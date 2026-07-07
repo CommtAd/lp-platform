@@ -1,0 +1,20 @@
+{
+  "name": "lp-platform",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace apps/lp",
+    "build": "npm run build --workspace apps/lp",
+    "start": "npm run start --workspace apps/lp",
+    "lint": "npm run lint --workspace apps/lp",
+    "check-rules": "tsx scripts/check-rules.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
