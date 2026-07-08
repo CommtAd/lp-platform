@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import type { ClientRecord, ClientStatus } from "@shared/index";
 import { fetchClientRecord } from "@/lib/client-record";
 import TagInjector from "./TagInjector";
@@ -50,6 +52,17 @@ export default async function LPShell({
 }: LPShellProps) {
   const record =
     (await fetchClientRecord(clientSlug)) ?? buildDefault(clientSlug, fallback);
+
+  // Phase 3: once a custom domain is verified and marked canonical, the
+  // platform's own path-based URL (…vercel.app/{slug}) becomes an alias —
+  // send crawlers and visitors to the client's own domain instead.
+  if (record.use_custom_domain_as_canonical && record.custom_domain) {
+    const currentHost = (await headers()).get("host")?.split(":")[0] ?? "";
+    if (currentHost && currentHost !== record.custom_domain) {
+      redirect(`https://${record.custom_domain}/`);
+    }
+  }
+
   const isPublished = record.status === "published";
 
   return (

@@ -10,6 +10,7 @@ export const clientRegistry: Record<
 > = {
   "_base-a": () => import("./_base-a/page"),
   "the-personal-pilates": () => import("./the-personal-pilates/page"),
+  "the-personal-gym": () => import("./the-personal-gym/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);

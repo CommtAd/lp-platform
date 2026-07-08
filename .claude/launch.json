@@ -6,6 +6,12 @@
       "runtimeExecutable": "/Users/tomohirouesugi/.nodenv/shims/npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
+    },
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "/Users/tomohirouesugi/.nodenv/shims/npm",
+      "runtimeArgs": ["run", "dev", "--workspace=apps/dashboard"],
+      "port": 3001
     }
   ]
 }

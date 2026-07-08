@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { VERCEL_DEPLOY_HOOK_URL } from "@/lib/env";
+import { addDomainToProject, removeDomainFromProject } from "@/lib/vercel-domains";
 import type { ClientStatus } from "@shared/index";
 
 const SLUG_RE = /^[a-z0-9-]+$/;
@@ -96,6 +97,52 @@ export async function setPublishState(clientId: string, next: ClientStatus) {
 
   revalidatePath(`/clients/${clientId}`);
   revalidatePath("/");
+  redirect(`/clients/${clientId}?saved=1`);
+}
+
+/** Update a client's custom domain + canonical flag, syncing the Vercel LP project. */
+export async function updateCustomDomain(clientId: string, formData: FormData) {
+  const supabase = await createClient();
+
+  const domain = String(formData.get("custom_domain") ?? "")
+    .trim()
+    .toLowerCase();
+  const canonical = formData.get("use_custom_domain_as_canonical") === "on";
+
+  const { data: current } = await supabase
+    .from("clients")
+    .select("custom_domain")
+    .eq("id", clientId)
+    .maybeSingle();
+  const previousDomain = current?.custom_domain ?? null;
+
+  if (domain && domain !== previousDomain) {
+    const result = await addDomainToProject(domain);
+    if (!result.ok) {
+      redirect(
+        `/clients/${clientId}?error=${encodeURIComponent(result.error ?? "ドメイン追加に失敗しました")}`,
+      );
+    }
+  }
+  if (previousDomain && previousDomain !== domain) {
+    await removeDomainFromProject(previousDomain);
+  }
+
+  const { error } = await supabase
+    .from("clients")
+    .update({
+      custom_domain: domain || null,
+      use_custom_domain_as_canonical: domain ? canonical : false,
+    })
+    .eq("id", clientId);
+
+  if (error) {
+    redirect(`/clients/${clientId}?error=${encodeURIComponent("ドメイン設定の保存に失敗しました")}`);
+  }
+
+  await fireDeployHook();
+
+  revalidatePath(`/clients/${clientId}`);
   redirect(`/clients/${clientId}?saved=1`);
 }
 

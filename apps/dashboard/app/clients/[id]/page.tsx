@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { setPublishState, updateClientRecord } from "../../actions";
+import { setPublishState, updateClientRecord, updateCustomDomain } from "../../actions";
+import { getDomainStatus, type DomainStatus } from "@/lib/vercel-domains";
 import type { ClientRecord } from "@shared/index";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -28,6 +29,8 @@ export default async function ClientDetailPage({
   const update = updateClientRecord.bind(null, client.id);
   const publish = setPublishState.bind(null, client.id, "published");
   const unpublish = setPublishState.bind(null, client.id, "unpublished");
+  const domainUpdate = updateCustomDomain.bind(null, client.id);
+  const domainStatus = client.custom_domain ? await getDomainStatus(client.custom_domain) : null;
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
@@ -76,6 +79,39 @@ export default async function ClientDetailPage({
           )}
         </div>
       </section>
+
+      {/* 独自ドメイン */}
+      <form
+        action={domainUpdate}
+        className="mb-8 space-y-4 rounded-lg border border-neutral-200 bg-white p-5"
+      >
+        <h2 className="text-sm font-semibold">独自ドメイン</h2>
+        <Field
+          label="独自ドメイン"
+          name="custom_domain"
+          defaultValue={client.custom_domain}
+          placeholder="example.com"
+        />
+        <Toggle
+          label="このドメインを正規URLにする（DNS設定・公開済みの確認後にON）"
+          name="use_custom_domain_as_canonical"
+          defaultChecked={client.use_custom_domain_as_canonical}
+        />
+        {client.custom_domain && (
+          <div className="rounded-md bg-neutral-50 p-3 text-xs text-neutral-600">
+            <p className="font-medium">{domainStatusLabel(domainStatus)}</p>
+            {(!domainStatus || !domainStatus.verified || domainStatus.misconfigured) && (
+              <DnsInstructions domain={client.custom_domain} />
+            )}
+          </div>
+        )}
+        <button
+          type="submit"
+          className="w-full rounded-md bg-navy px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+        >
+          ドメイン設定を保存
+        </button>
+      </form>
 
       {/* タグ・連携設定 */}
       <form action={update} className="space-y-6">
@@ -157,6 +193,33 @@ function Field({
         className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-navy"
       />
     </div>
+  );
+}
+
+function domainStatusLabel(status: DomainStatus | null): string {
+  if (!status) return "設定待ち — Vercel連携が未設定、または反映待ちです";
+  if (status.verified && !status.misconfigured) return "公開済み — DNSは正しく設定されています";
+  if (status.misconfigured) return "確認中 — DNSレコードの反映を待っています（反映まで最大48時間）";
+  return "設定待ち — 下記のレコードをドメイン管理画面に追加してください";
+}
+
+function DnsInstructions({ domain }: { domain: string }) {
+  const isApex = domain.split(".").length <= 2;
+  const host = isApex ? "@" : domain.split(".")[0];
+  return (
+    <ol className="mt-2 list-decimal space-y-1 pl-4 text-neutral-600">
+      <li>
+        ドメインを購入・管理している事業者（お名前.com、Google Domainsなど）の管理画面にログインしてください（不明な場合は購入時の請求メールを検索すると事業者が分かります）。
+      </li>
+      <li>
+        DNS設定画面で以下のレコードを追加してください。
+        <div className="mt-1 rounded bg-neutral-100 p-2 font-mono">
+          種別: {isApex ? "A" : "CNAME"}　ホスト: {host}　値:{" "}
+          {isApex ? "76.76.21.21" : "cname.vercel-dns.com"}
+        </div>
+      </li>
+      <li>反映まで数分〜48時間かかります。反映後、自動的に「公開済み」の表示に切り替わります。</li>
+    </ol>
   );
 }
 

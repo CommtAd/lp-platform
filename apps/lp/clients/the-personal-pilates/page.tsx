@@ -201,22 +201,31 @@ export default function Page() {
               background: "#FCFBF7",
             }}
           >
-            <div style={{ lineHeight: 1.25 }}>
-              <div
-                style={{
-                  fontFamily: fontGothic,
-                  fontSize: 15,
-                  fontWeight: 700,
-                  letterSpacing: "0.14em",
-                  color: "#3B3D36",
-                }}
-              >
-                {c.header.brand}
+            {c.header.logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={c.header.logo}
+                alt={c.header.logoAlt ?? c.header.brand}
+                style={{ height: 34, width: "auto", display: "block" }}
+              />
+            ) : (
+              <div style={{ lineHeight: 1.25 }}>
+                <div
+                  style={{
+                    fontFamily: fontGothic,
+                    fontSize: 15,
+                    fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    color: "#3B3D36",
+                  }}
+                >
+                  {c.header.brand}
+                </div>
+                <div style={{ fontSize: 9, letterSpacing: "0.14em", color: "#9A9C90" }}>
+                  {c.header.brandSub}
+                </div>
               </div>
-              <div style={{ fontSize: 9, letterSpacing: "0.14em", color: "#9A9C90" }}>
-                {c.header.brandSub}
-              </div>
-            </div>
+            )}
             <div style={{ textAlign: "right", lineHeight: 1.55 }}>
               {c.header.access.map((a, i) => (
                 <div key={i} style={{ fontSize: 13, color: "#3B3D36", letterSpacing: "0.03em" }}>

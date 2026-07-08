@@ -20,6 +20,9 @@ export interface PatternAConfig {
   header: {
     brand: string;
     brandSub: string;
+    /** Optional logo image path. When set, replaces the text brand/brandSub with an image lockup. */
+    logo?: string;
+    logoAlt?: string;
     access: { station: string; walk: string }[];
   };
   offerBar: { badgeLines: [string, string]; text: string };
