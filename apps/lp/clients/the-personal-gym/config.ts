@@ -28,6 +28,7 @@ const config: PatternAConfig = {
     brandSub: "マシンピラティススタジオ｜7:00〜23:00 土日祝営業",
     logo: `${ASSET}/logo.png`,
     logoAlt: "THE PERSONAL GYM",
+    hours: "営業時間 7:00〜23:00",
     access: [
       { station: "国分寺駅", walk: "徒歩3分" },
       { station: "吉祥寺駅", walk: "徒歩3分" },
@@ -45,7 +46,7 @@ const config: PatternAConfig = {
 
   offer: {
     eyebrow: "パーソナルピラティス",
-    heading: "90分のお試し体験",
+    heading: "90分の無料体験",
     trialBadge: "姿勢改善ストレッチも体験可能",
     trialRegular: "11,000",
     items: [

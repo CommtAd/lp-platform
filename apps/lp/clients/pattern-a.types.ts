@@ -23,6 +23,8 @@ export interface PatternAConfig {
     /** Optional logo image path. When set, replaces the text brand/brandSub with an image lockup. */
     logo?: string;
     logoAlt?: string;
+    /** Optional line shown below the logo (e.g. business hours). Only used when `logo` is set. */
+    hours?: string;
     access: { station: string; walk: string }[];
   };
   offerBar: { badgeLines: [string, string]; text: string };

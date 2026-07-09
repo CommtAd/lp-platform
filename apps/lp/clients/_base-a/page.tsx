@@ -99,9 +99,11 @@ const Icon = ({ children }: { children: ReactNode }) => (
 function SectionHeading({
   text,
   variant = "accent",
+  fontSize = 24,
 }: {
   text: string;
   variant?: "accent" | "white";
+  fontSize?: number;
 }) {
   const color = variant === "white" ? "#FFFFFF" : accent;
   const rule = variant === "white" ? "rgba(255,255,255,0.55)" : accent;
@@ -111,7 +113,7 @@ function SectionHeading({
         style={{
           fontFamily: fontMincho,
           fontWeight: 600,
-          fontSize: 24,
+          fontSize,
           letterSpacing: "0.08em",
           color,
           lineHeight: 1.4,
@@ -198,16 +200,23 @@ export default function Page() {
               alignItems: "center",
               justifyContent: "space-between",
               padding: "13px 18px",
-              background: "#FCFBF7",
+              background: "#FFFFFF",
             }}
           >
             {c.header.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={c.header.logo}
-                alt={c.header.logoAlt ?? c.header.brand}
-                style={{ height: 34, width: "auto", display: "block" }}
-              />
+              <div style={{ lineHeight: 1.25 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={c.header.logo}
+                  alt={c.header.logoAlt ?? c.header.brand}
+                  style={{ height: 34, width: "auto", display: "block" }}
+                />
+                {c.header.hours && (
+                  <div style={{ fontSize: 9, letterSpacing: "0.14em", color: "#3B3D36", marginTop: 4, marginLeft: 3 }}>
+                    {c.header.hours}
+                  </div>
+                )}
+              </div>
             ) : (
               <div style={{ lineHeight: 1.25 }}>
                 <div
@@ -296,8 +305,8 @@ export default function Page() {
                 style={{
                   fontFamily: fontGothic,
                   fontWeight: 700,
-                  fontSize: 24,
-                  letterSpacing: "0.12em",
+                  fontSize: 20,
+                  letterSpacing: "0.06em",
                   color: "#FFFFFF",
                   textShadow: "0 1px 5px rgba(180,110,30,0.5)",
                   lineHeight: 1.2,
@@ -407,7 +416,7 @@ export default function Page() {
                     <div style={{ fontSize: 15, letterSpacing: "0.08em", color: accent }}>
                       {c.fv.leftCard.small}
                     </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 20, letterSpacing: "0.05em", marginTop: 3 }}>
+                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
                       {c.fv.leftCard.big}
                     </div>
                   </div>
@@ -440,7 +449,7 @@ export default function Page() {
                     <div style={{ fontSize: 15, letterSpacing: "0.08em", color: accent }}>
                       {c.fv.rightCard.small}
                     </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 20, letterSpacing: "0.05em", marginTop: 3 }}>
+                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
                       {c.fv.rightCard.big}
                     </div>
                   </div>
@@ -463,7 +472,7 @@ export default function Page() {
                   style={{
                     fontFamily: fontMincho,
                     fontWeight: 600,
-                    fontSize: 36,
+                    fontSize: 29,
                     letterSpacing: "0.05em",
                     color: "#33352E",
                     margin: 0,
@@ -605,7 +614,7 @@ export default function Page() {
 
           {/* ── ③ worry ── */}
           <section style={{ background: creamGrad, padding: "54px 26px" }}>
-            <SectionHeading text={c.worry.heading} />
+            <SectionHeading text={c.worry.heading} fontSize={20} />
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 30 }}>
               {c.worry.cards.map((card, i) => (
                 <div key={i} style={{ background: "#FCFBF7", borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 14px rgba(70,72,60,0.07)" }}>
@@ -643,7 +652,7 @@ export default function Page() {
                     {item.trio.map((t, i) => (
                       <div key={i} style={{ background: "#ECE8E0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
                         <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accent }}>{t.label}</span>
-                        <span style={{ fontSize: 10.5, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
+                        <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
                       </div>
                     ))}
                   </div>
@@ -691,7 +700,7 @@ export default function Page() {
 
           {/* ── ⑤ scenes ── */}
           <section style={{ background: creamGrad, padding: "54px 26px" }}>
-            <SectionHeading text={c.scenes.heading} />
+            <SectionHeading text={c.scenes.heading} fontSize={20} />
             <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 32 }}>
               {c.scenes.items.map((s, i) => (
                 <div key={i} style={{ background: "#FCFBF7", borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 16px rgba(70,72,60,0.08)" }}>
