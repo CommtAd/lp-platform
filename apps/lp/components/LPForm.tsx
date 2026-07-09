@@ -19,8 +19,15 @@ export type ToggleField = FieldBase & {
   columns?: number;
 };
 export type InputField = FieldBase & {
-  type: "text" | "tel" | "email";
+  type: "text" | "tel" | "email" | "date" | "time";
   placeholder?: string;
+  /**
+   * For type "date"/"time": HTML min/max bound (e.g. "2026-07-10" or "07:00").
+   * For type "date" specifically, `min` defaults to tomorrow's local date when
+   * omitted — this blocks same-day booking automatically.
+   */
+  min?: string;
+  max?: string;
 };
 export type TextareaField = FieldBase & {
   type: "textarea";
@@ -94,6 +101,21 @@ export function trackEvent(
   void postEvent(clientSlug, type, {});
 }
 
+/** YYYY-MM-DD for a Date, using local time (avoids UTC off-by-one near midnight). */
+function toLocalISODate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/** Tomorrow's local date — the default minimum for type "date" fields (blocks same-day booking). */
+function tomorrowISODate(): string {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return toLocalISODate(d);
+}
+
 /* ── default styles (match pattern A design) ────────────────── */
 
 const labelStyle: CSSProperties = {
@@ -147,7 +169,16 @@ export default function LPForm({
     const missing = fields.some(
       (f) => f.required && !(values[f.name] ?? "").trim(),
     );
-    if (missing) {
+    // Defense in depth: browsers that fall back to a plain text input for
+    // type="date" would otherwise let someone type today's date manually,
+    // bypassing the native picker's min attribute.
+    const invalidDate = fields.some((f) => {
+      if (f.type !== "date") return false;
+      const v = values[f.name];
+      if (!v) return false;
+      return v < (f.min ?? tomorrowISODate());
+    });
+    if (missing || invalidDate) {
       setError(true);
       return;
     }
@@ -314,6 +345,8 @@ export default function LPForm({
               onFocus={() => setFocused(f.name)}
               onBlur={() => setFocused(null)}
               placeholder={f.placeholder}
+              min={f.type === "date" ? f.min ?? tomorrowISODate() : f.min}
+              max={f.max}
               style={{ ...inputStyle, ...focusStyle }}
             />
           </div>

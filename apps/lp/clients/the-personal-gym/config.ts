@@ -220,7 +220,7 @@ const config: PatternAConfig = {
       },
       {
         q: "予約の変更やキャンセルは?",
-        a: "前日までであれば、専用アプリからいつでも変更・キャンセルが可能です。その日の体調や予定に合わせて柔軟に調整できますので、忙しい方でも続けやすい仕組みになっています。",
+        a: "前日までであれば、いつでも変更・キャンセルが可能です。その日の体調や予定に合わせて柔軟に調整できますので、忙しい方でも続けやすい仕組みになっています。",
       },
     ],
   },
@@ -264,8 +264,10 @@ const config: PatternAConfig = {
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
-      { type: "text", name: "date1", label: "ご希望日時(第1希望)", placeholder: "例)平日夜、土曜午前など" },
-      { type: "text", name: "date2", label: "ご希望日時(第2希望)", placeholder: "例)日曜午後など" },
+      { type: "date", name: "date1", label: "ご希望日(第1希望)" },
+      { type: "time", name: "time1", label: "ご希望時間(第1希望)", min: "07:00", max: "22:00" },
+      { type: "date", name: "date2", label: "ご希望日(第2希望)" },
+      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "07:00", max: "22:00" },
       {
         type: "textarea",
         name: "note",
@@ -276,9 +278,8 @@ const config: PatternAConfig = {
       },
     ],
     submitLabel: "この内容で予約する",
-    disclaimer:
-      "送信いただいた内容は予約対応のみに利用します。\n90分無料体験｜入会金0円｜しつこい勧誘はいたしません。",
-    errorMessage: "店舗・お名前・電話番号は必須項目です。",
+    disclaimer: "",
+    errorMessage: "店舗・お名前・電話番号は必須項目です。ご希望日は明日以降の日付をお選びください。",
   },
 
   sticky: {

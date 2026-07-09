@@ -777,7 +777,7 @@ export default function Page() {
               fields={c.form.fields}
               submitLabel={c.form.submitLabel}
               errorMessage={c.form.errorMessage}
-              disclaimer={nl(c.form.disclaimer)}
+              disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
             />
           </section>
         </div>
