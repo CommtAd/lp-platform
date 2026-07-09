@@ -27,6 +27,7 @@ function buildDefault(
     status: fallback?.status ?? "published",
     owner_user_id: null,
     commitad_client_id: null,
+    notify_emails: [],
     custom_domain: null,
     use_custom_domain_as_canonical: false,
     meta_pixel_id: null,

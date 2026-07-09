@@ -16,6 +16,7 @@ export interface ClientRecord {
   status: ClientStatus;
   owner_user_id: string | null;
   commitad_client_id: string | null;
+  notify_emails: string[];
   custom_domain: string | null;
   use_custom_domain_as_canonical: boolean;
   meta_pixel_id: string | null;
@@ -34,6 +35,11 @@ export interface Utm {
   campaign?: string;
   content?: string;
   term?: string;
+  creative?: string;
+  adset?: string;
+  id?: string;
+  /** Meta/Facebook click id (`fbclid` URL param) — not a utm_* param, but travels alongside them for ad attribution. */
+  fbclid?: string;
 }
 
 /** Payload posted from LPForm to the form-submit Edge Function. */
@@ -44,5 +50,7 @@ export interface FormSubmitPayload {
   form_data: Record<string, string>;
   utm: Utm;
   referrer?: string;
+  /** Full URL of the LP page the form was submitted from (window.location.href). */
+  page_url?: string;
   occurred_at: string;
 }

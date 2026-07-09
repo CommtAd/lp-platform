@@ -4,12 +4,15 @@ const KEY = "lp_utm";
 const UTM_KEYS: (keyof Utm)[] = [
   "source",
   "medium",
-  "campaign",
   "content",
+  "creative",
+  "campaign",
+  "adset",
   "term",
+  "id",
 ];
 
-/** Persist any utm_* params from the current URL into sessionStorage (once). */
+/** Persist any utm_* params (+ fbclid) from the current URL into sessionStorage (once). */
 export function captureUtmFromUrl(): void {
   if (typeof window === "undefined") return;
   const params = new URLSearchParams(window.location.search);
@@ -18,6 +21,8 @@ export function captureUtmFromUrl(): void {
     const value = params.get(`utm_${key}`);
     if (value) incoming[key] = value;
   }
+  const fbclid = params.get("fbclid");
+  if (fbclid) incoming.fbclid = fbclid;
   if (Object.keys(incoming).length === 0) return;
   try {
     const existing = readUtm();

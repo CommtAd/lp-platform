@@ -69,6 +69,7 @@ async function postEvent(
     form_data: formData,
     utm: readUtm(),
     referrer: typeof document !== "undefined" ? document.referrer : undefined,
+    page_url: typeof window !== "undefined" ? window.location.href : undefined,
     occurred_at: new Date().toISOString(),
   };
 
