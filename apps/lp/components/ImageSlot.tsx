@@ -9,6 +9,8 @@ export interface ImageSlotProps {
   radius?: number;
   /** Sizing / layout styles (height, aspectRatio, flex, position, ...). */
   style?: CSSProperties;
+  /** CSS object-position for the cropped image. Default "center". */
+  objectPosition?: string;
 }
 
 /**
@@ -22,6 +24,7 @@ export default function ImageSlot({
   placeholder = "イメージ画像",
   radius = 0,
   style,
+  objectPosition = "center",
 }: ImageSlotProps) {
   return (
     <div
@@ -40,7 +43,7 @@ export default function ImageSlot({
         <img
           src={src}
           alt={alt}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition, display: "block" }}
         />
       ) : (
         <div

@@ -287,9 +287,9 @@ export default function Page() {
                     <span
                       key={i}
                       style={{
-                        fontFamily: fontGothic,
-                        fontWeight: 700,
-                        fontSize: 12.5,
+                        fontFamily: c.offerBar.badgeFontFamily === "mincho" ? fontMincho : fontGothic,
+                        fontWeight: c.offerBar.badgeFontWeight ?? 700,
+                        fontSize: c.offerBar.badgeFontSize ?? 12.5,
                         letterSpacing: "0.02em",
                       }}
                     >
@@ -339,10 +339,11 @@ export default function Page() {
           </div>
 
           {/* ── ① FV ── */}
-          <section style={{ position: "relative", minHeight: 660, overflow: "hidden", background: "#33352E" }}>
+          <section style={{ position: "relative", minHeight: 560, overflow: "hidden", background: "#33352E" }}>
             <ImageSlot
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
+              objectPosition={c.fv.hero.position ?? "center"}
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
             />
             <div
@@ -374,7 +375,7 @@ export default function Page() {
                     writingMode: "vertical-rl",
                     fontFamily: fontGothic,
                     fontWeight: 400,
-                    fontSize: 24,
+                    fontSize: 20,
                     letterSpacing: "0.12em",
                     lineHeight: 1.7,
                     color: "#3B3D36",
@@ -392,7 +393,7 @@ export default function Page() {
               style={{
                 position: "relative",
                 zIndex: 2,
-                minHeight: 660,
+                minHeight: 560,
                 display: "flex",
                 flexDirection: "column",
                 padding: "40px 28px 34px",
@@ -404,16 +405,16 @@ export default function Page() {
                   <div
                     style={{
                       flex: 1,
-                      background: "rgba(251,248,243,0.96)",
-                      border: "1px solid rgba(46,66,105,0.5)",
+                      background: accent,
+                      border: "1px solid rgba(255,255,255,0.25)",
                       borderRadius: 6,
                       padding: "20px 8px",
                       textAlign: "center",
-                      color: "#3B3D36",
+                      color: "#FFFFFF",
                       boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
                     }}
                   >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: accent }}>
+                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E8C877" }}>
                       {c.fv.leftCard.small}
                     </div>
                     <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
@@ -428,7 +429,7 @@ export default function Page() {
                       fontFamily: fontGothic,
                       fontWeight: 400,
                       fontSize: 44,
-                      color: accent,
+                      color: "#FFFFFF",
                       textShadow: "0 1px 6px rgba(0,0,0,0.35)",
                     }}
                   >
@@ -437,16 +438,16 @@ export default function Page() {
                   <div
                     style={{
                       flex: 1,
-                      background: "rgba(251,248,243,0.96)",
-                      border: "1px solid rgba(46,66,105,0.5)",
+                      background: accent,
+                      border: "1px solid rgba(255,255,255,0.25)",
                       borderRadius: 6,
                       padding: "20px 8px",
                       textAlign: "center",
-                      color: "#3B3D36",
+                      color: "#FFFFFF",
                       boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
                     }}
                   >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: accent }}>
+                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E8C877" }}>
                       {c.fv.rightCard.small}
                     </div>
                     <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
@@ -785,6 +786,7 @@ export default function Page() {
       <StickyFooterCTA
         anchor={c.sticky.anchor}
         buttonText={c.sticky.buttonText}
+        showAfter={c.sticky.showAfter}
         offers={c.sticky.offers.map((o) => (
           <span key={o.label} style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
             <span style={{ fontSize: 11, color: "#62655B", letterSpacing: "0.02em" }}>{o.label}</span>

@@ -5,6 +5,8 @@ import type { LPFormField } from "@/components/LPForm";
 export interface Slot {
   placeholder: string;
   src?: string | null;
+  /** CSS object-position for the cropped image (e.g. "38% center"). Default "center". */
+  position?: string;
 }
 
 export interface PatternAConfig {
@@ -27,7 +29,16 @@ export interface PatternAConfig {
     hours?: string;
     access: { station: string; walk: string }[];
   };
-  offerBar: { badgeLines: [string, string]; text: string };
+  offerBar: {
+    badgeLines: [string, string];
+    /** Badge text font size (px). Tune to fill the circle when line length changes. Default 12.5. */
+    badgeFontSize?: number;
+    /** Badge text font weight. Default 700 (bold). */
+    badgeFontWeight?: number;
+    /** Badge text font family. Default gothic. */
+    badgeFontFamily?: "gothic" | "mincho";
+    text: string;
+  };
   achievement: { pre: string; num: string; post: string };
 
   fv: {
@@ -129,5 +140,7 @@ export interface PatternAConfig {
     offers: { label: string; value: string }[];
     buttonText: string;
     anchor: string;
+    /** Show the sticky bar after scrolling this many px. Default 620 (matches hero height). */
+    showAfter?: number;
   };
 }

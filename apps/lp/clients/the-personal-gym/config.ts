@@ -34,12 +34,12 @@ const config: PatternAConfig = {
       { station: "吉祥寺駅", walk: "徒歩3分" },
     ],
   },
-  offerBar: { badgeLines: ["モニター", "募集中"], text: "90分体験無料・入会金0円" },
+  offerBar: { badgeLines: ["期間", "限定"], badgeFontSize: 18, badgeFontWeight: 400, badgeFontFamily: "mincho", text: "90分体験無料・入会金0円" },
   achievement: { pre: "全国", num: "50", post: "店舗展開のパーソナルジムが運営" },
 
   fv: {
     catchLines: ["心と身体の状態に", "合わせるピラティス"],
-    hero: { placeholder: "スタジオ / マシンピラティスの写真（全面）", src: null },
+    hero: { placeholder: "スタジオ / マシンピラティスの写真（全面）", src: "/clients/the-personal-gym/fv-hero.jpg", position: "42% center" },
     leftCard: { small: "パーソナル", big: "マシンピラティス" },
     rightCard: { small: "姿勢改善", big: "ストレッチ" },
   },
@@ -288,6 +288,7 @@ const config: PatternAConfig = {
     ],
     buttonText: "無料体験を予約する",
     anchor: "#form",
+    showAfter: 0,
   },
 };
 

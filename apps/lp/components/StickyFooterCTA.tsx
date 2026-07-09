@@ -27,7 +27,7 @@ export default function StickyFooterCTA({
 
   useEffect(() => {
     const onScroll = () => {
-      const past = window.scrollY > showAfter;
+      const past = window.scrollY >= showAfter;
       const target = document.querySelector(anchor);
       const reached = target
         ? target.getBoundingClientRect().top <= window.innerHeight * 0.9
