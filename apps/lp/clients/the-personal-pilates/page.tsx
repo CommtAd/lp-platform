@@ -301,7 +301,7 @@ export default function Page() {
                   color: "#FFFFFF",
                   textShadow: "0 1px 5px rgba(180,110,30,0.5)",
                   lineHeight: 1.2,
-                  whiteSpace: "nowrap",
+                  textAlign: "center",
                 }}
               >
                 {c.offerBar.text}
