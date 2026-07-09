@@ -235,7 +235,7 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <div style={{ textAlign: "right", lineHeight: 1.55 }}>
+            <div style={{ textAlign: "right", lineHeight: 1.55, marginTop: 5 }}>
               {c.header.access.map((a, i) => (
                 <div key={i} style={{ fontSize: 13, color: "#3B3D36", letterSpacing: "0.03em" }}>
                   {a.station} <span style={{ color: accent }}>{a.walk}</span>

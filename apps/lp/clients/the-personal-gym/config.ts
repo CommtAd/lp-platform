@@ -58,8 +58,8 @@ const config: PatternAConfig = {
       "改善プラン\n提案",
     ],
     photos: [
-      { placeholder: "ピラティスのシーン写真", src: null },
-      { placeholder: "スタジオ / マシンの写真", src: null },
+      { placeholder: "ピラティスのシーン写真", src: "/clients/the-personal-gym/offer-photo-1.jpg" },
+      { placeholder: "スタジオ / マシンの写真", src: "/clients/the-personal-gym/offer-photo-2.jpg" },
     ],
     joinLabel: "入会金",
     joinRegular: "33,000",
@@ -69,7 +69,7 @@ const config: PatternAConfig = {
 
   about: {
     heading: "THE PERSONAL GYM\nについて",
-    photo: { placeholder: "スタジオ / トレーナーの写真", src: null },
+    photo: { placeholder: "スタジオ / トレーナーの写真", src: "/clients/the-personal-gym/about-photo.jpg" },
     caption: "Personal × Pilates",
     lead: "鍛えるだけでも、\nただ休めるだけでもない。",
     body: "姿勢の乱れ、運動不足、抜けない疲れ。その日の身体は毎日ちがいます。THE PERSONAL GYMは、全国50店舗以上のパーソナルジムで培った身体づくりの知見を活かし、鍛える日も整える日も、あなたのコンディションに合わせて通えるマシンピラティススタジオです。",
@@ -78,10 +78,10 @@ const config: PatternAConfig = {
   worry: {
     heading: "こんなお悩み、ありませんか？",
     cards: [
-      { img: { placeholder: "イメージ画像", src: null }, text: "姿勢の乱れが\n気になってきた" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "身体を無理なく\n整えたい" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "運動不足を\n解消したい" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "疲れをケアしながら\n動きたい" },
+      { img: { placeholder: "イメージ画像", src: "/clients/the-personal-gym/worry-1.jpg" }, text: "姿勢の乱れが\n気になってきた" },
+      { img: { placeholder: "イメージ画像", src: "/clients/the-personal-gym/worry-2.jpg" }, text: "身体を無理なく\n整えたい" },
+      { img: { placeholder: "イメージ画像", src: "/clients/the-personal-gym/worry-3.jpg" }, text: "運動不足を\n解消したい" },
+      { img: { placeholder: "イメージ画像", src: "/clients/the-personal-gym/worry-4.jpg" }, text: "疲れをケアしながら\n動きたい" },
     ],
     closingPre: "その通い方、",
     closingHighlight: "ここなら叶います。",
@@ -92,13 +92,13 @@ const config: PatternAConfig = {
     items: [
       {
         num: "01",
-        img: { placeholder: "パーソナルトレーナー指導の写真", src: null },
+        img: { placeholder: "パーソナルトレーナー指導の写真", src: "/clients/the-personal-gym/reason-1.jpg" },
         title: "全国50店舗以上のジムの知見を\n活かしたマシンピラティス",
         body: "パーソナルジムで培ってきた身体づくりのノウハウを、そのままピラティスの指導にも活かせるのが最大の強み。一人ひとりの姿勢や身体の状態を見極めながら、あなたに合ったセッションを組み立てます。",
       },
       {
         num: "02",
-        img: { placeholder: "スタジオでのシーン写真", src: null },
+        img: { placeholder: "スタジオでのシーン写真", src: "/clients/the-personal-gym/reason-2.jpg" },
         title: "その日の気分や身体の状態に\n合わせて選べる",
         body: "「今日はどう過ごしたいか」で通い方を選べます。予定や体調に合わせられるから、無理なく続く運動習慣に。",
         trio: [
@@ -109,7 +109,7 @@ const config: PatternAConfig = {
       },
       {
         num: "03",
-        img: { placeholder: "姿勢改善ストレッチの写真", src: null },
+        img: { placeholder: "姿勢改善ストレッチの写真", src: "/clients/the-personal-gym/reason-3.jpg" },
         title: "ピラティスだけでなく、\n姿勢改善ストレッチにも対応",
         body: "ただ動くだけで終わらせないのがこのスタジオの特徴。トレーナーの手で凝り固まった部位をほぐし、姿勢やコンディションまで整えます。「今日は受け身でケアしたい」という日も、通う理由になります。",
       },
@@ -162,17 +162,17 @@ const config: PatternAConfig = {
     heading: "あなたの毎日に寄り添う通い方",
     items: [
       {
-        img: { placeholder: "ゆったり整えるシーン写真", src: null },
+        img: { placeholder: "ゆったり整えるシーン写真", src: "/clients/the-personal-gym/scene-1.jpg" },
         title: "「今日はゆったり整えたい」",
         body: "朝7時からの営業だから、出勤前にマシンピラティスで姿勢を整えてから一日をスタート。",
       },
       {
-        img: { placeholder: "疲れをリセットするシーン写真", src: null },
+        img: { placeholder: "疲れをリセットするシーン写真", src: "/clients/the-personal-gym/scene-2.jpg" },
         title: "「昨日の疲れをリセットしたい」",
         body: "残業続きの週は、仕事帰りに姿勢改善ストレッチ。受け身のケアで身体を軽くして帰る。",
       },
       {
-        img: { placeholder: "しっかり鍛えるシーン写真", src: null },
+        img: { placeholder: "しっかり鍛えるシーン写真", src: "/clients/the-personal-gym/scene-3.jpg" },
         title: "「がっつり鍛える日と使い分けたい」",
         body: "時間のある週末はパーソナルジムでしっかりトレーニング。気分に合わせて強度を選べる。",
       },
