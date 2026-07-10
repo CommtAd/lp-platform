@@ -21,8 +21,6 @@ export type ToggleField = FieldBase & {
 export type InputField = FieldBase & {
   type: "text" | "tel" | "email" | "date" | "time";
   placeholder?: string;
-  /** For type "time": step in seconds (e.g. 1800 restricts the picker to 30-min increments). */
-  step?: number;
   /**
    * For type "date"/"time": HTML min/max bound (e.g. "2026-07-10" or "07:00").
    * For type "date" specifically, `min` defaults to tomorrow's local date when
@@ -36,7 +34,12 @@ export type TextareaField = FieldBase & {
   placeholder?: string;
   rows?: number;
 };
-export type LPFormField = ToggleField | InputField | TextareaField;
+export type SelectField = FieldBase & {
+  type: "select";
+  options: { value: string; label: string }[];
+  placeholder?: string;
+};
+export type LPFormField = ToggleField | InputField | TextareaField | SelectField;
 
 export interface LPFormProps {
   /** Slug of the owning client — sent with every submission. */
@@ -308,6 +311,40 @@ export default function LPForm({
             ? { borderColor: accent, outline: "none" }
             : {};
 
+        if (f.type === "select") {
+          const chosen = values[f.name] ?? "";
+          return (
+            <div key={f.name}>
+              <label style={labelStyle}>
+                {f.label}
+                {requiredTag(f)}
+              </label>
+              <select
+                value={chosen}
+                onChange={(e) => setField(f.name, e.target.value)}
+                onFocus={() => setFocused(f.name)}
+                onBlur={() => setFocused(null)}
+                style={{
+                  ...inputStyle,
+                  appearance: "none",
+                  WebkitAppearance: "none",
+                  color: chosen ? "#33352E" : "#9A9C90",
+                  ...focusStyle,
+                }}
+              >
+                <option value="" disabled>
+                  {f.placeholder ?? "選択してください"}
+                </option>
+                {f.options.map((opt) => (
+                  <option key={opt.value} value={opt.value} style={{ color: "#33352E" }}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          );
+        }
+
         if (f.type === "textarea") {
           return (
             <div key={f.name}>
@@ -350,7 +387,6 @@ export default function LPForm({
               placeholder={f.placeholder}
               min={f.type === "date" ? f.min ?? tomorrowISODate() : f.min}
               max={f.max}
-              step={f.type === "time" ? f.step : undefined}
               style={{ ...inputStyle, ...focusStyle }}
             />
           </div>
