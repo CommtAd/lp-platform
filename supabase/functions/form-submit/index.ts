@@ -170,38 +170,56 @@ function buildAdminNotificationHtml(params: {
 
   const utmLine = (key: string) => `utm_${key}: ${params.utm[key] ?? ""}`;
 
-  const lines = [
-    `${name}様から予約申し込みを承りました。担当者はご対応をお願いいたします。`,
-    "",
-    "===========",
-    "",
-    "お問い合わせ内容",
-    "",
-    `お名前: ${name} 様`,
-    `メールアドレス: ${email}`,
-    `電話番号: ${tel}`,
-    `店舗名: ${storeLabel}`,
-    `体験希望日 第一希望: ${dt1}`,
-    `体験希望日 第ニ希望: ${dt2}`,
-    `ご質問・ご相談内容: ${note}`,
-    ...(extras.length ? ["", ...extras.map(([k, v]) => `${k}: ${v}`)] : []),
-    "",
-    "===========",
-    "アトリビューション情報",
-    "",
-    utmLine("source"),
-    utmLine("medium"),
-    utmLine("content"),
-    utmLine("creative"),
-    utmLine("campaign"),
-    utmLine("adset"),
-    utmLine("term"),
-    utmLine("id"),
-    `fbclid: ${params.utm.fbclid ?? ""}`,
-    "",
-    "===========",
-    `このメールは ${params.pageUrl ?? ""} から送信されました`,
-  ];
+  const lines = params.meta.adminSimple
+    ? [
+        `${name}様から予約申し込みを承りました。担当者はご対応をお願いいたします。`,
+        "",
+        "===========",
+        "",
+        "お問い合わせ内容",
+        "",
+        `お名前：${name} 様`,
+        `メールアドレス：${email}`,
+        `電話番号：${tel}`,
+        `体験日時：${dt1}`,
+        `ご質問・ご相談内容: ${note}`,
+        ...(extras.length ? ["", ...extras.map(([k, v]) => `${k}: ${v}`)] : []),
+        "",
+        "===========",
+        `このメールは ${params.pageUrl ?? ""} から送信されました`,
+      ]
+    : [
+        `${name}様から予約申し込みを承りました。担当者はご対応をお願いいたします。`,
+        "",
+        "===========",
+        "",
+        "お問い合わせ内容",
+        "",
+        `お名前: ${name} 様`,
+        `メールアドレス: ${email}`,
+        `電話番号: ${tel}`,
+        `店舗名: ${storeLabel}`,
+        `体験希望日 第一希望: ${dt1}`,
+        `体験希望日 第ニ希望: ${dt2}`,
+        `ご質問・ご相談内容: ${note}`,
+        ...(extras.length ? ["", ...extras.map(([k, v]) => `${k}: ${v}`)] : []),
+        "",
+        "===========",
+        "アトリビューション情報",
+        "",
+        utmLine("source"),
+        utmLine("medium"),
+        utmLine("content"),
+        utmLine("creative"),
+        utmLine("campaign"),
+        utmLine("adset"),
+        utmLine("term"),
+        utmLine("id"),
+        `fbclid: ${params.utm.fbclid ?? ""}`,
+        "",
+        "===========",
+        `このメールは ${params.pageUrl ?? ""} から送信されました`,
+      ];
 
   return `<div style="font-family: sans-serif; font-size: 14px; color: #222; white-space: pre-wrap;">${escapeHtml(
     lines.join("\n"),
@@ -218,6 +236,20 @@ interface ConfirmationMeta {
   menu?: string;
   duration?: string;
   stores?: Record<string, { label?: string; address?: string }>;
+  /**
+   * Full custom confirmation letter (takes priority over the store/menu/duration
+   * rows format above). Prose paragraphs around 持ち物/道案内 are fixed in
+   * buildConfirmationHtml — this only carries the parts that vary per booking.
+   */
+  letter?: {
+    menu: string;
+    storeLabel: string;
+    storeAddressLines: string[];
+    items: string[];
+    directionsNote: string;
+  };
+  /** Use a pared-down admin notification (no store line, single date, no UTM block) — for single-location clients where that info is always empty noise. */
+  adminSimple?: boolean;
 }
 
 /** "2026-06-01" + "12:00" -> "2026年6月1日(月) 12:00" (JST calendar date, no TZ conversion). */
@@ -238,6 +270,48 @@ function buildConfirmationHtml(params: {
   formData: Record<string, string>;
   meta: ConfirmationMeta;
 }): string {
+  const letter = params.meta.letter;
+  const letterDt1 = params.formData.date1
+    ? formatJaDateTime(params.formData.date1, params.formData.time1)
+    : undefined;
+  if (letter && letterDt1) {
+    const name = params.submitterName ? `${params.submitterName}様` : "お客様";
+    const lines = [
+      name,
+      "",
+      "この度は、体験レッスンへのお申し込みをいただき誠にありがとうございます。",
+      `${name}のご予約を確定させていただきましたのでご案内いたします。`,
+      "こちらの内容で確定とさせていただきます。",
+      "━━━━━━━━━━━━━━━━━━━━━",
+      "■ ご予約内容",
+      "━━━━━━━━━━━━━━━━━━━━━",
+      `日時：${letterDt1}`,
+      `メニュー： ${letter.menu}`,
+      "場所：",
+      letter.storeLabel,
+      ...letter.storeAddressLines,
+      "━━━━━━━━━━━━━━━━━━━━━",
+      "■ 当日のお持ち物",
+      "━━━━━━━━━━━━━━━━━━━━━",
+      ...letter.items,
+      "",
+      "※道に迷われた際のお願い※",
+      letter.directionsNote,
+      "",
+      `当日は、${name}の体調やお悩みに合わせて心地よく身体を動かせるよう、心を込めてサポートさせていただきます。`,
+      "ピラティスが初めての場合でも、どうぞリラックスしてお越しくださいませ。",
+      "",
+      "もし事前にご不明な点や、お身体について相談したいことなどがございましたら、お気軽にお問い合わせください。",
+      "",
+      "万が一、日時の変更やキャンセルが発生する場合は、お早めにご連絡いただけますようお願いいたします。",
+      `それでは、${letterDt1}に${name}にお会いできることを、スタッフ一同楽しみにお待ちしております。`,
+      "どうぞよろしくお願いいたします。",
+    ];
+    return `<div style="font-family: sans-serif; font-size: 14px; color: #222; white-space: pre-wrap;">${escapeHtml(
+      lines.join("\n"),
+    )}</div>`;
+  }
+
   const greeting = params.submitterName ? `${escapeHtml(params.submitterName)} 様` : "この度は";
 
   const storeValue = params.formData.store;
@@ -298,12 +372,14 @@ function buildConfirmationSubject(params: {
   formData: Record<string, string>;
   meta: ConfirmationMeta;
 }): string {
-  const storeValue = params.formData.store;
-  const storeInfo = storeValue ? params.meta.stores?.[storeValue] : undefined;
-  const storeLabel = storeInfo?.label ? `${params.clientName}${storeInfo.label}` : undefined;
   const dt1 = params.formData.date1
     ? formatJaDateTime(params.formData.date1, params.formData.time1)
     : undefined;
+  if (params.meta.letter && dt1) return `【ご予約完了】${params.meta.letter.storeLabel} ${dt1}`;
+
+  const storeValue = params.formData.store;
+  const storeInfo = storeValue ? params.meta.stores?.[storeValue] : undefined;
+  const storeLabel = storeInfo?.label ? `${params.clientName}${storeInfo.label}` : undefined;
   if (storeLabel && dt1) return `【ご予約完了】${storeLabel} ${dt1}`;
   return `【${params.clientName}】お申し込みを受け付けました`;
 }

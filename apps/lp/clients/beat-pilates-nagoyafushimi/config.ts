@@ -1,6 +1,26 @@
 import type { ClientStatus } from "@shared/index";
 import type { LPFormField } from "@/components/LPForm";
 
+/** Fixed lesson slot lists (times are on the hour but staggered, not evenly spaced). */
+const weekdaySlots = [
+  { value: "①9:00-9:45", label: "①9:00-9:45" },
+  { value: "②10:20-11:05", label: "②10:20-11:05" },
+  { value: "③11:40-12:25", label: "③11:40-12:25" },
+  { value: "④14:20-15:05", label: "④14:20-15:05" },
+  { value: "⑤15:40-16:25", label: "⑤15:40-16:25" },
+  { value: "⑥17:30-18:15", label: "⑥17:30-18:15" },
+  { value: "⑦18:50-19:35", label: "⑦18:50-19:35" },
+  { value: "⑧20:10-20:55", label: "⑧20:10-20:55" },
+];
+const weekendSlots = [
+  { value: "①9:00-9:45(土日)", label: "①9:00-9:45" },
+  { value: "②10:20-11:05(土日)", label: "②10:20-11:05" },
+  { value: "③11:40-12:25(土日)", label: "③11:40-12:25" },
+  { value: "④14:20-15:05(土日)", label: "④14:20-15:05" },
+  { value: "⑤15:40-16:25(土日)", label: "⑤15:40-16:25" },
+  { value: "⑥17:00-17:45(土日)", label: "⑥17:00-17:45" },
+];
+
 /** An image position in the layout. `src` empty → placeholder box. */
 export interface Slot {
   placeholder: string;
@@ -374,7 +394,7 @@ const config: BeatPilatesConfig = {
       { label: "月3回プラン", price: "7,800円〜" },
       { label: "月4回プラン", price: "10,000円〜" },
       { label: "デイタイム", sublabel: "平日9:00〜17:00", price: "11,800円〜" },
-      { label: "ナイトタイム", sublabel: "平日17:00〜22:00", price: "11,800円〜" },
+      { label: "ナイトタイム", sublabel: "全日17:00〜21:00", price: "11,800円〜" },
       { label: "フルプラン", sublabel: "回数無制限", price: "15,600円〜" },
     ],
     note: "※詳細は予約サイト・店頭でご確認ください",
@@ -387,7 +407,7 @@ const config: BeatPilatesConfig = {
         img: { placeholder: "名古屋伏見店の外観／内観写真", src: "/clients/beat-pilates-nagoyafushimi/access-store.jpg" },
         name: "BEAT PILATES 名古屋伏見店",
         address: "〒460-0008 名古屋市中区栄1-18-1 ハイツサンライズ2F号室",
-        hours: "営業時間 10:00〜22:00",
+        hours: "営業時間 9:00〜21:00",
         route: "地下鉄東山線・鶴舞線 伏見駅 徒歩8分／地下鉄鶴舞線 大須観音駅 徒歩10分",
       },
     ],
@@ -400,10 +420,18 @@ const config: BeatPilatesConfig = {
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
-      { type: "date", name: "date1", label: "ご希望日(第1希望)" },
-      { type: "time", name: "time1", label: "ご希望時間(第1希望)", min: "10:00", max: "22:00" },
-      { type: "date", name: "date2", label: "ご希望日(第2希望)" },
-      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "10:00", max: "22:00" },
+      { type: "date", name: "date1", label: "ご希望日" },
+      {
+        type: "select",
+        name: "time1",
+        label: "ご希望時間",
+        placeholder: "時間帯を選択してください",
+        dateLinkedOptions: {
+          dateField: "date1",
+          weekday: weekdaySlots,
+          weekend: weekendSlots,
+        },
+      },
       {
         type: "textarea",
         name: "note",
