@@ -36,7 +36,20 @@ export type TextareaField = FieldBase & {
 };
 export type SelectField = FieldBase & {
   type: "select";
-  options: { value: string; label: string }[];
+  /** Flat option list. Use `groups` instead for a grouped <optgroup> layout. */
+  options?: { value: string; label: string }[];
+  /** Grouped options, rendered as <optgroup>s (e.g. "平日" / "土日" slot lists). */
+  groups?: { label: string; options: { value: string; label: string }[] }[];
+  /**
+   * Resolve the option list from another field's date value instead of a
+   * static list: weekday → `weekday`, Sat/Sun → `weekend`. The select is
+   * disabled with a hint until that date field has a value.
+   */
+  dateLinkedOptions?: {
+    dateField: string;
+    weekday: { value: string; label: string }[];
+    weekend: { value: string; label: string }[];
+  };
   placeholder?: string;
 };
 export type LPFormField = ToggleField | InputField | TextareaField | SelectField;
@@ -122,6 +135,14 @@ function tomorrowISODate(): string {
   return toLocalISODate(d);
 }
 
+/** True for Saturday/Sunday. Parses "YYYY-MM-DD" as local calendar date (avoids UTC off-by-one). */
+function isWeekendISODate(iso: string): boolean {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return false;
+  const day = new Date(y, m - 1, d).getDay();
+  return day === 0 || day === 6;
+}
+
 /* ── default styles (match pattern A design) ────────────────── */
 
 const labelStyle: CSSProperties = {
@@ -169,7 +190,17 @@ export default function LPForm({
   const [focused, setFocused] = useState<string | null>(null);
 
   const setField = (name: string, value: string) =>
-    setValues((v) => ({ ...v, [name]: value }));
+    setValues((v) => {
+      const next = { ...v, [name]: value };
+      // Changing a date clears any select whose options depend on it —
+      // switching weekday/weekend invalidates the previously chosen slot.
+      for (const f of fields) {
+        if (f.type === "select" && f.dateLinkedOptions?.dateField === name) {
+          next[f.name] = "";
+        }
+      }
+      return next;
+    });
 
   const requiredTag = (f: FieldBase) =>
     f.required ? (
@@ -322,6 +353,14 @@ export default function LPForm({
 
         if (f.type === "select") {
           const chosen = values[f.name] ?? "";
+          const linked = f.dateLinkedOptions;
+          const linkedDateValue = linked ? values[linked.dateField] ?? "" : "";
+          const linkedOptions = linked
+            ? isWeekendISODate(linkedDateValue)
+              ? linked.weekend
+              : linked.weekday
+            : undefined;
+          const disabled = !!linked && !linkedDateValue;
           return (
             <div key={f.name} style={fieldWrapperStyle}>
               <label style={labelStyle}>
@@ -330,6 +369,7 @@ export default function LPForm({
               </label>
               <select
                 value={chosen}
+                disabled={disabled}
                 onChange={(e) => setField(f.name, e.target.value)}
                 onFocus={() => setFocused(f.name)}
                 onBlur={() => setFocused(null)}
@@ -338,17 +378,34 @@ export default function LPForm({
                   appearance: "none",
                   WebkitAppearance: "none",
                   color: chosen ? "#33352E" : "#9A9C90",
+                  ...(disabled ? { background: "#F3F1EA", cursor: "not-allowed" } : {}),
                   ...focusStyle,
                 }}
               >
                 <option value="" disabled>
-                  {f.placeholder ?? "選択してください"}
+                  {disabled ? "先にご希望日を選択してください" : f.placeholder ?? "選択してください"}
                 </option>
-                {f.options.map((opt) => (
-                  <option key={opt.value} value={opt.value} style={{ color: "#33352E" }}>
-                    {opt.label}
-                  </option>
-                ))}
+                {linkedOptions
+                  ? linkedOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value} style={{ color: "#33352E" }}>
+                        {opt.label}
+                      </option>
+                    ))
+                  : f.groups
+                    ? f.groups.map((g) => (
+                        <optgroup key={g.label} label={g.label}>
+                          {g.options.map((opt) => (
+                            <option key={opt.value} value={opt.value} style={{ color: "#33352E" }}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))
+                    : f.options?.map((opt) => (
+                        <option key={opt.value} value={opt.value} style={{ color: "#33352E" }}>
+                          {opt.label}
+                        </option>
+                      ))}
               </select>
             </div>
           );

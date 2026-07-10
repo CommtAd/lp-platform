@@ -1,6 +1,26 @@
 import type { ClientStatus } from "@shared/index";
 import type { LPFormField } from "@/components/LPForm";
 
+/** Fixed lesson slot lists (times are on the hour but staggered, not evenly spaced). */
+const weekdaySlots = [
+  { value: "①9:00-9:45", label: "①9:00-9:45" },
+  { value: "②10:20-11:05", label: "②10:20-11:05" },
+  { value: "③11:40-12:25", label: "③11:40-12:25" },
+  { value: "④14:20-15:05", label: "④14:20-15:05" },
+  { value: "⑤15:40-16:25", label: "⑤15:40-16:25" },
+  { value: "⑥17:30-18:15", label: "⑥17:30-18:15" },
+  { value: "⑦18:50-19:35", label: "⑦18:50-19:35" },
+  { value: "⑧20:10-20:55", label: "⑧20:10-20:55" },
+];
+const weekendSlots = [
+  { value: "①9:00-9:45(土日)", label: "①9:00-9:45" },
+  { value: "②10:20-11:05(土日)", label: "②10:20-11:05" },
+  { value: "③11:40-12:25(土日)", label: "③11:40-12:25" },
+  { value: "④14:20-15:05(土日)", label: "④14:20-15:05" },
+  { value: "⑤15:40-16:25(土日)", label: "⑤15:40-16:25" },
+  { value: "⑥17:00-17:45(土日)", label: "⑥17:00-17:45" },
+];
+
 /** An image position in the layout. `src` empty → placeholder box. */
 export interface Slot {
   placeholder: string;
@@ -66,6 +86,18 @@ export interface BeatPilatesConfig {
       note: string;
     }[];
     badges: { icon: string; label: string }[];
+  };
+
+  benefits: {
+    heading: string;
+    headingHighlight: string;
+    items: {
+      title: string;
+      nowLabel: string;
+      body: string;
+      price?: { unit?: string; value: string; suffix: string; note?: string };
+      gift?: boolean;
+    }[];
   };
 
   reasons: {
@@ -258,6 +290,25 @@ const config: BeatPilatesConfig = {
     ],
   },
 
+  benefits: {
+    heading: "うれしい",
+    headingHighlight: "入会特典",
+    items: [
+      {
+        title: "通い放題プランが2ヶ月おトク！",
+        nowLabel: "今だけ",
+        body: "通い放題プラン【スタンダード】or【プレミアム】の場合",
+        price: { unit: "2ヶ月", value: "1,980", suffix: "円", note: "月額会費（税込）" },
+      },
+      {
+        title: "入会された方限定プレゼント！",
+        nowLabel: "今だけ",
+        body: "ピラティス専用ソックスプレゼント",
+        gift: true,
+      },
+    ],
+  },
+
   reasons: {
     heading: "BEAT PILATESが選ばれる\n3つの理由",
     items: [
@@ -298,28 +349,44 @@ const config: BeatPilatesConfig = {
     swipeHint: "スワイプで移動",
     items: [
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-akina.jpg", position: "center 20%" },
         role: "PILATES INSTRUCTOR",
-        name: "AYA",
-        nameEn: "Aya",
+        name: "AKINA",
+        nameEn: "Akina",
         body: "「運動が苦手」という方こそ変われることを、自身の経験から実感。一人ひとりのペースに寄り添い、楽しく続けられるレッスンを心がけています。",
         tags: ["マシンピラティス", "姿勢改善"],
       },
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-momo.jpg", position: "center 15%" },
         role: "PILATES INSTRUCTOR",
-        name: "MIKI",
-        nameEn: "Miki",
+        name: "MOMO",
+        nameEn: "Momo",
         body: "身体を動かす楽しさと、続けることで生まれる変化を届けたい。初めての方でも安心できるよう、丁寧な声かけとサポートを大切にしています。",
         tags: ["ボディメイク", "体幹強化"],
       },
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-pipi.jpg", position: "center 25%" },
         role: "PILATES INSTRUCTOR",
-        name: "RINA",
-        nameEn: "Rina",
+        name: "PIPI",
+        nameEn: "Pipi",
         body: "音楽に合わせて動く心地よさを通して、運動を習慣に。その日の体調や目的に合わせたレッスンで、しなやかな身体づくりをサポートします。",
         tags: ["骨盤ケア", "ヒップアップ"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-kuma.jpg", position: "center 15%" },
+        role: "PILATES INSTRUCTOR",
+        name: "KUMA",
+        nameEn: "Kuma",
+        body: "レッスン後の軽やかな身体の変化を実感してほしい。呼吸と動きを丁寧に合わせながら、無理なく続けられるレッスンをお届けします。",
+        tags: ["姿勢改善", "柔軟性向上"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-ai.jpg", position: "center 20%" },
+        role: "PILATES INSTRUCTOR",
+        name: "ai",
+        nameEn: "Ai",
+        body: "初めての方にこそ、正しいフォームと心地よい負荷を。細やかな観察力で一人ひとりに合わせたレッスンを提供しています。",
+        tags: ["マシンピラティス", "ボディメイク"],
       },
     ],
   },
@@ -374,7 +441,7 @@ const config: BeatPilatesConfig = {
       { label: "月3回プラン", price: "7,800円〜" },
       { label: "月4回プラン", price: "10,000円〜" },
       { label: "デイタイム", sublabel: "平日9:00〜17:00", price: "11,800円〜" },
-      { label: "ナイトタイム", sublabel: "平日17:00〜22:00", price: "11,800円〜" },
+      { label: "ナイトタイム", sublabel: "全日17:00〜21:00", price: "11,800円〜" },
       { label: "フルプラン", sublabel: "回数無制限", price: "15,600円〜" },
     ],
     note: "※詳細は予約サイト・店頭でご確認ください",
@@ -387,7 +454,7 @@ const config: BeatPilatesConfig = {
         img: { placeholder: "名古屋伏見店の外観／内観写真", src: "/clients/beat-pilates-nagoyafushimi/access-store.jpg" },
         name: "BEAT PILATES 名古屋伏見店",
         address: "〒460-0008 名古屋市中区栄1-18-1 ハイツサンライズ2F号室",
-        hours: "営業時間 10:00〜22:00",
+        hours: "営業時間 9:00〜21:00",
         route: "地下鉄東山線・鶴舞線 伏見駅 徒歩8分／地下鉄鶴舞線 大須観音駅 徒歩10分",
       },
     ],
@@ -399,11 +466,20 @@ const config: BeatPilatesConfig = {
     fields: [
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
-      { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
-      { type: "date", name: "date1", label: "ご希望日(第1希望)" },
-      { type: "time", name: "time1", label: "ご希望時間(第1希望)", min: "10:00", max: "22:00" },
-      { type: "date", name: "date2", label: "ご希望日(第2希望)" },
-      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "10:00", max: "22:00" },
+      { type: "email", name: "email", label: "メールアドレス", required: true, placeholder: "example@mail.com" },
+      { type: "date", name: "date1", label: "ご希望日", required: true },
+      {
+        type: "select",
+        name: "time1",
+        label: "ご希望時間",
+        required: true,
+        placeholder: "時間帯を選択してください",
+        dateLinkedOptions: {
+          dateField: "date1",
+          weekday: weekdaySlots,
+          weekend: weekendSlots,
+        },
+      },
       {
         type: "textarea",
         name: "note",
@@ -415,7 +491,7 @@ const config: BeatPilatesConfig = {
     ],
     submitLabel: "この内容で予約する",
     disclaimer: "45分体験レッスン0円｜今なら入会金0円｜しつこい勧誘はいたしません。",
-    errorMessage: "お名前・電話番号は必須項目です。ご希望日は明日以降の日付をお選びください。",
+    errorMessage: "お名前・電話番号・メールアドレス・ご希望日・ご希望時間は必須項目です。ご希望日は明日以降の日付をお選びください。",
   },
 
   sticky: {
