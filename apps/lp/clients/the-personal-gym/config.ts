@@ -48,7 +48,7 @@ const config: PatternAConfig = {
   achievement: { pre: "全国", num: "50", post: "店舗のパーソナルジムが本気で作った、マシンピラティス" },
 
   fv: {
-    catchLines: ["心と身体の状態に", "合わせるピラティス"],
+    catchLines: ["ピラティス", "最短で変わるための"],
     hero: { placeholder: "スタジオ / マシンピラティスの写真（全面）", src: "/clients/the-personal-gym/fv-hero.jpg", position: "42% center" },
     leftCard: { small: "パーソナル", big: "マシンピラティス" },
     rightCard: { small: "姿勢改善", big: "ストレッチ" },
@@ -257,11 +257,11 @@ const config: PatternAConfig = {
       },
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
-      { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
-      { type: "date", name: "date1", label: "ご希望日(第1希望)" },
-      { type: "select", name: "time1", label: "ご希望時間(第1希望)", placeholder: "時間を選択", options: timeSlots(7, 22) },
-      { type: "date", name: "date2", label: "ご希望日(第2希望)" },
-      { type: "select", name: "time2", label: "ご希望時間(第2希望)", placeholder: "時間を選択", options: timeSlots(7, 22) },
+      { type: "email", name: "email", label: "メールアドレス", required: true, placeholder: "example@mail.com" },
+      { type: "date", name: "date1", label: "ご希望日(第1希望)", required: true },
+      { type: "select", name: "time1", label: "ご希望時間(第1希望)", required: true, placeholder: "時間を選択", options: timeSlots(7, 22) },
+      { type: "date", name: "date2", label: "ご希望日(第2希望)", required: true },
+      { type: "select", name: "time2", label: "ご希望時間(第2希望)", required: true, placeholder: "時間を選択", options: timeSlots(7, 22) },
       {
         type: "textarea",
         name: "note",
@@ -273,7 +273,7 @@ const config: PatternAConfig = {
     ],
     submitLabel: "この内容で予約する",
     disclaimer: "",
-    errorMessage: "店舗・お名前・電話番号は必須項目です。ご希望日は明日以降の日付をお選びください。",
+    errorMessage: "店舗・お名前・電話番号・メールアドレス・ご希望日時(第1・第2希望)は必須項目です。ご希望日は明日以降の日付をお選びください。",
   },
 
   sticky: {

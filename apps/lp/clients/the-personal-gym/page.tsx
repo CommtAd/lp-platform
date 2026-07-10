@@ -212,7 +212,7 @@ export default function Page() {
                   style={{ height: 34, width: "auto", display: "block" }}
                 />
                 {c.header.hours && (
-                  <div style={{ fontSize: 9, letterSpacing: "0.14em", color: "#3B3D36", marginTop: 4, marginLeft: 3 }}>
+                  <div style={{ fontSize: 11, letterSpacing: "0.1em", color: "#3B3D36", marginTop: 4, marginLeft: 3 }}>
                     {c.header.hours}
                   </div>
                 )}
@@ -305,12 +305,13 @@ export default function Page() {
                 style={{
                   fontFamily: fontGothic,
                   fontWeight: 700,
-                  fontSize: 20,
-                  letterSpacing: "0.06em",
+                  fontSize: 21,
+                  letterSpacing: "0.04em",
                   color: "#FFFFFF",
                   textShadow: "0 1px 5px rgba(180,110,30,0.5)",
                   lineHeight: 1.2,
                   textAlign: "center",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {c.offerBar.text}
@@ -363,32 +364,51 @@ export default function Page() {
                 left: 26,
                 zIndex: 2,
                 display: "flex",
-                flexDirection: "row-reverse",
+                flexDirection: "column",
                 alignItems: "flex-start",
-                gap: 6,
+                gap: 8,
                 pointerEvents: "none",
               }}
             >
-              {c.fv.catchLines.map((line, i) => (
+              <div style={{ display: "flex", flexDirection: "row-reverse", alignItems: "flex-start", gap: 6 }}>
+                {c.fv.catchLines.map((line, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      writingMode: "vertical-rl",
+                      fontFamily: fontGothic,
+                      fontWeight: 500,
+                      fontSize: 24,
+                      letterSpacing: "0.14em",
+                      lineHeight: 1.7,
+                      color: "#3B3D36",
+                      background: "#FFFFFF",
+                      padding: "14px 8px",
+                      borderRadius: 4,
+                      boxShadow: "0 4px 14px rgba(0,0,0,0.18)",
+                    }}
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
+              {c.fv.heroTag && (
                 <div
-                  key={i}
                   style={{
-                    writingMode: "vertical-rl",
                     fontFamily: fontGothic,
-                    fontWeight: 400,
-                    fontSize: 20,
-                    letterSpacing: "0.12em",
-                    lineHeight: 1.7,
+                    fontWeight: 600,
+                    fontSize: 14,
+                    letterSpacing: "0.06em",
                     color: "#3B3D36",
                     background: "#FFFFFF",
-                    padding: "12px 6px",
+                    padding: "6px 12px",
                     borderRadius: 4,
                     boxShadow: "0 4px 14px rgba(0,0,0,0.18)",
                   }}
                 >
-                  {line}
+                  {c.fv.heroTag}
                 </div>
-              ))}
+              )}
             </div>
             <div
               style={{
@@ -407,18 +427,18 @@ export default function Page() {
                     style={{
                       flex: 1,
                       background: accent,
-                      border: "1px solid rgba(255,255,255,0.25)",
+                      border: "1.5px solid rgba(232,200,119,0.45)",
                       borderRadius: 6,
                       padding: "20px 8px",
                       textAlign: "center",
                       color: "#FFFFFF",
-                      boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
+                      boxShadow: "0 8px 20px rgba(0,0,0,0.22)",
                     }}
                   >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E8C877" }}>
+                    <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "0.1em", color: "#E8C877", textShadow: "0 1px 4px rgba(0,0,0,0.3)" }}>
                       {c.fv.leftCard.small}
                     </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
+                    <div style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 16, letterSpacing: "0.02em", marginTop: 5, whiteSpace: "nowrap", textShadow: "0 1px 4px rgba(0,0,0,0.3)" }}>
                       {c.fv.leftCard.big}
                     </div>
                   </div>
@@ -440,18 +460,18 @@ export default function Page() {
                     style={{
                       flex: 1,
                       background: accent,
-                      border: "1px solid rgba(255,255,255,0.25)",
+                      border: "1.5px solid rgba(232,200,119,0.45)",
                       borderRadius: 6,
                       padding: "20px 8px",
                       textAlign: "center",
                       color: "#FFFFFF",
-                      boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
+                      boxShadow: "0 8px 20px rgba(0,0,0,0.22)",
                     }}
                   >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E8C877" }}>
+                    <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "0.1em", color: "#E8C877", textShadow: "0 1px 4px rgba(0,0,0,0.3)" }}>
                       {c.fv.rightCard.small}
                     </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
+                    <div style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 16, letterSpacing: "0.02em", marginTop: 5, whiteSpace: "nowrap", textShadow: "0 1px 4px rgba(0,0,0,0.3)" }}>
                       {c.fv.rightCard.big}
                     </div>
                   </div>
@@ -716,7 +736,6 @@ export default function Page() {
                     <div style={{ paddingBottom: last ? 0 : 28 }}>
                       <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
                         <h3 style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.03em", margin: 0, color: "#33352E" }}>{step.title}</h3>
-                        <span style={{ fontSize: 11, color: "#9A9C90" }}>{step.time}</span>
                       </div>
                       <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>{step.body}</p>
                     </div>
