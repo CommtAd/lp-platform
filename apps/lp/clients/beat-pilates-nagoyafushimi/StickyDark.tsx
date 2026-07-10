@@ -35,10 +35,16 @@ export default function StickyDark({
   }, [anchor, showAfter]);
 
   useEffect(() => {
-    const prev = document.body.style.paddingBottom;
+    // The sticky footer bar needs bottom clearance so it doesn't cover the form.
+    // Also override the global light body background (globals.css uses pattern A's
+    // cream #e4dfd5) so that padding doesn't show as a light strip under this dark LP.
+    const prevPad = document.body.style.paddingBottom;
+    const prevBg = document.body.style.background;
     document.body.style.paddingBottom = "104px";
+    document.body.style.background = "#0A0A10";
     return () => {
-      document.body.style.paddingBottom = prev;
+      document.body.style.paddingBottom = prevPad;
+      document.body.style.background = prevBg;
     };
   }, []);
 
