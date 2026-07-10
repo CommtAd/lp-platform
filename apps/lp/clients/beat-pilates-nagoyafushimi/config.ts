@@ -143,7 +143,7 @@ export interface BeatPilatesConfig {
 }
 
 const config: BeatPilatesConfig = {
-  slug: "beat-pilates",
+  slug: "beat-pilates-nagoyafushimi",
   status: "draft",
   meta: {
     title: "BEAT PILATES 名古屋伏見店｜暗闇×音楽×マシンピラティス",
@@ -154,7 +154,7 @@ const config: BeatPilatesConfig = {
   header: {
     brand: "BEAT PILATES",
     brandSub: "NAGOYA FUSHIMI",
-    logo: "/clients/beat-pilates/logo_w.png",
+    logo: "/clients/beat-pilates-nagoyafushimi/logo_w.png",
     logoAlt: "BEAT PILATES",
   },
 
@@ -162,7 +162,7 @@ const config: BeatPilatesConfig = {
     catchLines: ["運動が苦手でも、", "楽しく続く。"],
     subCatch: "暗闇×音楽×マシンピラティス",
     body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
-    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates/fv-hero.jpg", position: "0% 30%" },
+    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-nagoyafushimi/fv-hero.jpg", position: "0% 30%" },
     trialBadge: { label: "初回体験", price: "0", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
     tags: ["女性専用", "初心者歓迎"],
@@ -193,19 +193,19 @@ const config: BeatPilatesConfig = {
     items: [
       {
         num: "01",
-        img: { placeholder: "暗闇スタジオの写真", src: "/clients/beat-pilates/why-01-dark-studio.jpg", position: "center 38%" },
+        img: { placeholder: "暗闇スタジオの写真", src: "/clients/beat-pilates-nagoyafushimi/why-01-dark-studio.jpg", position: "center 38%" },
         title: "暗闇で集中",
         body: "周りの目を気にせず、自分の動きに集中できる特別な空間。",
       },
       {
         num: "02",
-        img: { placeholder: "音楽に合わせて動く写真", src: "/clients/beat-pilates/why-02-music.png", position: "center" },
+        img: { placeholder: "音楽に合わせて動く写真", src: "/clients/beat-pilates-nagoyafushimi/why-02-music.png", position: "center" },
         title: "音楽で楽しく",
         body: "心地よい音楽がモチベーションを高め、レッスンがもっと楽しく。",
       },
       {
         num: "03",
-        img: { placeholder: "マシンピラティスの写真", src: "/clients/beat-pilates/why-03-machine.jpg", position: "center 75%" },
+        img: { placeholder: "マシンピラティスの写真", src: "/clients/beat-pilates-nagoyafushimi/why-03-machine.jpg", position: "center 75%" },
         title: "マシンで安心",
         body: "専用マシンが身体をサポートするから、初心者でも安心して正しく動ける。",
       },
@@ -224,7 +224,7 @@ const config: BeatPilatesConfig = {
       { icon: "musicNote", label: "音楽" },
       { icon: "reformer", label: "リフォーマー" },
     ],
-    photo: { placeholder: "レッスンの様子の写真", src: "/clients/beat-pilates/about-lesson.jpg", position: "90% center" },
+    photo: { placeholder: "レッスンの様子の写真", src: "/clients/beat-pilates-nagoyafushimi/about-lesson.jpg", position: "90% center" },
   },
 
   offer: {
@@ -236,7 +236,7 @@ const config: BeatPilatesConfig = {
     cards: [
       {
         num: "01",
-        img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates/reason-01-studio.jpg", position: "center" },
+        img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates-nagoyafushimi/reason-01-studio.jpg", position: "center" },
         label: "45分\n体験レッスン",
         price: "0",
         unit: "円",
@@ -244,7 +244,7 @@ const config: BeatPilatesConfig = {
       },
       {
         num: "02",
-        img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates/why-01-dark-studio.jpg", position: "center" },
+        img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates-nagoyafushimi/why-01-dark-studio.jpg", position: "center" },
         label: "今なら\n入会金",
         price: "0",
         unit: "円",
@@ -263,13 +263,13 @@ const config: BeatPilatesConfig = {
     items: [
       {
         num: "01",
-        img: { placeholder: "女性専用スタジオの写真", src: "/clients/beat-pilates/reason-01-studio.jpg", position: "center" },
+        img: { placeholder: "女性専用スタジオの写真", src: "/clients/beat-pilates-nagoyafushimi/reason-01-studio.jpg", position: "center" },
         title: "女性専用の暗闇空間で、\n人目を気にせず集中できる",
         body: "会員もインストラクターもすべて女性。照明を落とした暗闇スタジオだから、周りの視線が気にならず、自分の身体と動きだけに集中できます。運動が苦手な方や初めての方でも、安心して始められる環境です。",
       },
       {
         num: "02",
-        img: { placeholder: "レッスンの写真", src: "/clients/beat-pilates/reason-02-program.jpg", position: "center" },
+        img: { placeholder: "レッスンの写真", src: "/clients/beat-pilates-nagoyafushimi/reason-02-program.jpg", position: "center" },
         title: "その日の目的に合わせて\n選べるプログラム",
         body: "「今日は何を整えたいか」でレッスンを選べます。目的に合わせてインストラクターが強度を調整するから、無理なく続けられる運動習慣に。",
         trio: [
@@ -283,7 +283,7 @@ const config: BeatPilatesConfig = {
       },
       {
         num: "03",
-        img: { placeholder: "マシンピラティスの写真", src: "/clients/beat-pilates/reason-03-machine.jpg", position: "center 60%" },
+        img: { placeholder: "マシンピラティスの写真", src: "/clients/beat-pilates-nagoyafushimi/reason-03-machine.jpg", position: "center 60%" },
         title: "マシンピラティスだから、\n初心者でも安心して動ける",
         body: "専用マシン（リフォーマー）が身体の動きをサポート。正しいフォームを保ちながら効率よく筋肉にアプローチできるので、運動経験がない方でも安心して取り組めます。",
       },
@@ -326,7 +326,7 @@ const config: BeatPilatesConfig = {
 
   movie: {
     heading: "スタジオ紹介ムービー",
-    src: "/clients/beat-pilates/studio-movie.mp4",
+    src: "/clients/beat-pilates-nagoyafushimi/studio-movie.mp4",
   },
 
   voices: {
@@ -384,7 +384,7 @@ const config: BeatPilatesConfig = {
     heading: "店舗のご案内",
     stores: [
       {
-        img: { placeholder: "名古屋伏見店の外観／内観写真", src: "/clients/beat-pilates/access-store.jpg" },
+        img: { placeholder: "名古屋伏見店の外観／内観写真", src: "/clients/beat-pilates-nagoyafushimi/access-store.jpg" },
         name: "BEAT PILATES 名古屋伏見店",
         address: "〒460-0008 名古屋市中区栄1-18-1 ハイツサンライズ2F号室",
         hours: "営業時間 10:00〜22:00",
