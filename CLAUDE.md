@@ -58,6 +58,8 @@
    push先がmainでないこと、PR差分が意図通りかを必ず確認する。
 4. **CIの通過を待つ**: GitHub Actions の `check`（check-rules + build）が緑になること。
    赤なら本番に反映されない仕組み。ログを見て直し、pushし直す。
+   状態確認は `gh pr checks <PR番号>` をまず一度直接叩く（`check` は通常40秒前後で完了）。
+   待ちループを回すと間隔ぶんの遅延で実際より遅く見えるため、無駄な待ち時間を避ける。
 5. **マージする**: CIが緑になったら `gh pr merge --squash`。mainへ反映される。
 6. **公開する**: ダッシュボードの公開ボタンで status を published に切り替える
    （Vercel Deploy Hook が発火 → 本番反映）。Vercelの席は不要＝追加費用なし。
