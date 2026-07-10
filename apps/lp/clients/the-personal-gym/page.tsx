@@ -263,8 +263,8 @@ export default function Page() {
                   left: 20,
                   top: "50%",
                   transform: "translateY(-50%)",
-                  width: 68,
-                  height: 68,
+                  width: 58,
+                  height: 58,
                   borderRadius: "50%",
                   background: "radial-gradient(circle at 38% 32%, #DD9A82 0%, #C9765C 100%)",
                   boxShadow: "0 3px 8px rgba(150,70,50,0.28)",
@@ -324,18 +324,19 @@ export default function Page() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 6,
+              gap: 3,
               background: "#FFFFFF",
               color: "#3B3D36",
-              padding: "7px 18px",
+              padding: "7px 10px",
               boxShadow: "0 2px 6px rgba(70,72,60,0.08)",
+              whiteSpace: "nowrap",
             }}
           >
-            <span style={{ fontSize: 13, letterSpacing: "0.03em" }}>{c.achievement.pre}</span>
-            <span style={{ fontWeight: 700, fontSize: 16, lineHeight: 1, color: accent }}>
+            <span style={{ fontSize: 11, letterSpacing: "-0.01em" }}>{c.achievement.pre}</span>
+            <span style={{ fontWeight: 700, fontSize: 14, lineHeight: 1, color: accent }}>
               {c.achievement.num}
             </span>
-            <span style={{ fontSize: 13, letterSpacing: "0.03em" }}>{c.achievement.post}</span>
+            <span style={{ fontSize: 11, letterSpacing: "-0.01em" }}>{c.achievement.post}</span>
           </div>
 
           {/* ── ① FV ── */}
@@ -570,21 +571,6 @@ export default function Page() {
               <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 112, lineHeight: 0.9, letterSpacing: "0.02em", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
                 0<span style={{ fontSize: 56 }}>円</span>
               </div>
-            </div>
-
-            {/* regular price */}
-            <div style={{ background: "#F4F0E8", borderRadius: 12, padding: "26px 20px", marginTop: 20, textAlign: "center" }}>
-              <p style={{ margin: 0, fontSize: 14, color: "#4C4E45", letterSpacing: "0.04em" }}>入会後は</p>
-              <p style={{ margin: "6px 0 0", fontFamily: fontMincho, color: "#33352E", lineHeight: 1 }}>
-                <span style={{ fontSize: 15 }}>{c.offer.regular.prefix}</span>
-                <span style={{ fontWeight: 700, fontSize: 52, background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                  {c.offer.regular.amount}
-                </span>
-                <span style={{ fontSize: 20, fontWeight: 700 }}>円</span>
-              </p>
-              <p style={{ margin: "8px 0 0", fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.08em", color: "#33352E" }}>
-                {c.offer.regular.suffix}
-              </p>
             </div>
 
             <GoldCta text={c.offer.ctaText} />

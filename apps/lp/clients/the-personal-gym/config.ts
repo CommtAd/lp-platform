@@ -34,8 +34,8 @@ const config: PatternAConfig = {
       { station: "吉祥寺駅", walk: "徒歩3分" },
     ],
   },
-  offerBar: { badgeLines: ["期間", "限定"], badgeFontSize: 18, badgeFontWeight: 400, badgeFontFamily: "mincho", text: "90分体験無料・入会金0円" },
-  achievement: { pre: "全国", num: "50", post: "店舗展開のパーソナルジムが運営" },
+  offerBar: { badgeLines: ["期間", "限定"], badgeFontSize: 15, badgeFontWeight: 400, badgeFontFamily: "mincho", text: "90分体験無料・入会金0円" },
+  achievement: { pre: "全国", num: "50", post: "店舗のパーソナルジムが本気で作った、マシンピラティス" },
 
   fv: {
     catchLines: ["心と身体の状態に", "合わせるピラティス"],
@@ -139,22 +139,6 @@ const config: PatternAConfig = {
         body: "“Look good, feel good, play good.” 見た目が変われば、すべてが変わる。「どうせ無理」と思っていた人こそ、自分の可能性に気づける。そのきっかけを本気で提供します。",
         tags: ["FWJ 2024 三重大会 men's physique"],
       },
-      {
-        img: { placeholder: "トレーナーの写真", src: `${ASSET}/trainer-omura.jpg` },
-        role: "PERSONAL TRAINER",
-        name: "大村 健人",
-        nameEn: "Kento Omura",
-        body: "身体が変わると気持ちが変わり、人生が豊かになる——それを伝えたくてトレーナーに。自身の知識と経験を活かし、一人ひとりに合ったボディメイクを提供します。理想の身体を目指して一緒にがんばりましょう。",
-        tags: ["NSCA-CPT", "FWJ 2021 Crystal Cup ノービス10位"],
-      },
-      {
-        img: { placeholder: "トレーナーの写真", src: `${ASSET}/trainer-ito.jpg` },
-        role: "PERSONAL TRAINER",
-        name: "伊藤 優汰",
-        nameEn: "Yuta Ito",
-        body: "トレーニングで身体が変わる喜びと、運動から得られる前向きな気持ちを実感。学んできた知識と技術をもとに、お客様の目標達成を全力でサポートします。理想の身体を一緒に作り上げましょう。",
-        tags: ["JATI-ATI", "JBBF 神奈川選手権2024 出場"],
-      },
     ],
   },
 
@@ -212,7 +196,7 @@ const config: PatternAConfig = {
       },
       {
         q: "服装は何を用意すればいい?",
-        a: "動きやすい服装であれば何でも構いません。Tシャツとレギンス、ジャージなどをお持ちください。お水とタオルは無料でご用意しています。仕事帰りでも手ぶらに近い形でお越しいただけます。",
+        a: "手ぶらでOKです。ウェア・タオル・お水はすべて無料でご用意しているので、お仕事帰りや外出のついでにもそのままお越しいただけます。シューズも不要で、お荷物なく気軽に通えます。",
       },
       {
         q: "男性も通える?",
@@ -265,9 +249,9 @@ const config: PatternAConfig = {
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
       { type: "date", name: "date1", label: "ご希望日(第1希望)" },
-      { type: "time", name: "time1", label: "ご希望時間(第1希望)", min: "07:00", max: "22:00" },
+      { type: "time", name: "time1", label: "ご希望時間(第1希望)", min: "07:00", max: "22:00", step: 1800 },
       { type: "date", name: "date2", label: "ご希望日(第2希望)" },
-      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "07:00", max: "22:00" },
+      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "07:00", max: "22:00", step: 1800 },
       {
         type: "textarea",
         name: "note",
