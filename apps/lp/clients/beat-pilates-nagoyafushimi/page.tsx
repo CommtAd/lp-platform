@@ -408,6 +408,85 @@ function OfferSection({ topPad = 48 }: { topPad?: number }) {
   );
 }
 
+function BenefitsSection() {
+  const bene = config.benefits;
+  return (
+    <section style={{ padding: "6px 18px 48px", background: "#0A0A10" }}>
+      <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: "#FFFFFF" }}>
+        {bene.heading}
+        <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66)` }}>{bene.headingHighlight}</span>
+      </h2>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 24 }}>
+        {bene.items.map((b, i) => {
+          const accent = i === 0 ? pink : blue;
+          return (
+            <div
+              key={i}
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                gap: 14,
+                borderRadius: 16,
+                border: `1px solid ${accent}55`,
+                background: `${accent}0F`,
+                boxShadow: `0 0 20px ${accent}22, inset 0 0 16px ${accent}0A`,
+                padding: "18px 16px 18px 22px",
+                overflow: "hidden",
+              }}
+            >
+              {/* left neon accent bar */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: 5,
+                  background: `linear-gradient(180deg, ${accent} 0%, ${accent}AA 100%)`,
+                  boxShadow: `0 0 12px ${accent}`,
+                }}
+              />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ display: "flex", alignItems: "flex-start", gap: 7, fontFamily: fontGothic, fontWeight: 800, fontSize: 15, lineHeight: 1.45, color: "#FFFFFF", margin: 0, textShadow: `0 0 10px ${accent}44` }}>
+                  <span style={{ flexShrink: 0, color: accent, fontSize: 13, lineHeight: 1.6, textShadow: `0 0 8px ${accent}` }}>◆</span>
+                  <span>{b.title}</span>
+                </p>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
+                  <span style={{ flexShrink: 0, fontFamily: fontGothic, fontWeight: 800, fontSize: 11, color: accent, textShadow: `0 0 8px ${accent}88` }}>{b.nowLabel}</span>
+                  <span style={{ fontSize: 11.5, lineHeight: 1.5, color: textDim }}>{b.body}</span>
+                </div>
+                {b.price && (
+                  <div style={{ display: "flex", alignItems: "flex-end", gap: 8, marginTop: 8 }}>
+                    {b.price.unit && (
+                      <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "4px 10px", borderRadius: 999, background: accent, fontFamily: fontGothic, fontWeight: 800, fontSize: 12, color: "#FFFFFF", boxShadow: `0 0 10px ${accent}77` }}>{b.price.unit}</span>
+                    )}
+                    <span style={{ display: "flex", alignItems: "flex-end" }}>
+                      {b.price.note && <span style={{ fontSize: 10, color: textDim2, marginRight: 6, marginBottom: 6 }}>{b.price.note}</span>}
+                      <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 40, lineHeight: 1.15, fontVariantNumeric: "lining-nums", padding: "0 3px", background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}88)` }}>{b.price.value}</span>
+                      <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 18, lineHeight: 1, color: "#FFFFFF", marginLeft: 1, marginBottom: 4 }}>{b.price.suffix}</span>
+                    </span>
+                  </div>
+                )}
+              </div>
+              {b.gift && (
+                <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 54, height: 54, borderRadius: 14, background: `${accent}18`, border: `1px solid ${accent}55`, boxShadow: `0 0 14px ${accent}33` }}>
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="8" width="18" height="13" rx="1.5" stroke={accent} strokeWidth="1.6" />
+                    <path d="M3 12h18" stroke={accent} strokeWidth="1.6" />
+                    <path d="M12 8v13" stroke={accent} strokeWidth="1.6" />
+                    <path d="M12 8S9.5 3.5 7 5C5 6.2 6.5 8 8 8h4Zm0 0s2.5-4.5 5-3c2 1.2.5 3-1 3h-4Z" stroke={accent} strokeWidth="1.6" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 export default function Page() {
   const c = config;
   return (
@@ -595,6 +674,9 @@ export default function Page() {
 
           {/* ── offer (初回体験オファー・FV下) ── */}
           <OfferSection topPad={20} />
+
+          {/* ── benefits (入会特典・FV下) ── */}
+          <BenefitsSection />
 
           {/* ── worry ── */}
           <section style={{ padding: "34px 22px 12px" }}>
@@ -855,6 +937,9 @@ export default function Page() {
 
           {/* ── offer (初回体験オファー) ── */}
           <OfferSection />
+
+          {/* ── benefits (入会特典) ── */}
+          <BenefitsSection />
 
           {/* ── reasons (選ばれる3つの理由) ── */}
           <section style={{ padding: "36px 22px 66px", background: "#0D0D14" }}>

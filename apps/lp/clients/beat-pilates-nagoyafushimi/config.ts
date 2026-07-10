@@ -88,6 +88,18 @@ export interface BeatPilatesConfig {
     badges: { icon: string; label: string }[];
   };
 
+  benefits: {
+    heading: string;
+    headingHighlight: string;
+    items: {
+      title: string;
+      nowLabel: string;
+      body: string;
+      price?: { unit?: string; value: string; suffix: string; note?: string };
+      gift?: boolean;
+    }[];
+  };
+
   reasons: {
     heading: string;
     items: {
@@ -278,6 +290,25 @@ const config: BeatPilatesConfig = {
     ],
   },
 
+  benefits: {
+    heading: "うれしい",
+    headingHighlight: "入会特典",
+    items: [
+      {
+        title: "通い放題プランが2ヶ月おトク！",
+        nowLabel: "今だけ",
+        body: "通い放題プラン【スタンダード】or【プレミアム】の場合",
+        price: { unit: "2ヶ月", value: "1,980", suffix: "円", note: "月額会費（税込）" },
+      },
+      {
+        title: "入会された方限定プレゼント！",
+        nowLabel: "今だけ",
+        body: "ピラティス専用ソックスプレゼント",
+        gift: true,
+      },
+    ],
+  },
+
   reasons: {
     heading: "BEAT PILATESが選ばれる\n3つの理由",
     items: [
@@ -318,28 +349,44 @@ const config: BeatPilatesConfig = {
     swipeHint: "スワイプで移動",
     items: [
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-akina.jpg", position: "center 20%" },
         role: "PILATES INSTRUCTOR",
-        name: "AYA",
-        nameEn: "Aya",
+        name: "AKINA",
+        nameEn: "Akina",
         body: "「運動が苦手」という方こそ変われることを、自身の経験から実感。一人ひとりのペースに寄り添い、楽しく続けられるレッスンを心がけています。",
         tags: ["マシンピラティス", "姿勢改善"],
       },
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-momo.jpg", position: "center 15%" },
         role: "PILATES INSTRUCTOR",
-        name: "MIKI",
-        nameEn: "Miki",
+        name: "MOMO",
+        nameEn: "Momo",
         body: "身体を動かす楽しさと、続けることで生まれる変化を届けたい。初めての方でも安心できるよう、丁寧な声かけとサポートを大切にしています。",
         tags: ["ボディメイク", "体幹強化"],
       },
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-pipi.jpg", position: "center 25%" },
         role: "PILATES INSTRUCTOR",
-        name: "RINA",
-        nameEn: "Rina",
+        name: "PIPI",
+        nameEn: "Pipi",
         body: "音楽に合わせて動く心地よさを通して、運動を習慣に。その日の体調や目的に合わせたレッスンで、しなやかな身体づくりをサポートします。",
         tags: ["骨盤ケア", "ヒップアップ"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-kuma.jpg", position: "center 15%" },
+        role: "PILATES INSTRUCTOR",
+        name: "KUMA",
+        nameEn: "Kuma",
+        body: "レッスン後の軽やかな身体の変化を実感してほしい。呼吸と動きを丁寧に合わせながら、無理なく続けられるレッスンをお届けします。",
+        tags: ["姿勢改善", "柔軟性向上"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: "/clients/beat-pilates-nagoyafushimi/trainer-ai.jpg", position: "center 20%" },
+        role: "PILATES INSTRUCTOR",
+        name: "ai",
+        nameEn: "Ai",
+        body: "初めての方にこそ、正しいフォームと心地よい負荷を。細やかな観察力で一人ひとりに合わせたレッスンを提供しています。",
+        tags: ["マシンピラティス", "ボディメイク"],
       },
     ],
   },
