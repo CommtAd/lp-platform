@@ -58,8 +58,10 @@
    push先がmainでないこと、PR差分が意図通りかを必ず確認する。
 4. **CIの通過を待つ**: GitHub Actions の `check`（check-rules + build）が緑になること。
    赤なら本番に反映されない仕組み。ログを見て直し、pushし直す。
-   状態確認は `gh pr checks <PR番号>` をまず一度直接叩く（`check` は通常40秒前後で完了）。
-   待ちループを回すと間隔ぶんの遅延で実際より遅く見えるため、無駄な待ち時間を避ける。
+   完了待ちは `gh pr checks <PR番号> --watch --fail-fast` を使う（完了で自動終了。`check` は通常40秒前後）。
+   自作の待ちループは避ける。特に **macOS の grep は `-P`（Perl正規表現）非対応**で、
+   待ちループに `grep -P` を書くと毎回無言で失敗し、判定不能のまま延々と待ち続ける
+   （「CIが遅い」の誤診の原因になった実例あり）。ワンショット確認は `gh pr view <PR番号> --json mergeStateStatus`（CLEAN=通過）。
 5. **マージする**: CIが緑になったら `gh pr merge --squash`。mainへ反映される。
 6. **公開する**: ダッシュボードの公開ボタンで status を published に切り替える
    （Vercel Deploy Hook が発火 → 本番反映）。Vercelの席は不要＝追加費用なし。
