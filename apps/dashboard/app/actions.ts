@@ -8,6 +8,7 @@ import { addDomainToProject, removeDomainFromProject } from "@/lib/vercel-domain
 import type { ClientStatus } from "@shared/index";
 
 const SLUG_RE = /^[a-z0-9-]+$/;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Create a new client row owned by the current user. */
 export async function createClientRecord(formData: FormData) {
@@ -53,6 +54,17 @@ export async function updateClientRecord(clientId: string, formData: FormData) {
     return s === "" ? null : s;
   };
 
+  const notifyEmails = String(formData.get("notify_emails") ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s !== "");
+  const invalidEmail = notifyEmails.find((e) => !EMAIL_RE.test(e));
+  if (invalidEmail) {
+    redirect(
+      `/clients/${clientId}?error=${encodeURIComponent(`通知先メールアドレスの形式が正しくありません: ${invalidEmail}`)}`,
+    );
+  }
+
   const { error } = await supabase
     .from("clients")
     .update({
@@ -63,6 +75,7 @@ export async function updateClientRecord(clientId: string, formData: FormData) {
       line_tag_id: emptyToNull(formData.get("line_tag_id")),
       meta_domain_verification: emptyToNull(formData.get("meta_domain_verification")),
       commitad_client_id: emptyToNull(formData.get("commitad_client_id")),
+      notify_emails: notifyEmails,
       cv_events: {
         form_submit: formData.get("cv_form_submit") === "on",
         tel_tap: formData.get("cv_tel_tap") === "on",

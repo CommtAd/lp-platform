@@ -155,6 +155,20 @@ export default async function ClientDetailPage({
           />
         </section>
 
+        <section className="rounded-lg border border-neutral-200 bg-white p-5">
+          <h2 className="mb-1 text-sm font-semibold">フォーム通知メール</h2>
+          <p className="mb-4 text-xs text-neutral-500">
+            フォーム送信があった際に社内担当へ通知メールを送ります。複数のアドレスに送りたい場合はカンマ区切りで入力してください（例:
+            a@example.com, b@example.com）。未設定の場合は通知メールは送信されません（入力者への確認メールには影響しません）。
+          </p>
+          <Field
+            label="通知先メールアドレス（複数可・カンマ区切り）"
+            name="notify_emails"
+            defaultValue={client.notify_emails?.join(", ") ?? ""}
+            placeholder="tantou@example.com, tantou2@example.com"
+          />
+        </section>
+
         <button
           type="submit"
           className="w-full rounded-md bg-navy px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"

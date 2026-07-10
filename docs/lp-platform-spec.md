@@ -236,7 +236,6 @@ LPForm → Edge Function form-submit
 - [ ] DNS設定依頼文テンプレ出力（CNAME/Aレコード2種・スクショ付き・「請求メールを検索」の案内文含む）
 - [ ] 301リダイレクト + canonical切り替え（use_custom_domain_as_canonical）
 - [ ] Metaドメイン認証メタタグ注入
-- [ ] 公開完了のSlack通知（CommitAd Slack資産流用）
 
 ### Phase 4 — HTML納品（要望が出たら・半日規模）
 
