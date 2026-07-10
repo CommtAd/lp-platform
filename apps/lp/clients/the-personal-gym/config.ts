@@ -2,6 +2,16 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
 
 const ASSET = "/clients/the-personal-gym";
 
+/** 30-minute time slots between two hours, e.g. timeSlots(7, 22) → 07:00 … 22:00. */
+const timeSlots = (startHour: number, endHour: number) => {
+  const slots: { value: string; label: string }[] = [];
+  for (let m = startHour * 60; m <= endHour * 60; m += 30) {
+    const label = `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+    slots.push({ value: label, label });
+  }
+  return slots;
+};
+
 /**
  * THE PERSONAL GYM (pattern A). This is the SAME business as
  * the-personal-pilates, rebranding under the name "THE PERSONAL GYM" — not a
@@ -249,9 +259,9 @@ const config: PatternAConfig = {
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
       { type: "date", name: "date1", label: "ご希望日(第1希望)" },
-      { type: "time", name: "time1", label: "ご希望時間(第1希望)", min: "07:00", max: "22:00", step: 1800 },
+      { type: "select", name: "time1", label: "ご希望時間(第1希望)", placeholder: "時間を選択", options: timeSlots(7, 22) },
       { type: "date", name: "date2", label: "ご希望日(第2希望)" },
-      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "07:00", max: "22:00", step: 1800 },
+      { type: "select", name: "time2", label: "ご希望時間(第2希望)", placeholder: "時間を選択", options: timeSlots(7, 22) },
       {
         type: "textarea",
         name: "note",
