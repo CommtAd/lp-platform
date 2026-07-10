@@ -46,3 +46,22 @@
   → FAQ4問 → 店舗案内2店 → 予約フォーム。
 - 「業界最安クラス」は削除済み。復活させない。
 - 二重価格表記（11,000円→0円 / 33,000円→0円）は顧客確認済み。そのまま維持。
+
+## チーム共同運用フロー（修正→公開・追加費用なし）
+
+複数メンバーが各自のClaude Codeで修正〜公開まで行う前提の運用ルール。
+**main への直接pushは禁止（ブランチ保護済み）。必ずPR経由で、CIが通ってからマージする。**
+
+1. **ブランチを切る**: `git switch -c fix/<内容>`（mainで直接作業しない）。
+2. **修正する**: Claude Codeで編集。ローカルで `npm run build` が通ることを確認。
+3. **PRを作る**: `git push -u origin <branch>` → `gh pr create`。
+   push先がmainでないこと、PR差分が意図通りかを必ず確認する。
+4. **CIの通過を待つ**: GitHub Actions の `check`（check-rules + build）が緑になること。
+   赤なら本番に反映されない仕組み。ログを見て直し、pushし直す。
+5. **マージする**: CIが緑になったら `gh pr merge --squash`。mainへ反映される。
+6. **公開する**: ダッシュボードの公開ボタンで status を published に切り替える
+   （Vercel Deploy Hook が発火 → 本番反映）。Vercelの席は不要＝追加費用なし。
+
+- **権限**: メンバーはGitHubの collaborator（write）とダッシュボードのSupabase Authユーザーを付与すれば足りる。いずれも無料枠。
+- **保護設定**: `check` 通過必須・PR必須・force-push/削除禁止。管理者のみ緊急時にバイパス可。
+  ルールを緩めたい場合もコードや設定側で調整し、保護自体は外さない。
