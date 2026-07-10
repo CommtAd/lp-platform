@@ -42,7 +42,9 @@ export interface PatternAConfig {
   achievement: { pre: string; num: string; post: string };
 
   fv: {
-    catchLines: [string, string];
+    catchLines: string[];
+    /** Optional short horizontal brand line rendered under the vertical catchLines stack. */
+    heroTag?: string;
     hero: Slot;
     leftCard: { small: string; big: string };
     rightCard: { small: string; big: string };
