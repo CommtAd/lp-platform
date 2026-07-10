@@ -61,6 +61,10 @@
 5. **マージする**: CIが緑になったら `gh pr merge --squash`。mainへ反映される。
 6. **公開する**: ダッシュボードの公開ボタンで status を published に切り替える
    （Vercel Deploy Hook が発火 → 本番反映）。Vercelの席は不要＝追加費用なし。
+7. **本番を確認する**: 本番LPは独自ドメイン **`https://fitness-lp.commitad.com`** で配信される。
+   `lp-platform-lp.vercel.app` は 308 でこのドメインへリダイレクトするため、
+   確認は独自ドメインを直接開く（curlで検証する場合は必ず `-L` を付ける）。
+   リダイレクト追従なしで vercel.app を叩くと本文が空になり「未反映」と誤検知するので注意。
 
 - **権限**: メンバーはGitHubの collaborator（write）とダッシュボードのSupabase Authユーザーを付与すれば足りる。いずれも無料枠。
 - **保護設定**: `check` 通過必須・PR必須・force-push/削除禁止。管理者のみ緊急時にバイパス可。
