@@ -453,7 +453,16 @@ export default function LPForm({
               placeholder={f.placeholder}
               min={f.type === "date" ? f.min ?? tomorrowISODate() : f.min}
               max={f.max}
-              style={{ ...inputStyle, ...focusStyle }}
+              style={{
+                ...inputStyle,
+                // iOS Safari sizes date/time inputs to a large intrinsic
+                // min-content width and ignores width:100% unless the native
+                // appearance is removed — this keeps them within the viewport.
+                ...(f.type === "date" || f.type === "time"
+                  ? { appearance: "none", WebkitAppearance: "none" }
+                  : {}),
+                ...focusStyle,
+              }}
             />
           </div>
         );
