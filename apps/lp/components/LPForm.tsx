@@ -134,6 +134,7 @@ const labelStyle: CSSProperties = {
 };
 const inputStyle: CSSProperties = {
   width: "100%",
+  boxSizing: "border-box",
   height: 50,
   padding: "0 16px",
   border: "1px solid #DDD6C8",
