@@ -132,8 +132,16 @@ const labelStyle: CSSProperties = {
   letterSpacing: "0.04em",
   marginBottom: 10,
 };
+// Flex items default to min-width:auto, which refuses to shrink below the
+// child's min-content width. iOS date/time inputs report a huge min-content
+// width, so without this the wrapper (and the whole form) overflows the screen.
+const fieldWrapperStyle: CSSProperties = { minWidth: 0 };
 const inputStyle: CSSProperties = {
   width: "100%",
+  // iOS Safari gives date/time inputs a large intrinsic min-width; without
+  // these two it ignores width:100% and overflows the viewport.
+  minWidth: 0,
+  maxWidth: "100%",
   boxSizing: "border-box",
   height: 50,
   padding: "0 16px",
@@ -267,7 +275,7 @@ export default function LPForm({
       {fields.map((f) => {
         if (f.type === "toggle") {
           return (
-            <div key={f.name}>
+            <div key={f.name} style={fieldWrapperStyle}>
               <label style={labelStyle}>
                 {f.label}
                 {requiredTag(f)}
@@ -315,7 +323,7 @@ export default function LPForm({
         if (f.type === "select") {
           const chosen = values[f.name] ?? "";
           return (
-            <div key={f.name}>
+            <div key={f.name} style={fieldWrapperStyle}>
               <label style={labelStyle}>
                 {f.label}
                 {requiredTag(f)}
@@ -348,7 +356,7 @@ export default function LPForm({
 
         if (f.type === "textarea") {
           return (
-            <div key={f.name}>
+            <div key={f.name} style={fieldWrapperStyle}>
               <label style={labelStyle}>
                 {f.label}
                 {requiredTag(f)}
@@ -374,7 +382,7 @@ export default function LPForm({
         }
 
         return (
-          <div key={f.name}>
+          <div key={f.name} style={fieldWrapperStyle}>
             <label style={labelStyle}>
               {f.label}
               {requiredTag(f)}
