@@ -21,6 +21,8 @@ export type ToggleField = FieldBase & {
 export type InputField = FieldBase & {
   type: "text" | "tel" | "email" | "date" | "time";
   placeholder?: string;
+  /** For type "time": step in seconds (e.g. 1800 restricts the picker to 30-min increments). */
+  step?: number;
   /**
    * For type "date"/"time": HTML min/max bound (e.g. "2026-07-10" or "07:00").
    * For type "date" specifically, `min` defaults to tomorrow's local date when
@@ -348,6 +350,7 @@ export default function LPForm({
               placeholder={f.placeholder}
               min={f.type === "date" ? f.min ?? tomorrowISODate() : f.min}
               max={f.max}
+              step={f.type === "time" ? f.step : undefined}
               style={{ ...inputStyle, ...focusStyle }}
             />
           </div>
