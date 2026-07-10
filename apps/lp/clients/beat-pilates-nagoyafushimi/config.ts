@@ -466,12 +466,13 @@ const config: BeatPilatesConfig = {
     fields: [
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
-      { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
-      { type: "date", name: "date1", label: "ご希望日" },
+      { type: "email", name: "email", label: "メールアドレス", required: true, placeholder: "example@mail.com" },
+      { type: "date", name: "date1", label: "ご希望日", required: true },
       {
         type: "select",
         name: "time1",
         label: "ご希望時間",
+        required: true,
         placeholder: "時間帯を選択してください",
         dateLinkedOptions: {
           dateField: "date1",
@@ -490,7 +491,7 @@ const config: BeatPilatesConfig = {
     ],
     submitLabel: "この内容で予約する",
     disclaimer: "45分体験レッスン0円｜今なら入会金0円｜しつこい勧誘はいたしません。",
-    errorMessage: "お名前・電話番号は必須項目です。ご希望日は明日以降の日付をお選びください。",
+    errorMessage: "お名前・電話番号・メールアドレス・ご希望日・ご希望時間は必須項目です。ご希望日は明日以降の日付をお選びください。",
   },
 
   sticky: {
