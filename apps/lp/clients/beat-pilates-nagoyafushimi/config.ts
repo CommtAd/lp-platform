@@ -162,7 +162,7 @@ const config: BeatPilatesConfig = {
     catchLines: ["運動が苦手でも、", "楽しく続く。"],
     subCatch: "暗闇×音楽×マシンピラティス",
     body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
-    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-nagoyafushimi/fv-hero.jpg", position: "0% 30%" },
+    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-nagoyafushimi/fv-hero.jpg", position: "3% 30%" },
     trialBadge: { label: "初回体験", price: "0", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
     tags: ["女性専用", "初心者歓迎"],
@@ -216,15 +216,15 @@ const config: BeatPilatesConfig = {
   about: {
     heading: "暗闇マシンピラティスとは？",
     body1:
-      "暗闇空間で音楽に合わせながら、リフォーマーを使って全身を動かすグループレッスン。",
+      "暗闇空間で音楽に合わせながら、\nリフォーマーを使って全身を動かす\nグループレッスン。",
     body2:
-      "周囲の目を気にせず集中でき、楽しみながら姿勢改善・体幹強化・ボディメイクを目指せます。",
+      "周囲の目を気にせず集中でき、楽しみ\nながら姿勢改善・体幹強化・ボディ\nメイクを目指せます。",
     tags: [
       { icon: "moon", label: "暗闇" },
       { icon: "musicNote", label: "音楽" },
       { icon: "reformer", label: "リフォーマー" },
     ],
-    photo: { placeholder: "レッスンの様子の写真", src: "/clients/beat-pilates-nagoyafushimi/about-lesson.jpg", position: "90% center" },
+    photo: { placeholder: "レッスンの様子の写真", src: "/clients/beat-pilates-nagoyafushimi/about-lesson.jpg", position: "70% center" },
   },
 
   offer: {
@@ -401,7 +401,9 @@ const config: BeatPilatesConfig = {
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
       { type: "date", name: "date1", label: "ご希望日(第1希望)" },
+      { type: "time", name: "time1", label: "ご希望時間(第1希望)", min: "10:00", max: "22:00" },
       { type: "date", name: "date2", label: "ご希望日(第2希望)" },
+      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "10:00", max: "22:00" },
       {
         type: "textarea",
         name: "note",

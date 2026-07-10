@@ -354,10 +354,10 @@ function CtaButton({ text }: { text: string }) {
   );
 }
 
-function OfferSection() {
+function OfferSection({ topPad = 48 }: { topPad?: number }) {
   const o = config.offer;
   return (
-    <section style={{ padding: "48px 18px 52px", background: "#0A0A10" }}>
+    <section style={{ padding: `${topPad}px 18px 52px`, background: "#0A0A10" }}>
       <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, lineHeight: 1.4, textAlign: "center", color: "#FFFFFF", margin: 0, textShadow: "0 0 14px rgba(255,255,255,0.25)" }}>
         {o.headingParts.map((p, i) =>
           p.hl ? (
@@ -376,7 +376,7 @@ function OfferSection() {
             <div key={i} style={{ position: "relative", borderRadius: 18, overflow: "hidden", border: `1px solid ${accent}66`, boxShadow: `0 0 22px ${accent}33` }}>
               <ImageSlot src={card.img.src} placeholder={card.img.placeholder} objectPosition={card.img.position ?? "center"} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#12121A" }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(10,10,16,0.55) 0%, rgba(10,10,16,0.8) 100%)" }} />
-              <div style={{ position: "relative", zIndex: 2, minHeight: 260, padding: "24px 14px 24px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <div style={{ position: "relative", zIndex: 2, padding: "22px 14px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <p style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 20, lineHeight: 1.35, textAlign: "center", color: "#FFFFFF", margin: 0, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>{nl(card.label)}</p>
                 <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", marginTop: 4 }}>
                   <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 56, lineHeight: 1, background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}88)` }}>{card.price}</span>
@@ -431,12 +431,12 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 8, fontSize: 12.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 6, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
               {c.hero.access.map((a, i) => (
                 <span key={i} style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
-                  {i > 0 && <span style={{ color: textDim2, marginRight: 5 }}>/</span>}
+                  {i > 0 && <span style={{ color: textDim2, marginRight: 4 }}>/</span>}
                   {a.station}
-                  <span style={{ color: blue, fontSize: 15, fontWeight: 400 }}>
+                  <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
                     {a.walk.split(/(\d+)/).map((part, j) =>
                       /^\d+$/.test(part) ? <b key={j} style={{ fontWeight: 700 }}>{part}</b> : part
                     )}
@@ -447,7 +447,7 @@ export default function Page() {
           </div>
 
           {/* ── FV / hero ── */}
-          <section style={{ position: "relative", minHeight: 560, overflow: "hidden", background: "#12121A" }}>
+          <section style={{ position: "relative", minHeight: "clamp(400px, 116.7vw, 560px)", overflow: "hidden", background: "#12121A" }}>
             <ImageSlot
               src={c.hero.hero.src}
               placeholder={c.hero.hero.placeholder}
@@ -469,7 +469,7 @@ export default function Page() {
                 background: "linear-gradient(180deg, rgba(8,8,13,0) 55%, rgba(8,8,13,0.85) 100%)",
               }}
             />
-            <div style={{ position: "relative", zIndex: 2, padding: "48px 22px 46px" }}>
+            <div style={{ position: "relative", zIndex: 2, padding: "48px 22px 24px" }}>
               <h1
                 style={{
                   fontFamily: fontMincho,
@@ -594,10 +594,10 @@ export default function Page() {
           </section>
 
           {/* ── offer (初回体験オファー・FV下) ── */}
-          <OfferSection />
+          <OfferSection topPad={20} />
 
           {/* ── worry ── */}
-          <section style={{ padding: "54px 22px" }}>
+          <section style={{ padding: "34px 22px 12px" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <span
                 style={{
@@ -632,7 +632,7 @@ export default function Page() {
                 border: `1px solid ${blue}44`,
                 background: "rgba(63,160,255,0.04)",
                 boxShadow: `0 0 22px ${blue}22, inset 0 0 18px rgba(63,160,255,0.05)`,
-                padding: "26px 20px",
+                padding: "26px 14px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -641,12 +641,12 @@ export default function Page() {
             >
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 20 }}>
               {c.worry.items.map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span
                     style={{
                       flexShrink: 0,
-                      width: 30,
-                      height: 30,
+                      width: 26,
+                      height: 26,
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
@@ -657,7 +657,7 @@ export default function Page() {
                   >
                     <Icon name="check" size={16} color={violet} />
                   </span>
-                  <span style={{ fontFamily: fontGothic, fontSize: 15.5, fontWeight: 700, lineHeight: 1.5, color: "rgba(255,255,255,0.92)" }}>
+                  <span style={{ fontFamily: fontGothic, fontSize: 13, fontWeight: 700, lineHeight: 1.5, whiteSpace: "nowrap", color: "rgba(255,255,255,0.92)" }}>
                     {item.parts.map((p, j) =>
                       p.hl ? (
                         <span
@@ -683,7 +683,7 @@ export default function Page() {
           </section>
 
           {/* ── why (だからBeat Pilates) ── */}
-          <section style={{ padding: "54px 22px", background: "#0D0D14" }}>
+          <section style={{ padding: "12px 22px 54px", background: "#0D0D14" }}>
             <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 26, letterSpacing: "0.06em", textAlign: "center", margin: 0, color: "#FFFFFF", textShadow: `0 0 12px ${pink}55, 0 0 4px rgba(255,255,255,0.25)` }}>
               {c.why.heading}
               <span style={{ display: "block", fontFamily: fontMincho, fontWeight: 700, fontSize: 34, letterSpacing: "0.04em", background: duoTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", marginTop: 6, filter: `drop-shadow(0 0 10px ${pink}66)` }}>
@@ -717,47 +717,55 @@ export default function Page() {
                         position: "absolute",
                         left: 0,
                         right: 0,
+                        top: 0,
+                        height: 110,
+                        background: "linear-gradient(180deg, rgba(8,8,13,0.8) 0%, rgba(8,8,13,0.4) 55%, rgba(8,8,13,0) 100%)",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
                         bottom: 0,
                         height: 76,
                         background: "linear-gradient(180deg, rgba(13,13,20,0) 0%, #0D0D14 100%)",
                       }}
                     />
-                    <span
-                      style={{
-                        position: "absolute",
-                        top: 14,
-                        left: 14,
-                        width: 44,
-                        height: 44,
-                        borderRadius: "50%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        background: "rgba(10,10,16,0.55)",
-                        border: `2px solid ${accent}`,
-                        boxShadow: `0 0 16px ${accent}AA, 0 0 4px ${accent}`,
-                        backdropFilter: "blur(4px)",
-                      }}
-                    >
+                    <h3 style={{ position: "absolute", left: 18, right: 18, top: 16, display: "flex", alignItems: "center", gap: 12, fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.02em", margin: 0, color: "#FFFFFF" }}>
                       <span
                         style={{
-                          fontFamily: fontDisplay,
-                          fontStyle: "italic",
-                          fontWeight: 700,
-                          fontSize: 17,
-                          color: accent,
-                          textShadow: `0 0 8px ${accent}88`,
+                          flexShrink: 0,
+                          width: 36,
+                          height: 36,
+                          borderRadius: "50%",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: "rgba(10,10,16,0.55)",
+                          border: `2px solid ${accent}`,
+                          boxShadow: `0 0 16px ${accent}AA, 0 0 4px ${accent}`,
+                          backdropFilter: "blur(4px)",
                         }}
                       >
-                        {item.num}
+                        <span
+                          style={{
+                            fontFamily: fontDisplay,
+                            fontStyle: "italic",
+                            fontWeight: 700,
+                            fontSize: 16,
+                            color: accent,
+                            textShadow: `0 0 8px ${accent}88`,
+                          }}
+                        >
+                          {item.num}
+                        </span>
                       </span>
-                    </span>
-                  </div>
-                  <div style={{ padding: "18px 20px 24px" }}>
-                    <h3 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 26, letterSpacing: "0.02em", margin: 0, color: "#FFFFFF" }}>
-                      <span style={{ textShadow: `0 0 10px ${accent}, 0 0 4px ${accent}CC` }}>{item.title}</span>
+                      <span style={{ textShadow: `0 0 10px ${accent}, 0 0 4px ${accent}CC, 0 2px 10px rgba(0,0,0,0.7)` }}>{item.title}</span>
                     </h3>
-                    <p style={{ fontSize: 14.5, lineHeight: 1.8, color: "rgba(255,255,255,0.75)", margin: "10px 0 0" }}>
+                  </div>
+                  <div style={{ padding: "16px 20px 24px" }}>
+                    <p style={{ fontSize: 14.5, lineHeight: 1.8, color: "rgba(255,255,255,0.75)", margin: 0 }}>
                       {item.body}
                     </p>
                   </div>
@@ -789,10 +797,10 @@ export default function Page() {
                 background: "linear-gradient(180deg, rgba(8,8,13,0) 60%, rgba(8,8,13,0.85) 100%)",
               }}
             />
-            <div style={{ position: "relative", zIndex: 2, minHeight: 420, display: "flex", flexDirection: "column", padding: "50px 22px 66px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.04em", lineHeight: 1.5, margin: 0, color: "#FFFFFF", textShadow: `0 2px 16px rgba(0,0,0,0.7), 0 0 12px ${pink}55` }}>{nl(c.about.heading)}</h2>
-              <p style={{ maxWidth: 300, fontSize: 13, lineHeight: 1.9, color: "#FFFFFF", margin: "16px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{c.about.body1}</p>
-              <p style={{ maxWidth: 300, fontSize: 12.5, lineHeight: 1.9, color: "rgba(255,255,255,0.8)", margin: "12px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{c.about.body2}</p>
+            <div style={{ position: "relative", zIndex: 2, minHeight: 420, display: "flex", flexDirection: "column", padding: "10px 22px 44px" }}>
+              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.04em", lineHeight: 1.5, margin: 0, background: duoTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66) drop-shadow(0 2px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 3px rgba(0,0,0,0.9))` }}>{nl(c.about.heading)}</h2>
+              <p style={{ maxWidth: 300, fontSize: 12, lineHeight: 1.7, color: "#FFFFFF", margin: "12px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body1)}</p>
+              <p style={{ maxWidth: 300, fontSize: 11.5, lineHeight: 1.7, color: "rgba(255,255,255,0.8)", margin: "8px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body2)}</p>
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", paddingTop: 32 }}>
                 {c.about.tags.map((t, i) => {
                   const accent = i === 1 ? violet : i === 2 ? blue : pink;
@@ -823,7 +831,7 @@ export default function Page() {
           </section>
 
           {/* ── movie (スタジオ紹介ムービー) ── */}
-          <section style={{ padding: "48px 22px 52px" }}>
+          <section style={{ padding: "34px 22px 52px" }}>
             <div style={{ textAlign: "center" }}>
               <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: "#FFFFFF", lineHeight: 1.4, margin: 0, textShadow: `0 0 12px ${blue}55` }}>
                 {c.movie.heading}
@@ -849,8 +857,8 @@ export default function Page() {
           <OfferSection />
 
           {/* ── reasons (選ばれる3つの理由) ── */}
-          <section style={{ padding: "58px 22px 66px", background: "#0D0D14" }}>
-            <SectionHeading plain={c.reasons.heading} />
+          <section style={{ padding: "36px 22px 66px", background: "#0D0D14" }}>
+            <SectionHeading plain={c.reasons.heading} fontSize={20} />
             {c.reasons.items.map((item, idx) => {
               const accent = idx === 1 ? violet : idx === 2 ? blue : pink;
               return (
@@ -915,8 +923,8 @@ export default function Page() {
                   {item.trio && (
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                       {item.trio.map((t, i) => (
-                        <div key={i} style={{ borderRadius: 12, border: `1px solid ${accent}55`, background: `${accent}12`, minHeight: 54, padding: "12px 6px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-                          <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 12.5, lineHeight: 1.4, color: "#FFFFFF", textShadow: `0 0 10px ${accent}, 0 0 4px ${accent}CC` }}>{t.label}</span>
+                        <div key={i} style={{ borderRadius: 12, border: `1px solid ${accent}55`, background: `${accent}12`, minHeight: 54, padding: "12px 4px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+                          <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 11, lineHeight: 1.4, color: "#FFFFFF", whiteSpace: "nowrap", textShadow: `0 0 10px ${accent}, 0 0 4px ${accent}CC` }}>{t.label}</span>
                         </div>
                       ))}
                     </div>
@@ -929,7 +937,7 @@ export default function Page() {
           </section>
 
           {/* ── trainers (インストラクター紹介) ── */}
-          <section style={{ padding: "48px 0 52px" }}>
+          <section style={{ padding: "34px 0 52px" }}>
             <div style={{ textAlign: "center", padding: "0 22px" }}>
               <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: "#FFFFFF", lineHeight: 1.4, margin: 0, textShadow: `0 0 12px ${pink}55` }}>
                 {c.trainers.heading}
@@ -967,7 +975,7 @@ export default function Page() {
           </section>
 
           {/* ── FAQ ── */}
-          <section style={{ padding: "54px 22px", background: "#0D0D14" }}>
+          <section style={{ padding: "34px 22px 54px", background: "#0D0D14" }}>
             <SectionHeading plain={c.faq.heading} />
             <div style={{ marginTop: 28 }}>
               <FaqDark items={c.faq.items} pink={pink} />
@@ -975,7 +983,7 @@ export default function Page() {
           </section>
 
           {/* ── pricing (料金プラン) ── */}
-          <section style={{ padding: "54px 22px", background: "#0D0D14" }}>
+          <section style={{ padding: "34px 22px 54px", background: "#0D0D14" }}>
             <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: "#FFFFFF" }}>
               {c.pricing.heading}
               <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66)` }}>{c.pricing.headingHighlight}</span>
@@ -1018,7 +1026,7 @@ export default function Page() {
           </section>
 
           {/* ── voices (お客様の声) ── */}
-          <section style={{ padding: "48px 0 52px", background: "#0D0D14" }}>
+          <section style={{ padding: "34px 0 52px", background: "#0D0D14" }}>
             <div style={{ textAlign: "center", padding: "0 22px" }}>
               <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: "#FFFFFF", lineHeight: 1.4, margin: 0, textShadow: `0 0 12px ${pink}55` }}>
                 {c.voices.heading}
@@ -1058,11 +1066,13 @@ export default function Page() {
           </section>
 
           {/* ── access (店舗のご案内) ── */}
-          <section id="access" style={{ padding: "54px 22px" }}>
+          <section id="access" style={{ padding: "34px 22px 54px" }}>
             <SectionHeading plain={c.access.heading} />
             <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 30 }}>
-              {c.access.stores.map((store, i) => (
-                <div key={i} style={{ borderRadius: 16, overflow: "hidden", border: `1px solid ${border}`, background: panel }}>
+              {c.access.stores.map((store, i) => {
+                const accent = blue;
+                return (
+                <div key={i} style={{ borderRadius: 16, overflow: "hidden", border: `1.5px solid ${accent}`, background: panel, boxShadow: `0 0 14px ${accent}66, inset 0 0 10px ${accent}22` }}>
                   <ImageSlot src={store.img.src} placeholder={store.img.placeholder} style={{ width: "100%", height: 160, background: "#161620" }} />
                   <div style={{ padding: 20 }}>
                     <h3 style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 17, letterSpacing: "0.04em", margin: 0, color: "#FFFFFF" }}>{store.name}</h3>
@@ -1075,17 +1085,42 @@ export default function Page() {
                     </p>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </section>
 
           {/* ── form ── */}
-          <section id="form" style={{ padding: "54px 22px", background: "#0D0D14" }}>
+          <section id="form" style={{ padding: "34px 22px 54px", background: "linear-gradient(160deg, #0B1030 0%, #171436 55%, #2A1A47 100%)" }}>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 20px", borderRadius: 999, border: `1px solid ${pink}`, background: `${pink}14`, color: "#FFFFFF", fontSize: 12, fontWeight: 800, letterSpacing: "0.04em", boxShadow: `0 0 14px ${pink}55, inset 0 0 8px ${pink}22`, textShadow: `0 0 8px ${pink}` }}>
+                ＼ 今なら初回体験0円 ／
+              </span>
+            </div>
             <SectionHeading plain={c.form.heading} />
             <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 1.9, color: textDim, margin: "16px 0 0" }}>{nl(c.form.lead)}</p>
+            <div style={{ display: "flex", justifyContent: "center", gap: 10, margin: "18px 0 0" }}>
+              {c.sticky.offers.map((o, i) => {
+                const accent = i % 2 === 0 ? pink : blue;
+                return (
+                  <span key={o.label} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 18px", borderRadius: 12, border: `1.5px solid ${accent}`, background: `${accent}12`, boxShadow: `0 0 12px ${accent}44, inset 0 0 8px ${accent}18` }}>
+                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.75)" }}>{o.label}</span>
+                    <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 18, color: "#FFFFFF", textShadow: `0 0 8px ${accent}, 0 0 3px ${accent}` }}>{o.value}</span>
+                  </span>
+                );
+              })}
+            </div>
             {/* LPForm's <label> text is styled dark (for pattern A's light background); override
                 to white here since this section sits on the dark theme's near-black background. */}
-            <style>{`#form label { color: #FFFFFF !important; }`}</style>
+            <style>{`
+              #form label { color: #FFFFFF !important; }
+              #form .lpform-required-tag { color: ${pink} !important; font-weight: 700; }
+              #form .lpform-disclaimer { font-size: 9.5px !important; letter-spacing: -0.01em; white-space: nowrap; }
+              @keyframes beatCtaPulse {
+                0%, 100% { transform: scale(1); box-shadow: 0 10px 26px rgba(255,61,147,0.32); }
+                50% { transform: scale(1.02); box-shadow: 0 12px 32px rgba(255,61,147,0.55), 0 0 24px rgba(63,160,255,0.42); }
+              }
+            `}</style>
             <LPForm
               clientSlug={c.slug}
               accent={pink}
@@ -1093,7 +1128,7 @@ export default function Page() {
               submitLabel={c.form.submitLabel}
               errorMessage={c.form.errorMessage}
               disclaimer={c.form.disclaimer}
-              submitStyle={{ background: ctaGrad, boxShadow: "0 10px 26px rgba(255,61,147,0.32)" }}
+              submitStyle={{ background: ctaGrad, boxShadow: "0 10px 26px rgba(255,61,147,0.32)", letterSpacing: "0.06em", whiteSpace: "nowrap", animation: "beatCtaPulse 1.8s ease-in-out infinite" }}
             />
           </section>
         </div>

@@ -159,9 +159,9 @@ export default function LPForm({
 
   const requiredTag = (f: FieldBase) =>
     f.required ? (
-      <span style={{ color: "#C25B4B", fontSize: 11, marginLeft: 6 }}>必須</span>
+      <span className="lpform-required-tag" style={{ color: "#C25B4B", fontSize: 11, marginLeft: 6 }}>必須</span>
     ) : f.optionalTag ? (
-      <span style={{ color: "#9A9C90", fontSize: 11, marginLeft: 6 }}>
+      <span className="lpform-optional-tag" style={{ color: "#9A9C90", fontSize: 11, marginLeft: 6 }}>
         {f.optionalTag}
       </span>
     ) : null;
@@ -390,6 +390,7 @@ export default function LPForm({
 
       {disclaimer && (
         <p
+          className="lpform-disclaimer"
           style={{
             fontSize: 11,
             lineHeight: 1.8,
