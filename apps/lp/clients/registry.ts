@@ -12,6 +12,7 @@ export const clientRegistry: Record<
   "the-personal-pilates": () => import("./the-personal-pilates/page"),
   "the-personal-gym": () => import("./the-personal-gym/page"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/page"),
+  "soelu-togoshiginza": () => import("./soelu-togoshiginza/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -35,4 +36,5 @@ export const clientMetaRegistry: Record<
   "the-personal-pilates": () => import("./the-personal-pilates/config"),
   "the-personal-gym": () => import("./the-personal-gym/config"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/config"),
+  "soelu-togoshiginza": () => import("./soelu-togoshiginza/config"),
 };
