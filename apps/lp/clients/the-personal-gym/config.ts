@@ -48,7 +48,7 @@ const config: PatternAConfig = {
   achievement: { pre: "全国", num: "50", post: "店舗のパーソナルジムが本気で作った、マシンピラティス" },
 
   fv: {
-    catchLines: ["ピラティス", "最短で変わるための"],
+    catchLines: ["最短で変わるための", "ピラティス"],
     hero: { placeholder: "スタジオ / マシンピラティスの写真（全面）", src: "/clients/the-personal-gym/fv-hero.jpg", position: "42% center" },
     leftCard: { small: "パーソナル", big: "マシンピラティス" },
     rightCard: { small: "姿勢改善", big: "ストレッチ" },

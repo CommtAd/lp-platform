@@ -58,9 +58,17 @@
    push先がmainでないこと、PR差分が意図通りかを必ず確認する。
 4. **CIの通過を待つ**: GitHub Actions の `check`（check-rules + build）が緑になること。
    赤なら本番に反映されない仕組み。ログを見て直し、pushし直す。
+   完了待ちは `gh pr checks <PR番号> --watch --fail-fast` を使う（完了で自動終了。`check` は通常40秒前後）。
+   自作の待ちループは避ける。特に **macOS の grep は `-P`（Perl正規表現）非対応**で、
+   待ちループに `grep -P` を書くと毎回無言で失敗し、判定不能のまま延々と待ち続ける
+   （「CIが遅い」の誤診の原因になった実例あり）。ワンショット確認は `gh pr view <PR番号> --json mergeStateStatus`（CLEAN=通過）。
 5. **マージする**: CIが緑になったら `gh pr merge --squash`。mainへ反映される。
 6. **公開する**: ダッシュボードの公開ボタンで status を published に切り替える
    （Vercel Deploy Hook が発火 → 本番反映）。Vercelの席は不要＝追加費用なし。
+7. **本番を確認する**: 本番LPは独自ドメイン **`https://fitness-lp.commitad.com`** で配信される。
+   `lp-platform-lp.vercel.app` は 308 でこのドメインへリダイレクトするため、
+   確認は独自ドメインを直接開く（curlで検証する場合は必ず `-L` を付ける）。
+   リダイレクト追従なしで vercel.app を叩くと本文が空になり「未反映」と誤検知するので注意。
 
 - **権限**: メンバーはGitHubの collaborator（write）とダッシュボードのSupabase Authユーザーを付与すれば足りる。いずれも無料枠。
 - **保護設定**: `check` 通過必須・PR必須・force-push/削除禁止。管理者のみ緊急時にバイパス可。
