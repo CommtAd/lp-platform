@@ -35,7 +35,10 @@ const config: PatternAConfig = {
       "整体×マシンピラティスで肩こり・腰痛・むくみ・姿勢の崩れなど身体の不調を整える女性専用スタジオ。初回体験0円・入会金＋事務手数料0円。梅田駅・心斎橋駅 徒歩2分、定休日なし。",
     ogpImage: undefined,
   },
-  accent: "#2E4269",
+  // 公式サイト https://dayspilates.com/ の配色に合わせた accent。
+  // ネイビーではなく、公式のフッター/ロゴと同じ温かみのあるトープブラウンを採用
+  // （生成り背景＋ゴールドは維持。パターンAのゴールドは page.tsx 側で固定）。
+  accent: "#6B5F55",
   showMonitorBadge: true,
 
   header: {
