@@ -1,18 +1,31 @@
 "use client";
 
+import { useState, type ReactNode } from "react";
+import LPForm, { type LPFormField } from "@/components/LPForm";
+
 /**
- * Store-specific CTA buttons in place of the reservation form. Each button
- * links straight out to that store's external reservation system.
- *
- * Deviation from the platform norm (documented per team decision): this
- * bypasses LPForm entirely, so bookings made here are NOT captured as CVs —
- * they won't show up in the dashboard or trigger CV notifications. Confirmed
- * with the client owner; the tradeoff is intentional for this LP only.
- *
- * TODO: replace the placeholder hrefs below with the real per-store
- * reservation URLs once shared.
+ * Store-specific CTA buttons in front of the reservation form. Picking a
+ * store pre-selects that store's toggle option and reveals the real LPForm
+ * (so the submission still goes through the platform's CV capture) instead
+ * of asking the visitor to pick the toggle themselves.
  */
-export default function StoreCtaButtons({ accent }: { accent: string }) {
+export default function StoreCtaButtons({
+  clientSlug,
+  accent,
+  fields,
+  submitLabel,
+  errorMessage,
+  disclaimer,
+}: {
+  clientSlug: string;
+  accent: string;
+  fields: LPFormField[];
+  submitLabel?: string;
+  errorMessage?: string;
+  disclaimer?: ReactNode;
+}) {
+  const [selectedStore, setSelectedStore] = useState<string | null>(null);
+
   const buttonStyle = {
     flex: 1,
     height: 56,
@@ -25,21 +38,49 @@ export default function StoreCtaButtons({ accent }: { accent: string }) {
     fontSize: 14.5,
     fontWeight: 700,
     letterSpacing: "0.04em",
-    textDecoration: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    textAlign: "center",
+    cursor: "pointer",
   } as const;
+
+  if (selectedStore) {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => setSelectedStore(null)}
+          style={{
+            display: "block",
+            margin: "20px auto 0",
+            background: "none",
+            border: "none",
+            color: "#9A9C90",
+            fontSize: 12,
+            textDecoration: "underline",
+            cursor: "pointer",
+          }}
+        >
+          店舗を選び直す
+        </button>
+        <LPForm
+          clientSlug={clientSlug}
+          accent={accent}
+          fields={fields}
+          submitLabel={submitLabel}
+          errorMessage={errorMessage}
+          disclaimer={disclaimer}
+          initialValues={{ store: selectedStore }}
+        />
+      </>
+    );
+  }
 
   return (
     <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
-      <a href="#TODO-umeda-reservation-url" style={buttonStyle}>
+      <button type="button" onClick={() => setSelectedStore("umeda")} style={buttonStyle}>
         梅田店の体験予約する
-      </a>
-      <a href="#TODO-shinsaibashi-reservation-url" style={buttonStyle}>
+      </button>
+      <button type="button" onClick={() => setSelectedStore("shinsaibashi")} style={buttonStyle}>
         心斎橋店の体験予約する
-      </a>
+      </button>
     </div>
   );
 }

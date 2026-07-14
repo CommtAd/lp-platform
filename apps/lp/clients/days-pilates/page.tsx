@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
+import LPForm from "@/components/LPForm";
 import FaqList from "./FaqList";
 import StoreCtaButtons from "./StoreCtaButtons";
 import config from "./config";
@@ -740,7 +741,14 @@ export default function Page() {
           <section id="form" style={{ background: "#FCFBF7", padding: "54px 26px" }}>
             <SectionHeading text={c.form.heading} />
             <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.9, color: "#62655B", margin: "18px 0 0" }}>{nl(c.form.lead)}</p>
-            <StoreCtaButtons accent={accent} />
+            <StoreCtaButtons
+              clientSlug={c.slug}
+              accent={accent}
+              fields={c.form.fields}
+              submitLabel={c.form.submitLabel}
+              errorMessage={c.form.errorMessage}
+              disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
+            />
           </section>
         </div>
       </div>
