@@ -1232,6 +1232,7 @@ export default function Page() {
               errorMessage={c.form.errorMessage}
               disclaimer={c.form.disclaimer}
               submitStyle={{ background: ctaGrad, boxShadow: "0 10px 26px rgba(255,61,147,0.32)", letterSpacing: "0.06em", whiteSpace: "nowrap", animation: "beatCtaPulse 1.8s ease-in-out infinite" }}
+              thanksHref={`/${c.slug}/thanks`}
             />
           </section>
 

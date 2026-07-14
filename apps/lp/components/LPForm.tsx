@@ -66,10 +66,12 @@ export interface LPFormProps {
   submitStyle?: CSSProperties;
   disclaimer?: ReactNode;
   errorMessage?: string;
-  /** Optional custom thank-you content (defaults to a simple card). */
+  /** Optional custom thank-you content (defaults to a simple card). Ignored when `thanksHref` is set. */
   thanks?: ReactNode;
   /** Pre-fill field values on mount (e.g. a store toggle pre-selected by a CTA button). */
   initialValues?: Record<string, string>;
+  /** When set, navigates here on successful submit instead of showing an inline thank-you card. */
+  thanksHref?: string;
 }
 
 /* ── shared network helper ──────────────────────────────────── */
@@ -188,6 +190,7 @@ export default function LPForm({
   errorMessage = "必須項目を入力してください。",
   thanks,
   initialValues,
+  thanksHref,
 }: LPFormProps) {
   const [values, setValues] = useState<Record<string, string>>(initialValues ?? {});
   const [error, setError] = useState(false);
@@ -237,6 +240,10 @@ export default function LPForm({
     const { ok, eventId } = await postEvent(clientSlug, "form_submit", values);
     if (ok) {
       firePixel("Lead", eventId);
+      if (thanksHref) {
+        window.location.assign(thanksHref);
+        return;
+      }
       setSubmitted(true);
     } else {
       setError(true);
