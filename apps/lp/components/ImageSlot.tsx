@@ -38,7 +38,16 @@ export default function ImageSlot({
         ...style,
       }}
     >
-      {src ? (
+      {src && /\.(mp4|webm|mov)$/i.test(src) ? (
+        <video
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition, display: "block" }}
+        />
+      ) : src ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}

@@ -19,9 +19,8 @@ const timeSlots = (startHour: number, endHour: number) => {
  *
  * 【要確認・公開前に顧客差し替え必須】シート・参考LP(https://dayspilates.com/sp-004/)
  * ともに未記載のためプレースホルダで作成した項目:
- *   - 画像素材すべて（src:null → プレースホルダ枠）。シートに「共有素材あり」との申告あり。
  *   - offer.trialRegular（体験の通常価格）。二重価格表記は THE PERSONAL GYM と違い顧客未確認。
- *   - trainers.items（インストラクター個別プロフィール）。判明しているのは「全員女性・女性専用」のみ。
+ *   - trainers.items（インストラクター個別プロフィール・氏名）。写真は顧客提供素材を仮配置。判明しているのは「全員女性・女性専用」のみ。
  * 実データ確定分:
  *   - offer.joinRegular = 10,000（入会金＋事務手数料10,000円→0円。シート Q9）。
  *   - 店舗住所・営業時間・アクセス（シート Q2/Q4）。
@@ -60,14 +59,15 @@ const config: PatternAConfig = {
 
   fv: {
     catchLines: ["美しいカラダに", "生まれ変わる"],
-    hero: { placeholder: "スタジオ / マシンピラティスの写真（全面）", src: null },
+    catchAlign: "right",
+    hero: { placeholder: "スタジオ / マシンピラティスの写真（全面）", src: `${ASSET}/hero.mp4` },
     leftCard: { small: "根本から整える", big: "整体" },
     rightCard: { small: "しなやかに動く", big: "マシンピラティス" },
   },
 
   offer: {
     eyebrow: "整体 × マシンピラティス",
-    heading: "約90分の無料体験",
+    heading: "約60分の無料体験",
     trialBadge: "整体×マシンピラティスを体験",
     trialRegular: "5,500",
     items: [
@@ -79,10 +79,10 @@ const config: PatternAConfig = {
       "改善プラン\nご提案",
     ],
     photos: [
-      { placeholder: "マシンピラティスのシーン写真", src: null },
-      { placeholder: "リフォーマー / スタジオ設備の写真", src: null },
+      { placeholder: "マシンピラティスのシーン写真", src: `${ASSET}/offer-1.jpg` },
+      { placeholder: "リフォーマー / スタジオ設備の写真", src: `${ASSET}/offer-2.jpg` },
     ],
-    joinLabel: "入会金",
+    joinLabel: "入会金＋事務手数料",
     joinRegular: "10,000",
     regular: { prefix: "1回 ", amount: "—", suffix: "で通える" },
     ctaText: "無料体験を予約する",
@@ -90,20 +90,20 @@ const config: PatternAConfig = {
 
   about: {
     heading: "DAYS PILATES\nについて",
-    photo: { placeholder: "スタジオ / インストラクターの写真", src: null },
+    photo: { placeholder: "スタジオ / インストラクターの写真", src: `${ASSET}/about.jpg` },
     caption: "Seitai × Pilates",
     lead: "不調を整えながら、\nしなやかな私へ。",
     body:
-      "肩こり、腰痛、冷え、むくみ、姿勢の崩れ。DAYS PILATESは、整体で身体の土台を整えながら、マシンピラティスでしなやかに動ける身体づくりを目指す女性専用スタジオです。マシンが身体を支えるので、運動が苦手な方や初心者の方も無理なく続けられます。",
+      "肩こり、腰痛、冷え、むくみ、姿勢の崩れ。DAYS PILATESは、整体で身体の土台を整えながら、マシンピラティスでしなやかに動ける身体づくりを目指す女性専用スタジオです。マシンが身体を支えるので、運動が苦手な方や初心者の方も無理なく続けられます。姿勢矯正・骨格矯正の専門院「ハピフル鍼灸整骨院」院長監修のプログラムだから、結果にこだわれます。",
   },
 
   worry: {
     heading: "こんなお悩み、ありませんか？",
     cards: [
-      { img: { placeholder: "イメージ画像", src: null }, text: "肩こり・腰痛が\nなかなか取れない" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "姿勢の崩れ・猫背が\n気になってきた" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "冷え・むくみ・\n便秘が続いている" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "運動が苦手で\n続けられるか不安" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg` }, text: "肩こり・腰痛が\nなかなか取れない" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg` }, text: "姿勢の崩れ・猫背が\n気になってきた" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg` }, text: "冷え・むくみ・\n便秘が続いている" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg` }, text: "運動が苦手で\n続けられるか不安" },
     ],
     closingPre: "その不調、",
     closingHighlight: "ここなら整います。",
@@ -114,17 +114,17 @@ const config: PatternAConfig = {
     items: [
       {
         num: "01",
-        img: { placeholder: "整体×マシンピラティスの写真", src: null },
+        img: { placeholder: "整体×マシンピラティスの写真", src: `${ASSET}/reasons-1.jpg` },
         title: "整体×マシンピラティスで\n不調の根本から整える",
         body:
           "整体で凝り固まった身体をほぐし土台を整えてから、マシンピラティスでしなやかに動ける身体づくりへ。肩こり・腰痛・冷え・むくみ・姿勢の崩れなど、気になる不調にアプローチしながら、引き締まった身体を目指せます。",
       },
       {
         num: "02",
-        img: { placeholder: "スタジオでのシーン写真", src: null },
-        title: "その日の身体に合わせて\n選べる3つのメニュー",
+        img: { placeholder: "スタジオでのシーン写真", src: `${ASSET}/reasons-2.jpg` },
+        title: "その日の身体に合わせて\n選べる3つのレッスン",
         body:
-          "目的やその日のコンディションに合わせて、通い方を選べます。無理なく続けられるから、身体を整える習慣に。",
+          "肩こり・腰痛・むくみ・姿勢の崩れなど、一人ひとりのお悩みに合わせて通い方を選べます。整体×マシンピラティスで、無理なく身体を整える習慣に。",
         trio: [
           { label: "マシン", desc: "リフォーマーで\n全身を整える" },
           { label: "パーソナル", desc: "マンツーマンで\nお悩みに集中" },
@@ -133,14 +133,14 @@ const config: PatternAConfig = {
       },
       {
         num: "03",
-        img: { placeholder: "インストラクター指導の写真", src: null },
+        img: { placeholder: "インストラクター指導の写真", src: `${ASSET}/reasons-3.jpg` },
         title: "女性専用スタジオ・\n全員女性のインストラクター",
         body:
           "インストラクターは全員女性。女性専用スタジオだから、周りの目を気にせず安心して通えます。初心者の方や運動が苦手な方も、一人ひとりのお悩みに寄り添って丁寧にサポートします。",
       },
     ],
     ctaText: "無料体験を予約する",
-    ctaSub: "初回体験0円｜入会金＋事務手数料0円｜プラン最大45%OFF",
+    ctaSub: "初回体験0円｜入会金＋事務手数料0円｜プラン最大45%OFF｜初月会費半額",
   },
 
   trainers: {
@@ -150,7 +150,7 @@ const config: PatternAConfig = {
     // 【要確認】個別プロフィール・写真・氏名は顧客素材を受領後に差し替え。
     items: [
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-1.jpg` },
         role: "PILATES INSTRUCTOR",
         name: "近日公開",
         nameEn: "Coming Soon",
@@ -159,7 +159,7 @@ const config: PatternAConfig = {
         tags: ["女性インストラクター"],
       },
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-2.jpg` },
         role: "PILATES INSTRUCTOR",
         name: "近日公開",
         nameEn: "Coming Soon",
@@ -174,17 +174,17 @@ const config: PatternAConfig = {
     heading: "あなたの毎日に寄り添う通い方",
     items: [
       {
-        img: { placeholder: "仕事帰りに通うシーン写真", src: null },
+        img: { placeholder: "仕事帰りに通うシーン写真", src: `${ASSET}/scene-1.jpg` },
         title: "「仕事終わりに立ち寄りたい」",
         body: "梅田・心斎橋ともに駅近。お仕事帰りにマシンピラティスで、一日の緊張をリセットして帰れます。",
       },
       {
-        img: { placeholder: "買い物ついでに通うシーン写真", src: null },
+        img: { placeholder: "買い物ついでに通うシーン写真", src: `${ASSET}/scene-2.jpg` },
         title: "「買い物ついでに通いたい」",
         body: "梅田・心斎橋の中心地だから、お出かけやショッピングの合間にも気軽に立ち寄れます。",
       },
       {
-        img: { placeholder: "定期的に身体を整えるシーン写真", src: null },
+        img: { placeholder: "定期的に身体を整えるシーン写真", src: `${ASSET}/scene-3.jpg` },
         title: "「不調を定期的に整えたい」",
         body: "肩こりや姿勢の崩れが気になったら整体×ピラティスで。無理なく続けて、身体を整える習慣に。",
       },
@@ -192,12 +192,12 @@ const config: PatternAConfig = {
   },
 
   flow: {
-    heading: "初回体験（約90分）の流れ",
+    heading: "初回体験（約60分）の流れ",
     steps: [
       {
         num: "1",
         title: "ご来店・お着替え",
-        time: "約10分",
+        time: "約5分",
         body: "手ぶらでOK。お着替えを済ませて、リラックスしてお待ちください。",
       },
       {
@@ -209,13 +209,13 @@ const config: PatternAConfig = {
       {
         num: "3",
         title: "体験レッスン",
-        time: "約50分",
+        time: "約30分",
         body: "整体×マシンピラティスをマンツーマンで体験。運動経験に合わせて強度を調整するので、初めての方も安心です。",
       },
       {
         num: "4",
         title: "事後カウンセリング",
-        time: "約20分",
+        time: "約15分",
         body: "体験を踏まえて、あなたに合った通い方やプランをご提案。無理な勧誘はいたしません。",
       },
     ],
@@ -247,7 +247,7 @@ const config: PatternAConfig = {
     heading: "店舗のご案内",
     stores: [
       {
-        img: { placeholder: "梅田店の外観 / 内観写真", src: null },
+        img: { placeholder: "梅田店の外観 / 内観写真", src: `${ASSET}/store-umeda.jpg` },
         name: "梅田店",
         address: "大阪府大阪市北区太融寺町8-2 エーワンビル4階",
         hours: "営業時間 10:00〜20:00",
@@ -255,7 +255,7 @@ const config: PatternAConfig = {
           "（定休日なし）\n地下鉄 東梅田駅・梅田駅「M14」出口 徒歩2分／阪急梅田駅・JR大阪駅 徒歩5分",
       },
       {
-        img: { placeholder: "心斎橋店の外観 / 内観写真", src: null },
+        img: { placeholder: "心斎橋店の外観 / 内観写真", src: `${ASSET}/store-shinsaibashi.jpg` },
         name: "心斎橋店",
         address: "大阪府大阪市中央区西心斎橋1-1-10 プレリー心斎橋ビル5F",
         hours: "営業時間 7:40〜21:00",
@@ -266,7 +266,7 @@ const config: PatternAConfig = {
 
   form: {
     heading: "無料体験のご予約",
-    lead: "下記フォームからお気軽にお申し込みください。\n担当より24時間以内にご連絡いたします。",
+    lead: "ご希望の店舗を選んで、予約ページへお進みください。",
     fields: [
       {
         type: "toggle",
@@ -297,7 +297,7 @@ const config: PatternAConfig = {
     ],
     submitLabel: "この内容で予約する",
     disclaimer:
-      "初回体験0円｜入会金＋事務手数料0円｜初月会費半額｜しつこい勧誘はいたしません。",
+      "初回体験0円｜入会金＋事務手数料0円｜プラン最大45%OFF｜初月会費半額｜しつこい勧誘はいたしません。",
     errorMessage:
       "店舗・お名前・電話番号・メールアドレス・ご希望日時(第1・第2希望)は必須項目です。ご希望日は明日以降の日付をお選びください。",
   },
@@ -305,7 +305,7 @@ const config: PatternAConfig = {
   sticky: {
     offers: [
       { label: "初回体験", value: "¥0" },
-      { label: "入会金", value: "¥0" },
+      { label: "入会金＋事務手数料", value: "¥0" },
     ],
     buttonText: "無料体験を予約する",
     anchor: "#form",

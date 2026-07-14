@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
-import LPForm from "@/components/LPForm";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqList from "./FaqList";
+import StoreCtaButtons from "./StoreCtaButtons";
 import config from "./config";
 
 /* Derive navy tones from the accent, mirroring the design's renderVals(). */
@@ -361,11 +361,11 @@ export default function Page() {
               style={{
                 position: "absolute",
                 top: 34,
-                left: 26,
+                ...(c.fv.catchAlign === "right" ? { right: 26 } : { left: 26 }),
                 zIndex: 2,
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "flex-start",
+                alignItems: c.fv.catchAlign === "right" ? "flex-end" : "flex-start",
                 gap: 8,
                 pointerEvents: "none",
               }}
@@ -574,7 +574,7 @@ export default function Page() {
             {/* 入会金0円 */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14 }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 8 }}>
-                <span style={{ display: "block", textAlign: "center", background: "#4A4E57", color: "#FFFFFF", fontSize: 21, fontWeight: 700, letterSpacing: "0.34em", padding: "7px 16px 7px 22px", borderRadius: 4, whiteSpace: "nowrap" }}>
+                <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 141, boxSizing: "border-box", textAlign: "center", background: "#4A4E57", color: "#FFFFFF", fontSize: 11, fontWeight: 700, letterSpacing: "0.05em", padding: "7px 16px 7px 22px", borderRadius: 4, whiteSpace: "nowrap" }}>
                   {c.offer.joinLabel}
                 </span>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
@@ -669,42 +669,6 @@ export default function Page() {
             <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} />
           </section>
 
-          {/* ── ④.5 trainers ── */}
-          <section style={{ background: navyGrad, padding: "40px 0 48px" }}>
-            <div style={{ textAlign: "center", padding: "0 26px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 24, letterSpacing: "0.08em", color: "#FFFFFF", lineHeight: 1.4, margin: 0 }}>
-                {c.trainers.heading}
-              </h2>
-              <div style={{ width: 30, height: 2, background: "rgba(255,255,255,0.55)", borderRadius: 2, margin: "14px auto 0" }} />
-              <p style={{ fontSize: 13, lineHeight: 1.9, color: "rgba(255,255,255,0.78)", margin: "18px 0 0" }}>{nl(c.trainers.lead)}</p>
-            </div>
-            <div
-              id="trainer-track"
-              className="no-scrollbar"
-              style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
-            >
-              {c.trainers.items.map((t, i) => (
-                <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 22px rgba(70,72,60,0.10)" }}>
-                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264 }} />
-                  <div style={{ padding: "18px 20px 22px" }}>
-                    <div style={{ fontSize: 11, letterSpacing: "0.14em", color: accent }}>{t.role}</div>
-                    <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#33352E", marginTop: 6 }}>{t.name}</div>
-                    <div style={{ fontSize: 12, color: "#9A9C90", marginTop: 2 }}>{t.nameEn}</div>
-                    <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "12px 0 0" }}>{t.body}</p>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
-                      {t.tags.map((tag, ti) => (
-                        <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: accent, border: `1px solid ${accentSoft}`, background: accentSoft, borderRadius: 999, padding: "4px 10px" }}>{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 20 }}>
-              <span style={{ fontSize: 11, letterSpacing: "0.1em", color: "rgba(255,255,255,0.65)" }}>{c.trainers.swipeHint}</span>
-            </div>
-          </section>
-
           {/* ── ⑤ scenes ── */}
           <section style={{ background: creamGrad, padding: "54px 26px" }}>
             <SectionHeading text={c.scenes.heading} fontSize={20} />
@@ -776,14 +740,7 @@ export default function Page() {
           <section id="form" style={{ background: "#FCFBF7", padding: "54px 26px" }}>
             <SectionHeading text={c.form.heading} />
             <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.9, color: "#62655B", margin: "18px 0 0" }}>{nl(c.form.lead)}</p>
-            <LPForm
-              clientSlug={c.slug}
-              accent={accent}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              errorMessage={c.form.errorMessage}
-              disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
-            />
+            <StoreCtaButtons accent={accent} />
           </section>
         </div>
       </div>
