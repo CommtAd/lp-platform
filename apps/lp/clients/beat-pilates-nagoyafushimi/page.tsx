@@ -470,13 +470,17 @@ function BenefitsSection() {
                 )}
               </div>
               {b.gift && (
-                <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 54, height: 54, borderRadius: 14, background: `${accent}18`, border: `1px solid ${accent}55`, boxShadow: `0 0 14px ${accent}33` }}>
-                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="8" width="18" height="13" rx="1.5" stroke={accent} strokeWidth="1.6" />
-                    <path d="M3 12h18" stroke={accent} strokeWidth="1.6" />
-                    <path d="M12 8v13" stroke={accent} strokeWidth="1.6" />
-                    <path d="M12 8S9.5 3.5 7 5C5 6.2 6.5 8 8 8h4Zm0 0s2.5-4.5 5-3c2 1.2.5 3-1 3h-4Z" stroke={accent} strokeWidth="1.6" strokeLinejoin="round" />
-                  </svg>
+                <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 54, height: 54, borderRadius: 14, background: `${accent}18`, border: `1px solid ${accent}55`, boxShadow: `0 0 14px ${accent}33`, overflow: "hidden" }}>
+                  {b.giftImage ? (
+                    <img src={b.giftImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="8" width="18" height="13" rx="1.5" stroke={accent} strokeWidth="1.6" />
+                      <path d="M3 12h18" stroke={accent} strokeWidth="1.6" />
+                      <path d="M12 8v13" stroke={accent} strokeWidth="1.6" />
+                      <path d="M12 8S9.5 3.5 7 5C5 6.2 6.5 8 8 8h4Zm0 0s2.5-4.5 5-3c2 1.2.5 3-1 3h-4Z" stroke={accent} strokeWidth="1.6" strokeLinejoin="round" />
+                    </svg>
+                  )}
                 </div>
               )}
             </div>
@@ -1173,10 +1177,24 @@ export default function Page() {
                 );
               })}
             </div>
+            {c.access.mapEmbedSrc && (
+              <div style={{ marginTop: 18, borderRadius: 16, overflow: "hidden", border: `1.5px solid ${blue}`, boxShadow: `0 0 14px ${blue}66, inset 0 0 10px ${blue}22`, lineHeight: 0 }}>
+                <iframe
+                  src={c.access.mapEmbedSrc}
+                  title={`${c.access.stores[0]?.name ?? c.header.brand} の地図`}
+                  width="100%"
+                  height={220}
+                  style={{ border: 0, display: "block", filter: "grayscale(0.2) contrast(1.05)" }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              </div>
+            )}
           </section>
 
           {/* ── form ── */}
-          <section id="form" style={{ padding: "34px 22px 54px", background: "linear-gradient(160deg, #0B1030 0%, #171436 55%, #2A1A47 100%)" }}>
+          <section id="form" style={{ padding: "34px 22px 30px", background: "linear-gradient(160deg, #0B1030 0%, #171436 55%, #2A1A47 100%)" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 20px", borderRadius: 999, border: `1px solid ${pink}`, background: `${pink}14`, color: "#FFFFFF", fontSize: 12, fontWeight: 800, letterSpacing: "0.04em", boxShadow: `0 0 14px ${pink}55, inset 0 0 8px ${pink}22`, textShadow: `0 0 8px ${pink}` }}>
                 ＼ 今なら初回体験0円 ／
@@ -1216,6 +1234,11 @@ export default function Page() {
               submitStyle={{ background: ctaGrad, boxShadow: "0 10px 26px rgba(255,61,147,0.32)", letterSpacing: "0.06em", whiteSpace: "nowrap", animation: "beatCtaPulse 1.8s ease-in-out infinite" }}
             />
           </section>
+
+          {/* ── footer ── */}
+          <footer style={{ padding: "18px 22px 22px", background: bg, borderTop: `1px solid ${border}`, textAlign: "center" }}>
+            <p style={{ margin: 0, fontFamily: fontGothic, fontSize: 10.5, letterSpacing: "0.08em", color: textDim2 }}>{c.footer.copyright}</p>
+          </footer>
         </div>
       </div>
 

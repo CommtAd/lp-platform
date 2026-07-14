@@ -49,6 +49,8 @@ export type SelectField = FieldBase & {
     dateField: string;
     weekday: { value: string; label: string }[];
     weekend: { value: string; label: string }[];
+    /** Exact-date overrides ("YYYY-MM-DD" → options), e.g. for a manually-managed weekly schedule. Takes priority over weekday/weekend. */
+    byDate?: Record<string, { value: string; label: string }[]>;
   };
   placeholder?: string;
 };
@@ -356,9 +358,8 @@ export default function LPForm({
           const linked = f.dateLinkedOptions;
           const linkedDateValue = linked ? values[linked.dateField] ?? "" : "";
           const linkedOptions = linked
-            ? isWeekendISODate(linkedDateValue)
-              ? linked.weekend
-              : linked.weekday
+            ? linked.byDate?.[linkedDateValue] ??
+              (isWeekendISODate(linkedDateValue) ? linked.weekend : linked.weekday)
             : undefined;
           const disabled = !!linked && !linkedDateValue;
           return (
