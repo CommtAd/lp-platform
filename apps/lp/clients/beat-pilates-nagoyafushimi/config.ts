@@ -140,6 +140,7 @@ export interface BeatPilatesConfig {
       body: string;
       price?: { unit?: string; value: string; suffix: string; note?: string };
       gift?: boolean;
+      giftImage?: string;
     }[];
   };
 
@@ -353,6 +354,7 @@ const config: BeatPilatesConfig = {
         nowLabel: "今だけ",
         body: "ピラティス専用ソックスプレゼント",
         gift: true,
+        giftImage: "/clients/beat-pilates-nagoyafushimi/benefit-gift-socks.png",
       },
     ],
   },

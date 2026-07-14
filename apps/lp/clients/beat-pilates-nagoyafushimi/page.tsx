@@ -470,13 +470,17 @@ function BenefitsSection() {
                 )}
               </div>
               {b.gift && (
-                <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 54, height: 54, borderRadius: 14, background: `${accent}18`, border: `1px solid ${accent}55`, boxShadow: `0 0 14px ${accent}33` }}>
-                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="8" width="18" height="13" rx="1.5" stroke={accent} strokeWidth="1.6" />
-                    <path d="M3 12h18" stroke={accent} strokeWidth="1.6" />
-                    <path d="M12 8v13" stroke={accent} strokeWidth="1.6" />
-                    <path d="M12 8S9.5 3.5 7 5C5 6.2 6.5 8 8 8h4Zm0 0s2.5-4.5 5-3c2 1.2.5 3-1 3h-4Z" stroke={accent} strokeWidth="1.6" strokeLinejoin="round" />
-                  </svg>
+                <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 54, height: 54, borderRadius: 14, background: `${accent}18`, border: `1px solid ${accent}55`, boxShadow: `0 0 14px ${accent}33`, overflow: "hidden" }}>
+                  {b.giftImage ? (
+                    <img src={b.giftImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="8" width="18" height="13" rx="1.5" stroke={accent} strokeWidth="1.6" />
+                      <path d="M3 12h18" stroke={accent} strokeWidth="1.6" />
+                      <path d="M12 8v13" stroke={accent} strokeWidth="1.6" />
+                      <path d="M12 8S9.5 3.5 7 5C5 6.2 6.5 8 8 8h4Zm0 0s2.5-4.5 5-3c2 1.2.5 3-1 3h-4Z" stroke={accent} strokeWidth="1.6" strokeLinejoin="round" />
+                    </svg>
+                  )}
                 </div>
               )}
             </div>
