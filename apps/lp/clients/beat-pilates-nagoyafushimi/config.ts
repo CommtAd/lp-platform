@@ -149,6 +149,7 @@ export interface BeatPilatesConfig {
 
   access: {
     heading: string;
+    mapEmbedSrc?: string;
     stores: {
       img: Slot;
       name: string;
@@ -171,6 +172,10 @@ export interface BeatPilatesConfig {
     offers: { label: string; value: string }[];
     buttonText: string;
     anchor: string;
+  };
+
+  footer: {
+    copyright: string;
   };
 }
 
@@ -449,6 +454,8 @@ const config: BeatPilatesConfig = {
 
   access: {
     heading: "店舗のご案内",
+    mapEmbedSrc:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3261.664848305828!2d136.89272!3d35.16497839999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600377fb17fe07c5%3A0xe0039999223bec7b!2zQmVhdCBQaWxhdGVz77yI44OT44O844OI44OU44Op44OG44Kj44K577yJ5ZCN5Y-k5bGL5LyP6KaL5bqX!5e0!3m2!1sja!2sjp!4v1783923815160!5m2!1sja!2sjp",
     stores: [
       {
         img: { placeholder: "名古屋伏見店の外観／内観写真", src: "/clients/beat-pilates-nagoyafushimi/access-store.jpg" },
@@ -501,6 +508,10 @@ const config: BeatPilatesConfig = {
     ],
     buttonText: "体験レッスンを予約する",
     anchor: "#form",
+  },
+
+  footer: {
+    copyright: "© 2026 BEAT PILATES 名古屋伏見店",
   },
 };
 
