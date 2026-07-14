@@ -17,6 +17,17 @@ export const clientRegistry: Record<
 
 export const clientSlugs = Object.keys(clientRegistry);
 
+/**
+ * Slug → thank-you page module registry. Optional per client — only clients
+ * that pass `thanksHref` to `LPForm` need an entry here; others keep the
+ * inline thank-you card and are absent from this map.
+ */
+export const clientThanksRegistry: Partial<
+  Record<string, () => Promise<{ default: ComponentType }>>
+> = {
+  "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/thanks"),
+};
+
 interface ClientMeta {
   title: string;
   description: string;
