@@ -45,6 +45,8 @@ export interface PatternAConfig {
     catchLines: string[];
     /** Optional short horizontal brand line rendered under the vertical catchLines stack. */
     heroTag?: string;
+    /** Which side of the hero image the vertical catchLines stack sits on. Defaults to "left". */
+    catchAlign?: "left" | "right";
     hero: Slot;
     leftCard: { small: string; big: string };
     rightCard: { small: string; big: string };

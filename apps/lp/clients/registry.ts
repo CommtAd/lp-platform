@@ -12,6 +12,7 @@ export const clientRegistry: Record<
   "the-personal-pilates": () => import("./the-personal-pilates/page"),
   "the-personal-gym": () => import("./the-personal-gym/page"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/page"),
+  "days-pilates": () => import("./days-pilates/page"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/page"),
 };
 
@@ -47,5 +48,6 @@ export const clientMetaRegistry: Record<
   "the-personal-pilates": () => import("./the-personal-pilates/config"),
   "the-personal-gym": () => import("./the-personal-gym/config"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/config"),
+  "days-pilates": () => import("./days-pilates/config"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/config"),
 };
