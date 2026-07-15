@@ -170,9 +170,11 @@ function buildAdminNotificationHtml(params: {
 
   const utmLine = (key: string) => `utm_${key}: ${params.utm[key] ?? ""}`;
 
+  const greeting = renderLetterLine(params.meta.adminGreeting ?? DEFAULT_ADMIN_GREETING, { name });
+
   const lines = params.meta.adminSimple
     ? [
-        `${name}様から予約申し込みを承りました。担当者はご対応をお願いいたします。`,
+        greeting,
         "",
         "===========",
         "",
@@ -189,7 +191,7 @@ function buildAdminNotificationHtml(params: {
         `このメールは ${params.pageUrl ?? ""} から送信されました`,
       ]
     : [
-        `${name}様から予約申し込みを承りました。担当者はご対応をお願いいたします。`,
+        greeting,
         "",
         "===========",
         "",
@@ -262,6 +264,13 @@ interface ConfirmationMeta {
   };
   /** Use a pared-down admin notification (no store line, single date, no UTM block) — for single-location clients where that info is always empty noise. */
   adminSimple?: boolean;
+  /**
+   * Override for the admin notification's greeting line (used by both the
+   * simple and full formats). Supports the {{name}} placeholder. Defaults to
+   * the original wording if omitted — set this per-client to use different
+   * wording without touching the shared default.
+   */
+  adminGreeting?: string;
 }
 
 /** Default `letter.introLines` — the original wording, written for Beat Pilates. */
@@ -270,6 +279,9 @@ const DEFAULT_LETTER_INTRO_LINES = [
   "{{name}}のご予約を確定させていただきましたのでご案内いたします。",
   "こちらの内容で確定とさせていただきます。",
 ];
+
+/** Default `adminGreeting` — the original wording, shared by every client until overridden. */
+const DEFAULT_ADMIN_GREETING = "{{name}}様から予約申し込みを承りました。担当者はご対応をお願いいたします。";
 
 /** Default `letter.closingLines` — the original wording, written for Beat Pilates. */
 const DEFAULT_LETTER_CLOSING_LINES = [
