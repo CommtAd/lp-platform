@@ -10,18 +10,28 @@ export interface StickyFooterCTAProps {
   anchor: string;
   /** Show only after scrolling past this Y offset (px). */
   showAfter?: number;
+  /** Button background. Default matches pattern A's gold gradient. */
+  buttonGradient?: string;
+  /** Button box-shadow color (rgba). Default matches pattern A's gold glow. */
+  shadowColor?: string;
+  /** Card border color (rgba). Default matches pattern A's gold border. */
+  borderColor?: string;
 }
 
 /**
- * Shared following footer CTA (pattern A). Appears after the hero and hides once
- * the target section is in view. Reserves bottom padding on <body> equal to its
- * own height so it never overlaps the final section.
+ * Shared following footer CTA. Appears after the hero and hides once the
+ * target section is in view. Reserves bottom padding on <body> equal to its
+ * own height so it never overlaps the final section. Colors default to
+ * pattern A's gold styling but can be overridden per pattern/client.
  */
 export default function StickyFooterCTA({
   offers,
   buttonText,
   anchor,
   showAfter = 620,
+  buttonGradient = "linear-gradient(135deg, #E8C877 0%, #C1902F 100%)",
+  shadowColor = "rgba(160,120,40,0.4)",
+  borderColor = "rgba(190,150,70,0.35)",
 }: StickyFooterCTAProps) {
   const [visible, setVisible] = useState(false);
 
@@ -72,7 +82,7 @@ export default function StickyFooterCTA({
           padding: "12px 14px",
           background: "rgba(255,255,255,0.94)",
           backdropFilter: "blur(10px)",
-          border: "1px solid rgba(190,150,70,0.35)",
+          border: `1px solid ${borderColor}`,
           borderRadius: 16,
           boxShadow: "0 8px 26px rgba(70,72,60,0.22)",
           pointerEvents: "auto",
@@ -114,14 +124,14 @@ export default function StickyFooterCTA({
             justifyContent: "center",
             gap: 8,
             height: 54,
-            background: "linear-gradient(135deg, #E8C877 0%, #C1902F 100%)",
+            background: buttonGradient,
             color: "#FFFFFF",
             textDecoration: "none",
             fontSize: 15,
             fontWeight: 700,
             letterSpacing: "0.08em",
             borderRadius: 999,
-            boxShadow: "0 6px 16px rgba(160,120,40,0.4)",
+            boxShadow: `0 6px 16px ${shadowColor}`,
           }}
         >
           <span style={{ position: "relative", zIndex: 1 }}>{buttonText}</span>
