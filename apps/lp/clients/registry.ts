@@ -9,6 +9,8 @@ export const clientRegistry: Record<
   () => Promise<{ default: ComponentType }>
 > = {
   "_base-a": () => import("./_base-a/page"),
+  "_base-b": () => import("./_base-b/page"),
+  "kaigyo-support": () => import("./kaigyo-support/page"),
   "the-personal-pilates": () => import("./the-personal-pilates/page"),
   "the-personal-gym": () => import("./the-personal-gym/page"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/page"),
@@ -45,6 +47,8 @@ export const clientMetaRegistry: Record<
   () => Promise<{ default: { meta: ClientMeta } }>
 > = {
   "_base-a": () => import("./_base-a/config"),
+  "_base-b": () => import("./_base-b/config"),
+  "kaigyo-support": () => import("./kaigyo-support/config"),
   "the-personal-pilates": () => import("./the-personal-pilates/config"),
   "the-personal-gym": () => import("./the-personal-gym/config"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/config"),
