@@ -238,8 +238,7 @@ interface ConfirmationMeta {
   stores?: Record<string, { label?: string; address?: string }>;
   /**
    * Full custom confirmation letter (takes priority over the store/menu/duration
-   * rows format above). Prose paragraphs around 持ち物/道案内 are fixed in
-   * buildConfirmationHtml — this only carries the parts that vary per booking.
+   * rows format above).
    */
   letter?: {
     menu: string;
@@ -247,9 +246,46 @@ interface ConfirmationMeta {
     storeAddressLines: string[];
     items: string[];
     directionsNote: string;
+    /**
+     * Prose lines shown before the "■ ご予約内容" block. Supports
+     * {{name}}/{{datetime}}/{{menu}} placeholders. Defaults to the original
+     * wording (written for Beat Pilates) if omitted — set this per-client to
+     * use different wording without touching the shared default.
+     */
+    introLines?: string[];
+    /**
+     * Prose lines shown after the 当日のお持ち物/道案内 block, before the
+     * final sign-off. Same placeholders as `introLines`. Defaults to the
+     * original wording if omitted.
+     */
+    closingLines?: string[];
   };
   /** Use a pared-down admin notification (no store line, single date, no UTM block) — for single-location clients where that info is always empty noise. */
   adminSimple?: boolean;
+}
+
+/** Default `letter.introLines` — the original wording, written for Beat Pilates. */
+const DEFAULT_LETTER_INTRO_LINES = [
+  "この度は、体験レッスンへのお申し込みをいただき誠にありがとうございます。",
+  "{{name}}のご予約を確定させていただきましたのでご案内いたします。",
+  "こちらの内容で確定とさせていただきます。",
+];
+
+/** Default `letter.closingLines` — the original wording, written for Beat Pilates. */
+const DEFAULT_LETTER_CLOSING_LINES = [
+  "当日は、{{name}}の体調やお悩みに合わせて心地よく身体を動かせるよう、心を込めてサポートさせていただきます。",
+  "ピラティスが初めての場合でも、どうぞリラックスしてお越しくださいませ。",
+  "",
+  "もし事前にご不明な点や、お身体について相談したいことなどがございましたら、お気軽にお問い合わせください。",
+  "",
+  "万が一、日時の変更やキャンセルが発生する場合は、お早めにご連絡いただけますようお願いいたします。",
+  "それでは、{{datetime}}に{{name}}にお会いできることを、スタッフ一同楽しみにお待ちしております。",
+  "どうぞよろしくお願いいたします。",
+];
+
+/** Substitutes {{name}}/{{datetime}}/{{menu}} placeholders in a letter prose line. */
+function renderLetterLine(line: string, vars: Record<string, string>): string {
+  return line.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] ?? "");
 }
 
 /** "2026-06-01" + "12:00" -> "2026年6月1日(月) 12:00" (JST calendar date, no TZ conversion). */
@@ -276,12 +312,17 @@ function buildConfirmationHtml(params: {
     : undefined;
   if (letter && letterDt1) {
     const name = params.submitterName ? `${params.submitterName}様` : "お客様";
+    const vars = { name, datetime: letterDt1, menu: letter.menu };
+    const introLines = (letter.introLines ?? DEFAULT_LETTER_INTRO_LINES).map((l) =>
+      renderLetterLine(l, vars),
+    );
+    const closingLines = (letter.closingLines ?? DEFAULT_LETTER_CLOSING_LINES).map((l) =>
+      renderLetterLine(l, vars),
+    );
     const lines = [
       name,
       "",
-      "この度は、体験レッスンへのお申し込みをいただき誠にありがとうございます。",
-      `${name}のご予約を確定させていただきましたのでご案内いたします。`,
-      "こちらの内容で確定とさせていただきます。",
+      ...introLines,
       "━━━━━━━━━━━━━━━━━━━━━",
       "■ ご予約内容",
       "━━━━━━━━━━━━━━━━━━━━━",
@@ -298,14 +339,7 @@ function buildConfirmationHtml(params: {
       "※道に迷われた際のお願い※",
       letter.directionsNote,
       "",
-      `当日は、${name}の体調やお悩みに合わせて心地よく身体を動かせるよう、心を込めてサポートさせていただきます。`,
-      "ピラティスが初めての場合でも、どうぞリラックスしてお越しくださいませ。",
-      "",
-      "もし事前にご不明な点や、お身体について相談したいことなどがございましたら、お気軽にお問い合わせください。",
-      "",
-      "万が一、日時の変更やキャンセルが発生する場合は、お早めにご連絡いただけますようお願いいたします。",
-      `それでは、${letterDt1}に${name}にお会いできることを、スタッフ一同楽しみにお待ちしております。`,
-      "どうぞよろしくお願いいたします。",
+      ...closingLines,
     ];
     return `<div style="font-family: sans-serif; font-size: 14px; color: #222; white-space: pre-wrap;">${escapeHtml(
       lines.join("\n"),
