@@ -1,0 +1,74 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hpBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDF1F6"/>
+      <stop offset="100%" stop-color="#DCE5F0"/>
+    </linearGradient>
+    <linearGradient id="laptopBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#132C52"/>
+      <stop offset="100%" stop-color="#081A33"/>
+    </linearGradient>
+    <linearGradient id="photoBlock1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#BFD4EA"/>
+      <stop offset="100%" stop-color="#8FAFD1"/>
+    </linearGradient>
+    <linearGradient id="photoBlock2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F5D6BE"/>
+      <stop offset="100%" stop-color="#E3B489"/>
+    </linearGradient>
+    <linearGradient id="screenGlareHp" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45"/>
+      <stop offset="30%" stop-color="#FFFFFF" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="devShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0B2545" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+  <rect width="400" height="300" fill="url(#hpBg)"/>
+  <ellipse cx="190" cy="256" rx="170" ry="14" fill="#0B2545" opacity="0.08"/>
+
+  <!-- laptop -->
+  <g transform="translate(78,58)" filter="url(#devShadow)">
+    <rect x="0" y="0" width="230" height="146" rx="8" fill="url(#laptopBody)"/>
+    <rect x="8" y="8" width="214" height="130" rx="3" fill="#FFFFFF"/>
+    <!-- hero band -->
+    <rect x="8" y="8" width="214" height="54" fill="#0B2545"/>
+    <circle cx="180" cy="35" r="16" fill="#3DA5F5" opacity="0.5"/>
+    <circle cx="200" cy="24" r="8" fill="#FF6A2B" opacity="0.6"/>
+    <rect x="24" y="24" width="80" height="9" rx="3" fill="#FFFFFF"/>
+    <rect x="24" y="40" width="56" height="6" rx="3" fill="#9FB3CE"/>
+    <!-- nav dots -->
+    <circle cx="16" cy="16" r="2.6" fill="#FF6A2B"/>
+    <circle cx="26" cy="16" r="2.6" fill="#F5C453"/>
+    <circle cx="36" cy="16" r="2.6" fill="#3DA5F5"/>
+    <!-- content blocks: photo-like gradients -->
+    <rect x="24" y="76" width="60" height="46" rx="4" fill="url(#photoBlock1)"/>
+    <circle cx="42" cy="94" r="8" fill="#FFFFFF" opacity="0.35"/>
+    <rect x="92" y="76" width="60" height="46" rx="4" fill="url(#photoBlock2)"/>
+    <circle cx="110" cy="90" r="7" fill="#FFFFFF" opacity="0.35"/>
+    <rect x="160" y="76" width="46" height="46" rx="4" fill="url(#photoBlock1)"/>
+    <rect x="24" y="130" width="90" height="7" rx="3.5" fill="#0B2545"/>
+    <path d="M-8 146 h246 l14 18 h-274 z" fill="#132C52"/>
+    <path d="M-8 146 h246 l4 6 h-254 z" fill="#1B3A63"/>
+    <rect x="8" y="8" width="214" height="130" rx="3" fill="url(#screenGlareHp)"/>
+  </g>
+
+  <!-- phone -->
+  <g transform="translate(262,120) rotate(6)" filter="url(#devShadow)">
+    <rect x="0" y="0" width="86" height="150" rx="14" fill="url(#laptopBody)"/>
+    <rect x="6" y="10" width="74" height="130" rx="4" fill="#FFFFFF"/>
+    <rect x="6" y="10" width="74" height="40" fill="#0B2545"/>
+    <rect x="14" y="20" width="40" height="7" rx="3.5" fill="#FFFFFF"/>
+    <rect x="14" y="34" width="28" height="5" rx="2.5" fill="#9FB3CE"/>
+    <rect x="14" y="58" width="58" height="30" rx="4" fill="url(#photoBlock2)"/>
+    <rect x="14" y="94" width="58" height="16" rx="8" fill="#FF6A2B"/>
+    <rect x="14" y="94" width="58" height="7" rx="8" fill="#FFFFFF" opacity="0.2"/>
+    <rect x="14" y="118" width="40" height="5" rx="2.5" fill="#C7CDD8"/>
+    <circle cx="43" cy="135" r="2.4" fill="#C7CDD8"/>
+    <rect x="6" y="10" width="74" height="130" rx="4" fill="url(#screenGlareHp)"/>
+  </g>
+
+  <circle cx="46" cy="52" r="6" fill="#FF6A2B" opacity="0.5"/>
+  <circle cx="356" cy="70" r="4.5" fill="#3DA5F5" opacity="0.6"/>
+</svg>

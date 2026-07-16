@@ -30,14 +30,20 @@ const config: PatternBConfig = {
     heading: ["フィットネス開業の", "Web・集客周り、", "すべて丸投げしませんか？"],
     sub: "HP・LP制作から予約システム導入、広告運用まで。\nあなたの店舗に合わせた完全カスタマイズで、オープン初月からのロケットスタートを実現します！",
     ctaText: "まずは無料相談・お見積りはこちら",
-    hero: { placeholder: "高級感のあるクリーンなジム内装とWebサービスUIの合成イメージ", src: null },
+    hero: {
+      placeholder: "高級感のあるクリーンなジム内装とWebサービスUIの合成イメージ",
+      src: "/clients/kaigyo-support/hero.svg",
+    },
   },
 
   problem: {
     eyebrow: "PROBLEM",
     heading: "こんなお悩み、ありませんか？",
     lead: "物件契約、機材選定、ホームページ制作、広告運用……開業準備はやることが山積み。\nすべて自分たちだけで抱え込み、疲弊してしまうオーナー様の声を数多くお聞きしてきました。",
-    persona: { placeholder: "少し疲れた表情のジムオーナーのイラスト", src: null },
+    persona: {
+      placeholder: "少し疲れた表情のジムオーナーのイラスト",
+      src: "/clients/kaigyo-support/persona.svg",
+    },
     tasks: ["物件", "機材", "HP制作", "広告"],
   },
 
@@ -58,28 +64,40 @@ const config: PatternBConfig = {
         tag: "HP制作",
         title: "魅力が伝わる\n店舗のホームページ制作",
         body: "清潔感のあるスタジオやインストラクター・トレーナーの写真を中心に据えた、\n信頼感のあるホームページを制作します。",
-        image: { placeholder: "ノートPC・スマホに表示されたジムHPのイメージ", src: null },
+        image: {
+          placeholder: "ノートPC・スマホに表示されたジムHPのイメージ",
+          src: "/clients/kaigyo-support/benefit-hp.svg",
+        },
       },
       {
         num: "02",
         tag: "LP制作",
         title: "コンバージョンを高める\n体験申込み特化LP",
         body: "カウントダウンタイマーや体験申込みフォームを配置した、成果につながるランディングページを制作します。",
-        image: { placeholder: "スマホに表示された体験申込みLPのイメージ", src: null },
+        image: {
+          placeholder: "スマホに表示された体験申込みLPのイメージ",
+          src: "/clients/kaigyo-support/benefit-lp.svg",
+        },
       },
       {
         num: "03",
         tag: "予約システム導入",
         title: "直感的に使える\n予約・顧客管理システム",
         body: "操作しやすいカレンダー予約UIと顧客管理ダッシュボードを導入し、日々の運営を効率化します。",
-        image: { placeholder: "タブレットに表示された予約カレンダーUIのイメージ", src: null },
+        image: {
+          placeholder: "タブレットに表示された予約カレンダーUIのイメージ",
+          src: "/clients/kaigyo-support/benefit-reservation.svg",
+        },
       },
       {
         num: "04",
         tag: "広告運用",
         title: "Google・Instagram・LINEの\n広告運用で集客を後押し",
         body: "各媒体の特性に合わせた広告運用で、オープン時からの安定した集客を支援します。\n成果保証型の広告運用のため、成果が出なければ費用が発生しません。",
-        image: { placeholder: "広告媒体ロゴと右肩上がりの成果グラフのイメージ", src: null },
+        image: {
+          placeholder: "広告媒体ロゴと右肩上がりの成果グラフのイメージ",
+          src: "/clients/kaigyo-support/benefit-ads.svg",
+        },
       },
     ],
   },
@@ -132,7 +150,10 @@ const config: PatternBConfig = {
     heading: "まずは無料相談から、\n始めてみませんか？",
     body: "ご相談・お見積りは無料です。開業に向けた不安や疑問、なんでもお気軽にお聞かせください。",
     ctaText: "まずは無料相談・お見積りはこちら",
-    photo: { placeholder: "自信に満ちた笑顔のトレーナーと、賑わうジムのイメージ", src: null },
+    photo: {
+      placeholder: "自信に満ちた笑顔のトレーナーと、賑わうジムのイメージ",
+      src: "/clients/kaigyo-support/closing.svg",
+    },
   },
 
   form: {

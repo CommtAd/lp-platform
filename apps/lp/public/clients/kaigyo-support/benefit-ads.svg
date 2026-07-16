@@ -1,0 +1,87 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="adsBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDF1F6"/>
+      <stop offset="100%" stop-color="#DCE5F0"/>
+    </linearGradient>
+    <linearGradient id="barGrad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#FF6A2B"/>
+      <stop offset="100%" stop-color="#FF9A66"/>
+    </linearGradient>
+    <linearGradient id="barGradBlue" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#3DA5F5"/>
+      <stop offset="100%" stop-color="#8FCBFB"/>
+    </linearGradient>
+    <linearGradient id="instaGrad" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FEC564"/>
+      <stop offset="45%" stop-color="#E1447A"/>
+      <stop offset="100%" stop-color="#8A4FE0"/>
+    </linearGradient>
+    <radialGradient id="badgeGlow" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="badgeShadow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#0B2545" flood-opacity="0.22"/>
+    </filter>
+    <filter id="barShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0B2545" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="400" height="300" fill="url(#adsBg)"/>
+
+  <!-- ad platform badges (abstracted, generic icons — not brand logos) -->
+  <g transform="translate(60,44)" filter="url(#badgeShadow)">
+    <circle cx="0" cy="0" r="26" fill="#FFFFFF"/>
+    <circle cx="0" cy="0" r="26" fill="none" stroke="#EAEFF6" stroke-width="2"/>
+    <circle cx="0" cy="0" r="11" fill="none" stroke="#4285F4" stroke-width="5" stroke-dasharray="26 60" transform="rotate(-90)"/>
+    <circle cx="0" cy="0" r="11" fill="none" stroke="#EA4335" stroke-width="5" stroke-dasharray="20 60" stroke-dashoffset="-26" transform="rotate(-90)"/>
+    <circle cx="0" cy="0" r="11" fill="none" stroke="#FBBC05" stroke-width="5" stroke-dasharray="14 60" stroke-dashoffset="-46" transform="rotate(-90)"/>
+    <circle cx="0" cy="0" r="11" fill="none" stroke="#34A853" stroke-width="5" stroke-dasharray="10 60" stroke-dashoffset="-60" transform="rotate(-90)"/>
+    <circle cx="0" cy="0" r="26" fill="url(#badgeGlow)"/>
+  </g>
+  <text x="60" y="86" font-family="'Zen Kaku Gothic New','Noto Sans JP',sans-serif" font-size="10" fill="#0B2545" text-anchor="middle" font-weight="700">検索広告</text>
+
+  <g transform="translate(140,44)" filter="url(#badgeShadow)">
+    <rect x="-26" y="-26" width="52" height="52" rx="16" fill="url(#instaGrad)"/>
+    <rect x="-13" y="-13" width="26" height="26" rx="8" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    <circle cx="0" cy="0" r="6" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    <circle cx="10" cy="-10" r="2" fill="#FFFFFF"/>
+    <rect x="-26" y="-26" width="52" height="52" rx="16" fill="url(#badgeGlow)"/>
+  </g>
+  <text x="140" y="86" font-family="'Zen Kaku Gothic New','Noto Sans JP',sans-serif" font-size="10" fill="#0B2545" text-anchor="middle" font-weight="700">SNS広告</text>
+
+  <g transform="translate(220,44)" filter="url(#badgeShadow)">
+    <rect x="-26" y="-22" width="52" height="40" rx="18" fill="#3EC85A"/>
+    <path d="M-8 18 l0 14 l14 -14 z" fill="#3EC85A"/>
+    <circle cx="-12" cy="-2" r="4" fill="#FFFFFF"/>
+    <circle cx="0" cy="-2" r="4" fill="#FFFFFF"/>
+    <circle cx="12" cy="-2" r="4" fill="#FFFFFF"/>
+    <rect x="-26" y="-22" width="52" height="40" rx="18" fill="url(#badgeGlow)"/>
+  </g>
+  <text x="220" y="86" font-family="'Zen Kaku Gothic New','Noto Sans JP',sans-serif" font-size="10" fill="#0B2545" text-anchor="middle" font-weight="700">メッセージ広告</text>
+
+  <!-- growth graph -->
+  <g transform="translate(50,120)">
+    <line x1="0" y1="140" x2="300" y2="140" stroke="#C7CDD8" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="0" y2="140" stroke="#C7CDD8" stroke-width="1.5"/>
+
+    <g filter="url(#barShadow)">
+      <rect x="24" y="104" width="30" height="36" rx="4" fill="url(#barGradBlue)" opacity="0.55"/>
+      <rect x="76" y="86" width="30" height="54" rx="4" fill="url(#barGradBlue)" opacity="0.7"/>
+      <rect x="128" y="60" width="30" height="80" rx="4" fill="url(#barGradBlue)"/>
+      <rect x="180" y="34" width="30" height="106" rx="4" fill="url(#barGrad)"/>
+      <rect x="232" y="10" width="30" height="130" rx="4" fill="url(#barGrad)"/>
+    </g>
+    <rect x="24" y="104" width="30" height="10" rx="4" fill="#FFFFFF" opacity="0.25"/>
+    <rect x="76" y="86" width="30" height="10" rx="4" fill="#FFFFFF" opacity="0.25"/>
+    <rect x="128" y="60" width="30" height="10" rx="4" fill="#FFFFFF" opacity="0.25"/>
+    <rect x="180" y="34" width="30" height="10" rx="4" fill="#FFFFFF" opacity="0.3"/>
+    <rect x="232" y="10" width="30" height="10" rx="4" fill="#FFFFFF" opacity="0.3"/>
+
+    <path d="M39 100 L91 82 L143 56 L195 30 L247 6" fill="none" stroke="#0B2545" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="247" cy="6" r="6" fill="#FF6A2B"/>
+    <circle cx="247" cy="6" r="6" fill="none" stroke="#FFFFFF" stroke-width="1.5"/>
+    <path d="M240 -2 l14 -2 l-2 14" fill="none" stroke="#FF6A2B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,4)"/>
+  </g>
+</svg>
