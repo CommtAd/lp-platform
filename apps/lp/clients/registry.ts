@@ -16,6 +16,7 @@ export const clientRegistry: Record<
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/page"),
   "days-pilates": () => import("./days-pilates/page"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/page"),
+  "demo01": () => import("./demo01/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -54,4 +55,5 @@ export const clientMetaRegistry: Record<
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/config"),
   "days-pilates": () => import("./days-pilates/config"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/config"),
+  "demo01": () => import("./demo01/config"),
 };
