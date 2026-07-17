@@ -32,7 +32,7 @@ const config: PatternBConfig = {
     ctaText: "まずは無料相談・お見積りはこちら",
     hero: {
       placeholder: "高級感のあるクリーンなジム内装とWebサービスUIの合成イメージ",
-      src: "/clients/kaigyo-support/hero.svg",
+      src: "/clients/kaigyo-support/hero.jpg",
     },
   },
 
@@ -42,7 +42,7 @@ const config: PatternBConfig = {
     lead: "物件契約、機材選定、ホームページ制作、広告運用……開業準備はやることが山積み。\nすべて自分たちだけで抱え込み、疲弊してしまうオーナー様の声を数多くお聞きしてきました。",
     persona: {
       placeholder: "少し疲れた表情のジムオーナーのイラスト",
-      src: "/clients/kaigyo-support/persona.svg",
+      src: "/clients/kaigyo-support/persona.jpg",
     },
     tasks: ["物件", "機材", "HP制作", "広告"],
   },
@@ -66,7 +66,7 @@ const config: PatternBConfig = {
         body: "清潔感のあるスタジオやインストラクター・トレーナーの写真を中心に据えた、\n信頼感のあるホームページを制作します。",
         image: {
           placeholder: "ノートPC・スマホに表示されたジムHPのイメージ",
-          src: "/clients/kaigyo-support/benefit-hp.svg",
+          src: "/clients/kaigyo-support/benefit-hp.jpg",
         },
       },
       {
@@ -76,7 +76,7 @@ const config: PatternBConfig = {
         body: "カウントダウンタイマーや体験申込みフォームを配置した、成果につながるランディングページを制作します。",
         image: {
           placeholder: "スマホに表示された体験申込みLPのイメージ",
-          src: "/clients/kaigyo-support/benefit-lp.svg",
+          src: "/clients/kaigyo-support/benefit-lp.jpg",
         },
       },
       {
@@ -86,7 +86,7 @@ const config: PatternBConfig = {
         body: "操作しやすいカレンダー予約UIと顧客管理ダッシュボードを導入し、日々の運営を効率化します。",
         image: {
           placeholder: "タブレットに表示された予約カレンダーUIのイメージ",
-          src: "/clients/kaigyo-support/benefit-reservation.svg",
+          src: "/clients/kaigyo-support/benefit-reservation.jpg",
         },
       },
       {
@@ -96,7 +96,7 @@ const config: PatternBConfig = {
         body: "各媒体の特性に合わせた広告運用で、オープン時からの安定した集客を支援します。\n成果保証型の広告運用のため、成果が出なければ費用が発生しません。",
         image: {
           placeholder: "広告媒体ロゴと右肩上がりの成果グラフのイメージ",
-          src: "/clients/kaigyo-support/benefit-ads.svg",
+          src: "/clients/kaigyo-support/benefit-ads.jpg",
         },
       },
     ],
@@ -152,7 +152,7 @@ const config: PatternBConfig = {
     ctaText: "まずは無料相談・お見積りはこちら",
     photo: {
       placeholder: "自信に満ちた笑顔のトレーナーと、賑わうジムのイメージ",
-      src: "/clients/kaigyo-support/closing.svg",
+      src: "/clients/kaigyo-support/closing.jpg",
     },
   },
 
