@@ -17,6 +17,7 @@ export const clientRegistry: Record<
   "days-pilates": () => import("./days-pilates/page"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/page"),
   "demo01": () => import("./demo01/page"),
+  "wps-pilates": () => import("./wps-pilates/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -56,4 +57,5 @@ export const clientMetaRegistry: Record<
   "days-pilates": () => import("./days-pilates/config"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/config"),
   "demo01": () => import("./demo01/config"),
+  "wps-pilates": () => import("./wps-pilates/config"),
 };
