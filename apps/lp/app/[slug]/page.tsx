@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { clientMetaRegistry, clientRegistry, clientSlugs } from "@/clients/registry";
 
+// ISR: prerender at build time, then revalidate in the background so that
+// clients-table changes made directly in the DB (e.g. status draft→published,
+// which gates the noindex banner in LPShell) reflect within a minute without a
+// full redeploy. The dashboard publish button still fires a Deploy Hook for
+// immediate reflection; this is the fallback for out-of-band DB edits.
+export const revalidate = 60;
+
 export function generateStaticParams() {
   return clientSlugs.map((slug) => ({ slug }));
 }
