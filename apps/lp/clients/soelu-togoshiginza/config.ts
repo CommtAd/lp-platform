@@ -1,21 +1,9 @@
 import type { ClientStatus } from "@shared/index";
-import type { LPFormField } from "@/components/LPForm";
 
 const ASSET = "/clients/soelu-togoshiginza";
 
-/**
- * 30-minute time slots between two (decimal) hours.
- * timeSlots(6.5, 23) → 06:30 … 23:00. レッスン枠は朝6:30〜夜23:45のため、
- * 体験希望は6:30〜23:00の30分刻みで受け付ける。
- */
-const timeSlots = (startHour: number, endHour: number) => {
-  const slots: { value: string; label: string }[] = [];
-  for (let m = startHour * 60; m <= endHour * 60; m += 30) {
-    const label = `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
-    slots.push({ value: label, label });
-  }
-  return slots;
-};
+/** 予約ウィジェット（SOELUマイページ）。全CTAの共通遷移先。 */
+const CTA_URL = "https://mypage.soelu.com/widgets/3?isShowProgramName=true&studioId=88";
 
 /** An image position in the layout. `src` empty → placeholder box. */
 export interface Slot {
@@ -27,6 +15,8 @@ export interface Slot {
 export interface SoeluConfig {
   slug: string;
   status?: ClientStatus;
+  /** 予約ウィジェット等、全CTAの共通遷移先URL。 */
+  ctaUrl: string;
   meta: { title: string; description: string; ogpImage?: string };
 
   header: {
@@ -149,13 +139,12 @@ export interface SoeluConfig {
     };
   };
 
+  /** 末尾の予約導線セクション（予約ウィジェットへの誘導CTA）。 */
   form: {
     heading: string;
     lead: string;
-    fields: LPFormField[];
-    submitLabel: string;
+    ctaText: string;
     disclaimer: string;
-    errorMessage: string;
   };
 
   sticky: {
@@ -170,6 +159,7 @@ export interface SoeluConfig {
 const config: SoeluConfig = {
   slug: "soelu-togoshiginza",
   status: "draft",
+  ctaUrl: CTA_URL,
   meta: {
     title: "ソエル 戸越銀座｜女性専用マシンピラティス&よもぎ蒸し 体験レッスンいつでも0円",
     description:
@@ -475,28 +465,9 @@ const config: SoeluConfig = {
 
   form: {
     heading: "無料体験のご予約",
-    lead: "ご希望日時を第2希望まで入力してください。\nスタッフが空き状況を確認のうえ、24時間以内にご連絡し日程を確定します。\n2週間より先のご希望日も、こちらのフォームから受付できます。",
-    fields: [
-      { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
-      { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
-      { type: "email", name: "email", label: "メールアドレス", required: true, placeholder: "example@mail.com" },
-      { type: "date", name: "date1", label: "ご希望日（第1希望）", required: true },
-      { type: "select", name: "time1", label: "ご希望時間帯（第1希望）", required: true, placeholder: "時間帯を選択", options: timeSlots(6.5, 23) },
-      { type: "date", name: "date2", label: "ご希望日（第2希望）", required: true },
-      { type: "select", name: "time2", label: "ご希望時間帯（第2希望）", required: true, placeholder: "時間帯を選択", options: timeSlots(6.5, 23) },
-      {
-        type: "textarea",
-        name: "note",
-        label: "ご質問・ご相談内容",
-        optionalTag: "任意",
-        placeholder: "運動経験や気になることなど、ご自由にお書きください。",
-        rows: 4,
-      },
-    ],
-    submitLabel: "この内容で予約する",
+    lead: "予約ページで空き状況をご確認のうえ、ご希望の日時をお選びください。\n45分の体験レッスンはいつでも0円（税込）。手ぶらでお越しいただけます。",
+    ctaText: "予約ページで空き枠を見る",
     disclaimer: "45分体験レッスンいつでも0円（税込）｜無理な勧誘はいたしません。",
-    errorMessage:
-      "お名前・電話番号・メールアドレス・ご希望日時（第1・第2希望）は必須項目です。ご希望日は明日以降の日付をお選びください。",
   },
 
   sticky: {
@@ -505,7 +476,7 @@ const config: SoeluConfig = {
       { label: "入会金", value: "¥0" },
     ],
     buttonText: "無料体験を予約する",
-    anchor: "#form",
+    anchor: CTA_URL,
   },
 
   footer: {

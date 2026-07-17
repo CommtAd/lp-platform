@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
-import LPForm from "@/components/LPForm";
 import ImageSlot from "@/components/ImageSlot";
 import FaqLight from "./FaqLight";
 import StickyLight from "./StickyLight";
@@ -204,7 +203,9 @@ function CtaButton({ text, withUrgency = true }: { text: string; withUrgency?: b
     <>
       {withUrgency && <CtaUrgency />}
       <a
-        href="#form"
+        href={config.ctaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           display: "flex",
           alignItems: "center",
@@ -763,8 +764,8 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── form ── */}
-          <section id="form" style={{ padding: "44px 22px 50px", background: "#FFFFFF" }}>
+          {/* ── 予約導線（予約ウィジェットへの誘導CTA） ── */}
+          <section id="reserve" style={{ padding: "44px 22px 50px", background: "#FFFFFF" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 18px", borderRadius: 999, background: `${gold}14`, border: `1px solid ${gold}55`, color: gold, fontSize: 12, fontWeight: 700, letterSpacing: "0.02em" }}>
                 ＼ 1周年キャンペーンは8月31日まで ／
@@ -781,15 +782,8 @@ export default function Page() {
                 </span>
               ))}
             </div>
-            <LPForm
-              clientSlug={c.slug}
-              accent={blue}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              errorMessage={c.form.errorMessage}
-              disclaimer={c.form.disclaimer}
-              submitStyle={{ background: ctaGrad, boxShadow: "0 10px 22px rgba(180,135,60,0.35)", letterSpacing: "0.06em", whiteSpace: "nowrap" }}
-            />
+            <CtaButton text={c.form.ctaText} withUrgency={false} />
+            <Notes items={[c.form.disclaimer]} align="center" />
           </section>
 
           {/* ── footer ── */}

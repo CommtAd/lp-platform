@@ -22,11 +22,14 @@ export default function StickyLight({
   showAfter = 0,
 }: StickyLightProps) {
   const [visible, setVisible] = useState(false);
+  // 外部URL（予約ウィジェット等）の場合はページ内アンカーが無いので、
+  // querySelector（URLは不正なセレクタで例外になる）を回避し常時表示扱いにする。
+  const isExternal = /^https?:\/\//.test(anchor);
 
   useEffect(() => {
     const onScroll = () => {
       const past = window.scrollY >= showAfter;
-      const target = document.querySelector(anchor);
+      const target = isExternal ? null : document.querySelector(anchor);
       const reached = target
         ? target.getBoundingClientRect().top <= window.innerHeight * 0.9
         : false;
@@ -35,7 +38,7 @@ export default function StickyLight({
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, [anchor, showAfter]);
+  }, [anchor, showAfter, isExternal]);
 
   useEffect(() => {
     // Reserve bottom clearance for the fixed bar, and override the global body
@@ -97,6 +100,7 @@ export default function StickyLight({
         </div>
         <a
           href={anchor}
+          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           style={{
             position: "relative",
             overflow: "hidden",
