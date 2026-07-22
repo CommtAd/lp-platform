@@ -24,7 +24,7 @@ const REQUIRED = ["LPShell", "LPForm"] as const;
  * Slugs intentionally shipped without an on-page LPForm because conversions are
  * routed to an external booking widget. LPShell remains required for these.
  */
-const FORM_EXEMPT = new Set<string>(["soelu-togoshiginza"]);
+const FORM_EXEMPT = new Set<string>(["soelu-togoshiginza", "days-pilates"]);
 
 function clientSlugs(): string[] {
   return readdirSync(clientsDir).filter((entry) => {

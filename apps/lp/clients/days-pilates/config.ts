@@ -2,6 +2,17 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
 
 const ASSET = "/clients/days-pilates";
 
+/**
+ * 予約CTAの遷移先（外部予約システム reserveform.com）。店舗選択→自社フォーム入力
+ * ではなく、店舗ボタンから直接外部予約ページへ遷移する運用のため、on-page LPForm
+ * は使用しない（scripts/check-rules.ts の FORM_EXEMPT を参照）。
+ */
+type StoreUrls = { umeda: string; shinsaibashi: string };
+const STORE_URLS: StoreUrls = {
+  umeda: "https://reserveform.com/link.php?i=pif6y9z4w33s&m=miamm4uqeua3",
+  shinsaibashi: "https://reserveform.com/link.php?i=pif6y78rtvcb&m=miamm4uqeua3",
+};
+
 /** 30-minute time slots between two hours, e.g. timeSlots(8, 21) → 08:00 … 21:00. */
 const timeSlots = (startHour: number, endHour: number) => {
   const slots: { value: string; label: string }[] = [];
@@ -25,7 +36,7 @@ const timeSlots = (startHour: number, endHour: number) => {
  *   - offer.joinRegular = 10,000（入会金＋事務手数料10,000円→0円。シート Q9）。
  *   - 店舗住所・営業時間・アクセス（シート Q2/Q4）。
  */
-const config: PatternAConfig = {
+const config: PatternAConfig & { storeUrls: StoreUrls } = {
   slug: "days-pilates",
   status: "draft",
   meta: {
@@ -56,6 +67,7 @@ const config: PatternAConfig = {
     text: "初回体験0円・入会金0円",
   },
   achievement: { pre: "大阪", num: "2", post: "店舗｜女性専用の整体×マシンピラティススタジオ" },
+  storeUrls: STORE_URLS,
 
   fv: {
     catchLines: ["美しいカラダに", "生まれ変わる"],

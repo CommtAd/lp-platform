@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
-import LPForm from "@/components/LPForm";
 import FaqList from "./FaqList";
 import StoreCtaButtons from "./StoreCtaButtons";
 import config from "./config";
@@ -136,8 +135,29 @@ function SectionHeading({
   );
 }
 
-const GoldCta = ({ text, sub }: { text: string; sub?: string }) => (
+/** Scarcity note shown just above a CTA button. */
+const UrgencyNote = () => (
+  <p
+    style={{
+      textAlign: "center",
+      fontSize: 12.5,
+      fontWeight: 700,
+      letterSpacing: "0.03em",
+      color: "#C25B4B",
+      margin: 0,
+    }}
+  >
+    好評につき、予約枠残りわずか！
+  </p>
+);
+
+const GoldCta = ({ text, sub, urgent }: { text: string; sub?: string; urgent?: boolean }) => (
   <div style={{ marginTop: 28 }}>
+    {urgent && (
+      <div style={{ marginBottom: 12 }}>
+        <UrgencyNote />
+      </div>
+    )}
     <a
       href="#form"
       style={{
@@ -594,7 +614,7 @@ export default function Page() {
               </div>
             </div>
 
-            <GoldCta text={c.offer.ctaText} />
+            <GoldCta text={c.offer.ctaText} urgent />
           </section>
 
           {/* ── ② about ── */}
@@ -667,7 +687,44 @@ export default function Page() {
                 )}
               </div>
             ))}
-            <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} />
+            <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} urgent />
+          </section>
+
+          {/* ── ④.5 trainers ── */}
+          <section style={{ background: navyGrad, padding: "54px 0 60px" }}>
+            <div style={{ textAlign: "center", padding: "0 26px" }}>
+              <h2 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 24, letterSpacing: "0.08em", color: "#FFFFFF", lineHeight: 1.4, margin: 0 }}>
+                {nl(c.trainers.heading)}
+              </h2>
+              <div style={{ width: 30, height: 2, background: "rgba(255,255,255,0.55)", borderRadius: 2, margin: "14px auto 0" }} />
+              <p style={{ fontSize: 13, lineHeight: 1.9, color: "rgba(255,255,255,0.78)", margin: "18px 0 0" }}>{nl(c.trainers.lead)}</p>
+            </div>
+            <div
+              className="no-scrollbar"
+              style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
+            >
+              {c.trainers.items.map((t, i) => (
+                <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: "#FCFBF7", borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 16px rgba(70,72,60,0.10)" }}>
+                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264 }} />
+                  <div style={{ padding: "18px 20px 22px" }}>
+                    <div style={{ fontSize: 11, letterSpacing: "0.14em", color: "#C1902F" }}>{t.role}</div>
+                    <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#33352E", marginTop: 6 }}>{t.name}</div>
+                    <div style={{ fontSize: 12, color: "#9A9C90", marginTop: 2 }}>{t.nameEn}</div>
+                    <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "12px 0 0" }}>{t.body}</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
+                      {t.tags.map((tag, ti) => (
+                        <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: accent, border: `1px solid ${accentSoft}`, background: accentSoft, borderRadius: 999, padding: "4px 10px" }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: 20 }}>
+              <span style={{ fontSize: 11, letterSpacing: "0.1em", color: "rgba(255,255,255,0.65)" }}>{c.trainers.swipeHint}</span>
+            </div>
           </section>
 
           {/* ── ⑤ scenes ── */}
@@ -741,20 +798,27 @@ export default function Page() {
           <section id="form" style={{ background: "#FCFBF7", padding: "54px 26px" }}>
             <SectionHeading text={c.form.heading} />
             <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.9, color: "#62655B", margin: "18px 0 0" }}>{nl(c.form.lead)}</p>
+            <div style={{ margin: "16px 0 0" }}>
+              <UrgencyNote />
+            </div>
             <StoreCtaButtons
-              clientSlug={c.slug}
-              accent={accent}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              errorMessage={c.form.errorMessage}
-              disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
+              stores={[
+                { value: "umeda", label: "梅田店の体験予約する", url: c.storeUrls.umeda },
+                { value: "shinsaibashi", label: "心斎橋店の体験予約する", url: c.storeUrls.shinsaibashi },
+              ]}
             />
+            {c.form.disclaimer && (
+              <p style={{ fontSize: 11, lineHeight: 1.8, color: "#9A9C90", margin: "18px 0 0", textAlign: "center" }}>
+                {nl(c.form.disclaimer)}
+              </p>
+            )}
           </section>
         </div>
       </div>
 
       <StickyFooterCTA
         anchor={c.sticky.anchor}
+        note={<UrgencyNote />}
         buttonText={c.sticky.buttonText}
         showAfter={c.sticky.showAfter}
         offers={c.sticky.offers.map((o) => (
