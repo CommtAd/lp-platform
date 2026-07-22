@@ -159,25 +159,60 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
     heading: "インストラクター紹介",
     lead: "全員女性のインストラクターが、\n一人ひとりの身体とお悩みに寄り添います。",
     swipeHint: "スワイプで移動",
-    // 【要確認】個別プロフィール・写真・氏名は顧客素材を受領後に差し替え。
     items: [
       {
         img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-1.jpg` },
         role: "PILATES INSTRUCTOR",
-        name: "近日公開",
-        nameEn: "Coming Soon",
+        name: "CHIKA",
+        nameEn: "Chika",
         body:
-          "全員女性のインストラクターが在籍しています。プロフィールは近日公開予定です。（※顧客プロフィール受領後に差し替え）",
-        tags: ["女性インストラクター"],
+          "ヨガインストラクターの経験も持つ、資格保有のインストラクター。明るく誰とでもすぐに打ち解けられる性格で、初めての方も安心してレッスンを受けていただけます。",
+        tags: ["女性インストラクター", "ヨガ資格保有"],
       },
       {
         img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-2.jpg` },
         role: "PILATES INSTRUCTOR",
-        name: "近日公開",
-        nameEn: "Coming Soon",
+        name: "RENE",
+        nameEn: "Rene",
         body:
-          "整体×マシンピラティスの知識をもつ女性インストラクターが、丁寧にサポートします。（※顧客プロフィール受領後に差し替え）",
-        tags: ["女性インストラクター"],
+          "格闘家としての顔も持つ、資格保有のインストラクター。マイペースながら負けず嫌いな一面もあり、レッスンにも情熱を注ぎます。闘技や水泳、バッティングセンターでのトレーニングも欠かしません。",
+        tags: ["女性インストラクター", "格闘技経験あり"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-3.jpg` },
+        role: "PILATES INSTRUCTOR",
+        name: "ARISA",
+        nameEn: "Arisa",
+        body:
+          "数多くの指導実績を持つインストラクター。マシン・マットピラティスの両方で、外側からも内側からも身体を整えます。好奇心旺盛でポジティブな性格で、レッスンにも自然と笑顔があふれます。",
+        tags: ["女性インストラクター", "指導実績多数"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-4.jpg` },
+        role: "PILATES INSTRUCTOR",
+        name: "LIRY",
+        nameEn: "Liry",
+        body:
+          "ビキニフィットネス大会出場経験を持つ、資格保有のインストラクター。筋トレやキックボクシング、水泳、スキューバダイビングとアクティブな趣味を通して、鍛え抜かれた身体づくりのコツを知り尽くしています。",
+        tags: ["女性インストラクター", "ビキニフィットネス出場経験"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-5.jpg` },
+        role: "PILATES INSTRUCTOR",
+        name: "AKIKO",
+        nameEn: "Akiko",
+        body:
+          "ピラティスの資格に加えてネイリストの資格も持つ、多才なインストラクター。ON/OFFをしっかり切り替えながら、何事にも一生懸命に取り組む姿勢が持ち味です。休日は登山でリフレッシュしています。",
+        tags: ["女性インストラクター", "ネイリスト資格保有"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-6.jpg` },
+        role: "PILATES INSTRUCTOR",
+        name: "KUMI",
+        nameEn: "Kumi",
+        body:
+          "ウエスト・お尻・二の腕・背中の引き締めから姿勢改善、柔軟性向上まで、幅広い得意分野を持つインストラクター。一人ひとりの気になる部分に合わせて、丁寧にアプローチします。",
+        tags: ["女性インストラクター", "引き締め・姿勢改善が得意"],
       },
     ],
   },
