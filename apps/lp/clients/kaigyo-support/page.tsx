@@ -61,24 +61,28 @@ export default function Page() {
 
           {/* ── FV ── */}
           <section className="bg-[linear-gradient(160deg,var(--navy)_0%,#132C52_55%,#0A1E3B_100%)] px-5 py-12">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--blue)]/15 px-4 py-1.5 text-[11.5px] font-bold text-[var(--blue)]">
-              ★ {c.fv.badge}
-            </span>
-            <h1 className="mt-5 text-[24px] font-bold leading-[1.5] text-white">
+            <h1 className="text-[24px] font-bold leading-[1.5] text-white">
               {c.fv.heading.map((line, i) => (
                 <span key={i} className="block">
                   {line}
                 </span>
               ))}
             </h1>
+            <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--cta)]/15 px-4 py-2 text-[13.5px] font-bold text-[var(--cta)]">
+              {c.fv.highlight}
+            </div>
             <p className="mt-4 text-[13px] leading-[1.85] text-white/75">{nl(c.fv.sub)}</p>
+            <div className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-[var(--blue)]/15 px-4 py-1.5 text-[11.5px] font-bold text-[var(--blue)]">
+              ★ {c.fv.badge}
+            </div>
             <a
               href="#form"
-              className="mt-7 flex h-14 items-center justify-center gap-2 rounded-full text-[14.5px] font-bold text-white shadow-[0_10px_26px_rgba(255,106,43,0.45)]"
+              className="mt-5 flex h-14 items-center justify-center gap-2 rounded-full text-[14.5px] font-bold text-white shadow-[0_10px_26px_rgba(255,106,43,0.45)]"
               style={{ background: ctaGradAngle(c.cta) }}
             >
               {c.fv.ctaText} <span>→</span>
             </a>
+            <p className="mt-3 text-center text-[10.5px] text-white/50">{c.fv.trust.join("　｜　")}</p>
             <div className="mt-8">
               <ImageSlot
                 src={c.fv.hero.src}
@@ -273,6 +277,7 @@ export default function Page() {
               submitLabel={c.form.submitLabel}
               errorMessage={c.form.errorMessage}
               disclaimer={nl(c.form.disclaimer)}
+              thanksHref={`/${c.slug}/thanks`}
               submitStyle={{
                 background: ctaGradAngle(c.cta),
                 boxShadow: `0 10px 26px ${c.cta}66`,
