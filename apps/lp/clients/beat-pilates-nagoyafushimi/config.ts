@@ -1,16 +1,22 @@
 import type { ClientStatus } from "@shared/index";
 import type { LPFormField } from "@/components/LPForm";
 
-/** Fixed lesson slot lists (times are on the hour but staggered, not evenly spaced). */
+/**
+ * Fixed lesson slot lists (times are on the hour but staggered, not evenly spaced).
+ * Numbering is shared across weekday/weekend so ①-⑤ line up; ⑥ (17:00-17:45) is
+ * 土日祝 only and has no weekday equivalent, so weekdaySlots[5] is unused filler —
+ * weekday evening classes are ⑦⑧⑨ instead.
+ */
 const weekdaySlots = [
   { value: "①9:00-9:45", label: "①9:00-9:45" },
   { value: "②10:20-11:05", label: "②10:20-11:05" },
   { value: "③11:40-12:25", label: "③11:40-12:25" },
   { value: "④14:20-15:05", label: "④14:20-15:05" },
   { value: "⑤15:40-16:25", label: "⑤15:40-16:25" },
-  { value: "⑥17:30-18:15", label: "⑥17:30-18:15" },
-  { value: "⑦18:50-19:35", label: "⑦18:50-19:35" },
-  { value: "⑧20:10-20:55", label: "⑧20:10-20:55" },
+  { value: "⑥17:00-17:45", label: "⑥17:00-17:45" }, // unused on weekdays (土日祝限定枠)
+  { value: "⑦17:30-18:15", label: "⑦17:30-18:15" },
+  { value: "⑧18:50-19:35", label: "⑧18:50-19:35" },
+  { value: "⑨20:10-20:55", label: "⑨20:10-20:55" },
 ];
 const weekendSlots = [
   { value: "①9:00-9:45(土日)", label: "①9:00-9:45" },
@@ -44,11 +50,42 @@ const scheduleByDate: Record<string, number[]> = {
   "2026-07-29": [1, 2, 6, 7, 8],
   "2026-07-30": [1, 2, 6, 7, 8],
   "2026-07-31": [2, 3, 4, 5],
+  "2026-08-01": [6],
+  "2026-08-02": [1, 2, 3, 5, 6],
+  "2026-08-03": [2, 3, 7, 8, 9],
+  "2026-08-04": [2, 3, 7, 8, 9],
+  "2026-08-05": [2, 3, 7, 8, 9],
+  "2026-08-06": [1, 2, 7, 8, 9],
+  "2026-08-07": [2, 3, 7, 8, 9],
+  "2026-08-08": [6],
+  "2026-08-09": [6],
+  "2026-08-10": [7, 8, 9],
+  "2026-08-11": [4, 5, 7, 8, 9],
+  "2026-08-12": [2, 3, 7, 8, 9],
+  "2026-08-13": [1, 2, 7, 8, 9],
+  "2026-08-14": [1, 2, 7, 8, 9],
+  "2026-08-15": [1, 2],
+  "2026-08-16": [1, 2, 3, 5, 6],
+  "2026-08-17": [2, 3, 7, 8, 9],
+  "2026-08-18": [2, 3, 7, 8, 9],
+  "2026-08-19": [2, 3, 7, 8, 9],
+  "2026-08-20": [2, 3, 7, 8, 9],
+  "2026-08-21": [2, 3, 7, 8, 9],
+  "2026-08-22": [6],
+  "2026-08-23": [6],
+  "2026-08-24": [2, 3],
+  "2026-08-25": [2, 3, 7, 8, 9],
+  "2026-08-26": [2, 3, 7, 8, 9],
+  "2026-08-27": [4, 5, 7, 8, 9],
+  "2026-08-28": [7, 8, 9],
+  "2026-08-29": [6],
+  "2026-08-30": [2, 3, 4, 5],
+  "2026-08-31": [2, 3],
 };
 
 /** First/last date the client has actually confirmed availability for — the booking form's `min`/`max` date. */
 const FIRST_CONFIRMED_DATE = "2026-07-16";
-const LAST_CONFIRMED_DATE = "2026-07-31";
+const LAST_CONFIRMED_DATE = "2026-08-31";
 
 /** True for Saturday/Sunday, parsed as a local calendar date (no UTC off-by-one). */
 function isWeekendDate(iso: string): boolean {
