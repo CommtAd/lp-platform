@@ -37,8 +37,12 @@ export interface PatternBConfig {
   fv: {
     badge: string;
     heading: string[];
+    /** Short standout guarantee line shown between heading and sub (e.g. a results-guarantee claim). */
+    highlight: string;
     sub: string;
     ctaText: string;
+    /** Small trust cues shown under the CTA button, e.g. ["相談無料", "しつこい営業なし"]. */
+    trust: string[];
     hero: Slot;
   };
 

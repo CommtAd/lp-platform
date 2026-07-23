@@ -32,6 +32,7 @@ export const clientThanksRegistry: Partial<
   Record<string, () => Promise<{ default: ComponentType }>>
 > = {
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/thanks"),
+  "kaigyo-support": () => import("./kaigyo-support/thanks"),
 };
 
 interface ClientMeta {
