@@ -2,6 +2,17 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
 
 const ASSET = "/clients/days-pilates";
 
+/**
+ * 予約CTAの遷移先（外部予約システム reserveform.com）。店舗選択→自社フォーム入力
+ * ではなく、店舗ボタンから直接外部予約ページへ遷移する運用のため、on-page LPForm
+ * は使用しない（scripts/check-rules.ts の FORM_EXEMPT を参照）。
+ */
+type StoreUrls = { umeda: string; shinsaibashi: string };
+const STORE_URLS: StoreUrls = {
+  umeda: "https://reserveform.com/link.php?i=pif6y9z4w33s&m=miamm4uqeua3",
+  shinsaibashi: "https://reserveform.com/link.php?i=pif6y78rtvcb&m=miamm4uqeua3",
+};
+
 /** 30-minute time slots between two hours, e.g. timeSlots(8, 21) → 08:00 … 21:00. */
 const timeSlots = (startHour: number, endHour: number) => {
   const slots: { value: string; label: string }[] = [];
@@ -25,7 +36,7 @@ const timeSlots = (startHour: number, endHour: number) => {
  *   - offer.joinRegular = 10,000（入会金＋事務手数料10,000円→0円。シート Q9）。
  *   - 店舗住所・営業時間・アクセス（シート Q2/Q4）。
  */
-const config: PatternAConfig = {
+const config: PatternAConfig & { storeUrls: StoreUrls } = {
   slug: "days-pilates",
   status: "draft",
   meta: {
@@ -56,6 +67,7 @@ const config: PatternAConfig = {
     text: "初回体験0円・入会金0円",
   },
   achievement: { pre: "大阪", num: "2", post: "店舗｜女性専用の整体×マシンピラティススタジオ" },
+  storeUrls: STORE_URLS,
 
   fv: {
     catchLines: ["美しいカラダに", "生まれ変わる"],
@@ -147,25 +159,60 @@ const config: PatternAConfig = {
     heading: "インストラクター紹介",
     lead: "全員女性のインストラクターが、\n一人ひとりの身体とお悩みに寄り添います。",
     swipeHint: "スワイプで移動",
-    // 【要確認】個別プロフィール・写真・氏名は顧客素材を受領後に差し替え。
     items: [
       {
         img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-1.jpg` },
         role: "PILATES INSTRUCTOR",
-        name: "近日公開",
-        nameEn: "Coming Soon",
+        name: "CHIKA",
+        nameEn: "Chika",
         body:
-          "全員女性のインストラクターが在籍しています。プロフィールは近日公開予定です。（※顧客プロフィール受領後に差し替え）",
-        tags: ["女性インストラクター"],
+          "ヨガインストラクターの経験も持つ、資格保有のインストラクター。明るく誰とでもすぐに打ち解けられる性格で、初めての方も安心してレッスンを受けていただけます。",
+        tags: ["女性インストラクター", "ヨガ資格保有"],
       },
       {
         img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-2.jpg` },
         role: "PILATES INSTRUCTOR",
-        name: "近日公開",
-        nameEn: "Coming Soon",
+        name: "RENE",
+        nameEn: "Rene",
         body:
-          "整体×マシンピラティスの知識をもつ女性インストラクターが、丁寧にサポートします。（※顧客プロフィール受領後に差し替え）",
-        tags: ["女性インストラクター"],
+          "格闘家としての顔も持つ、資格保有のインストラクター。マイペースながら負けず嫌いな一面もあり、レッスンにも情熱を注ぎます。闘技や水泳、バッティングセンターでのトレーニングも欠かしません。",
+        tags: ["女性インストラクター", "格闘技経験あり"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-3.jpg` },
+        role: "PILATES INSTRUCTOR",
+        name: "ARISA",
+        nameEn: "Arisa",
+        body:
+          "数多くの指導実績を持つインストラクター。マシン・マットピラティスの両方で、外側からも内側からも身体を整えます。好奇心旺盛でポジティブな性格で、レッスンにも自然と笑顔があふれます。",
+        tags: ["女性インストラクター", "指導実績多数"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-4.jpg` },
+        role: "PILATES INSTRUCTOR",
+        name: "LIRY",
+        nameEn: "Liry",
+        body:
+          "ビキニフィットネス大会出場経験を持つ、資格保有のインストラクター。筋トレやキックボクシング、水泳、スキューバダイビングとアクティブな趣味を通して、鍛え抜かれた身体づくりのコツを知り尽くしています。",
+        tags: ["女性インストラクター", "ビキニフィットネス出場経験"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-5.jpg` },
+        role: "PILATES INSTRUCTOR",
+        name: "AKIKO",
+        nameEn: "Akiko",
+        body:
+          "ピラティスの資格に加えてネイリストの資格も持つ、多才なインストラクター。ON/OFFをしっかり切り替えながら、何事にも一生懸命に取り組む姿勢が持ち味です。休日は登山でリフレッシュしています。",
+        tags: ["女性インストラクター", "ネイリスト資格保有"],
+      },
+      {
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-6.jpg` },
+        role: "PILATES INSTRUCTOR",
+        name: "KUMI",
+        nameEn: "Kumi",
+        body:
+          "ウエスト・お尻・二の腕・背中の引き締めから姿勢改善、柔軟性向上まで、幅広い得意分野を持つインストラクター。一人ひとりの気になる部分に合わせて、丁寧にアプローチします。",
+        tags: ["女性インストラクター", "引き締め・姿勢改善が得意"],
       },
     ],
   },

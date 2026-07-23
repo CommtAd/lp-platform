@@ -5,6 +5,8 @@ import { useEffect, useState, type ReactNode } from "react";
 export interface StickyFooterCTAProps {
   /** Offer chips shown above the button, e.g. ["90分体験 ¥0", "入会金 ¥0"]. */
   offers: ReactNode[];
+  /** Optional scarcity/urgency line shown above the offer chips. */
+  note?: ReactNode;
   buttonText: string;
   /** In-page anchor the button scrolls to (e.g. "#form"). */
   anchor: string;
@@ -26,6 +28,7 @@ export interface StickyFooterCTAProps {
  */
 export default function StickyFooterCTA({
   offers,
+  note,
   buttonText,
   anchor,
   showAfter = 620,
@@ -91,6 +94,7 @@ export default function StickyFooterCTA({
           gap: 9,
         }}
       >
+        {note && <div style={{ textAlign: "center" }}>{note}</div>}
         <div
           style={{
             display: "flex",
