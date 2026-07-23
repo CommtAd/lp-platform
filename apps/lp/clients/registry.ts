@@ -18,6 +18,7 @@ export const clientRegistry: Record<
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/page"),
   "demo01": () => import("./demo01/page"),
   "wps-pilates": () => import("./wps-pilates/page"),
+  "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -58,4 +59,5 @@ export const clientMetaRegistry: Record<
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/config"),
   "demo01": () => import("./demo01/config"),
   "wps-pilates": () => import("./wps-pilates/config"),
+  "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/config"),
 };
