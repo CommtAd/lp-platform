@@ -165,6 +165,7 @@ const config: BeeConfig = {
       "Pilates Studio Beê 恵比寿店｜完全個室パーソナルピラティス｜2026.8.1 GRAND OPEN 体験500円",
     description:
       "恵比寿駅徒歩2分、完全個室のパーソナルピラティス専門スタジオ。2026年8月1日グランドオープン。オープン記念で55分の体験レッスンが通常5,500円→500円（税込）。入会金22,000円も体験当日入会で0円。初めての方も、何歳からでも、プロによる一対一のオーダーメイドレッスンで、姿勢と美しいボディラインを。",
+    ogpImage: `${ASSET}/ogp.jpg`,
   },
 
   header: {
@@ -183,7 +184,7 @@ const config: BeeConfig = {
     catchTop: "恵比寿駅 徒歩2分｜完全個室パーソナル",
     catchLines: ["ずっと、", "もっと、", "美しく。"],
     lead: "呼吸から整え、体をコアから鍛える。プロと一対一の、あなただけのピラティス。",
-    hero: { placeholder: "スタジオ内観 / マシンピラティスの写真（全面）", src: null },
+    hero: { placeholder: "スタジオ内観 / マシンピラティスの写真（全面）", src: `${ASSET}/hero.jpg`, position: "center" },
     trial: {
       label: "55分 体験レッスン",
       time: "オープン記念価格",
@@ -221,7 +222,7 @@ const config: BeeConfig = {
   about: {
     eyebrow: "WHAT'S PILATES",
     heading: "パーソナルピラティスとは",
-    img: { placeholder: "マシンピラティスのレッスン写真", src: null },
+    img: { placeholder: "マシンピラティスのレッスン写真", src: `${ASSET}/about.jpg` },
     body: "呼吸を使い、体の深部（コア）を目覚めさせ、正しい動きを生みだすエクササイズです。表面の筋肉ではなく、体を内側から支えるインナーマッスルに働きかけることで、姿勢を整え、美しいボディラインをつくります。Beê では、お一人おひとりの体の状態や目標に合わせて、プロのインストラクターが一対一でレッスンを組み立てます。",
     points: [
       { icon: "spine", label: "姿勢を整える", desc: "体幹（コア）を目覚めさせ、内側からまっすぐ美しい姿勢へ。" },
@@ -236,8 +237,8 @@ const config: BeeConfig = {
     headingHighlight: "オープン記念500円",
     lead: "プロのインストラクターによる一対一のカウンセリングから、実際のマシンピラティスまで。\n初めての方も、体験だけでも、お気軽にお越しください。",
     photos: [
-      { placeholder: "カウンセリングのシーン写真", src: null },
-      { placeholder: "マシンピラティスのシーン写真", src: null },
+      { placeholder: "カウンセリングのシーン写真", src: `${ASSET}/trial-counseling.jpg` },
+      { placeholder: "マシンピラティスのシーン写真", src: `${ASSET}/trial-machine.jpg` },
     ],
     steps: [
       {
@@ -278,31 +279,31 @@ const config: BeeConfig = {
     items: [
       {
         num: "01",
-        img: { placeholder: "完全個室のレッスン風景の写真", src: null },
+        img: { placeholder: "完全個室のレッスン風景の写真", src: `${ASSET}/reason-1.jpg` },
         title: "プライベート空間で\n一対一のオーダーメイド",
         body: "完全個室で、まわりを気にせずレッスンに集中。お一人おひとりの体と目標に合わせて、プロが一対一でメニューを組み立てます。",
       },
       {
         num: "02",
-        img: { placeholder: "インストラクター指導中の写真", src: null },
+        img: { placeholder: "インストラクター指導中の写真", src: `${ASSET}/reason-2.jpg` },
         title: "質の高い\nインストラクター陣",
         body: "確かな知識と技術をもつプロのインストラクターが在籍。担当が変わっても引き継ぎがあるので、毎回「はじめまして」になりません。",
       },
       {
         num: "03",
-        img: { placeholder: "マシン設備の写真", src: null },
+        img: { placeholder: "マシン設備の写真", src: `${ASSET}/reason-3.jpg` },
         title: "充実の\nマシン設備",
         body: "本格的なピラティスマシンを完備。マシンならではのサポートと負荷で、初心者の方でも正しい動きを効率よく身につけられます。",
       },
       {
         num: "04",
-        img: { placeholder: "レッスン風景 / 料金イメージの写真", src: null },
+        img: { placeholder: "レッスン風景 / 料金イメージの写真", src: `${ASSET}/reason-4.jpg` },
         title: "続けやすい\n価格設定",
         body: "55分のレッスンを、続けやすい料金で。月4回プランなら1回あたり税込7,425円（女性）から。無理なく通い続けられます。",
       },
       {
         num: "05",
-        img: { placeholder: "恵比寿駅前 / 店舗外観の写真", src: null },
+        img: { placeholder: "恵比寿駅前 / 店舗外観の写真", src: `${ASSET}/reason-5.jpg` },
         title: "恵比寿駅から\n徒歩2分の好立地",
         body: "恵比寿駅から徒歩2分。お仕事帰りやお出かけのついでにも通いやすく、予約枠も1日12枠と取りやすい環境です。",
       },
@@ -352,7 +353,7 @@ const config: BeeConfig = {
     heading: "あなたを支える、\nプロのインストラクター",
     lead: "Beê には、確かな技術をもつプロのインストラクターが在籍。担当が変わってもレッスンを引き継ぐから、あなたのことを分かった上で、いつも最適なレッスンをお届けします。",
     count: { num: "10", unit: "名", post: "のインストラクターが在籍" },
-    img: { placeholder: "インストラクター集合 / 指導シーンの写真", src: null },
+    img: { placeholder: "インストラクター集合 / 指導シーンの写真", src: `${ASSET}/instructor.jpg` },
     message: {
       title: "インストラクターより",
       body: "「あなたらしく、ずっと、もっと、美しく…。変化したところを一緒に見つけ、なぜその動きが必要なのかをお伝えしながら、体を根本から整えていきましょう。」",
@@ -420,7 +421,7 @@ const config: BeeConfig = {
   access: {
     heading: "店舗のご案内",
     store: {
-      img: { placeholder: "恵比寿店の外観 / 内観の写真", src: null },
+      img: { placeholder: "恵比寿店の外観 / 内観の写真", src: `${ASSET}/store.jpg` },
       name: "Pilates Studio Beê 恵比寿店",
       address: "〒150-0021 東京都渋谷区恵比寿西1丁目8-1 かづさやビル 301",
       hours: "営業時間 8:00〜21:45",
