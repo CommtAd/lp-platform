@@ -316,7 +316,7 @@ export default function Page() {
                 <br />
                 <span style={{ color: gold }}>{c.fv.catchLines[2]}</span>
               </h1>
-              <p style={{ fontSize: 13, lineHeight: 1.95, color: dim, margin: "14px 0 0" }}>{c.fv.lead}</p>
+              <p style={{ fontSize: 13, lineHeight: 1.95, color: dim, margin: "14px 0 0" }}>{nl(c.fv.lead)}</p>
 
               {/* 体験オープン記念価格カード */}
               <div
