@@ -298,17 +298,17 @@ export default function Page() {
                 objectPosition={c.fv.hero.position ?? "center"}
                 style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#E4DCCB" }}
               />
-              <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, rgba(250,246,238,0) 52%, rgba(250,246,238,0.9) 86%, ${cream} 100%)` }} />
+              <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, rgba(250,246,238,0) 38%, rgba(250,246,238,0.7) 66%, rgba(250,246,238,0.95) 84%, ${cream} 100%)` }} />
               <div style={{ position: "absolute", top: 14, right: 14 }}>
                 <OpenBadge size={88} />
               </div>
-              <div style={{ position: "absolute", left: 18, bottom: 44 }}>
+              <div style={{ position: "absolute", left: 18, bottom: 128 }}>
                 <span style={{ display: "inline-flex", padding: "5px 14px", borderRadius: 999, background: deep, color: "#FFFFFF", fontSize: 11, fontWeight: 700, letterSpacing: "0.06em" }}>
                   {c.fv.catchTop}
                 </span>
               </div>
             </div>
-            <div style={{ position: "relative", padding: "0 22px 30px", marginTop: -20 }}>
+            <div style={{ position: "relative", padding: "0 22px 30px", marginTop: -104 }}>
               <h1 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 58, lineHeight: 1.28, letterSpacing: "0.16em", color: deep, margin: "0" }}>
                 {c.fv.catchLines[0]}
                 <br />
