@@ -309,7 +309,7 @@ export default function Page() {
               </div>
             </div>
             <div style={{ position: "relative", padding: "0 22px 30px", marginTop: -20 }}>
-              <h1 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 40, lineHeight: 1.35, letterSpacing: "0.06em", color: deep, margin: "0" }}>
+              <h1 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 58, lineHeight: 1.28, letterSpacing: "0.16em", color: deep, margin: "0" }}>
                 {c.fv.catchLines[0]}
                 <br />
                 {c.fv.catchLines[1]}
@@ -333,16 +333,16 @@ export default function Page() {
                   <span style={{ padding: "4px 12px", borderRadius: 999, background: `${gold}18`, color: "#7A5E28", fontSize: 12, fontWeight: 700 }}>{c.fv.trial.label}</span>
                   <span style={{ padding: "4px 12px", borderRadius: 999, background: deep, color: "#FFFFFF", fontSize: 12, fontWeight: 700 }}>{c.fv.trial.time}</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 8, marginTop: 10 }}>
+                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 6, marginTop: 10 }}>
                   <span style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 12 }}>
                     <span style={{ fontSize: 11, color: dim }}>通常</span>
-                    <span style={{ fontFamily: fontMincho, fontSize: 17, color: dim, textDecoration: "line-through", textDecorationColor: `${dim}99` }}>{c.fv.trial.normal}円</span>
+                    <span style={{ fontFamily: fontMincho, fontSize: 17, color: dim, textDecoration: "line-through", textDecorationColor: `${dim}99`, whiteSpace: "nowrap" }}>{c.fv.trial.normal}円</span>
                   </span>
-                  <span style={{ fontSize: 22, color: gold, marginBottom: 20 }}>→</span>
-                  <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 72, lineHeight: 0.9, color: gold }}>{c.fv.trial.price}</span>
-                  <span style={{ fontFamily: fontMincho, fontSize: 26, fontWeight: 600, color: deep, marginBottom: 6 }}>
+                  <span style={{ fontSize: 20, color: gold, marginBottom: 18 }}>→</span>
+                  <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 60, lineHeight: 0.9, color: gold }}>{c.fv.trial.price}</span>
+                  <span style={{ fontFamily: fontMincho, fontSize: 22, fontWeight: 600, color: deep, marginBottom: 6, whiteSpace: "nowrap" }}>
                     {c.fv.trial.unit}
-                    <span style={{ fontSize: 11, color: dim, marginLeft: 4 }}>{c.fv.trial.priceNote}</span>
+                    <span style={{ fontSize: 10, color: dim, marginLeft: 3 }}>{c.fv.trial.priceNote}</span>
                   </span>
                 </div>
               </div>
