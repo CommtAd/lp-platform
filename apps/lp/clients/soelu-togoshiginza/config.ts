@@ -161,13 +161,13 @@ const config: SoeluConfig = {
   status: "draft",
   ctaUrl: CTA_URL,
   meta: {
-    title: "ソエル 戸越銀座｜女性専用マシンピラティス&よもぎ蒸し 体験レッスンいつでも0円",
+    title: "ソエルスタジオ戸越銀座店｜女性専用マシンピラティス&よもぎ蒸し 体験レッスンいつでも0円",
     description:
       "戸越銀座駅徒歩30秒・戸越駅徒歩2分の女性専用マシンピラティススタジオ。45分体験レッスンはいつでも0円（税込）・手ぶらOK。会員はよもぎ蒸しも追加料金なし。朝6時〜夜24時まで年中無休。",
   },
 
   header: {
-    brand: "ソエル 戸越銀座",
+    brand: "ソエルスタジオ戸越銀座店",
     brandSub: "女性専用マシンピラティス&よもぎ蒸し",
     access: [
       { station: "戸越銀座駅", walk: "徒歩30秒" },
@@ -184,7 +184,7 @@ const config: SoeluConfig = {
     anniversaryBadge: { small: "祝", big: "1st", en: "ANNIVERSARY" },
     catchTop: "戸越銀座駅 徒歩30秒｜女性専用",
     catchLines: ["話題のマシンピラティスを", "手ぶらで、気軽に。"],
-    hero: { placeholder: "スタジオ内観 / マシンピラティスの写真（全面）", src: null },
+    hero: { placeholder: "スタジオ内観 / マシンピラティスの写真（全面）", src: `${ASSET}/hero.jpg` },
     trial: {
       label: "45分体験レッスン",
       time: "手ぶらでOK",
@@ -236,7 +236,7 @@ const config: SoeluConfig = {
       "家や駅から近い場所で、気軽に始めたい",
     ],
     closingPre: "その想い、",
-    closingHighlight: "ソエル戸越銀座ではじめませんか？",
+    closingHighlight: "ソエルスタジオ戸越銀座店ではじめませんか？",
   },
 
   trial: {
@@ -262,8 +262,8 @@ const config: SoeluConfig = {
       },
     ],
     photos: [
-      { placeholder: "体験レッスンのシーン写真", src: null },
-      { placeholder: "リフォーマー / スタジオの写真", src: null },
+      { placeholder: "体験レッスンのシーン写真", src: `${ASSET}/lesson-2.jpg` },
+      { placeholder: "リフォーマー / スタジオの写真", src: `${ASSET}/hero.jpg` },
     ],
     notes: [
       "※体験レッスンが無料となるのは初めて予約された方です。",
@@ -309,7 +309,7 @@ const config: SoeluConfig = {
   method1: {
     eyebrow: "METHOD 01",
     heading: "動画×スタッフサポート型\nマシンピラティス",
-    img: { placeholder: "大画面動画レッスン＋スタッフサポートの写真", src: null },
+    img: { placeholder: "大画面動画レッスン＋スタッフサポートの写真", src: `${ASSET}/lesson-2.jpg` },
     body: "大画面モニターに映るプロインストラクターの分かりやすいお手本動画を見ながら、専用マシン「リフォーマー」で動いていきます。スタジオのスタッフが一人ひとりのフォームをチェックして直接お声がけ・サポート（アジャスト）するから、指導のブレがなく、初心者の方でも安心して取り組めます。",
     points: [
       { icon: "monitor", label: "プロ監修の動画レッスン", desc: "実績豊富なプロインストラクター陣が出演・監修。いつ受けてもブレのないクオリティ。" },
@@ -327,7 +327,7 @@ const config: SoeluConfig = {
   method2: {
     eyebrow: "METHOD 02",
     heading: "本格よもぎ蒸しで、\nじんわり温まる温活タイム",
-    img: { placeholder: "よもぎ蒸しルームの写真", src: null },
+    img: { placeholder: "よもぎ蒸しルームの写真", src: `${ASSET}/yomogi.jpg` },
     body: "女性に人気の本格よもぎ蒸し設備を完備。ピラティスでしっかり体を動かして心地よく引き締めた後は、よもぎの蒸気でじんわり温まって、爽快なリフレッシュ、冷えを和らげるケア、心地よいリラックスタイムを。",
     badge: "会員は追加料金なしで利用OK",
     note: "※よもぎ蒸しは会員限定メニューです。体験レッスンでは利用できません。",
@@ -341,29 +341,29 @@ const config: SoeluConfig = {
   },
 
   reasons: {
-    heading: "ソエル戸越銀座が\n選ばれる5つの理由",
+    heading: "ソエルスタジオ戸越銀座店が\n選ばれる5つの理由",
     items: [
       {
         num: "01",
-        img: { placeholder: "よもぎ蒸しの写真", src: null },
+        img: { placeholder: "よもぎ蒸しの写真", src: `${ASSET}/yomogi.jpg` },
         title: "よもぎ蒸し×ピラティスの\n贅沢なトータルケア",
         body: "体を動かして引き締めた後は、よもぎ蒸しでじんわり温まってリラックス。運動と温活のトータルケアが、ひとつのスタジオで、ひとつの月額会費で楽しめます。",
       },
       {
         num: "02",
-        img: { placeholder: "戸越銀座駅前 / 店舗外観の写真", src: null },
+        img: { placeholder: "戸越銀座駅前 / 店舗外観の写真", src: `${ASSET}/exterior.jpg` },
         title: "朝6時〜夜24時・年中無休の\n通いやすさ",
         body: "朝6:30から夜23:45の枠までレッスンがあるから、早朝も、お仕事帰りの遅い時間も、自分のタイミングで通えます。戸越銀座駅から徒歩30秒の駅近です。",
       },
       {
         num: "03",
-        img: { placeholder: "動画レッスン受講シーンの写真", src: null },
+        img: { placeholder: "動画レッスン受講シーンの写真", src: `${ASSET}/lesson-2.jpg` },
         title: "プロの動画レッスン×\nスタッフサポートで安心",
         body: "レッスンはプロインストラクター監修の動画だから、インストラクターによる指導の差が出ません。さらに常駐スタッフがフォームを優しくサポートします。",
       },
       {
         num: "04",
-        img: { placeholder: "スタジオ内観の写真", src: null },
+        img: { placeholder: "スタジオ内観の写真", src: `${ASSET}/hero.jpg` },
         title: "女性専用のクリーンで\n洗練されたスタジオ空間",
         body: "会員さまは女性のみ。清潔感のある洗練された空間で、まわりを気にせずレッスンに集中できます。更衣室・天井ミラー・無料レンタルウェアを完備しています。",
       },
@@ -429,7 +429,7 @@ const config: SoeluConfig = {
     items: [
       {
         q: "運動経験がなくても大丈夫？",
-        a: "はい、ご安心ください。ソエル戸越銀座はピラティスを0から始める初心者の方が多数です。分かりやすいお手本動画に合わせて動き、スタッフがフォームをサポートするので、初めての方でも無理なく取り組めます。",
+        a: "はい、ご安心ください。ソエルスタジオ戸越銀座店はピラティスを0から始める初心者の方が多数です。分かりやすいお手本動画に合わせて動き、スタッフがフォームをサポートするので、初めての方でも無理なく取り組めます。",
       },
       {
         q: "持ち物は必要？",
@@ -441,7 +441,7 @@ const config: SoeluConfig = {
       },
       {
         q: "男性も通える？",
-        a: "申し訳ございません。ソエル戸越銀座は女性専用スタジオです。女性のお客さまが安心して通える空間づくりをしています。",
+        a: "申し訳ございません。ソエルスタジオ戸越銀座店は女性専用スタジオです。女性のお客さまが安心して通える空間づくりをしています。",
       },
       {
         q: "予約の変更やキャンセルは？",
@@ -453,8 +453,8 @@ const config: SoeluConfig = {
   access: {
     heading: "店舗のご案内",
     store: {
-      img: { placeholder: "店舗外観 / 内観の写真", src: null },
-      name: "ソエル 戸越銀座",
+      img: { placeholder: "店舗外観 / 内観の写真", src: `${ASSET}/entrance.jpg` },
+      name: "ソエルスタジオ戸越銀座店",
       address: "〒142-0051 東京都品川区平塚1丁目9-1 グローバル戸越銀座ビル 5F",
       hours: "営業時間 6:00〜24:00",
       holiday: "定休日なし（年中無休）",
@@ -481,7 +481,7 @@ const config: SoeluConfig = {
 
   footer: {
     lines: [
-      "ソエル 戸越銀座",
+      "ソエルスタジオ戸越銀座店",
       "〒142-0051 東京都品川区平塚1丁目9-1 グローバル戸越銀座ビル 5F",
       "営業時間 6:00〜24:00｜定休日なし（年中無休）",
     ],
