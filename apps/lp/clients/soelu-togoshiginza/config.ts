@@ -337,7 +337,7 @@ const config: SoeluConfig = {
     heading: "ずーっと手ぶらで、\nサクッと通える。",
     body: "無料レンタルウェアがあるから、体験のときも、入会後もずっと手ぶらでOK。ウェアを持ち歩く面倒がないから、毎日の予定にすっと組み込めます。",
     scenes: ["出勤前に", "お買い物ついでに", "お仕事帰りに"],
-    img: { placeholder: "レンタルウェア / 更衣室の写真", src: null },
+    img: { placeholder: "レンタルウェア / 更衣室の写真", src: `${ASSET}/wear.jpg` },
   },
 
   reasons: {
