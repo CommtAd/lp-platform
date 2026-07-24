@@ -79,7 +79,7 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
 
   offer: {
     eyebrow: "整体 × マシンピラティス",
-    heading: "約60分の無料体験",
+    heading: "約90分の無料体験",
     trialBadge: "整体×マシンピラティスを体験",
     trialRegular: "5,500",
     items: [
@@ -239,13 +239,13 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
   },
 
   flow: {
-    heading: "初回体験（約60分）の流れ",
+    heading: "初回体験（約90分）の流れ",
     steps: [
       {
         num: "1",
         title: "ご来店・お着替え",
         time: "約5分",
-        body: "手ぶらでOK。お着替えを済ませて、リラックスしてお待ちください。",
+        body: "レンタルウェアをご用意しておりますので、\nお着替えの準備は不要です。\n（ご自身のものでももちろんOKです！）\nお着替えを済ませて、リラックスしてお待ちください。",
       },
       {
         num: "2",
@@ -261,7 +261,7 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
       },
       {
         num: "4",
-        title: "事後カウンセリング",
+        title: "体験フィードバック",
         time: "約15分",
         body: "体験を踏まえて、あなたに合った通い方やプランをご提案。無理な勧誘はいたしません。",
       },

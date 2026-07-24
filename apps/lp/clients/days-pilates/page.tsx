@@ -759,7 +759,7 @@ export default function Page() {
                       <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
                         <h3 style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.03em", margin: 0, color: "#33352E" }}>{step.title}</h3>
                       </div>
-                      <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>{step.body}</p>
+                      <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>{nl(step.body)}</p>
                     </div>
                   </div>
                 );
