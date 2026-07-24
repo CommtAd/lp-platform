@@ -369,7 +369,7 @@ const config: SoeluConfig = {
       },
       {
         num: "05",
-        img: { placeholder: "スマホ予約画面のイメージ写真", src: `${ASSET}/reservation.png` },
+        img: { placeholder: "スマホ予約画面のイメージ写真", src: `${ASSET}/reservation.jpg` },
         title: "予約もキャンセルも\nスマホで簡単",
         body: "レッスンの予約・キャンセルはスマホでいつでも完結。思い立ったときにサクッと予約できるから、忙しい毎日でも続けやすい仕組みです。",
       },
