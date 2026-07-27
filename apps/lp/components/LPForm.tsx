@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { CvEventType, FormSubmitPayload } from "@shared/index";
 import { FORM_SUBMIT_URL } from "@/lib/form-endpoint";
 import { readUtm } from "@/lib/utm";
@@ -195,6 +195,11 @@ export default function LPForm({
   const [values, setValues] = useState<Record<string, string>>(initialValues ?? {});
   const [error, setError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  // Synchronous in-flight guard. Rapid taps in the same tick all read the same
+  // render's `submitting` (state updates only apply on re-render), so state
+  // alone can't block a burst of clicks — the ref updates immediately.
+  const submittingRef = useRef(false);
   const [focused, setFocused] = useState<string | null>(null);
 
   const setField = (name: string, value: string) =>
@@ -220,6 +225,10 @@ export default function LPForm({
     ) : null;
 
   const handleSubmit = async () => {
+    // In-flight guard: block repeat taps while a submission is pending, so a
+    // double-tap can't fire multiple submissions (each with its own event_id,
+    // which the backend can't dedup → duplicate notification emails).
+    if (submittingRef.current) return;
     const missing = fields.some(
       (f) => f.required && !(values[f.name] ?? "").trim(),
     );
@@ -237,6 +246,8 @@ export default function LPForm({
       return;
     }
     setError(false);
+    submittingRef.current = true;
+    setSubmitting(true);
     const { ok, eventId } = await postEvent(clientSlug, "form_submit", values);
     if (ok) {
       firePixel("Lead", eventId);
@@ -247,6 +258,8 @@ export default function LPForm({
       setSubmitted(true);
     } else {
       setError(true);
+      submittingRef.current = false;
+      setSubmitting(false);
     }
   };
 
@@ -495,6 +508,7 @@ export default function LPForm({
       <button
         type="button"
         onClick={handleSubmit}
+        disabled={submitting}
         style={{
           height: 60,
           background: "linear-gradient(135deg, #E8C877 0%, #C1902F 100%)",
@@ -505,12 +519,13 @@ export default function LPForm({
           fontSize: 16,
           fontWeight: 700,
           letterSpacing: "0.1em",
-          cursor: "pointer",
+          cursor: submitting ? "wait" : "pointer",
+          opacity: submitting ? 0.7 : 1,
           boxShadow: "0 10px 22px rgba(160,120,40,0.4)",
           ...submitStyle,
         }}
       >
-        {submitLabel}
+        {submitting ? "送信中…" : submitLabel}
       </button>
 
       {disclaimer && (
