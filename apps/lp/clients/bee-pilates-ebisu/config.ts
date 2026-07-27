@@ -166,7 +166,7 @@ export interface BeeConfig {
 
 const config: BeeConfig = {
   slug: "bee-pilates-ebisu",
-  status: "draft",
+  status: "published",
   ctaUrl: CTA_URL,
   meta: {
     title:

@@ -181,7 +181,7 @@ function CtaUrgency() {
           letterSpacing: "0.02em",
         }}
       >
-        ＼ 2026.8.1 GRAND OPEN・オープン記念キャンペーン実施中 ／
+        ＼ オープン記念キャンペーン実施中 ／
       </span>
     </div>
   );
