@@ -28,29 +28,29 @@ const weekendSlots = [
 ];
 
 /**
- * Manually-managed weekly availability (received from the client by chat).
- * Each entry lists which numbered slots (①-⑧, see weekdaySlots/weekendSlots
- * above) are open on that date. Update this — and `LAST_CONFIRMED_DATE` below
- * — whenever the client sends the next batch of dates.
+ * Manually-managed daily availability (received from the client by chat).
+ * Each entry lists which numbered slots are open on that date, using the FIXED
+ * numbering of weekdaySlots/weekendSlots above:
+ *   ①9:00 ②10:20 ③11:40 ④14:20 ⑤15:40 ⑥17:00-17:45(土日祝) ⑦17:30-18:15 ⑧18:50 ⑨20:10
+ *
+ * NOTE: the client's July sheet uses a *different* numbering (⑥=17:30-18:15 on
+ * weekdays / 17:00-17:45 on 土日祝, ⑦=18:50, ⑧=20:10, and no ⑨). Those July
+ * dates are converted here to the fixed numbering *by actual time* so the times
+ * shown to the customer stay correct. From August the client's numbering
+ * matches the fixed one 1:1, so those numbers are used as-is.
+ *
+ * Update this — and `LAST_CONFIRMED_DATE` below — whenever the client sends the
+ * next batch. Past dates may be dropped; LPForm blocks any date before tomorrow
+ * regardless, so already-passed dates are never selectable.
  */
 const scheduleByDate: Record<string, number[]> = {
-  "2026-07-16": [4, 5, 6, 7, 8],
-  "2026-07-17": [2, 3, 4, 5],
-  "2026-07-18": [1, 2, 3],
-  "2026-07-19": [1, 2, 3, 4, 5],
-  "2026-07-20": [2, 3],
-  "2026-07-21": [2, 3, 6, 7, 8],
-  "2026-07-22": [6, 7, 8],
-  "2026-07-23": [2, 3, 6, 7, 8],
-  "2026-07-24": [2, 3, 4, 5],
-  "2026-07-25": [2, 3, 4, 5],
-  "2026-07-26": [2, 3, 4, 5],
-  "2026-07-27": [2, 3, 6, 7, 8],
-  "2026-07-28": [2, 3, 7, 8],
-  "2026-07-29": [1, 2, 6, 7, 8],
-  "2026-07-30": [1, 2, 6, 7, 8],
-  "2026-07-31": [2, 3, 4, 5],
-  "2026-08-01": [6],
+  // ── 7月（クライアント番号: ⑥=17:30/17:00・⑦=18:50・⑧=20:10 → 固定番号へ変換） ──
+  "2026-07-28": [2, 3, 8, 9], // ②③⑦⑧
+  "2026-07-29": [1, 2, 7, 8, 9], // ①②⑥⑦⑧
+  "2026-07-30": [1, 2, 7, 8, 9], // ①②⑥⑦⑧
+  "2026-07-31": [2, 3, 4, 5], // ②③④⑤
+  // ── 8月（クライアント番号 = 固定番号） ──
+  "2026-08-01": [3, 4, 6],
   "2026-08-02": [1, 2, 3, 5, 6],
   "2026-08-03": [2, 3, 7, 8, 9],
   "2026-08-04": [2, 3, 7, 8, 9],
@@ -83,8 +83,12 @@ const scheduleByDate: Record<string, number[]> = {
   "2026-08-31": [2, 3],
 };
 
-/** First/last date the client has actually confirmed availability for — the booking form's `min`/`max` date. */
-const FIRST_CONFIRMED_DATE = "2026-07-16";
+/**
+ * Last date the client has confirmed availability for — the booking form's `max`.
+ * There is intentionally no `min`: LPForm defaults the date picker's minimum to
+ * tomorrow (computed client-side), so already-passed dates are never selectable
+ * and the floor advances automatically each day.
+ */
 const LAST_CONFIRMED_DATE = "2026-08-31";
 
 /** True for Saturday/Sunday, parsed as a local calendar date (no UTC off-by-one). */
@@ -561,7 +565,6 @@ const config: BeatPilatesConfig = {
         name: "date1",
         label: "ご希望日",
         required: true,
-        min: FIRST_CONFIRMED_DATE,
         max: LAST_CONFIRMED_DATE,
       },
       {
