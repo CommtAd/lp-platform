@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import ImageSlot from "@/components/ImageSlot";
-import LPForm from "@/components/LPForm";
 import Faq from "./Faq";
 import Sticky from "./Sticky";
 import config from "./config";
@@ -193,7 +192,9 @@ function CtaButton({ text, withUrgency = true }: { text: string; withUrgency?: b
     <>
       {withUrgency && <CtaUrgency />}
       <a
-        href={config.sticky.anchor}
+        href={config.ctaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           display: "flex",
           alignItems: "center",
@@ -668,8 +669,8 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 予約フォーム ── */}
-          <section id="form" style={{ padding: "48px 22px 50px", background: "#FFFFFF" }}>
+          {/* ── 予約導線（外部予約システムへの誘導CTA） ── */}
+          <section id="reserve" style={{ padding: "48px 22px 50px", background: "#FFFFFF" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 18px", borderRadius: 999, background: `${gold}14`, border: `1px solid ${gold}55`, color: gold, fontSize: 12, fontWeight: 700, letterSpacing: "0.02em" }}>
                 ＼ オープン記念 体験500円・入会金0円 ／
@@ -678,14 +679,16 @@ export default function Page() {
             <Eyebrow text="RESERVATION" />
             <SectionHeading text={c.form.heading} />
             <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 2, color: dim, margin: "16px 0 0" }}>{nl(c.form.lead)}</p>
-            <LPForm
-              clientSlug={c.slug}
-              accent={gold}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              errorMessage={c.form.errorMessage}
-              disclaimer={nl(c.form.disclaimer)}
-            />
+            <div style={{ display: "flex", justifyContent: "center", gap: 10, margin: "18px 0 0" }}>
+              {c.sticky.offers.map((o) => (
+                <span key={o.label} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 18px", borderRadius: 12, border: `1.5px solid ${gold}66`, background: cream }}>
+                  <span style={{ fontSize: 11, color: dim }}>{o.label}</span>
+                  <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 18, color: deep }}>{o.value}</span>
+                </span>
+              ))}
+            </div>
+            <CtaButton text={c.form.ctaText} withUrgency={false} />
+            <Notes items={[c.form.disclaimer]} align="center" />
           </section>
 
           {/* ── footer ── */}
@@ -702,7 +705,7 @@ export default function Page() {
       <Sticky
         offers={c.sticky.offers}
         buttonText={c.sticky.buttonText}
-        anchor={c.sticky.anchor}
+        anchor={c.ctaUrl}
         accent={gold}
         gradient={ctaGrad}
         showAfter={0}

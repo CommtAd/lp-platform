@@ -3,6 +3,10 @@ import type { LPFormField } from "@/components/LPForm";
 
 const ASSET = "/clients/bee-pilates-ebisu";
 
+/** 予約システム（hacomono）。全CTAの共通遷移先。 */
+const CTA_URL =
+  "https://pilatesbee.hacomono.jp/reserve/schedule/12/7?date_from=2026-08-03";
+
 /** An image position in the layout. `src` empty → placeholder box. */
 export interface Slot {
   placeholder: string;
@@ -13,6 +17,8 @@ export interface Slot {
 export interface BeeConfig {
   slug: string;
   status?: ClientStatus;
+  /** 予約システム等、全CTAの共通遷移先URL。 */
+  ctaUrl: string;
   meta: { title: string; description: string; ogpImage?: string };
 
   header: {
@@ -142,6 +148,7 @@ export interface BeeConfig {
   form: {
     heading: string;
     lead: string;
+    ctaText: string;
     fields: LPFormField[];
     submitLabel: string;
     disclaimer: string;
@@ -160,6 +167,7 @@ export interface BeeConfig {
 const config: BeeConfig = {
   slug: "bee-pilates-ebisu",
   status: "draft",
+  ctaUrl: CTA_URL,
   meta: {
     title:
       "Pilates Studio Beê 恵比寿店｜完全個室パーソナルピラティス｜2026.8.1 GRAND OPEN 体験500円",
@@ -433,7 +441,8 @@ const config: BeeConfig = {
 
   form: {
     heading: "体験レッスンのご予約",
-    lead: "下記フォームよりお気軽にお申し込みください。\n担当より折り返しご連絡いたします。",
+    lead: "ご予約ページで空き状況をご確認のうえ、ご希望の日時をお選びください。\nオープン記念 体験55分500円（税込）、体験レッスン時のご入会で入会金0円。",
+    ctaText: "オープン記念で体験を予約する",
     fields: [
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
@@ -453,7 +462,7 @@ const config: BeeConfig = {
     ],
     submitLabel: "この内容で予約する",
     disclaimer:
-      "送信いただいた内容は予約対応のみに利用します。\nオープン記念 体験55分500円（税込）｜体験レッスン時の入会で入会金0円｜無理な勧誘はいたしません。",
+      "オープン記念 体験55分500円（税込）｜体験レッスン時の入会で入会金0円｜無理な勧誘はいたしません。",
     errorMessage: "お名前・電話番号・第1希望日時は必須です。ご希望日は明日以降の日付をお選びください。",
   },
 
@@ -463,7 +472,7 @@ const config: BeeConfig = {
       { label: "入会金", value: "¥0" },
     ],
     buttonText: "オープン記念で体験を予約する",
-    anchor: "#form",
+    anchor: CTA_URL,
   },
 
   footer: {
