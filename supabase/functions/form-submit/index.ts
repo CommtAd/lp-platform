@@ -164,13 +164,36 @@ function buildAdminNotificationHtml(params: {
     ? formatJaDateTimeAdmin(params.formData.date2, params.formData.time2)
     : "";
 
-  const extras = Object.entries(params.formData).filter(
-    ([k, v]) => !ADMIN_KNOWN_FORM_KEYS.has(k) && v,
-  );
-
   const utmLine = (key: string) => `utm_${key}: ${params.utm[key] ?? ""}`;
 
   const greeting = renderLetterLine(params.meta.adminGreeting ?? DEFAULT_ADMIN_GREETING, { name });
+
+  const footer = ["", "===========", `このメールは ${params.pageUrl ?? ""} から送信されました`];
+
+  // Explicit field list: render exactly the form's own fields, so nothing shows
+  // up as an empty 予約-shaped row or a raw `key: value` extras line.
+  const formFields = params.meta.formFields;
+  if (formFields && formFields.length > 0) {
+    const undeclared = undeclaredFormEntries(formFields, params.formData);
+    const lines = [
+      greeting,
+      "",
+      "===========",
+      "",
+      "お問い合わせ内容",
+      "",
+      ...renderFormFieldRows(formFields, params.formData),
+      ...(undeclared.length ? ["", ...undeclared.map(([k, v]) => `${k}: ${v}`)] : []),
+      ...footer,
+    ];
+    return `<div style="font-family: sans-serif; font-size: 14px; color: #222; white-space: pre-wrap;">${escapeHtml(
+      lines.join("\n"),
+    )}</div>`;
+  }
+
+  const extras = Object.entries(params.formData).filter(
+    ([k, v]) => !ADMIN_KNOWN_FORM_KEYS.has(k) && v,
+  );
 
   const lines = params.meta.adminSimple
     ? [
@@ -229,8 +252,12 @@ function buildAdminNotificationHtml(params: {
 }
 
 /** Subject line for the admin notification email. */
-function buildAdminNotificationSubject(formData: Record<string, string>): string {
+function buildAdminNotificationSubject(
+  formData: Record<string, string>,
+  meta: ConfirmationMeta,
+): string {
   const name = formData.name;
+  if (meta.adminSubject) return renderLetterLine(meta.adminSubject, { name: name ?? "" });
   return name ? `${name}様から予約申し込みがあります` : "新規のお申し込みがあります";
 }
 
@@ -265,12 +292,68 @@ interface ConfirmationMeta {
   /** Use a pared-down admin notification (no store line, single date, no UTM block) — for single-location clients where that info is always empty noise. */
   adminSimple?: boolean;
   /**
-   * Override for the admin notification's greeting line (used by both the
-   * simple and full formats). Supports the {{name}} placeholder. Defaults to
-   * the original wording if omitted — set this per-client to use different
-   * wording without touching the shared default.
+   * Override for the admin notification's greeting line (used by every
+   * format). Supports the {{name}} placeholder. Defaults to the original
+   * wording if omitted — set this per-client to use different wording without
+   * touching the shared default.
    */
   adminGreeting?: string;
+  /** Override for the admin notification's subject line. Supports the {{name}} placeholder. */
+  adminSubject?: string;
+  /**
+   * The LP form's own fields, in display order — mirrors `config.ts`'s
+   * `form.fields`. Drives the 「お問い合わせ内容」 block of BOTH notification
+   * emails:
+   *   - admin: takes priority over the `adminSimple` and full formats
+   *   - submitter: appends the block to the generic fallback confirmation
+   *
+   * Set this whenever the LP's form is not the 予約 shape the admin formats
+   * assume (name/tel/email/store/date/time/note): they hard-code 体験日時 and
+   * 店舗名 rows that render as empty noise, and push every other field into the
+   * `extras` block as a raw `key: value` line.
+   */
+  formFields?: FormFieldMeta[];
+}
+
+interface FormFieldMeta {
+  /** `form_data` key, i.e. the field's `name` in `config.ts`. */
+  name: string;
+  /** Label shown in the email — mirror the form field's Japanese label. */
+  label: string;
+  /**
+   * For select/toggle fields: option value → label, so a submitted "unset"
+   * renders as "未定" rather than the raw value. Values with no entry here
+   * fall through unchanged.
+   */
+  valueLabels?: Record<string, string>;
+}
+
+/**
+ * 「お問い合わせ内容」 rows for `formFields`, in the declared order. A blank
+ * submitted value still gets its row, so a skipped optional field reads as
+ * deliberately empty rather than as a missing line.
+ */
+function renderFormFieldRows(
+  fields: FormFieldMeta[],
+  formData: Record<string, string>,
+): string[] {
+  return fields.map((f) => {
+    const raw = formData[f.name] ?? "";
+    return `${f.label}：${raw ? f.valueLabels?.[raw] ?? raw : ""}`;
+  });
+}
+
+/**
+ * Entries not covered by `formFields` — a field added to `config.ts` but not to
+ * `formFields` still has to reach the inbox, so it falls back to its raw key
+ * rather than being dropped silently.
+ */
+function undeclaredFormEntries(
+  fields: FormFieldMeta[],
+  formData: Record<string, string>,
+): [string, string][] {
+  const declared = new Set(fields.map((f) => f.name));
+  return Object.entries(formData).filter(([k, v]) => !declared.has(k) && v);
 }
 
 /** Default `letter.introLines` — the original wording, written for Beat Pilates. */
@@ -317,6 +400,8 @@ function buildConfirmationHtml(params: {
   submitterName?: string;
   formData: Record<string, string>;
   meta: ConfirmationMeta;
+  /** Full URL of the submitting LP page — shown in the 問い合わせ内容 footer. */
+  pageUrl?: string;
 }): string {
   const letter = params.meta.letter;
   const letterDt1 = params.formData.date1
@@ -400,11 +485,32 @@ function buildConfirmationHtml(params: {
     `;
   }
 
+  // Echo the submission back to the sender so they keep a record of what they
+  // sent — this fallback is the 問い合わせ-shaped path (no store/date/menu), so
+  // without it the mail says nothing about the enquiry itself.
+  const echoFields = params.meta.formFields;
+  const echoHtml =
+    echoFields && echoFields.length > 0
+      ? `<div style="white-space: pre-wrap; margin-top:24px;">${escapeHtml(
+          [
+            "===========",
+            "お問い合わせ内容",
+            ...renderFormFieldRows(echoFields, params.formData),
+            ...undeclaredFormEntries(echoFields, params.formData).map(
+              ([k, v]) => `${k}: ${v}`,
+            ),
+            "===========",
+            `このメールは ${params.pageUrl ?? ""} から送信されました`,
+          ].join("\n"),
+        )}</div>`
+      : "";
+
   return `
     <div style="font-family: sans-serif; font-size: 14px; color: #222;">
       <p>${greeting}</p>
       <p>${escapeHtml(params.clientName)} へのお申し込み・お問い合わせを受け付けました。<br>
       担当より追ってご連絡いたしますので、今しばらくお待ちください。</p>
+      ${echoHtml}
       <p style="color:#999; font-size:12px; margin-top:24px;">
         ※このメールは送信専用です。返信いただいてもご対応できません。
       </p>
@@ -445,7 +551,10 @@ async function sendNotificationEmails(
       sendBrevoEmail({
         toEmail: notifyEmail,
         fromName: `${clientName} LP通知`,
-        subject: buildAdminNotificationSubject(payload.form_data),
+        subject: buildAdminNotificationSubject(
+          payload.form_data,
+          client.confirmation_meta ?? {},
+        ),
         htmlContent: buildAdminNotificationHtml({
           formData: payload.form_data,
           utm: payload.utm,
@@ -476,6 +585,7 @@ async function sendNotificationEmails(
           submitterName,
           formData: payload.form_data,
           meta: client.confirmation_meta ?? {},
+          pageUrl: payload.page_url,
         }),
       }).catch((e) => console.error(`[form-submit] confirmation email failed: ${e}`)),
     );
