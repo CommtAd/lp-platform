@@ -11,7 +11,8 @@
     "build": "npm run build --workspace apps/lp",
     "start": "npm run start --workspace apps/lp",
     "lint": "npm run lint --workspace apps/lp",
-    "check-rules": "tsx scripts/check-rules.ts"
+    "check-rules": "tsx scripts/check-rules.ts",
+    "check-slug-sync": "tsx scripts/check-slug-sync.ts"
   },
   "devDependencies": {
     "tsx": "^4.19.2",
