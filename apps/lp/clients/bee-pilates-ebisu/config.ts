@@ -315,8 +315,7 @@ const config: BeeConfig = {
       },
       {
         num: "05",
-        img: { placeholder: "Beê ロゴ", src: `${ASSET}/logo_main.png` },
-        imgContain: true,
+        img: { placeholder: "スタジオ / Beêロゴの写真", src: `${ASSET}/reason-5.jpg`, position: "center" },
         title: "恵比寿駅から\n徒歩2分の好立地",
         body: "恵比寿駅から徒歩2分。お仕事帰りやお出かけのついでにも通いやすい立地です。さらに五反田・目黒・新富町・奥沢・船橋の姉妹店を追加料金なしで相互利用でき、その日のご予定やお近くの店舗に合わせて通えます。",
       },
