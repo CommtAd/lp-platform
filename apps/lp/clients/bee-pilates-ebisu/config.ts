@@ -3,6 +3,10 @@ import type { LPFormField } from "@/components/LPForm";
 
 const ASSET = "/clients/bee-pilates-ebisu";
 
+/** 予約システム（hacomono）。全CTAの共通遷移先。 */
+const CTA_URL =
+  "https://pilatesbee.hacomono.jp/reserve/schedule/12/7?date_from=2026-08-03";
+
 /** An image position in the layout. `src` empty → placeholder box. */
 export interface Slot {
   placeholder: string;
@@ -13,6 +17,8 @@ export interface Slot {
 export interface BeeConfig {
   slug: string;
   status?: ClientStatus;
+  /** 予約システム等、全CTAの共通遷移先URL。 */
+  ctaUrl: string;
   meta: { title: string; description: string; ogpImage?: string };
 
   header: {
@@ -114,6 +120,9 @@ export interface BeeConfig {
     lead: string;
     count: { num: string; unit: string; post: string };
     img: Slot;
+    /** 個別インストラクター紹介（横スワイプカード） */
+    members: { name: string; nameEn: string; img: Slot; body: string }[];
+    swipeHint: string;
     message: { title: string; body: string };
     points: string[];
   };
@@ -142,6 +151,7 @@ export interface BeeConfig {
   form: {
     heading: string;
     lead: string;
+    ctaText: string;
     fields: LPFormField[];
     submitLabel: string;
     disclaimer: string;
@@ -159,7 +169,8 @@ export interface BeeConfig {
 
 const config: BeeConfig = {
   slug: "bee-pilates-ebisu",
-  status: "draft",
+  status: "published",
+  ctaUrl: CTA_URL,
   meta: {
     title:
       "Pilates Studio Beê 恵比寿店｜完全個室パーソナルピラティス｜2026.8.1 GRAND OPEN 体験500円",
@@ -291,7 +302,7 @@ const config: BeeConfig = {
       },
       {
         num: "03",
-        img: { placeholder: "マシン設備の写真", src: `${ASSET}/reason-3.jpg` },
+        img: { placeholder: "スタジオ内観 / マシン設備の写真", src: `${ASSET}/reason-3.jpg`, position: "center 38%" },
         title: "充実の\nマシン設備",
         body: "本格的なピラティスマシンを完備。マシンならではのサポートと負荷で、初心者の方でも正しい動きを効率よく身につけられます。",
       },
@@ -353,7 +364,40 @@ const config: BeeConfig = {
     heading: "あなたを支える、\nプロのインストラクター",
     lead: "Beê には、確かな技術をもつプロのインストラクターが在籍。担当が変わってもレッスンを引き継ぐから、あなたのことを分かった上で、いつも最適なレッスンをお届けします。",
     count: { num: "10", unit: "名", post: "のインストラクターが在籍" },
-    img: { placeholder: "インストラクター集合 / 指導シーンの写真", src: `${ASSET}/instructor.jpg` },
+    img: { placeholder: "インストラクターの写真", src: `${ASSET}/instructor.jpg`, position: "center 22%" },
+    swipeHint: "スワイプで移動",
+    members: [
+      {
+        name: "Hiroko",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Hiroko の写真", src: `${ASSET}/instructor-hiroko.jpg`, position: "center 20%" },
+        body: "無理のない動きや、バランスの整った身体づくりがケガや不調の予防に繋がります。お一人おひとりに合わせたレッスンで、健やかな毎日を一緒に目指しましょう！",
+      },
+      {
+        name: "Arisa",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Arisa の写真", src: `${ASSET}/instructor-arisa.jpg`, position: "center 20%" },
+        body: "身体が変わると毎日はもっと自由に、快適に。運動が苦手な方や、初めての方も大歓迎です。来て良かったと思っていただけるレッスンを、心を込めてお届けします。",
+      },
+      {
+        name: "Nanako",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Nanako の写真", src: `${ASSET}/instructor-nanako.jpg`, position: "center 20%" },
+        body: "ボディーワーク全般の経験をいかして、様々な視点からお身体のお悩みにアプローチします。いつまでも健康な身体づくりをサポートいたします。",
+      },
+      {
+        name: "Mari.S",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Mari.S の写真", src: `${ASSET}/instructor-mari.jpg`, position: "center 30%" },
+        body: "身体・食事・心まで、健やかな毎日につながる学びが大好きです。ピラティスを通して、心も身体も軽やかな毎日を一緒につくっていきましょう。",
+      },
+      {
+        name: "Yuka",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Yuka の写真", src: `${ASSET}/instructor-yuka.jpg`, position: "center 20%" },
+        body: "体の細かな動きや意識のポイントを丁寧にお伝えします。心も体もすっきり笑顔に。楽しく理想の身体づくりを始めましょう。",
+      },
+    ],
     message: {
       title: "インストラクターより",
       body: "「あなたらしく、ずっと、もっと、美しく…。変化したところを一緒に見つけ、なぜその動きが必要なのかをお伝えしながら、体を根本から整えていきましょう。」",
@@ -433,7 +477,8 @@ const config: BeeConfig = {
 
   form: {
     heading: "体験レッスンのご予約",
-    lead: "下記フォームよりお気軽にお申し込みください。\n担当より折り返しご連絡いたします。",
+    lead: "ご予約ページで空き状況をご確認のうえ、ご希望の日時をお選びください。\nオープン記念 体験55分500円（税込）、体験レッスン時のご入会で入会金0円。",
+    ctaText: "オープン記念で体験を予約する",
     fields: [
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
@@ -453,7 +498,7 @@ const config: BeeConfig = {
     ],
     submitLabel: "この内容で予約する",
     disclaimer:
-      "送信いただいた内容は予約対応のみに利用します。\nオープン記念 体験55分500円（税込）｜体験レッスン時の入会で入会金0円｜無理な勧誘はいたしません。",
+      "オープン記念 体験55分500円（税込）｜体験レッスン時の入会で入会金0円｜無理な勧誘はいたしません。",
     errorMessage: "お名前・電話番号・第1希望日時は必須です。ご希望日は明日以降の日付をお選びください。",
   },
 
@@ -463,7 +508,7 @@ const config: BeeConfig = {
       { label: "入会金", value: "¥0" },
     ],
     buttonText: "オープン記念で体験を予約する",
-    anchor: "#form",
+    anchor: CTA_URL,
   },
 
   footer: {

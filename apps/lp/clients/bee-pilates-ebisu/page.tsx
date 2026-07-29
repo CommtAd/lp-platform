@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import ImageSlot from "@/components/ImageSlot";
-import LPForm from "@/components/LPForm";
 import Faq from "./Faq";
 import Sticky from "./Sticky";
 import config from "./config";
@@ -182,7 +181,7 @@ function CtaUrgency() {
           letterSpacing: "0.02em",
         }}
       >
-        ＼ 2026.8.1 GRAND OPEN・オープン記念キャンペーン実施中 ／
+        ＼ オープン記念キャンペーン実施中 ／
       </span>
     </div>
   );
@@ -193,7 +192,9 @@ function CtaButton({ text, withUrgency = true }: { text: string; withUrgency?: b
     <>
       {withUrgency && <CtaUrgency />}
       <a
-        href={config.sticky.anchor}
+        href={config.ctaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           display: "flex",
           alignItems: "center",
@@ -586,7 +587,27 @@ export default function Page() {
             <ImageSlot src={c.instructors.img.src} placeholder={c.instructors.img.placeholder} objectPosition={c.instructors.img.position ?? "center"} radius={16} style={{ width: "100%", height: 200, background: "#E4DCCB", marginTop: 18 }} />
             <p style={{ fontSize: 13, lineHeight: 2.05, color: ink, margin: "18px 0 0" }}>{c.instructors.lead}</p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
+            {/* 個別インストラクター紹介（横スワイプ） */}
+            <div
+              className="no-scrollbar"
+              style={{ display: "flex", gap: 14, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", margin: "22px -22px 0", padding: "4px 22px 6px" }}
+            >
+              {c.instructors.members.map((m, i) => (
+                <div key={i} style={{ flex: "none", width: 220, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 16, overflow: "hidden", border: `1px solid ${creamLine}`, boxShadow: "0 6px 18px rgba(120,95,40,0.1)" }}>
+                  <ImageSlot src={m.img.src} placeholder={m.img.placeholder} objectPosition={m.img.position ?? "center"} style={{ width: "100%", height: 244, background: "#E4DCCB" }} />
+                  <div style={{ padding: "14px 16px 18px" }}>
+                    <div style={{ fontFamily: fontGothic, fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", color: gold }}>{m.nameEn}</div>
+                    <div style={{ fontFamily: fontMincho, fontSize: 20, fontWeight: 600, letterSpacing: "0.04em", color: deep, marginTop: 4 }}>{m.name}</div>
+                    <p style={{ fontSize: 12, lineHeight: 1.85, color: dim, margin: "10px 0 0" }}>{m.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 14 }}>
+              <span style={{ fontSize: 11, letterSpacing: "0.12em", color: dim }}>← {c.instructors.swipeHint} →</span>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 24 }}>
               {c.instructors.points.map((p) => (
                 <div key={p} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ flexShrink: 0, width: 22, height: 22, borderRadius: "50%", background: gold, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -668,8 +689,8 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 予約フォーム ── */}
-          <section id="form" style={{ padding: "48px 22px 50px", background: "#FFFFFF" }}>
+          {/* ── 予約導線（外部予約システムへの誘導CTA） ── */}
+          <section id="reserve" style={{ padding: "48px 22px 50px", background: "#FFFFFF" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 18px", borderRadius: 999, background: `${gold}14`, border: `1px solid ${gold}55`, color: gold, fontSize: 12, fontWeight: 700, letterSpacing: "0.02em" }}>
                 ＼ オープン記念 体験500円・入会金0円 ／
@@ -678,14 +699,16 @@ export default function Page() {
             <Eyebrow text="RESERVATION" />
             <SectionHeading text={c.form.heading} />
             <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 2, color: dim, margin: "16px 0 0" }}>{nl(c.form.lead)}</p>
-            <LPForm
-              clientSlug={c.slug}
-              accent={gold}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              errorMessage={c.form.errorMessage}
-              disclaimer={nl(c.form.disclaimer)}
-            />
+            <div style={{ display: "flex", justifyContent: "center", gap: 10, margin: "18px 0 0" }}>
+              {c.sticky.offers.map((o) => (
+                <span key={o.label} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 18px", borderRadius: 12, border: `1.5px solid ${gold}66`, background: cream }}>
+                  <span style={{ fontSize: 11, color: dim }}>{o.label}</span>
+                  <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 18, color: deep }}>{o.value}</span>
+                </span>
+              ))}
+            </div>
+            <CtaButton text={c.form.ctaText} withUrgency={false} />
+            <Notes items={[c.form.disclaimer]} align="center" />
           </section>
 
           {/* ── footer ── */}
@@ -702,7 +725,7 @@ export default function Page() {
       <Sticky
         offers={c.sticky.offers}
         buttonText={c.sticky.buttonText}
-        anchor={c.sticky.anchor}
+        anchor={c.ctaUrl}
         accent={gold}
         gradient={ctaGrad}
         showAfter={0}
