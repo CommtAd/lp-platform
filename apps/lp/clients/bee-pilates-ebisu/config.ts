@@ -308,7 +308,7 @@ const config: BeeConfig = {
       },
       {
         num: "04",
-        img: { placeholder: "レッスン風景 / 料金イメージの写真", src: `${ASSET}/reason-4.jpg` },
+        img: { placeholder: "レッスン風景の写真", src: `${ASSET}/reason-4.jpg`, position: "center 30%" },
         title: "続けやすい\n価格設定",
         body: "55分のレッスンを、続けやすい料金で。月4回プランなら1回あたり税込7,425円（女性）から。無理なく通い続けられます。",
       },
