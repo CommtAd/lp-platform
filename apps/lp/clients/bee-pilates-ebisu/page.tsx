@@ -487,7 +487,14 @@ export default function Page() {
             {c.reasons.items.map((item) => (
               <div key={item.num} style={{ marginTop: 34 }}>
                 <div style={{ position: "relative" }}>
-                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} objectPosition={item.img.position ?? "center"} radius={16} style={{ width: "100%", height: 240, background: "#E4DCCB" }} />
+                  {item.imgContain ? (
+                    <div style={{ width: "100%", height: 240, borderRadius: 16, background: cream, border: `1px solid ${creamLine}`, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 44px", boxSizing: "border-box" }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={item.img.src ?? undefined} alt={item.img.placeholder} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", display: "block" }} />
+                    </div>
+                  ) : (
+                    <ImageSlot src={item.img.src} placeholder={item.img.placeholder} objectPosition={item.img.position ?? "center"} radius={16} style={{ width: "100%", height: 240, background: "#E4DCCB" }} />
+                  )}
                   <span
                     style={{
                       position: "absolute",
