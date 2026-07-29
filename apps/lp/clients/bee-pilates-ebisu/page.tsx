@@ -487,7 +487,7 @@ export default function Page() {
             {c.reasons.items.map((item) => (
               <div key={item.num} style={{ marginTop: 34 }}>
                 <div style={{ position: "relative" }}>
-                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} objectPosition={item.img.position ?? "center"} radius={16} style={{ width: "100%", height: 190, background: "#E4DCCB" }} />
+                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} objectPosition={item.img.position ?? "center"} radius={16} style={{ width: "100%", height: 240, background: "#E4DCCB" }} />
                   <span
                     style={{
                       position: "absolute",
