@@ -302,7 +302,7 @@ const config: BeeConfig = {
       },
       {
         num: "03",
-        img: { placeholder: "マシン設備の写真", src: `${ASSET}/reason-3.jpg` },
+        img: { placeholder: "スタジオ内観 / マシン設備の写真", src: `${ASSET}/reason-3.jpg`, position: "center 38%" },
         title: "充実の\nマシン設備",
         body: "本格的なピラティスマシンを完備。マシンならではのサポートと負荷で、初心者の方でも正しい動きを効率よく身につけられます。",
       },
