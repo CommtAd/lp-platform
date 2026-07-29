@@ -120,6 +120,9 @@ export interface BeeConfig {
     lead: string;
     count: { num: string; unit: string; post: string };
     img: Slot;
+    /** 個別インストラクター紹介（横スワイプカード） */
+    members: { name: string; nameEn: string; img: Slot; body: string }[];
+    swipeHint: string;
     message: { title: string; body: string };
     points: string[];
   };
@@ -362,6 +365,39 @@ const config: BeeConfig = {
     lead: "Beê には、確かな技術をもつプロのインストラクターが在籍。担当が変わってもレッスンを引き継ぐから、あなたのことを分かった上で、いつも最適なレッスンをお届けします。",
     count: { num: "10", unit: "名", post: "のインストラクターが在籍" },
     img: { placeholder: "インストラクター集合 / 指導シーンの写真", src: `${ASSET}/instructor.jpg` },
+    swipeHint: "スワイプで移動",
+    members: [
+      {
+        name: "Hiroko",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Hiroko の写真", src: `${ASSET}/instructor-hiroko.jpg`, position: "center 20%" },
+        body: "無理のない動きや、バランスの整った身体づくりがケガや不調の予防に繋がります。お一人おひとりに合わせたレッスンで、健やかな毎日を一緒に目指しましょう！",
+      },
+      {
+        name: "Arisa",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Arisa の写真", src: `${ASSET}/instructor-arisa.jpg`, position: "center 20%" },
+        body: "身体が変わると毎日はもっと自由に、快適に。運動が苦手な方や、初めての方も大歓迎です。来て良かったと思っていただけるレッスンを、心を込めてお届けします。",
+      },
+      {
+        name: "Nanako",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Nanako の写真", src: `${ASSET}/instructor-nanako.jpg`, position: "center 20%" },
+        body: "ボディーワーク全般の経験をいかして、様々な視点からお身体のお悩みにアプローチします。いつまでも健康な身体づくりをサポートいたします。",
+      },
+      {
+        name: "Mari.S",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Mari.S の写真", src: `${ASSET}/instructor-mari.jpg`, position: "center 30%" },
+        body: "身体・食事・心まで、健やかな毎日につながる学びが大好きです。ピラティスを通して、心も身体も軽やかな毎日を一緒につくっていきましょう。",
+      },
+      {
+        name: "Yuka",
+        nameEn: "PILATES INSTRUCTOR",
+        img: { placeholder: "Yuka の写真", src: `${ASSET}/instructor-yuka.jpg`, position: "center 20%" },
+        body: "体の細かな動きや意識のポイントを丁寧にお伝えします。心も体もすっきり笑顔に。楽しく理想の身体づくりを始めましょう。",
+      },
+    ],
     message: {
       title: "インストラクターより",
       body: "「あなたらしく、ずっと、もっと、美しく…。変化したところを一緒に見つけ、なぜその動きが必要なのかをお伝えしながら、体を根本から整えていきましょう。」",

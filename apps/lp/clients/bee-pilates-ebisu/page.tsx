@@ -587,7 +587,27 @@ export default function Page() {
             <ImageSlot src={c.instructors.img.src} placeholder={c.instructors.img.placeholder} objectPosition={c.instructors.img.position ?? "center"} radius={16} style={{ width: "100%", height: 200, background: "#E4DCCB", marginTop: 18 }} />
             <p style={{ fontSize: 13, lineHeight: 2.05, color: ink, margin: "18px 0 0" }}>{c.instructors.lead}</p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
+            {/* 個別インストラクター紹介（横スワイプ） */}
+            <div
+              className="no-scrollbar"
+              style={{ display: "flex", gap: 14, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", margin: "22px -22px 0", padding: "4px 22px 6px" }}
+            >
+              {c.instructors.members.map((m, i) => (
+                <div key={i} style={{ flex: "none", width: 220, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 16, overflow: "hidden", border: `1px solid ${creamLine}`, boxShadow: "0 6px 18px rgba(120,95,40,0.1)" }}>
+                  <ImageSlot src={m.img.src} placeholder={m.img.placeholder} objectPosition={m.img.position ?? "center"} style={{ width: "100%", height: 244, background: "#E4DCCB" }} />
+                  <div style={{ padding: "14px 16px 18px" }}>
+                    <div style={{ fontFamily: fontGothic, fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", color: gold }}>{m.nameEn}</div>
+                    <div style={{ fontFamily: fontMincho, fontSize: 20, fontWeight: 600, letterSpacing: "0.04em", color: deep, marginTop: 4 }}>{m.name}</div>
+                    <p style={{ fontSize: 12, lineHeight: 1.85, color: dim, margin: "10px 0 0" }}>{m.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 14 }}>
+              <span style={{ fontSize: 11, letterSpacing: "0.12em", color: dim }}>← {c.instructors.swipeHint} →</span>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 24 }}>
               {c.instructors.points.map((p) => (
                 <div key={p} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ flexShrink: 0, width: 22, height: 22, borderRadius: "50%", background: gold, display: "flex", alignItems: "center", justifyContent: "center" }}>
