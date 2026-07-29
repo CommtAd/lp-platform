@@ -87,7 +87,8 @@ export interface BeeConfig {
 
   reasons: {
     heading: string;
-    items: { num: string; img: Slot; title: string; body: string }[];
+    /** imgContain: 写真ではなくロゴ等を余白付き・全体表示（object-fit: contain）で見せる */
+    items: { num: string; img: Slot; title: string; body: string; imgContain?: boolean }[];
     ctaText: string;
     ctaSub: string;
   };
@@ -302,19 +303,20 @@ const config: BeeConfig = {
       },
       {
         num: "03",
-        img: { placeholder: "スタジオ内観 / マシン設備の写真", src: `${ASSET}/reason-3.jpg`, position: "center 38%" },
+        img: { placeholder: "スタジオ内観 / マシン設備の写真", src: `${ASSET}/reason-3.jpg`, position: "center" },
         title: "充実の\nマシン設備",
         body: "本格的なピラティスマシンを完備。マシンならではのサポートと負荷で、初心者の方でも正しい動きを効率よく身につけられます。",
       },
       {
         num: "04",
-        img: { placeholder: "レッスン風景の写真", src: `${ASSET}/reason-4.jpg`, position: "center 30%" },
+        img: { placeholder: "レッスン風景の写真", src: `${ASSET}/reason-4.jpg`, position: "center 42%" },
         title: "続けやすい\n価格設定",
         body: "55分のレッスンを、続けやすい料金で。月4回プランなら1回あたり税込7,425円（女性）から。無理なく通い続けられます。",
       },
       {
         num: "05",
-        img: { placeholder: "恵比寿駅前 / 店舗外観の写真", src: `${ASSET}/reason-5.jpg` },
+        img: { placeholder: "Beê ロゴ", src: `${ASSET}/logo_main.png` },
+        imgContain: true,
         title: "恵比寿駅から\n徒歩2分の好立地",
         body: "恵比寿駅から徒歩2分。お仕事帰りやお出かけのついでにも通いやすい立地です。さらに五反田・目黒・新富町・奥沢・船橋の姉妹店を追加料金なしで相互利用でき、その日のご予定やお近くの店舗に合わせて通えます。",
       },
