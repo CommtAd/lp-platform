@@ -364,7 +364,7 @@ const config: BeeConfig = {
     heading: "あなたを支える、\nプロのインストラクター",
     lead: "Beê には、確かな技術をもつプロのインストラクターが在籍。担当が変わってもレッスンを引き継ぐから、あなたのことを分かった上で、いつも最適なレッスンをお届けします。",
     count: { num: "10", unit: "名", post: "のインストラクターが在籍" },
-    img: { placeholder: "インストラクター集合 / 指導シーンの写真", src: `${ASSET}/instructor.jpg` },
+    img: { placeholder: "インストラクターの写真", src: `${ASSET}/instructor.jpg`, position: "center 22%" },
     swipeHint: "スワイプで移動",
     members: [
       {
