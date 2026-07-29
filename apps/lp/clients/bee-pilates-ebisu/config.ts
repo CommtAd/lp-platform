@@ -87,7 +87,8 @@ export interface BeeConfig {
 
   reasons: {
     heading: string;
-    items: { num: string; img: Slot; title: string; body: string }[];
+    /** imgAspect 指定時は固定高さでなく画像比率でスロットを作り、全体を表示（トリミングなし） */
+    items: { num: string; img: Slot; title: string; body: string; imgAspect?: string }[];
     ctaText: string;
     ctaSub: string;
   };
@@ -302,7 +303,8 @@ const config: BeeConfig = {
       },
       {
         num: "03",
-        img: { placeholder: "スタジオ内観 / マシン設備の写真", src: `${ASSET}/reason-3.jpg`, position: "center 38%" },
+        img: { placeholder: "スタジオ内観 / マシン設備の写真", src: `${ASSET}/reason-3.jpg` },
+        imgAspect: "1098 / 878",
         title: "充実の\nマシン設備",
         body: "本格的なピラティスマシンを完備。マシンならではのサポートと負荷で、初心者の方でも正しい動きを効率よく身につけられます。",
       },
