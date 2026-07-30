@@ -1,9 +1,15 @@
 import type { ClientStatus } from "@shared/index";
 
-const ASSET = "/clients/pilates-rinne";
+const ASSET = "/clients/pilates-rinne-ebina";
 
 /**
- * ピラティスRINNE — 実顧客LP。構成案 §15〜§19 に対応。
+ * ピラティスRINNE 海老名店 — 実顧客LP。構成案 §15〜§19 に対応。
+ *
+ * ■ 店舗別LP運用について
+ * 店舗ごとに個別のLPを作る方針のため、このLPは海老名店専用（slug: pilates-rinne-ebina）。
+ * 辻堂店はこのフォルダを複製して作る予定（想定slug: pilates-rinne-tsujido）。
+ * そのため店舗選択UIは持たず、予約導線・店舗情報・FAQ等はすべて海老名店1店舗の内容のみ。
+ * ダッシュボード側で slug "pilates-rinne-ebina" を登録すること（規約12）。
  *
  * ■ 構成がテンプレAと違う理由
  * ブリーフ §15 が要求する13セクションのうち5つ（④比較表・⑤姿勢診断・⑦初心者・
@@ -21,8 +27,8 @@ const ASSET = "/clients/pilates-rinne";
  * ■ 未確定（ブリーフ §18 優先確認事項）— すべて `null` / 〇〇 / 00 表記
  * もっともらしい仮の値は入れていない。実データと区別できなくなり、
  * そのまま公開される事故につながるため。
- *   1. reserve.stores[].url — hacomono店舗別予約URL（★これが無いとCTAが機能しない）
- *   2. stores[].address / hours / closed / tel / access — 両店の住所・営業時間・定休日・電話・アクセス
+ *   1. reserve.stores[].url — hacomono海老名店予約URL（★これが無いとCTAが機能しない）
+ *   2. stores[].address / hours / closed / tel / access — 海老名店の住所・営業時間・定休日・電話・アクセス
  *   3. pricing — 通常体験料金・月額・入会金・事務手数料・キャンペーン期間・適用条件
  *   4. flow.steps[].time / flowNote — 体験所要時間・持ち物・服装・レンタル品
  *   5. instructors[] — 氏名・資格・指導歴・写真
@@ -218,13 +224,13 @@ export interface RinneConfig {
 }
 
 const config: RinneConfig = {
-  slug: "pilates-rinne",
+  slug: "pilates-rinne-ebina",
   status: "draft",
   meta: {
     title:
-      "ピラティスRINNE｜最大3名のセミパーソナル・姿勢診断付きマシンピラティス（海老名店・辻堂店）",
+      "ピラティスRINNE 海老名店｜最大3名のセミパーソナル・姿勢診断付きマシンピラティス",
     description:
-      "海老名店・辻堂店のセミパーソナルマシンピラティスRINNE。最大3名だからインストラクターが一人ひとりの動きを確認します。鍼灸師・整体師監修のプログラムと姿勢診断から始めるので、ピラティスが初めての方・身体が硬い方も安心。体験レッスン受付中。",
+      "海老名店のセミパーソナルマシンピラティスRINNE。最大3名だからインストラクターが一人ひとりの動きを確認します。鍼灸師・整体師監修のプログラムと姿勢診断から始めるので、ピラティスが初めての方・身体が硬い方も安心。体験レッスン受付中。",
     ogpImage: undefined,
   },
   accent: "#003E2F",
@@ -232,7 +238,7 @@ const config: RinneConfig = {
   header: {
     brand: "PILATES RINNE",
     brandSub: "セミパーソナルマシンピラティス",
-    stores: ["海老名店", "辻堂店"],
+    stores: ["海老名店"],
   },
   offerBar: {
     badgeLines: ["期間", "限定"],
@@ -248,7 +254,7 @@ const config: RinneConfig = {
       placeholder: "最大3名でのレッスン風景（メインビジュアル）",
       src: null,
     },
-    notes: ["初心者歓迎", "鍼灸師・整体師監修", "海老名店・辻堂店で体験受付中"],
+    notes: ["初心者歓迎", "鍼灸師・整体師監修", "海老名店で体験受付中"],
     chips: [
       { small: "最大", big: "3名" },
       { small: "姿勢診断", big: "付き" },
@@ -364,7 +370,7 @@ const config: RinneConfig = {
         num: "1",
         title: "ご予約",
         time: null,
-        body: "予約ページから、ご希望の店舗と日時を選択します。",
+        body: "予約ページから、ご希望の日時を選択します。",
       },
       {
         num: "2",
@@ -478,7 +484,7 @@ const config: RinneConfig = {
     // 景表法対応：適用条件・期間・対象店舗・別途費用の明記が必須（§10 注意事項）
     notes: [
       "※キャンペーン対象期間：要確認（開始日・終了日を明記）",
-      "※対象店舗：海老名店・辻堂店",
+      "※対象店舗：海老名店",
       "※適用条件：要確認（初回の方限定・お一人様1回限りなどを明記）",
       "※別途費用が発生する場合はここに明記",
     ],
@@ -503,22 +509,6 @@ const config: RinneConfig = {
           "近隣ランドマーク：要確認",
         ],
         map: { placeholder: "海老名店の地図", src: null },
-      },
-      {
-        name: "辻堂店",
-        appeal: "辻堂で、一人ひとりに目が届く\n最大3名のセミパーソナルピラティス",
-        img: { placeholder: "辻堂店の外観", src: null },
-        // TBD(§18): 正確な住所・営業時間・定休日・電話番号・駅からの所要時間
-        address: "〒000-0000 神奈川県藤沢市〇〇0-0-0 建物名0階",
-        hours: "営業時間 0:00〜00:00",
-        closed: "定休日 要確認",
-        tel: null,
-        access: [
-          "最寄り駅：辻堂駅（駅からの所要時間は要確認）",
-          "店舗までの道順：要確認",
-          "近隣ランドマーク：要確認",
-        ],
-        map: { placeholder: "辻堂店の地図", src: null },
       },
     ],
   },
@@ -556,7 +546,7 @@ const config: RinneConfig = {
       },
       {
         q: "駐車場はありますか？",
-        a: "海老名店は駐車場を3台分ご用意しております。辻堂店の駐車場については要確認です。",
+        a: "駐車場を3台分ご用意しております。",
       },
       {
         q: "体験レッスンは何分ですか？",
@@ -585,17 +575,14 @@ const config: RinneConfig = {
       "姿勢診断付き",
       "鍼灸師・整体師監修",
       "初心者歓迎",
-      "海老名店・辻堂店",
+      "海老名店",
     ],
   },
 
   reserve: {
-    eyebrow: "ご希望の店舗をお選びください",
-    // ★TBD(§18): hacomono の店舗別予約URL。null の間は非リンク描画になる。
-    stores: [
-      { label: "海老名店の空き状況を見る", url: null },
-      { label: "辻堂店の空き状況を見る", url: null },
-    ],
+    eyebrow: "ご希望の日時をお選びください",
+    // ★TBD(§18): hacomono 海老名店の予約URL。null の間は非リンク描画になる。
+    stores: [{ label: "空いている日時を見る", url: null }],
     note: "空き状況の確認のみでもご利用いただけます。",
   },
 

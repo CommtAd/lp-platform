@@ -29,7 +29,8 @@ const FORM_EXEMPT = new Set<string>([
   "days-pilates",
   "bee-pilates-ebisu",
   // 構成案 §16「予約ボタンはすべてhacomonoの店舗別ウィジェットへ接続」による。
-  "pilates-rinne",
+  // 店舗別に別LPを作る運用のため slug は店舗名サフィックス付き（辻堂店は複製で対応予定）。
+  "pilates-rinne-ebina",
 ]);
 
 function clientSlugs(): string[] {

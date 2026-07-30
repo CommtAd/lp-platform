@@ -20,7 +20,7 @@ export const clientRegistry: Record<
   "wps-pilates": () => import("./wps-pilates/page"),
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/page"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/page"),
-  "pilates-rinne": () => import("./pilates-rinne/page"),
+  "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -65,5 +65,5 @@ export const clientMetaRegistry: Record<
   "wps-pilates": () => import("./wps-pilates/config"),
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/config"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/config"),
-  "pilates-rinne": () => import("./pilates-rinne/config"),
+  "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/config"),
 };
