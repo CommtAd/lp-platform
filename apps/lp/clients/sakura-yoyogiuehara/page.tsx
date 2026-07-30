@@ -469,8 +469,8 @@ export default function Page() {
               <div style={{ fontFamily: fontMincho, fontSize: 14, letterSpacing: "0.12em", color: "#4A4E57" }}>
                 {c.offer.eyebrow}
               </div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginTop: 8 }}>
-                <span style={{ display: "inline-block", width: 22, height: 1, background: "linear-gradient(90deg, transparent, #CE7C97)", position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 8 }}>
+                <span style={{ display: "inline-block", width: 14, height: 1, flex: "none", background: "linear-gradient(90deg, transparent, #CE7C97)", position: "relative" }}>
                   <span style={{ position: "absolute", right: -2, top: -2, width: 4, height: 4, borderRadius: "50%", background: "#CE7C97" }} />
                 </span>
                 <h2
@@ -478,40 +478,41 @@ export default function Page() {
                     fontFamily: fontMincho,
                     fontWeight: 600,
                     fontSize: 29,
-                    letterSpacing: "0.05em",
+                    letterSpacing: "0.04em",
                     color: "#33352E",
                     margin: 0,
+                    whiteSpace: "nowrap",
                     background: "linear-gradient(transparent 66%, #F7DBE2 66%)",
                     padding: "0 4px",
                   }}
                 >
                   {c.offer.heading}
                 </h2>
-                <span style={{ display: "inline-block", width: 22, height: 1, background: "linear-gradient(90deg, #CE7C97, transparent)", position: "relative" }}>
+                <span style={{ display: "inline-block", width: 14, height: 1, flex: "none", background: "linear-gradient(90deg, #CE7C97, transparent)", position: "relative" }}>
                   <span style={{ position: "absolute", left: -2, top: -2, width: 4, height: 4, borderRadius: "50%", background: "#CE7C97" }} />
                 </span>
               </div>
             </div>
 
             {/* 0円 hero */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginTop: 26 }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
-                <span style={{ display: "inline-flex", background: "#4A4E57", color: "#FFFFFF", fontSize: 10.5, fontWeight: 700, letterSpacing: "0.02em", padding: "6px 10px", borderRadius: 4, whiteSpace: "nowrap" }}>
-                  {c.offer.trialBadge}
-                </span>
+            <div style={{ marginTop: 24, textAlign: "center" }}>
+              <span style={{ display: "inline-flex", background: "#4A4E57", color: "#FFFFFF", fontSize: 11, fontWeight: 700, letterSpacing: "0.02em", padding: "7px 14px", borderRadius: 4, whiteSpace: "nowrap" }}>
+                {c.offer.trialBadge}
+              </span>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginTop: 14 }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
                   <span style={{ fontSize: 11, color: "#62655B" }}>通常価格</span>
-                  <span style={{ position: "relative", fontFamily: fontMincho, fontSize: 19, color: "#4A4E57" }}>
+                  <span style={{ position: "relative", fontFamily: fontMincho, fontSize: 20, color: "#4A4E57" }}>
                     {c.offer.trialRegular}
                     <span style={{ fontSize: 11 }}>円</span>
                     <span style={{ position: "absolute", left: -2, right: -2, top: "55%", height: 1.5, background: "#C25B4B", transform: "rotate(-8deg)" }} />
                   </span>
                   <span style={{ fontSize: 10, color: "#9A9C90" }}>税込</span>
-                  <span style={{ fontSize: 17, color: "#CE7C97", marginLeft: 2 }}>→</span>
+                  <span style={{ fontSize: 18, color: "#CE7C97", marginLeft: 2 }}>→</span>
                 </div>
-              </div>
-              <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 92, lineHeight: 0.9, letterSpacing: "0.02em", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                0<span style={{ fontSize: 48 }}>円</span>
+                <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 112, lineHeight: 0.9, letterSpacing: "0.02em", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", whiteSpace: "nowrap" }}>
+                  0<span style={{ fontSize: 58 }}>円</span>
+                </div>
               </div>
             </div>
 

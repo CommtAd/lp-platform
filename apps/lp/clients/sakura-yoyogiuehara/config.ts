@@ -28,9 +28,9 @@ const config: PatternAConfig = {
     text: "60分体験＆カウンセリングが0円",
   },
   achievement: {
-    pre: "Googleクチコミ",
+    pre: "Google口コミ",
     num: "★4.95",
-    post: "の高評価をいただいています",
+    post: "",
   },
 
   fv: {
