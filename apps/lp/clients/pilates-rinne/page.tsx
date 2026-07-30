@@ -1,15 +1,27 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
-import LPForm from "@/components/LPForm";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqList from "./FaqList";
-import config from "./config";
+import TelLink from "./TelLink";
+import config, { type Mark } from "./config";
+
+/**
+ * ピラティスRINNE — 構成案 §15 の13セクション構成。
+ *
+ * テンプレA（_base-a）の配色・タイポ・見出し様式は踏襲しつつ、セクション構成は
+ * ブリーフ §15 に合わせている（④比較表・⑤姿勢診断・⑦初心者・⑧お客様の声・
+ * ⑬最終予約エリアはテンプレAに無いセクション）。
+ *
+ * 予約は §16 に従い全CTAが hacomono の店舗別ウィジェットへ遷移する（LPForm 非使用）。
+ * このため scripts/check-rules.ts の FORM_EXEMPT に pilates-rinne を登録している。
+ * LPShell は必須のため維持。
+ */
 
 /* Derive navy tones from the accent, mirroring the design's renderVals(). */
 function shade(hex: string, amt: number): string {
   let h = hex.replace("#", "");
-  if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+  if (h.length === 3) h = h.split("").map((ch) => ch + ch).join("");
   let r = parseInt(h.slice(0, 2), 16),
     g = parseInt(h.slice(2, 4), 16),
     b = parseInt(h.slice(4, 6), 16);
@@ -32,7 +44,8 @@ function nl(text: string): ReactNode {
   ));
 }
 
-const accent = config.accent;
+const c = config;
+const accent = c.accent;
 const navyGrad = `linear-gradient(158deg, ${shade(accent, 0.14)} 0%, ${accent} 52%, ${shade(accent, -0.18)} 100%)`;
 const accentSoft = accent + "22";
 const accentGlow = accent + "55";
@@ -42,64 +55,11 @@ const creamGrad = "linear-gradient(180deg, #F4EEE4 0%, #EAE2D3 100%)";
 const fontMincho = "'Shippori Mincho', serif";
 const fontGothic = "'Zen Kaku Gothic New', serif";
 
-/* Fixed decorative icons for the six offer items (order matches config). */
-const offerIcons: ReactNode[] = [
-  <>
-    <rect x="5" y="3.5" width="14" height="17" rx="2" />
-    <path d="M9 3.5h6v2.5H9z" />
-    <path d="M8.5 10h7M8.5 13.5h7M8.5 17h4" />
-  </>,
-  <>
-    <circle cx="12" cy="4.5" r="2" />
-    <path d="M12 6.5v7" />
-    <path d="M12 9l-4-1.5M12 9l4-1.5" />
-    <path d="M12 13.5l-3 6M12 13.5l3 6" />
-    <path d="M4 4.5v15M4 4.5l1.6.9M4 19.5l1.6-.9" />
-  </>,
-  <>
-    <path d="M3 8h18" />
-    <path d="M3 8v3a1.5 1.5 0 001.5 1.5h15A1.5 1.5 0 0021 11V8" />
-    <path d="M4.5 12.5l-1 4M19.5 12.5l1 4" />
-    <path d="M7 8V6.5M17 8V6.5" />
-    <circle cx="12" cy="8" r="1" />
-  </>,
-  <>
-    <circle cx="9" cy="4.5" r="2" />
-    <path d="M9 6.5l-1 5 4 1 2 6" />
-    <path d="M8 11.5l-3 1.5-1.5 4" />
-    <path d="M12 12.5l6-2.5" />
-  </>,
-  <>
-    <path d="M4 5.5h16a1 1 0 011 1V15a1 1 0 01-1 1H9l-4 3.5V16H4a1 1 0 01-1-1V6.5a1 1 0 011-1z" />
-    <path d="M8.5 11l2.2 2 4.3-4" />
-  </>,
-  <>
-    <rect x="5" y="3.5" width="14" height="17" rx="2" />
-    <path d="M8.5 15l2.5-3 2 2 3-4" />
-    <path d="M15 8h1M8.5 8h3.5" />
-  </>,
-];
-
-const Icon = ({ children }: { children: ReactNode }) => (
-  <svg
-    width="32"
-    height="32"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke={accent}
-    strokeWidth="1.4"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {children}
-  </svg>
-);
-
 /** Accent (or white) heading with a short underline rule. */
 function SectionHeading({
   text,
   variant = "accent",
-  fontSize = 24,
+  fontSize = 22,
 }: {
   text: string;
   variant?: "accent" | "white";
@@ -116,7 +76,7 @@ function SectionHeading({
           fontSize,
           letterSpacing: "0.08em",
           color,
-          lineHeight: 1.4,
+          lineHeight: 1.5,
           margin: 0,
         }}
       >
@@ -135,45 +95,124 @@ function SectionHeading({
   );
 }
 
-const GoldCta = ({ text, sub }: { text: string; sub?: string }) => (
-  <div style={{ marginTop: 28 }}>
-    <a
-      href="#form"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: 60,
-        background: goldBtn,
-        color: "#FFFFFF",
-        textDecoration: "none",
-        fontSize: 16,
-        fontWeight: 700,
-        letterSpacing: "0.1em",
-        borderRadius: 999,
-        boxShadow: "0 10px 22px rgba(160,120,40,0.4)",
-      }}
-    >
-      {text}
-    </a>
-    {sub && (
+const CheckIcon = ({ color = accent }: { color?: string }) => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2.4"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ flex: "none", marginTop: 3 }}
+  >
+    <path d="M4 12.5l5 5L20 6.5" />
+  </svg>
+);
+
+/**
+ * 予約CTA。§16 の設置箇所すべてで使う。店舗別に hacomono ウィジェットへ遷移する。
+ * url が null（未確定）の場合は死んだリンクを出さず、設定待ちである旨を表示する。
+ */
+function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
+  const eyebrowColor = variant === "dark" ? "rgba(255,255,255,0.85)" : "#62655B";
+  const noteColor = variant === "dark" ? "rgba(255,255,255,0.7)" : "#9A9C90";
+  return (
+    <div style={{ marginTop: 28 }}>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: 12,
+          letterSpacing: "0.08em",
+          color: eyebrowColor,
+          margin: "0 0 12px",
+          textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
+        }}
+      >
+        {c.reserve.eyebrow}
+      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {c.reserve.stores.map((s) =>
+          s.url ? (
+            <a
+              key={s.label}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                height: 58,
+                background: goldBtn,
+                color: "#FFFFFF",
+                textDecoration: "none",
+                fontSize: 15.5,
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                borderRadius: 999,
+                boxShadow: "0 10px 22px rgba(160,120,40,0.35)",
+              }}
+            >
+              {s.label}
+              <span style={{ fontSize: 13 }}>›</span>
+            </a>
+          ) : (
+            /* 予約URL未確定。死んだリンクを出さず、設定待ちであることを明示する。 */
+            <div
+              key={s.label}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 2,
+                minHeight: 58,
+                background: "#D9D4C8",
+                color: "#6E7065",
+                fontSize: 15,
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                borderRadius: 999,
+                padding: "8px 12px",
+                textAlign: "center",
+              }}
+            >
+              {s.label}
+              <span style={{ fontSize: 10, fontWeight: 400, letterSpacing: "0.02em" }}>
+                hacomono予約URL設定待ち
+              </span>
+            </div>
+          ),
+        )}
+      </div>
       <p
         style={{
           textAlign: "center",
           fontSize: 11,
-          color: "#9A9C90",
-          letterSpacing: "0.1em",
+          lineHeight: 1.8,
+          color: noteColor,
+          letterSpacing: "0.04em",
           margin: "12px 0 0",
+          textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
         }}
       >
-        {sub}
+        {c.reserve.note}
       </p>
-    )}
-  </div>
-);
+    </div>
+  );
+}
+
+const markGlyph: Record<Mark, string> = { good: "◎", fair: "○", poor: "△" };
+const markColor: Record<Mark, string> = {
+  good: "#C1902F",
+  fair: "#7C8069",
+  poor: "#B98A80",
+};
 
 export default function Page() {
-  const c = config;
   return (
     <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
       <div
@@ -203,42 +242,26 @@ export default function Page() {
               background: "#FFFFFF",
             }}
           >
-            {c.header.logo ? (
-              <div style={{ lineHeight: 1.25 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={c.header.logo}
-                  alt={c.header.logoAlt ?? c.header.brand}
-                  style={{ height: 34, width: "auto", display: "block" }}
-                />
-                {c.header.hours && (
-                  <div style={{ fontSize: 9, letterSpacing: "0.14em", color: "#3B3D36", marginTop: 4, marginLeft: 3 }}>
-                    {c.header.hours}
-                  </div>
-                )}
+            <div style={{ lineHeight: 1.25 }}>
+              <div
+                style={{
+                  fontFamily: fontGothic,
+                  fontSize: 15,
+                  fontWeight: 700,
+                  letterSpacing: "0.14em",
+                  color: "#3B3D36",
+                }}
+              >
+                {c.header.brand}
               </div>
-            ) : (
-              <div style={{ lineHeight: 1.25 }}>
-                <div
-                  style={{
-                    fontFamily: fontGothic,
-                    fontSize: 15,
-                    fontWeight: 700,
-                    letterSpacing: "0.14em",
-                    color: "#3B3D36",
-                  }}
-                >
-                  {c.header.brand}
-                </div>
-                <div style={{ fontSize: 9, letterSpacing: "0.14em", color: "#9A9C90" }}>
-                  {c.header.brandSub}
-                </div>
+              <div style={{ fontSize: 9, letterSpacing: "0.14em", color: "#9A9C90" }}>
+                {c.header.brandSub}
               </div>
-            )}
-            <div style={{ textAlign: "right", lineHeight: 1.55, marginTop: 5 }}>
-              {c.header.access.map((a, i) => (
-                <div key={i} style={{ fontSize: 13, color: "#3B3D36", letterSpacing: "0.03em" }}>
-                  {a.station} <span style={{ color: accent }}>{a.walk}</span>
+            </div>
+            <div style={{ textAlign: "right", lineHeight: 1.55 }}>
+              {c.header.stores.map((s) => (
+                <div key={s} style={{ fontSize: 13, color: accent, letterSpacing: "0.03em" }}>
+                  {s}
                 </div>
               ))}
             </div>
@@ -256,50 +279,48 @@ export default function Page() {
               boxShadow: "0 3px 10px rgba(70,72,60,0.18)",
             }}
           >
-            {c.showMonitorBadge && (
+            <div
+              style={{
+                position: "absolute",
+                left: 20,
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: 68,
+                height: 68,
+                borderRadius: "50%",
+                background: "radial-gradient(circle at 38% 32%, #DD9A82 0%, #C9765C 100%)",
+                boxShadow: "0 3px 8px rgba(150,70,50,0.28)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#FFFFFF",
+              }}
+            >
               <div
                 style={{
-                  position: "absolute",
-                  left: 20,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  width: 68,
-                  height: 68,
-                  borderRadius: "50%",
-                  background: "radial-gradient(circle at 38% 32%, #DD9A82 0%, #C9765C 100%)",
-                  boxShadow: "0 3px 8px rgba(150,70,50,0.28)",
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
-                  justifyContent: "center",
-                  color: "#FFFFFF",
+                  lineHeight: 1.2,
+                  transform: "rotate(-9deg)",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    lineHeight: 1.2,
-                    transform: "rotate(-9deg)",
-                  }}
-                >
-                  {c.offerBar.badgeLines.map((l, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        fontFamily: c.offerBar.badgeFontFamily === "mincho" ? fontMincho : fontGothic,
-                        fontWeight: c.offerBar.badgeFontWeight ?? 700,
-                        fontSize: c.offerBar.badgeFontSize ?? 12.5,
-                        letterSpacing: "0.02em",
-                      }}
-                    >
-                      {l}
-                    </span>
-                  ))}
-                </div>
+                {c.offerBar.badgeLines.map((l, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      fontFamily: fontGothic,
+                      fontWeight: 700,
+                      fontSize: 13,
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {l}
+                  </span>
+                ))}
               </div>
-            )}
-            <div style={{ flex: "none", width: c.showMonitorBadge ? 78 : 0 }} />
+            </div>
+            <div style={{ flex: "none", width: 78 }} />
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div
                 style={{
@@ -318,7 +339,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* ── achievement bar ── */}
+          {/* ── 監修バー ── */}
           <div
             style={{
               display: "flex",
@@ -332,14 +353,16 @@ export default function Page() {
             }}
           >
             <span style={{ fontSize: 13, letterSpacing: "0.03em" }}>{c.achievement.pre}</span>
-            <span style={{ fontWeight: 700, fontSize: 16, lineHeight: 1, color: accent }}>
-              {c.achievement.num}
-            </span>
+            {c.achievement.num && (
+              <span style={{ fontWeight: 700, fontSize: 16, lineHeight: 1, color: accent }}>
+                {c.achievement.num}
+              </span>
+            )}
             <span style={{ fontSize: 13, letterSpacing: "0.03em" }}>{c.achievement.post}</span>
           </div>
 
-          {/* ── ① FV ── */}
-          <section style={{ position: "relative", minHeight: 560, overflow: "hidden", background: "#33352E" }}>
+          {/* ── ① ファーストビュー ── */}
+          <section style={{ position: "relative", minHeight: 640, overflow: "hidden", background: "#33352E" }}>
             <ImageSlot
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
@@ -350,11 +373,14 @@ export default function Page() {
               style={{
                 position: "absolute",
                 inset: 0,
+                /* 下半分を確実に暗くする。サブコピー・補足チップ・CTAが乗る領域なので、
+                   ヒーロー写真が明るい場合でも白文字の可読性を確保する。 */
                 background:
-                  "linear-gradient(to bottom, rgba(30,31,26,0.10) 0%, rgba(30,31,26,0) 20%, rgba(30,31,26,0) 100%)",
+                  "linear-gradient(to bottom, rgba(30,31,26,0.12) 0%, rgba(30,31,26,0) 18%, rgba(30,31,26,0.34) 50%, rgba(30,31,26,0.80) 100%)",
                 pointerEvents: "none",
               }}
             />
+            {/* 縦書きメインコピー */}
             <div
               style={{
                 position: "absolute",
@@ -373,9 +399,9 @@ export default function Page() {
                   key={i}
                   style={{
                     writingMode: "vertical-rl",
-                    fontFamily: fontGothic,
-                    fontWeight: 400,
-                    fontSize: 20,
+                    fontFamily: fontMincho,
+                    fontWeight: 600,
+                    fontSize: 21,
                     letterSpacing: "0.12em",
                     lineHeight: 1.7,
                     color: "#3B3D36",
@@ -389,396 +415,968 @@ export default function Page() {
                 </div>
               ))}
             </div>
+            {/* 特徴チップ（最大3名 / 姿勢診断付き） */}
             <div
               style={{
-                position: "relative",
+                position: "absolute",
+                top: 38,
+                right: 22,
                 zIndex: 2,
-                minHeight: 560,
                 display: "flex",
                 flexDirection: "column",
-                padding: "40px 28px 34px",
+                gap: 8,
                 pointerEvents: "none",
               }}
             >
-              <div style={{ marginTop: "auto" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 4 }}>
-                  <div
-                    style={{
-                      flex: 1,
-                      background: accent,
-                      border: "1px solid rgba(255,255,255,0.25)",
-                      borderRadius: 6,
-                      padding: "20px 8px",
-                      textAlign: "center",
-                      color: "#FFFFFF",
-                      boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
-                    }}
-                  >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E8C877" }}>
-                      {c.fv.leftCard.small}
-                    </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
-                      {c.fv.leftCard.big}
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      position: "relative",
-                      zIndex: 3,
-                      margin: "0 -18px",
-                      fontFamily: fontGothic,
-                      fontWeight: 400,
-                      fontSize: 44,
-                      color: "#FFFFFF",
-                      textShadow: "0 1px 6px rgba(0,0,0,0.35)",
-                    }}
-                  >
-                    ×
-                  </div>
-                  <div
-                    style={{
-                      flex: 1,
-                      background: accent,
-                      border: "1px solid rgba(255,255,255,0.25)",
-                      borderRadius: 6,
-                      padding: "20px 8px",
-                      textAlign: "center",
-                      color: "#FFFFFF",
-                      boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
-                    }}
-                  >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E8C877" }}>
-                      {c.fv.rightCard.small}
-                    </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
-                      {c.fv.rightCard.big}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ── ⑦ offer / plan ── */}
-          <section style={{ background: "#FCFBF7", padding: "54px 24px" }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontFamily: fontMincho, fontSize: 14, letterSpacing: "0.12em", color: "#4A4E57" }}>
-                {c.offer.eyebrow}
-              </div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginTop: 8 }}>
-                <span style={{ display: "inline-block", width: 22, height: 1, background: "linear-gradient(90deg, transparent, #C79A47)", position: "relative" }}>
-                  <span style={{ position: "absolute", right: -2, top: -2, width: 4, height: 4, borderRadius: "50%", background: "#C79A47" }} />
-                </span>
-                <h2
-                  style={{
-                    fontFamily: fontMincho,
-                    fontWeight: 600,
-                    fontSize: 29,
-                    letterSpacing: "0.05em",
-                    color: "#33352E",
-                    margin: 0,
-                    background: "linear-gradient(transparent 66%, #F3E7BE 66%)",
-                    padding: "0 4px",
-                  }}
-                >
-                  {c.offer.heading}
-                </h2>
-                <span style={{ display: "inline-block", width: 22, height: 1, background: "linear-gradient(90deg, #C79A47, transparent)", position: "relative" }}>
-                  <span style={{ position: "absolute", left: -2, top: -2, width: 4, height: 4, borderRadius: "50%", background: "#C79A47" }} />
-                </span>
-              </div>
-            </div>
-
-            {/* 0円 hero */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginTop: 26 }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
-                <span style={{ display: "inline-flex", background: "#4A4E57", color: "#FFFFFF", fontSize: 10.5, fontWeight: 700, letterSpacing: "0.02em", padding: "6px 10px", borderRadius: 4, whiteSpace: "nowrap" }}>
-                  {c.offer.trialBadge}
-                </span>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                  <span style={{ fontSize: 11, color: "#62655B" }}>通常価格</span>
-                  <span style={{ position: "relative", fontFamily: fontMincho, fontSize: 19, color: "#4A4E57" }}>
-                    {c.offer.trialRegular}
-                    <span style={{ fontSize: 11 }}>円</span>
-                    <span style={{ position: "absolute", left: -2, right: -2, top: "55%", height: 1.5, background: "#C25B4B", transform: "rotate(-8deg)" }} />
-                  </span>
-                  <span style={{ fontSize: 10, color: "#9A9C90" }}>税込</span>
-                  <span style={{ fontSize: 17, color: "#C79A47", marginLeft: 2 }}>→</span>
-                </div>
-              </div>
-              <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 92, lineHeight: 0.9, letterSpacing: "0.02em", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                0<span style={{ fontSize: 48 }}>円</span>
-              </div>
-            </div>
-
-            {/* six items */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px 8px", marginTop: 34 }}>
-              {c.offer.items.map((label, i) => (
+              {c.fv.chips.map((chip) => (
                 <div
-                  key={i}
+                  key={chip.big}
                   style={{
-                    aspectRatio: "1",
+                    width: 66,
+                    height: 66,
                     borderRadius: "50%",
-                    background: "#FFFFFF",
-                    border: "1px solid #E6E1D5",
-                    boxShadow: "0 4px 12px rgba(70,72,60,0.06)",
+                    background: accent,
+                    border: "1.5px solid rgba(255,255,255,0.5)",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: 7,
-                    textAlign: "center",
-                    padding: 8,
+                    lineHeight: 1.2,
+                    color: "#FFFFFF",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.22)",
                   }}
                 >
-                  <span style={{ fontSize: 12, lineHeight: 1.4, color: "#4C4E45" }}>{nl(label)}</span>
-                  <Icon>{offerIcons[i]}</Icon>
-                </div>
-              ))}
-            </div>
-
-            {/* photos */}
-            <div style={{ display: "flex", gap: 10, marginTop: 24, alignItems: "flex-start" }}>
-              <ImageSlot src={c.offer.photos[0].src} placeholder={c.offer.photos[0].placeholder} radius={8} style={{ flex: 1, height: 180 }} />
-              <ImageSlot src={c.offer.photos[1].src} placeholder={c.offer.photos[1].placeholder} radius={8} style={{ flex: 1, height: 180, marginTop: 22 }} />
-            </div>
-
-            {/* さらに */}
-            <div style={{ display: "flex", justifyContent: "center", margin: "30px 0 20px" }}>
-              <div style={{ width: 66, height: 66, borderRadius: "50%", background: "#F3E7BE", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fontMincho, fontSize: 16, color: "#4A4E57", boxShadow: "0 4px 12px rgba(150,120,40,0.18)" }}>
-                さらに
-              </div>
-            </div>
-
-            {/* 入会金0円 */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14 }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 8 }}>
-                <span style={{ display: "block", textAlign: "center", background: "#4A4E57", color: "#FFFFFF", fontSize: 21, fontWeight: 700, letterSpacing: "0.34em", padding: "7px 16px 7px 22px", borderRadius: 4, whiteSpace: "nowrap" }}>
-                  {c.offer.joinLabel}
-                </span>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                  <span style={{ fontSize: 11, color: "#62655B" }}>通常</span>
-                  <span style={{ position: "relative", fontFamily: fontMincho, fontSize: 19, color: "#4A4E57" }}>
-                    {c.offer.joinRegular}
-                    <span style={{ fontSize: 11 }}>円</span>
-                    <span style={{ position: "absolute", left: -2, right: -2, top: "55%", height: 1.5, background: "#C25B4B", transform: "rotate(-8deg)" }} />
+                  <span style={{ fontSize: 9.5, letterSpacing: "0.06em", color: "#E8C877" }}>
+                    {chip.small}
                   </span>
-                  <span style={{ fontSize: 10, color: "#9A9C90" }}>税込</span>
-                  <span style={{ fontSize: 17, color: "#C79A47", marginLeft: 2 }}>→</span>
-                </div>
-              </div>
-              <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 112, lineHeight: 0.9, letterSpacing: "0.02em", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                0<span style={{ fontSize: 56 }}>円</span>
-              </div>
-            </div>
-
-            {/* regular price */}
-            <div style={{ background: "#F4F0E8", borderRadius: 12, padding: "26px 20px", marginTop: 20, textAlign: "center" }}>
-              <p style={{ margin: 0, fontSize: 14, color: "#4C4E45", letterSpacing: "0.04em" }}>入会後は</p>
-              <p style={{ margin: "6px 0 0", fontFamily: fontMincho, color: "#33352E", lineHeight: 1 }}>
-                <span style={{ fontSize: 15 }}>{c.offer.regular.prefix}</span>
-                <span style={{ fontWeight: 700, fontSize: 52, background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                  {c.offer.regular.amount}
-                </span>
-                <span style={{ fontSize: 20, fontWeight: 700 }}>円</span>
-              </p>
-              <p style={{ margin: "8px 0 0", fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.08em", color: "#33352E" }}>
-                {c.offer.regular.suffix}
-              </p>
-            </div>
-
-            <GoldCta text={c.offer.ctaText} />
-          </section>
-
-          {/* ── ② about ── */}
-          <section style={{ background: navyGrad, padding: "54px 26px" }}>
-            <div style={{ textAlign: "center" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 22, letterSpacing: "0.08em", color: "#FFFFFF", lineHeight: 1.5, margin: 0 }}>
-                {nl(c.about.heading)}
-              </h2>
-              <div style={{ width: 30, height: 2, background: "rgba(255,255,255,0.55)", borderRadius: 2, margin: "14px auto 0" }} />
-            </div>
-            <div style={{ position: "relative", margin: "40px 8px 0" }}>
-              <div style={{ position: "absolute", inset: "-12px -12px 12px 12px", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 4, pointerEvents: "none" }} />
-              <ImageSlot src={c.about.photo.src} placeholder={c.about.photo.placeholder} radius={4} style={{ position: "relative", zIndex: 1, width: "100%", height: 300 }} />
-              <div style={{ position: "absolute", zIndex: 2, bottom: 16, left: 16, background: "rgba(20,21,18,0.55)", backdropFilter: "blur(4px)", color: "#FFFFFF", padding: "8px 14px", borderRadius: 2 }}>
-                <div style={{ fontFamily: fontMincho, fontSize: 13, letterSpacing: "0.14em" }}>{c.about.caption}</div>
-              </div>
-            </div>
-            <p style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 21, lineHeight: 1.9, letterSpacing: "0.04em", textAlign: "center", margin: "40px 0 0", color: "#FFFFFF" }}>
-              {nl(c.about.lead)}
-            </p>
-            <p style={{ fontSize: 13.5, lineHeight: 2.1, color: "rgba(255,255,255,0.78)", margin: "20px 0 0", textAlign: "center" }}>
-              {c.about.body}
-            </p>
-          </section>
-
-          {/* ── ③ worry ── */}
-          <section style={{ background: creamGrad, padding: "54px 26px" }}>
-            <SectionHeading text={c.worry.heading} fontSize={20} />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 30 }}>
-              {c.worry.cards.map((card, i) => (
-                <div key={i} style={{ background: "#FCFBF7", borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 14px rgba(70,72,60,0.07)" }}>
-                  <ImageSlot src={card.img.src} placeholder={card.img.placeholder} style={{ width: "100%", height: 110 }} />
-                  <p style={{ fontSize: 12.5, lineHeight: 1.7, color: "#4C4E45", margin: 0, padding: "16px 12px", textAlign: "center" }}>{nl(card.text)}</p>
+                  <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 17 }}>
+                    {chip.big}
+                  </span>
                 </div>
               ))}
             </div>
-            <p style={{ textAlign: "center", fontFamily: fontMincho, fontWeight: 600, fontSize: 20, letterSpacing: "0.06em", margin: "34px 0 0", color: "#33352E" }}>
-              {c.worry.closingPre}
-              <span style={{ display: "inline-block", background: accent, color: "#FFFFFF", padding: "4px 12px", borderRadius: 4, boxShadow: `0 4px 12px ${accentGlow}` }}>
-                {c.worry.closingHighlight}
-              </span>
-            </p>
-          </section>
-
-          {/* ── ④ reasons ── */}
-          <section style={{ background: "#FCFBF7", padding: "58px 26px 74px" }}>
-            <SectionHeading text={c.reasons.heading} />
-            {c.reasons.items.map((item, idx) => (
-              <div key={idx} style={{ marginTop: idx === 0 ? 44 : 48 }}>
-                <div style={{ position: "relative" }}>
-                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} radius={16} style={{ width: "100%", height: 210 }} />
-                  <div style={{ position: "absolute", top: -16, right: 16, width: 50, height: 50, transform: "rotate(45deg)", background: accent, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 6px 14px ${accentGlow}` }}>
-                    <span style={{ transform: "rotate(-45deg)", fontFamily: fontGothic, fontWeight: 700, fontSize: 19, color: "#FFFFFF" }}>{item.num}</span>
+            {/* サブコピー + 補足 + CTA */}
+            <div
+              style={{
+                position: "relative",
+                zIndex: 2,
+                minHeight: 640,
+                display: "flex",
+                flexDirection: "column",
+                padding: "40px 26px 30px",
+              }}
+            >
+              <div style={{ marginTop: "auto" }}>
+                <div style={{ textAlign: "center", pointerEvents: "none" }}>
+                  {c.fv.subLines.map((line) => (
+                    <p
+                      key={line}
+                      style={{
+                        fontFamily: fontGothic,
+                        fontWeight: 500,
+                        fontSize: 15,
+                        letterSpacing: "0.06em",
+                        lineHeight: 1.8,
+                        color: "#FFFFFF",
+                        textShadow: "0 1px 8px rgba(0,0,0,0.55)",
+                        margin: 0,
+                      }}
+                    >
+                      {line}
+                    </p>
+                  ))}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "center",
+                      gap: 6,
+                      marginTop: 14,
+                    }}
+                  >
+                    {c.fv.notes.map((n) => (
+                      <span
+                        key={n}
+                        style={{
+                          fontSize: 10.5,
+                          letterSpacing: "0.02em",
+                          color: "#FFFFFF",
+                          background: "rgba(46,66,105,0.85)",
+                          border: "1px solid rgba(255,255,255,0.35)",
+                          borderRadius: 999,
+                          padding: "4px 10px",
+                        }}
+                      >
+                        {n}
+                      </span>
+                    ))}
                   </div>
                 </div>
-                <h3 style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 18, lineHeight: 1.6, letterSpacing: "0.04em", margin: "22px 0 0", color: "#33352E", textAlign: "center" }}>
+                {/* §16 CTA 1/7: ファーストビュー */}
+                <ReserveCta variant="dark" />
+              </div>
+            </div>
+          </section>
+
+          {/* ── ② このようなお悩みはありませんか ── */}
+          <section style={{ background: creamGrad, padding: "54px 26px" }}>
+            <SectionHeading text={c.worry.heading} fontSize={20} />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 30 }}>
+              {c.worry.items.map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 7,
+                    background: "#FCFBF7",
+                    borderRadius: 12,
+                    padding: "14px 12px",
+                    boxShadow: "0 4px 12px rgba(70,72,60,0.06)",
+                  }}
+                >
+                  <CheckIcon />
+                  <span style={{ fontSize: 12, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                </div>
+              ))}
+            </div>
+            <p
+              style={{
+                textAlign: "center",
+                fontFamily: fontMincho,
+                fontWeight: 600,
+                fontSize: 18,
+                lineHeight: 1.8,
+                letterSpacing: "0.04em",
+                margin: "34px 0 0",
+                color: "#33352E",
+              }}
+            >
+              {c.worry.closing}
+            </p>
+            {/* §16 CTA 2/7: 悩み訴求の後 */}
+            <ReserveCta />
+          </section>
+
+          {/* ── ③ RINNEが選ばれる理由 ── */}
+          <section style={{ background: "#FCFBF7", padding: "58px 26px 66px" }}>
+            <SectionHeading text={c.reasons.heading} fontSize={24} />
+            {c.reasons.items.map((item, idx) => (
+              <div key={item.num} style={{ marginTop: idx === 0 ? 44 : 48 }}>
+                <div style={{ position: "relative" }}>
+                  <ImageSlot
+                    src={item.img.src}
+                    placeholder={item.img.placeholder}
+                    radius={16}
+                    style={{ width: "100%", height: 210 }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: -16,
+                      right: 16,
+                      width: 50,
+                      height: 50,
+                      transform: "rotate(45deg)",
+                      background: accent,
+                      borderRadius: 8,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: `0 6px 14px ${accentGlow}`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        transform: "rotate(-45deg)",
+                        fontFamily: fontGothic,
+                        fontWeight: 700,
+                        fontSize: 19,
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      {item.num}
+                    </span>
+                  </div>
+                </div>
+                <h3
+                  style={{
+                    fontFamily: fontGothic,
+                    fontWeight: 700,
+                    fontSize: 18,
+                    lineHeight: 1.6,
+                    letterSpacing: "0.04em",
+                    margin: "22px 0 0",
+                    color: "#33352E",
+                    textAlign: "center",
+                  }}
+                >
                   {nl(item.title)}
                 </h3>
                 <div style={{ width: 40, height: 2, background: "#DAD5C9", margin: "12px auto 0" }} />
-                <p style={{ fontSize: 13, lineHeight: 2, color: "#62655B", margin: item.trio ? "16px 0 20px" : "16px 0 0" }}>{item.body}</p>
-                {item.trio && (
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                    {item.trio.map((t, i) => (
-                      <div key={i} style={{ background: "#ECE8E0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
-                        <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accent }}>{t.label}</span>
-                        <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <p style={{ fontSize: 13, lineHeight: 2, color: "#62655B", margin: "16px 0 0" }}>
+                  {item.body}
+                </p>
               </div>
             ))}
-            <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} />
+            {/* §16 CTA 3/7: 選ばれる理由の後 */}
+            <ReserveCta />
           </section>
 
-          {/* ── ④.5 trainers ── */}
-          <section style={{ background: navyGrad, padding: "40px 0 48px" }}>
+          {/* ── ④ RINNEと他のレッスン形式の違い ── */}
+          <section style={{ background: navyGrad, padding: "54px 20px" }}>
+            <SectionHeading text={c.comparison.heading} variant="white" fontSize={21} />
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: 12.5,
+                lineHeight: 1.9,
+                color: "rgba(255,255,255,0.78)",
+                margin: "18px 0 0",
+              }}
+            >
+              {c.comparison.lead}
+            </p>
+            <div
+              style={{
+                marginTop: 26,
+                background: "#FCFBF7",
+                borderRadius: 14,
+                overflow: "hidden",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.18)",
+              }}
+            >
+              {/* 列見出し */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1.05fr 1fr 1fr 1.15fr",
+                  background: "#EFEAE0",
+                }}
+              >
+                <div />
+                {c.comparison.columns.map((col, i) => (
+                  <div
+                    key={col}
+                    style={{
+                      padding: "10px 4px",
+                      textAlign: "center",
+                      fontFamily: fontGothic,
+                      fontWeight: 700,
+                      fontSize: 10.5,
+                      lineHeight: 1.4,
+                      letterSpacing: "0.02em",
+                      color: i === c.comparison.highlight ? "#FFFFFF" : "#62655B",
+                      background: i === c.comparison.highlight ? accent : "transparent",
+                    }}
+                  >
+                    {nl(col)}
+                  </div>
+                ))}
+              </div>
+              {/* 行 */}
+              {c.comparison.rows.map((row) => (
+                <div
+                  key={row.label}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1.05fr 1fr 1fr 1.15fr",
+                    borderTop: "1px solid #E6E1D5",
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "12px 8px",
+                      fontSize: 10.5,
+                      lineHeight: 1.5,
+                      fontWeight: 700,
+                      color: "#4C4E45",
+                      background: "#F7F3EB",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {row.label}
+                  </div>
+                  {row.values.map((v, vi) => (
+                    <div
+                      key={vi}
+                      style={{
+                        padding: "12px 5px",
+                        textAlign: "center",
+                        background: vi === c.comparison.highlight ? accentSoft : "transparent",
+                        borderLeft: "1px solid #EFEAE0",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 16,
+                          lineHeight: 1,
+                          color: markColor[row.marks[vi]],
+                          fontWeight: 700,
+                        }}
+                      >
+                        {markGlyph[row.marks[vi]]}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 9.5,
+                          lineHeight: 1.5,
+                          color: vi === c.comparison.highlight ? "#33352E" : "#62655B",
+                          marginTop: 5,
+                        }}
+                      >
+                        {v}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── ⑤ 姿勢診断について ── */}
+          <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
+            <SectionHeading text={c.posture.heading} fontSize={21} />
+            <ImageSlot
+              src={c.posture.photo.src}
+              placeholder={c.posture.photo.placeholder}
+              radius={16}
+              style={{ width: "100%", height: 220, marginTop: 32 }}
+            />
+            <p style={{ fontSize: 13, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
+              {c.posture.body}
+            </p>
+            <div style={{ background: "#F4F0E8", borderRadius: 14, padding: "22px 20px", marginTop: 24 }}>
+              <p
+                style={{
+                  fontFamily: fontGothic,
+                  fontWeight: 700,
+                  fontSize: 13,
+                  letterSpacing: "0.06em",
+                  color: accent,
+                  margin: "0 0 14px",
+                }}
+              >
+                姿勢診断で確認する内容
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+                {c.posture.items.map((item) => (
+                  <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                    <CheckIcon color="#C1902F" />
+                    <span style={{ fontSize: 12.5, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ── ⑥ 体験レッスンの流れ ── */}
+          <section style={{ background: creamGrad, padding: "54px 26px" }}>
+            <SectionHeading text={c.flow.heading} fontSize={24} />
+            <div style={{ display: "flex", flexDirection: "column", marginTop: 34 }}>
+              {c.flow.steps.map((step, i) => {
+                const last = i === c.flow.steps.length - 1;
+                return (
+                  <div key={step.num} style={{ display: "flex", gap: 16 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        flex: "none",
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: 44,
+                          height: 44,
+                          borderRadius: "50%",
+                          background: accent,
+                          color: "#FFFFFF",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontFamily: fontGothic,
+                          fontWeight: 700,
+                          fontSize: 18,
+                          flex: "none",
+                        }}
+                      >
+                        {step.num}
+                      </span>
+                      {!last && <span style={{ width: 2, flex: 1, background: "#DED8CB" }} />}
+                    </div>
+                    <div style={{ paddingBottom: last ? 0 : 26 }}>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
+                        <h3
+                          style={{
+                            fontFamily: fontGothic,
+                            fontWeight: 700,
+                            fontSize: 16,
+                            letterSpacing: "0.03em",
+                            margin: 0,
+                            color: "#33352E",
+                          }}
+                        >
+                          {step.title}
+                        </h3>
+                        {step.time && <span style={{ fontSize: 11, color: "#9A9C90" }}>{step.time}</span>}
+                      </div>
+                      <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>
+                        {step.body}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {/* 体験の補足情報。未確定の項目は「要確認」と明示する。 */}
+            <div
+              style={{
+                background: "#FCFBF7",
+                borderRadius: 14,
+                padding: "20px",
+                marginTop: 28,
+                boxShadow: "0 4px 12px rgba(70,72,60,0.06)",
+              }}
+            >
+              {c.flow.notes.map((n, i) => (
+                <div
+                  key={n.label}
+                  style={{
+                    display: "flex",
+                    gap: 12,
+                    padding: "9px 0",
+                    borderTop: i === 0 ? "none" : "1px solid #EFEAE0",
+                  }}
+                >
+                  <span
+                    style={{
+                      flex: "none",
+                      width: 96,
+                      fontSize: 11.5,
+                      fontWeight: 700,
+                      color: accent,
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    {n.label}
+                  </span>
+                  <span style={{ fontSize: 12, lineHeight: 1.7, color: n.value ? "#4C4E45" : "#A8A399" }}>
+                    {n.value ?? "要確認"}
+                  </span>
+                </div>
+              ))}
+            </div>
+            {/* §16 CTA 4/7: 体験レッスンの流れの後 */}
+            <ReserveCta />
+          </section>
+
+          {/* ── ⑦ 初心者でも参加しやすい理由 ── */}
+          <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
+            <SectionHeading text={c.beginner.heading} fontSize={21} />
+            <p style={{ fontSize: 13, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
+              {c.beginner.body}
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 26 }}>
+              {c.beginner.items.map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 7,
+                    background: "#F4F0E8",
+                    borderRadius: 12,
+                    padding: "14px 12px",
+                  }}
+                >
+                  <CheckIcon />
+                  <span style={{ fontSize: 11.5, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── ⑧ お客様の声 ── */}
+          <section style={{ background: creamGrad, padding: "54px 26px" }}>
+            <SectionHeading text={c.testimonials.heading} fontSize={24} />
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: 12.5,
+                lineHeight: 1.9,
+                color: "#62655B",
+                margin: "18px 0 0",
+              }}
+            >
+              {c.testimonials.lead}
+            </p>
+            {c.testimonials.items.length > 0 ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 28 }}>
+                {c.testimonials.items.map((t, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      background: "#FCFBF7",
+                      borderRadius: 16,
+                      padding: 20,
+                      boxShadow: "0 6px 16px rgba(70,72,60,0.08)",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                      <ImageSlot
+                        src={t.img.src}
+                        placeholder={t.img.placeholder}
+                        radius={999}
+                        style={{ flex: "none", width: 62, height: 62 }}
+                      />
+                      <div style={{ lineHeight: 1.6 }}>
+                        <div
+                          style={{
+                            fontFamily: fontGothic,
+                            fontWeight: 700,
+                            fontSize: 14,
+                            color: "#33352E",
+                          }}
+                        >
+                          {t.age}
+                        </div>
+                        <div style={{ fontSize: 11, color: "#9A9C90" }}>
+                          {t.store}／{t.period}
+                        </div>
+                      </div>
+                    </div>
+                    <p style={{ fontSize: 12.5, lineHeight: 1.95, color: "#62655B", margin: "14px 0 0" }}>
+                      {t.comment}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* 実在・許諾済みの声のみ掲載する。未取得のため意図的に空。 */
+              <div
+                style={{
+                  marginTop: 26,
+                  border: "1px dashed #C9C3B4",
+                  borderRadius: 14,
+                  background: "rgba(252,251,247,0.7)",
+                  padding: "26px 22px",
+                  textAlign: "center",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: fontGothic,
+                    fontWeight: 700,
+                    fontSize: 13,
+                    color: "#8A8578",
+                    margin: 0,
+                    letterSpacing: "0.04em",
+                  }}
+                >
+                  お客様の声：掲載準備中
+                </p>
+                <p style={{ fontSize: 11.5, lineHeight: 1.9, color: "#9A9C90", margin: "10px 0 0" }}>
+                  写真・年代・利用店舗・利用期間・コメント、および
+                  <br />
+                  広告掲載許可を取得のうえ掲載します。
+                </p>
+              </div>
+            )}
+          </section>
+
+          {/* ── ⑨ インストラクター紹介 ── */}
+          <section style={{ background: navyGrad, padding: "44px 0 48px" }}>
             <div style={{ textAlign: "center", padding: "0 26px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 24, letterSpacing: "0.08em", color: "#FFFFFF", lineHeight: 1.4, margin: 0 }}>
-                {c.trainers.heading}
+              <h2
+                style={{
+                  fontFamily: fontMincho,
+                  fontWeight: 600,
+                  fontSize: 21,
+                  letterSpacing: "0.08em",
+                  color: "#FFFFFF",
+                  lineHeight: 1.5,
+                  margin: 0,
+                }}
+              >
+                {c.instructors.heading}
               </h2>
-              <div style={{ width: 30, height: 2, background: "rgba(255,255,255,0.55)", borderRadius: 2, margin: "14px auto 0" }} />
-              <p style={{ fontSize: 13, lineHeight: 1.9, color: "rgba(255,255,255,0.78)", margin: "18px 0 0" }}>{nl(c.trainers.lead)}</p>
+              <div
+                style={{
+                  width: 30,
+                  height: 2,
+                  background: "rgba(255,255,255,0.55)",
+                  borderRadius: 2,
+                  margin: "14px auto 0",
+                }}
+              />
+              <p style={{ fontSize: 13, lineHeight: 1.9, color: "rgba(255,255,255,0.78)", margin: "18px 0 0" }}>
+                {nl(c.instructors.lead)}
+              </p>
             </div>
             <div
-              id="trainer-track"
+              id="instructor-track"
               className="no-scrollbar"
-              style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
+              style={{
+                display: "flex",
+                gap: 16,
+                overflowX: "auto",
+                scrollSnapType: "x mandatory",
+                WebkitOverflowScrolling: "touch",
+                padding: "30px 26px 8px",
+              }}
             >
-              {c.trainers.items.map((t, i) => (
-                <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 22px rgba(70,72,60,0.10)" }}>
-                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264 }} />
+              {c.instructors.items.map((t, i) => (
+                <div
+                  key={i}
+                  style={{
+                    flex: "none",
+                    width: 244,
+                    scrollSnapAlign: "center",
+                    background: "#FFFFFF",
+                    borderRadius: 18,
+                    overflow: "hidden",
+                    boxShadow: "0 8px 22px rgba(70,72,60,0.10)",
+                  }}
+                >
+                  <ImageSlot
+                    src={t.img.src}
+                    placeholder={t.img.placeholder}
+                    style={{ width: "100%", height: 264 }}
+                  />
                   <div style={{ padding: "18px 20px 22px" }}>
                     <div style={{ fontSize: 11, letterSpacing: "0.14em", color: accent }}>{t.role}</div>
-                    <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#33352E", marginTop: 6 }}>{t.name}</div>
+                    <div
+                      style={{
+                        fontFamily: fontMincho,
+                        fontSize: 20,
+                        letterSpacing: "0.04em",
+                        color: "#33352E",
+                        marginTop: 6,
+                      }}
+                    >
+                      {t.name}
+                    </div>
                     <div style={{ fontSize: 12, color: "#9A9C90", marginTop: 2 }}>{t.nameEn}</div>
-                    <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "12px 0 0" }}>{t.body}</p>
+                    <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "12px 0 0" }}>
+                      {t.body}
+                    </p>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
-                      {t.tags.map((tag, ti) => (
-                        <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: accent, border: `1px solid ${accentSoft}`, background: accentSoft, borderRadius: 999, padding: "4px 10px" }}>{tag}</span>
+                      {t.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          style={{
+                            fontSize: 10.5,
+                            letterSpacing: "0.02em",
+                            color: accent,
+                            border: `1px solid ${accentSoft}`,
+                            background: accentSoft,
+                            borderRadius: 999,
+                            padding: "4px 10px",
+                          }}
+                        >
+                          {tag}
+                        </span>
                       ))}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 20 }}>
-              <span style={{ fontSize: 11, letterSpacing: "0.1em", color: "rgba(255,255,255,0.65)" }}>{c.trainers.swipeHint}</span>
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+              <span style={{ fontSize: 11, letterSpacing: "0.1em", color: "rgba(255,255,255,0.65)" }}>
+                {c.instructors.swipeHint}
+              </span>
             </div>
           </section>
 
-          {/* ── ⑤ scenes ── */}
-          <section style={{ background: creamGrad, padding: "54px 26px" }}>
-            <SectionHeading text={c.scenes.heading} fontSize={20} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 32 }}>
-              {c.scenes.items.map((s, i) => (
-                <div key={i} style={{ background: "#FCFBF7", borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 16px rgba(70,72,60,0.08)" }}>
-                  <ImageSlot src={s.img.src} placeholder={s.img.placeholder} style={{ width: "100%", height: 180 }} />
-                  <div style={{ padding: "18px 20px 20px" }}>
-                    <p style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.03em", margin: 0, color: "#33352E" }}>{s.title}</p>
-                    <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "7px 0 0" }}>{s.body}</p>
-                  </div>
+          {/* ── ⑩ 料金・キャンペーン ── */}
+          <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
+            <SectionHeading text={c.pricing.heading} fontSize={24} />
+            <div style={{ textAlign: "center", marginTop: 30 }}>
+              <span
+                style={{
+                  display: "inline-block",
+                  background: "#4A4E57",
+                  color: "#FFFFFF",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
+                  padding: "6px 14px",
+                  borderRadius: 4,
+                }}
+              >
+                {c.pricing.campaignBadge}
+              </span>
+              <div>
+                <h3
+                  style={{
+                    fontFamily: fontMincho,
+                    fontWeight: 600,
+                    fontSize: 27,
+                    letterSpacing: "0.05em",
+                    color: "#33352E",
+                    margin: "14px 0 0",
+                    background: "linear-gradient(transparent 66%, #F3E7BE 66%)",
+                    display: "inline-block",
+                    padding: "0 4px",
+                  }}
+                >
+                  {c.pricing.campaignTitle}
+                </h3>
+              </div>
+              <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "14px 0 0" }}>
+                {c.pricing.campaignLead}
+              </p>
+            </div>
+
+            {/* 二重価格表記（通常 → キャンペーン） */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 14,
+                marginTop: 24,
+              }}
+            >
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    background: "#4A4E57",
+                    color: "#FFFFFF",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    padding: "6px 12px",
+                    borderRadius: 4,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  体験レッスン
+                </span>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                  <span style={{ fontSize: 11, color: "#62655B" }}>通常価格</span>
+                  <span style={{ position: "relative", fontFamily: fontMincho, fontSize: 19, color: "#4A4E57" }}>
+                    {c.pricing.trialRegular}
+                    <span style={{ fontSize: 11 }}>円</span>
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: -2,
+                        right: -2,
+                        top: "55%",
+                        height: 1.5,
+                        background: "#C25B4B",
+                        transform: "rotate(-8deg)",
+                      }}
+                    />
+                  </span>
+                  <span style={{ fontSize: 10, color: "#9A9C90" }}>税込</span>
+                  <span style={{ fontSize: 17, color: "#C79A47", marginLeft: 2 }}>→</span>
+                </div>
+              </div>
+              <div
+                style={{
+                  fontFamily: fontMincho,
+                  fontWeight: 700,
+                  fontSize: 92,
+                  lineHeight: 0.9,
+                  letterSpacing: "0.02em",
+                  background: goldGrad,
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                {c.pricing.trialNow}
+                <span style={{ fontSize: 48 }}>円</span>
+              </div>
+            </div>
+
+            {/* 月額・入会金など */}
+            <div style={{ background: "#F4F0E8", borderRadius: 14, padding: "8px 20px", marginTop: 26 }}>
+              {c.pricing.rows.map((row, i) => (
+                <div
+                  key={row.label}
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    gap: 12,
+                    padding: "13px 0",
+                    borderTop: i === 0 ? "none" : "1px solid #E3DDCF",
+                  }}
+                >
+                  <span style={{ fontSize: 12.5, fontWeight: 700, color: "#4C4E45", letterSpacing: "0.04em" }}>
+                    {row.label}
+                  </span>
+                  <span style={{ textAlign: "right" }}>
+                    <span
+                      style={{
+                        fontFamily: fontGothic,
+                        fontWeight: 700,
+                        fontSize: 14,
+                        color: row.value === "要確認" ? "#A8A399" : accent,
+                      }}
+                    >
+                      {row.value}
+                    </span>
+                    {row.note && (
+                      <span style={{ display: "block", fontSize: 10, color: "#9A9C90", marginTop: 2 }}>
+                        {row.note}
+                      </span>
+                    )}
+                  </span>
                 </div>
               ))}
             </div>
-          </section>
 
-          {/* ── ⑥ flow ── */}
-          <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.flow.heading} />
-            <div style={{ display: "flex", flexDirection: "column", marginTop: 34 }}>
-              {c.flow.steps.map((step, i) => {
-                const last = i === c.flow.steps.length - 1;
-                return (
-                  <div key={i} style={{ display: "flex", gap: 16 }}>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: "none" }}>
-                      <span style={{ width: 44, height: 44, borderRadius: "50%", background: accent, color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fontGothic, fontWeight: 700, fontSize: 18 }}>{step.num}</span>
-                      {!last && <span style={{ width: 2, flex: 1, background: "#E1DCD0" }} />}
-                    </div>
-                    <div style={{ paddingBottom: last ? 0 : 28 }}>
-                      <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
-                        <h3 style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.03em", margin: 0, color: "#33352E" }}>{step.title}</h3>
-                        <span style={{ fontSize: 11, color: "#9A9C90" }}>{step.time}</span>
-                      </div>
-                      <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>{step.body}</p>
-                    </div>
-                  </div>
-                );
-              })}
+            {/* 注意事項（適用条件・期間・対象店舗・別途費用の明記） */}
+            <div style={{ marginTop: 18 }}>
+              {c.pricing.notes.map((n) => (
+                <p key={n} style={{ fontSize: 10.5, lineHeight: 1.8, color: "#9A9C90", margin: "3px 0" }}>
+                  {n}
+                </p>
+              ))}
             </div>
+
+            {/* §16 CTA 5/7: 料金・キャンペーンの後 */}
+            <ReserveCta />
           </section>
 
-          {/* ── ⑧ FAQ ── */}
-          <section style={{ background: navyGrad, padding: "54px 26px" }}>
-            <SectionHeading text={c.faq.heading} variant="white" />
-            <FaqList items={c.faq.items} accent={accent} accentSoft={accentSoft} />
-          </section>
-
-          {/* ── ⑨ access ── */}
-          <section id="access" style={{ background: creamGrad, padding: "54px 26px 64px" }}>
-            <SectionHeading text={c.access.heading} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 30 }}>
-              {c.access.stores.map((store, i) => (
-                <div key={i} style={{ background: "#FCFBF7", borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 16px rgba(70,72,60,0.10)" }}>
-                  <ImageSlot src={store.img.src} placeholder={store.img.placeholder} style={{ width: "100%", height: 160 }} />
+          {/* ── ⑪ 店舗情報 ── */}
+          <section id="stores" style={{ background: creamGrad, padding: "54px 26px" }}>
+            <SectionHeading text={c.stores.heading} fontSize={24} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 30 }}>
+              {c.stores.items.map((store) => (
+                <div
+                  key={store.name}
+                  style={{
+                    background: "#FCFBF7",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    boxShadow: "0 6px 16px rgba(70,72,60,0.10)",
+                  }}
+                >
+                  <ImageSlot
+                    src={store.img.src}
+                    placeholder={store.img.placeholder}
+                    style={{ width: "100%", height: 170 }}
+                  />
                   <div style={{ padding: 20 }}>
-                    <h3 style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 17, letterSpacing: "0.05em", margin: 0, color: "#33352E" }}>{store.name}</h3>
-                    <p style={{ fontSize: 12, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>
+                    <h3
+                      style={{
+                        fontFamily: fontGothic,
+                        fontWeight: 700,
+                        fontSize: 18,
+                        letterSpacing: "0.05em",
+                        margin: 0,
+                        color: "#33352E",
+                      }}
+                    >
+                      {store.name}
+                    </h3>
+                    <p
+                      style={{
+                        fontFamily: fontMincho,
+                        fontWeight: 600,
+                        fontSize: 14,
+                        lineHeight: 1.8,
+                        letterSpacing: "0.04em",
+                        color: accent,
+                        margin: "10px 0 0",
+                      }}
+                    >
+                      {nl(store.appeal)}
+                    </p>
+                    <div style={{ height: 1, background: "#EFEAE0", margin: "16px 0" }} />
+                    <p style={{ fontSize: 12, lineHeight: 1.9, color: "#62655B", margin: 0 }}>
                       {store.address}
                       <br />
                       <span style={{ color: accent, fontWeight: 700 }}>{store.hours}</span>
-                      {nl(store.route)}
+                      <br />
+                      {store.closed}
                     </p>
+                    <div style={{ marginTop: 12 }}>
+                      {store.access.map((a) => (
+                        <div key={a} style={{ display: "flex", alignItems: "flex-start", gap: 7, marginTop: 6 }}>
+                          <CheckIcon color="#C1902F" />
+                          <span style={{ fontSize: 11.5, lineHeight: 1.7, color: "#62655B" }}>{a}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <ImageSlot
+                      src={store.map.src}
+                      placeholder={store.map.placeholder}
+                      radius={10}
+                      style={{ width: "100%", height: 150, marginTop: 16 }}
+                    />
+                    {store.tel && (
+                      <TelLink tel={store.tel} slug={c.slug} label={`${store.name}に電話する`} accent={accent} />
+                    )}
                   </div>
                 </div>
               ))}
             </div>
+            {/* §16 CTA 6/7: 店舗情報の後 */}
+            <ReserveCta />
           </section>
 
-          {/* ── ⑩ form ── */}
-          <section id="form" style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.form.heading} />
-            <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.9, color: "#62655B", margin: "18px 0 0" }}>{nl(c.form.lead)}</p>
-            <LPForm
-              clientSlug={c.slug}
-              accent={accent}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              errorMessage={c.form.errorMessage}
-              disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
-            />
+          {/* ── ⑫ よくある質問 ── */}
+          <section style={{ background: navyGrad, padding: "54px 26px" }}>
+            <SectionHeading text={c.faq.heading} variant="white" fontSize={24} />
+            <FaqList items={c.faq.items} accent={accent} accentSoft={accentSoft} />
+          </section>
+
+          {/* ── ⑬ 最終予約エリア ── */}
+          <section id="reserve" style={{ background: "#FCFBF7", padding: "56px 26px 64px" }}>
+            <SectionHeading text={c.closing.heading} fontSize={21} />
+            <p
+              style={{
+                textAlign: "center",
+                fontFamily: fontMincho,
+                fontWeight: 600,
+                fontSize: 16,
+                lineHeight: 1.9,
+                letterSpacing: "0.04em",
+                color: "#33352E",
+                margin: "22px 0 0",
+              }}
+            >
+              {c.closing.lead}
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 7,
+                marginTop: 22,
+              }}
+            >
+              {c.closing.chips.map((chip) => (
+                <span
+                  key={chip}
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: "0.02em",
+                    color: accent,
+                    border: `1px solid ${accentSoft}`,
+                    background: accentSoft,
+                    borderRadius: 999,
+                    padding: "6px 12px",
+                  }}
+                >
+                  {chip}
+                </span>
+              ))}
+            </div>
+            {/* §16 CTA 7/7: LP最下部 */}
+            <ReserveCta />
           </section>
         </div>
       </div>
@@ -790,7 +1388,17 @@ export default function Page() {
         offers={c.sticky.offers.map((o) => (
           <span key={o.label} style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
             <span style={{ fontSize: 11, color: "#62655B", letterSpacing: "0.02em" }}>{o.label}</span>
-            <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 17, lineHeight: 1, color: "#C1902F" }}>{o.value}</span>
+            <span
+              style={{
+                fontFamily: fontMincho,
+                fontWeight: 700,
+                fontSize: 17,
+                lineHeight: 1,
+                color: "#C1902F",
+              }}
+            >
+              {o.value}
+            </span>
           </span>
         ))}
       />

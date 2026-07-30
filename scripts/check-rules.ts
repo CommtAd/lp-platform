@@ -28,6 +28,8 @@ const FORM_EXEMPT = new Set<string>([
   "soelu-togoshiginza",
   "days-pilates",
   "bee-pilates-ebisu",
+  // 構成案 §16「予約ボタンはすべてhacomonoの店舗別ウィジェットへ接続」による。
+  "pilates-rinne",
 ]);
 
 function clientSlugs(): string[] {
