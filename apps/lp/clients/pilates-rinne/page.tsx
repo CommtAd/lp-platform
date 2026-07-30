@@ -46,12 +46,20 @@ function nl(text: string): ReactNode {
 
 const c = config;
 const accent = c.accent;
+/* 実サイト（rinne-pilates.com）の実測値。深緑×クリーム×白の3色構成で、
+   パターンA由来のゴールドは一切使わない。 */
+const cream = "#E6D2BE";
+const creamSoft = "#F1E6D6";
+const accentMid = "#2E7D5B"; // 価格・チェック等の強調用に、見出しのdeep greenより明るい中間トーン
 const navyGrad = `linear-gradient(158deg, ${shade(accent, 0.14)} 0%, ${accent} 52%, ${shade(accent, -0.18)} 100%)`;
 const accentSoft = accent + "22";
 const accentGlow = accent + "55";
-const goldGrad = "linear-gradient(160deg, #E8C877 0%, #C1902F 100%)";
-const goldBtn = "linear-gradient(135deg, #E8C877 0%, #C1902F 100%)";
-const creamGrad = "linear-gradient(180deg, #F4EEE4 0%, #EAE2D3 100%)";
+const goldGrad = `linear-gradient(160deg, ${accentMid} 0%, ${accent} 100%)`;
+const goldBtn = `linear-gradient(135deg, ${creamSoft} 0%, ${cream} 100%)`;
+/* StickyFooterCTAの共通コンポーネントはボタン文字色が白固定のため、
+   クリーム地のgoldBtnではなく白文字が読める濃緑グラデーションを使う。 */
+const stickyBtnGrad = `linear-gradient(135deg, ${shade(accent, 0.12)} 0%, ${shade(accent, -0.15)} 100%)`;
+const creamGrad = "linear-gradient(180deg, #F3E8D8 0%, #E9DAC4 100%)";
 const fontMincho = "'Shippori Mincho', serif";
 const fontGothic = "'Zen Kaku Gothic New', serif";
 
@@ -147,13 +155,13 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
                 gap: 8,
                 height: 58,
                 background: goldBtn,
-                color: "#FFFFFF",
+                color: accent,
                 textDecoration: "none",
                 fontSize: 15.5,
                 fontWeight: 700,
                 letterSpacing: "0.04em",
                 borderRadius: 999,
-                boxShadow: "0 10px 22px rgba(160,120,40,0.35)",
+                boxShadow: "0 10px 22px rgba(0,40,30,0.28)",
               }}
             >
               {s.label}
@@ -207,7 +215,7 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
 
 const markGlyph: Record<Mark, string> = { good: "◎", fair: "○", poor: "△" };
 const markColor: Record<Mark, string> = {
-  good: "#C1902F",
+  good: accentMid,
   fair: "#7C8069",
   poor: "#B98A80",
 };
@@ -274,7 +282,7 @@ export default function Page() {
               zIndex: 5,
               display: "flex",
               alignItems: "center",
-              background: "linear-gradient(120deg, #E4C784 0%, #D3A857 55%, #C79A47 100%)",
+              background: `linear-gradient(120deg, ${shade(accent, 0.16)} 0%, ${accent} 55%, ${shade(accent, -0.15)} 100%)`,
               padding: "14px 18px",
               boxShadow: "0 3px 10px rgba(70,72,60,0.18)",
             }}
@@ -288,12 +296,12 @@ export default function Page() {
                 width: 68,
                 height: 68,
                 borderRadius: "50%",
-                background: "radial-gradient(circle at 38% 32%, #DD9A82 0%, #C9765C 100%)",
-                boxShadow: "0 3px 8px rgba(150,70,50,0.28)",
+                background: `radial-gradient(circle at 38% 32%, ${creamSoft} 0%, ${cream} 100%)`,
+                boxShadow: "0 3px 8px rgba(50,40,25,0.28)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#FFFFFF",
+                color: accent,
               }}
             >
               <div
@@ -329,7 +337,7 @@ export default function Page() {
                   fontSize: 20,
                   letterSpacing: "0.06em",
                   color: "#FFFFFF",
-                  textShadow: "0 1px 5px rgba(180,110,30,0.5)",
+                  textShadow: "0 1px 5px rgba(0,20,15,0.5)",
                   lineHeight: 1.2,
                   textAlign: "center",
                 }}
@@ -361,8 +369,17 @@ export default function Page() {
             <span style={{ fontSize: 13, letterSpacing: "0.03em" }}>{c.achievement.post}</span>
           </div>
 
-          {/* ── ① ファーストビュー ── */}
-          <section style={{ position: "relative", minHeight: 640, overflow: "hidden", background: "#33352E" }}>
+          {/* ── ① ファーストビュー：写真＋縦書きコピー ── */}
+          {/*
+            以前は縦書きキャッチコピー（絶対配置・上寄せ）とサブコピー＋CTA
+            （flex marginTop:auto で下寄せ）を同じ写真セクション内に重ねており、
+            後者のコンテンツ量が増えると marginTop:auto が効かず上に張り付いて、
+            縦書きコピーの真下に文字が被る問題があった。
+            写真は縦書きコピー＋特徴チップだけが乗る固定高さの領域に留め、
+            サブコピー・補足・CTAは写真の外（通常フロー）に出して物理的に
+            座標がぶつからないようにしている。
+          */}
+          <section style={{ position: "relative", minHeight: 480, overflow: "hidden", background: accent }}>
             <ImageSlot
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
@@ -373,10 +390,10 @@ export default function Page() {
               style={{
                 position: "absolute",
                 inset: 0,
-                /* 下半分を確実に暗くする。サブコピー・補足チップ・CTAが乗る領域なので、
-                   ヒーロー写真が明るい場合でも白文字の可読性を確保する。 */
+                /* 縦書きコピーは白背景の札に乗るため、ここは写真に軽い陰影を
+                   付けるだけの演出用。 */
                 background:
-                  "linear-gradient(to bottom, rgba(30,31,26,0.12) 0%, rgba(30,31,26,0) 18%, rgba(30,31,26,0.34) 50%, rgba(30,31,26,0.80) 100%)",
+                  "linear-gradient(to bottom, rgba(0,20,15,0.05) 0%, rgba(0,20,15,0) 32%, rgba(0,20,15,0.42) 100%)",
                 pointerEvents: "none",
               }}
             />
@@ -446,7 +463,7 @@ export default function Page() {
                     boxShadow: "0 4px 12px rgba(0,0,0,0.22)",
                   }}
                 >
-                  <span style={{ fontSize: 9.5, letterSpacing: "0.06em", color: "#E8C877" }}>
+                  <span style={{ fontSize: 9.5, letterSpacing: "0.06em", color: cream }}>
                     {chip.small}
                   </span>
                   <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 17 }}>
@@ -455,68 +472,57 @@ export default function Page() {
                 </div>
               ))}
             </div>
-            {/* サブコピー + 補足 + CTA */}
-            <div
-              style={{
-                position: "relative",
-                zIndex: 2,
-                minHeight: 640,
-                display: "flex",
-                flexDirection: "column",
-                padding: "40px 26px 30px",
-              }}
-            >
-              <div style={{ marginTop: "auto" }}>
-                <div style={{ textAlign: "center", pointerEvents: "none" }}>
-                  {c.fv.subLines.map((line) => (
-                    <p
-                      key={line}
-                      style={{
-                        fontFamily: fontGothic,
-                        fontWeight: 500,
-                        fontSize: 15,
-                        letterSpacing: "0.06em",
-                        lineHeight: 1.8,
-                        color: "#FFFFFF",
-                        textShadow: "0 1px 8px rgba(0,0,0,0.55)",
-                        margin: 0,
-                      }}
-                    >
-                      {line}
-                    </p>
-                  ))}
-                  <div
+          </section>
+
+          {/* ── ①-2 サブコピー・補足・CTA（写真の外の通常フロー） ── */}
+          <div style={{ position: "relative", background: accent, padding: "30px 26px 38px" }}>
+            <div style={{ textAlign: "center" }}>
+              {c.fv.subLines.map((line) => (
+                <p
+                  key={line}
+                  style={{
+                    fontFamily: fontGothic,
+                    fontWeight: 500,
+                    fontSize: 15,
+                    letterSpacing: "0.06em",
+                    lineHeight: 1.8,
+                    color: "#FFFFFF",
+                    margin: 0,
+                  }}
+                >
+                  {line}
+                </p>
+              ))}
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  gap: 6,
+                  marginTop: 14,
+                }}
+              >
+                {c.fv.notes.map((n) => (
+                  <span
+                    key={n}
                     style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "center",
-                      gap: 6,
-                      marginTop: 14,
+                      fontSize: 10.5,
+                      letterSpacing: "0.02em",
+                      color: "#FFFFFF",
+                      background: "rgba(255,255,255,0.14)",
+                      border: "1px solid rgba(255,255,255,0.35)",
+                      borderRadius: 999,
+                      padding: "4px 10px",
                     }}
                   >
-                    {c.fv.notes.map((n) => (
-                      <span
-                        key={n}
-                        style={{
-                          fontSize: 10.5,
-                          letterSpacing: "0.02em",
-                          color: "#FFFFFF",
-                          background: "rgba(46,66,105,0.85)",
-                          border: "1px solid rgba(255,255,255,0.35)",
-                          borderRadius: 999,
-                          padding: "4px 10px",
-                        }}
-                      >
-                        {n}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                {/* §16 CTA 1/7: ファーストビュー */}
-                <ReserveCta variant="dark" />
+                    {n}
+                  </span>
+                ))}
               </div>
             </div>
-          </section>
+            {/* §16 CTA 1/7: ファーストビュー */}
+            <ReserveCta variant="dark" />
+          </div>
 
           {/* ── ② このようなお悩みはありませんか ── */}
           <section style={{ background: creamGrad, padding: "54px 26px" }}>
@@ -763,7 +769,7 @@ export default function Page() {
               <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
                 {c.posture.items.map((item) => (
                   <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                    <CheckIcon color="#C1902F" />
+                    <CheckIcon color={accentMid} />
                     <span style={{ fontSize: 12.5, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
                   </div>
                 ))}
@@ -1119,7 +1125,7 @@ export default function Page() {
                     letterSpacing: "0.05em",
                     color: "#33352E",
                     margin: "14px 0 0",
-                    background: "linear-gradient(transparent 66%, #F3E7BE 66%)",
+                    background: `linear-gradient(transparent 66%, ${creamSoft} 66%)`,
                     display: "inline-block",
                     padding: "0 4px",
                   }}
@@ -1176,7 +1182,7 @@ export default function Page() {
                     />
                   </span>
                   <span style={{ fontSize: 10, color: "#9A9C90" }}>税込</span>
-                  <span style={{ fontSize: 17, color: "#C79A47", marginLeft: 2 }}>→</span>
+                  <span style={{ fontSize: 17, color: accentMid, marginLeft: 2 }}>→</span>
                 </div>
               </div>
               <div
@@ -1304,7 +1310,7 @@ export default function Page() {
                     <div style={{ marginTop: 12 }}>
                       {store.access.map((a) => (
                         <div key={a} style={{ display: "flex", alignItems: "flex-start", gap: 7, marginTop: 6 }}>
-                          <CheckIcon color="#C1902F" />
+                          <CheckIcon color={accentMid} />
                           <span style={{ fontSize: 11.5, lineHeight: 1.7, color: "#62655B" }}>{a}</span>
                         </div>
                       ))}
@@ -1385,6 +1391,9 @@ export default function Page() {
         anchor={c.sticky.anchor}
         buttonText={c.sticky.buttonText}
         showAfter={c.sticky.showAfter}
+        buttonGradient={stickyBtnGrad}
+        shadowColor="rgba(0,40,30,0.35)"
+        borderColor={`${accent}59`}
         offers={c.sticky.offers.map((o) => (
           <span key={o.label} style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
             <span style={{ fontSize: 11, color: "#62655B", letterSpacing: "0.02em" }}>{o.label}</span>
@@ -1394,7 +1403,7 @@ export default function Page() {
                 fontWeight: 700,
                 fontSize: 17,
                 lineHeight: 1,
-                color: "#C1902F",
+                color: accentMid,
               }}
             >
               {o.value}
