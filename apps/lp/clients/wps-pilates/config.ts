@@ -4,7 +4,7 @@ import type { LPFormField } from "@/components/LPForm";
 const ASSET = "/clients/wps-pilates";
 
 /**
- * WAKATA PHYSIO STUDIO (WPS) — 名古屋市緑区の「整体×ピラティス」スタジオ。
+ * WAKATA PHYSIO STUDIO (WPS) — 名古屋市緑区の「理学療法士監修マシンピラティス」スタジオ。
  * 参照サイト（画像ベタ貼りLP）をHTML化して最適化した bespoke クライアント。
  *
  * ⚠️ 画像は参照サイトからの一時プレースホルダ（確認用）。CLAUDE.md 規約11に基づき、
@@ -158,9 +158,9 @@ const config: WpsConfig = {
   status: "draft",
   meta: {
     title:
-      "WAKATA PHYSIO STUDIO｜整体×ピラティスで不調の根本改善｜名古屋市緑区",
+      "WAKATA PHYSIO STUDIO｜理学療法士監修のマシンピラティスで不調の根本改善｜名古屋市緑区",
     description:
-      "理学療法士・柔道整復師が在籍する名古屋市緑区の整体×マシンピラティススタジオ。身体を分析し不調の原因にアプローチ。初回体験実質0円・入会金0円、平日21時まで営業・駐車場完備。肩こり・腰痛・姿勢改善に。",
+      "理学療法士監修、名古屋市緑区のマシンピラティススタジオ。身体を分析し不調の原因にアプローチ。初回体験実質0円・入会金0円、平日21時まで営業・駐車場完備。肩こり・腰痛・姿勢改善に。",
     ogpImage: `${ASSET}/hero.jpg`,
   },
 
@@ -178,13 +178,13 @@ const config: WpsConfig = {
 
   fv: {
     eyebrow: "理学療法士が身体を分析",
-    catchTop: "整体×",
+    catchTop: "マシン",
     catchLines: ["ピラティス", "で"],
     catchTail: "不調の原因にアプローチ！",
     tags: ["肩こり", "腰痛", "姿勢改善"],
     band: "あらゆる不調を整える",
     punch: "1度で効果を実感",
-    duo: ["整体", "マシン\nピラティス"],
+    duo: ["身体分析", "マシン\nピラティス"],
     hero: {
       placeholder: "マシンピラティスのシーン（全面）",
       src: `${ASSET}/hero.jpg`,
@@ -203,7 +203,6 @@ const config: WpsConfig = {
     items: [
       "カウンセリング",
       "姿勢・\n動作分析",
-      "整体",
       "ピラティス\n体験",
       "フィード\nバック",
     ],
@@ -226,9 +225,9 @@ const config: WpsConfig = {
       src: `${ASSET}/about-studio.jpg`,
       position: "center 42%",
     },
-    leadPre: "ただ鍛えるだけではなく、",
-    leadHighlight: "整体とピラティスを組み合わせ",
-    leadPost: "、身体のクセ・動き方から改善を目指します。",
+    leadPre: "ただ鍛えるだけではなく、理学療法士が",
+    leadHighlight: "身体を分析",
+    leadPost: "し、クセ・動き方から根本改善を目指します。",
     features: [
       { icon: "hand", label: "パーソナル対応" },
       { icon: "group", label: "少人数制グループ" },
@@ -249,7 +248,7 @@ const config: WpsConfig = {
     whyHeading: "なぜ不調を",
     whyHi: "繰り返す",
     whyBody:
-      "マッサージや整体だけでは、一時的にラクになることはあっても身体の使い方が変わらなければ、不調を繰り返してしまうことも…",
+      "マッサージやその場のケアだけでは、一時的にラクになることはあっても身体の使い方が変わらなければ、不調を繰り返してしまうことも…",
     traps: [
       { label: "湿布で\nごまかす", img: { placeholder: "イメージ", src: null } },
       { label: "自己流で\nストレッチ", img: { placeholder: "イメージ", src: null } },
@@ -267,11 +266,11 @@ const config: WpsConfig = {
       position: "center 30%",
     },
     leadTop: "痛みがあるから無理ではなく、\n痛みがあるからこそ身体を見直す。",
-    duo: ["整体", "マシン\nピラティス"],
-    subPre: "整体だけで終わらせず、",
+    duo: ["身体分析", "マシン\nピラティス"],
+    subPre: "その場しのぎで終わらせず、",
     subHi: "“動ける身体”",
     subPost: "を目指しませんか？",
-    bodyPre: "整体で整えるだけでなく、ピラティスで正しい動きを身につけ、",
+    bodyPre: "身体を分析し、マシンピラティスで正しい動きを身につけ、",
     bodyHi: "不調を根本から改善",
     bodyPost: "します。",
     footnote: "一人一人に合わせたオーダーメイドのプログラムをご提供します。",
@@ -279,7 +278,7 @@ const config: WpsConfig = {
 
   method: {
     eyebrow: "WPS METHOD",
-    heading: "WPS独自の3ステップ",
+    heading: "WPS独自のメソッド",
     steps: [
       {
         no: "01",
@@ -294,22 +293,11 @@ const config: WpsConfig = {
       },
       {
         no: "02",
-        en: "ALIGN THE BODY",
-        title: "整体で整える",
-        photo: { placeholder: "整体施術の写真", src: `${ASSET}/method-02.jpg`, position: "center 45%" },
-        body: [
-          { text: "硬くなった筋肉や関節を調整し、動きやすい状態へ。無理に鍛える前に、まずは" },
-          { text: "を作ります。", hi: "身体が動ける状態" },
-        ],
-        chips: ["筋肉の緊張を緩和", "関節の調整", "バランス改善", "可動域向上"],
-      },
-      {
-        no: "03",
         en: "MOVE CORRECTLY WITH PILATES",
         title: "ピラティスで正しく動かす",
         photo: { placeholder: "マシンピラティスの写真", src: `${ASSET}/method-03.jpg`, position: "center 30%" },
         body: [
-          { text: "整えた身体を、正しく使える身体へ。インナーマッスルや姿勢保持にアプローチし、" },
+          { text: "分析結果をもとに、正しく使える身体へ。インナーマッスルや姿勢保持にアプローチし、" },
           { text: "を目指します。", hi: "再発しにくい身体づくり" },
         ],
         chips: ["インナーマッスル", "姿勢保持", "再発予防"],
@@ -322,7 +310,7 @@ const config: WpsConfig = {
     brandLabel: "WAKATA PHYSIO STUDIOが",
     items: [
       { icon: "care", title: "理学療法士監修の\n安心品質" },
-      { icon: "handshake", title: "整体×ピラティス\n独自のアプローチ" },
+      { icon: "handshake", title: "分析×ピラティス\n独自のアプローチ" },
       { icon: "dumbbell", title: "本格マシン完備\n充実の設備" },
       { icon: "person", title: "パーソナル\n少人数制" },
       { icon: "spark", title: "慢性的な\n痛み改善" },
@@ -355,9 +343,9 @@ const config: WpsConfig = {
       },
       {
         no: "04",
-        title: "整体・ピラティス体験",
-        body: "整体とピラティスを掛け合わせたメニューで、身体を整え、正しく動かします。",
-        photo: { placeholder: "施術・体験の写真", src: `${ASSET}/flow-4.jpg`, position: "center 30%" },
+        title: "マシンピラティス体験",
+        body: "お一人お一人に合わせたマシンピラティスで、身体を正しく動かします。",
+        photo: { placeholder: "マシンピラティス体験の写真", src: `${ASSET}/method-03.jpg`, position: "center 30%" },
       },
       {
         no: "05",
@@ -394,7 +382,8 @@ const config: WpsConfig = {
     hours: [
       { day: "平日", time: "9:00〜21:00" },
       { day: "土曜", time: "9:00〜17:00" },
-      { day: "日祝", time: "9:00〜14:00" },
+      { day: "日曜", time: "9:00〜17:00" },
+      { day: "祝日", time: "9:00〜14:00" },
       { day: "定休日", time: "不定休" },
     ],
     parking: "駐車場完備",
