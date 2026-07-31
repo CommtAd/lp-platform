@@ -29,7 +29,7 @@ const ASSET = "/clients/pilates-rinne-ebina";
  * そのまま公開される事故につながるため。
  *   1. reserve.stores[].url — hacomono海老名店予約URL（★これが無いとCTAが機能しない）
  *   2. stores[].address / hours / closed / tel / access — 海老名店の住所・営業時間・定休日・電話・アクセス
- *   3. pricing — 通常体験料金・月額・入会金・事務手数料・キャンペーン期間・適用条件
+ *   3. pricing — 月額・入会金・事務手数料・キャンペーン期間・適用条件（通常体験料金8,800円は確定済み）
  *   4. flow.steps[].time / flowNote — 体験所要時間・持ち物・服装・レンタル品
  *   5. instructors[].name / nameEn / tags / body — 氏名・資格・指導歴（写真はGoogle Driveの実素材を仮配置済み）
  *   6. testimonials[] — お客様の声（★広告掲載許可の取得が前提）
@@ -479,8 +479,7 @@ const config: RinneConfig = {
     campaignTitle: "体験レッスン無料",
     campaignLead:
       "最大3名のセミパーソナルと姿勢診断を、まずは体験してみませんか？",
-    // TBD(§18): 通常体験料金
-    trialRegular: "00,000",
+    trialRegular: "8,800",
     trialNow: "0",
     // TBD(§18): 月額料金・入会金・事務手数料・当日入会特典・最低継続期間
     rows: [
