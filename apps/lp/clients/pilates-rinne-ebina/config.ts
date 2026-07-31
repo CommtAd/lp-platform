@@ -31,11 +31,19 @@ const ASSET = "/clients/pilates-rinne-ebina";
  *   2. stores[].address / hours / closed / tel / access — 海老名店の住所・営業時間・定休日・電話・アクセス
  *   3. pricing — 通常体験料金・月額・入会金・事務手数料・キャンペーン期間・適用条件
  *   4. flow.steps[].time / flowNote — 体験所要時間・持ち物・服装・レンタル品
- *   5. instructors[] — 氏名・資格・指導歴・写真
+ *   5. instructors[].name / nameEn / tags / body — 氏名・資格・指導歴（写真はGoogle Driveの実素材を仮配置済み）
  *   6. testimonials[] — お客様の声（★広告掲載許可の取得が前提）
  *   7. achievement — Google口コミ等の実績数値
- *   8. 全 Slot の src — 写真素材一式（§17）
+ *   8. stores[].map の src — Googleマップ埋め込み/地図画像（写真は実素材を仮配置済み。地図は未）
  *   9. faq の一部回答 — 年齢制限・男性利用・更衣室・キャンセル規定・妊娠中/産後
+ *
+ * ■ 写真素材について（2026-07-31 反映）
+ * Google Drive「ピラティス素材(RINNE様)」フォルダより、海老名店と確認済みの写真を
+ * 9枚配置（public/clients/pilates-rinne-ebina/）。フルサイズ(6000px級, 10MB前後)を
+ * sipsで1600px・JPEG品質78に圧縮済み（1枚あたり200〜350KB）。同フォルダ内の
+ * TEP09332/TEP09374は辻堂店の写真と確認したため、このLPには使用していない。
+ * インストラクターの写真は現状「複数人が写る指導風景」から流用しており、本来の
+ * 個人ポートレートではない。ソロ写真が用意され次第、差し替えが必要。
  */
 
 /** レイアウト上の画像枠。`src` が null ならプレースホルダ表示。 */
@@ -252,7 +260,8 @@ const config: RinneConfig = {
     subLines: ["最大3名のセミパーソナル", "姿勢診断から始めるマシンピラティス"],
     hero: {
       placeholder: "最大3名でのレッスン風景（メインビジュアル）",
-      src: null,
+      src: `${ASSET}/hero.jpg`,
+      position: "center 30%",
     },
     notes: ["初心者歓迎", "鍼灸師・整体師監修", "海老名店で体験受付中"],
     chips: [
@@ -284,28 +293,28 @@ const config: RinneConfig = {
         title: "最大3名のセミパーソナル",
         body:
           "大人数のグループレッスンとは異なり、インストラクターが一人ひとりの動きを確認します。初心者の方や、正しく動けているか不安な方にも参加しやすいレッスンです。",
-        img: { placeholder: "最大3名で受講している様子", src: null },
+        img: { placeholder: "最大3名で受講している様子", src: `${ASSET}/reason-1.jpg` },
       },
       {
         num: "02",
         title: "姿勢診断からスタート",
         body:
           "レッスン前に姿勢や身体の癖を確認し、一人ひとりの状態に合わせて必要な動きをご提案します。全員が同じ動きをするのではなく、自分の身体に合ったレッスンを受けられます。",
-        img: { placeholder: "姿勢診断の様子", src: null },
+        img: { placeholder: "姿勢診断の様子", src: `${ASSET}/reason-2.jpg` },
       },
       {
         num: "03",
         title: "鍼灸師・整体師監修",
         body:
           "身体に関する知識を持つ専門家が、姿勢や身体の使い方を考えたプログラムを監修しています。ただ身体を動かすだけでなく、姿勢や動きやすさを意識したレッスンを行います。",
-        img: { placeholder: "インストラクターの指導風景", src: null },
+        img: { placeholder: "インストラクターの指導風景", src: `${ASSET}/reason-3.jpg` },
       },
       {
         num: "04",
         title: "続けやすいセミパーソナル形式",
         body:
           "パーソナルレッスンのような丁寧さと、グループレッスンの通いやすさを両立しています。しっかり見てもらいたいけれど、完全パーソナルは続けにくいと感じる方にもおすすめです。",
-        img: { placeholder: "スタジオ内観・マシンの写真", src: null },
+        img: { placeholder: "スタジオ内観・マシンの写真", src: `${ASSET}/reason-4.jpg` },
       },
     ],
   },
@@ -360,7 +369,7 @@ const config: RinneConfig = {
       "気になる部分や目標をヒアリング",
       "診断内容をもとにレッスンをご提案",
     ],
-    photo: { placeholder: "姿勢診断の様子", src: null },
+    photo: { placeholder: "姿勢診断の様子", src: `${ASSET}/posture.jpg` },
   },
 
   flow: {
@@ -444,7 +453,7 @@ const config: RinneConfig = {
     // TBD(§18): インストラクター情報（氏名・保有資格・指導歴・得意な指導・メッセージ・写真）
     items: [
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/instructor-1.jpg` },
         role: "INSTRUCTOR",
         name: "氏名 要確認",
         nameEn: "Name TBD",
@@ -453,7 +462,7 @@ const config: RinneConfig = {
         tags: ["保有資格を記載"],
       },
       {
-        img: { placeholder: "インストラクターの写真", src: null },
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/instructor-2.jpg` },
         role: "INSTRUCTOR",
         name: "氏名 要確認",
         nameEn: "Name TBD",
@@ -496,7 +505,7 @@ const config: RinneConfig = {
       {
         name: "海老名店",
         appeal: "駐車場3台完備\n車で通いやすいセミパーソナルピラティス",
-        img: { placeholder: "海老名店の外観", src: null },
+        img: { placeholder: "海老名店の外観", src: `${ASSET}/store-ebina.jpg` },
         // TBD(§18): 正確な住所・営業時間・定休日・電話番号
         address: "〒000-0000 神奈川県海老名市〇〇0-0-0 建物名0階",
         hours: "営業時間 0:00〜00:00",
