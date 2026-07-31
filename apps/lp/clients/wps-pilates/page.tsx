@@ -213,7 +213,7 @@ function Laurel({ children }: { children: ReactNode }) {
   );
 }
 
-/** ゴールドの円形バッジ（整体 × マシンピラティス） */
+/** ゴールドの円形バッジ（身体分析 × マシンピラティス） */
 function CrownCircle({ label }: { label: string }) {
   return (
     <div style={{ position: "relative", width: 128, height: 128, borderRadius: "50%", background: goldGrad, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 22px rgba(176,138,60,0.35)" }}>
@@ -343,13 +343,13 @@ export default function WpsPilatesPage() {
                 <p style={{ fontSize: 11, color: dim, textAlign: "center", margin: "10px 0 0" }}>{c.campaign.note}</p>
 
                 {/* items */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 24 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16, marginTop: 24, maxWidth: 300, marginLeft: "auto", marginRight: "auto" }}>
                   {c.campaign.items.map((item, i) => (
                     <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-                      <div style={{ width: 74, height: 74, borderRadius: "50%", background: sage, border: `1px solid ${sageLine}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Icon name={["clipboard", "posture", "massage", "reformer", "document"][i]} size={32} color={greenDeep} />
+                      <div style={{ width: 78, height: 78, borderRadius: "50%", background: sage, border: `1px solid ${sageLine}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Icon name={["clipboard", "posture", "reformer", "document"][i]} size={34} color={greenDeep} />
                       </div>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: forest, textAlign: "center", lineHeight: 1.4 }}>{nl(item)}</span>
+                      <span style={{ fontSize: 12.5, fontWeight: 700, color: forest, textAlign: "center", lineHeight: 1.4 }}>{nl(item)}</span>
                     </div>
                   ))}
                 </div>
