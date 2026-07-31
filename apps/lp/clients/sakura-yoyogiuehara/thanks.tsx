@@ -3,7 +3,6 @@ import config from "./config";
 
 /* SAKURA サンクスページ — ご予約完了後に体験当日入会特典クーポンをご案内。 */
 const accent = "#C25C79";
-const rose = "#C24F71";
 const cream = "#FCFBF7";
 const border = "rgba(70,72,60,0.12)";
 const textDim = "#62655B";
@@ -56,52 +55,8 @@ export default function ThanksPage() {
               今しばらくお待ちくださいませ。
             </p>
 
-            {/* coupon */}
-            <div
-              style={{
-                width: "100%",
-                marginTop: 34,
-                background: "#FFFFFF",
-                border: `1.5px dashed ${accent}`,
-                borderRadius: 16,
-                padding: "26px 22px",
-                boxShadow: "0 8px 22px rgba(194,92,121,0.12)",
-              }}
-            >
-              <span style={{ display: "inline-block", background: accent, color: "#FFFFFF", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", padding: "5px 14px", borderRadius: 999 }}>
-                ご予約特典
-              </span>
-              <p style={{ margin: "16px 0 0", fontFamily: fontMincho, fontSize: 17, lineHeight: 1.7, color: "#33352E" }}>
-                体験当日のご入会で
-                <br />
-                <span style={{ color: rose, fontWeight: 700 }}>2ヶ月目のレッスン料が10,000円割引</span>
-              </p>
-              <p style={{ margin: "18px 0 6px", fontSize: 11, letterSpacing: "0.08em", color: textDim }}>
-                クーポンコード
-              </p>
-              <div
-                style={{
-                  fontFamily: fontMincho,
-                  fontSize: 30,
-                  fontWeight: 700,
-                  letterSpacing: "0.2em",
-                  color: rose,
-                  background: "#FBF1EE",
-                  borderRadius: 10,
-                  padding: "12px 0",
-                }}
-              >
-                JXLEWCNJ
-              </div>
-              <p style={{ margin: "14px 0 0", fontSize: 11, lineHeight: 1.8, color: textDim }}>
-                割引の適用にはクーポンコードのご提示が必要です。
-                <br />
-                体験当日、受付でスタッフにお伝えください。
-              </p>
-            </div>
-
             {/* extra perks */}
-            <div style={{ width: "100%", marginTop: 16, background: "#FBF1EE", borderRadius: 14, padding: "18px 20px", textAlign: "left" }}>
+            <div style={{ width: "100%", marginTop: 34, background: "#FBF1EE", borderRadius: 14, padding: "20px 22px", textAlign: "left" }}>
               <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.9, color: "#4C4E45" }}>
                 <span style={{ color: accent, fontWeight: 700 }}>◎</span> 体験レッスンのウェア・パンツ・靴下は無料レンタル
                 <br />

@@ -555,7 +555,12 @@ export default function Page() {
               </div>
             </div>
 
-            {/* 入会金0円 */}
+            {/* 入会金0円（体験当日のご入会限定・先着10名様） */}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+              <span style={{ display: "inline-flex", alignItems: "center", background: accent, color: "#FFFFFF", fontSize: 12.5, fontWeight: 700, letterSpacing: "0.04em", padding: "8px 18px", borderRadius: 999, boxShadow: `0 4px 12px ${accentGlow}`, whiteSpace: "nowrap" }}>
+                体験当日のご入会限定・先着10名様
+              </span>
+            </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14 }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 8 }}>
                 <span style={{ display: "block", textAlign: "center", background: "#4A4E57", color: "#FFFFFF", fontSize: 21, fontWeight: 700, letterSpacing: "0.34em", padding: "7px 16px 7px 22px", borderRadius: 4, whiteSpace: "nowrap" }}>
@@ -575,21 +580,6 @@ export default function Page() {
               <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 112, lineHeight: 0.9, letterSpacing: "0.02em", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
                 0<span style={{ fontSize: 56 }}>円</span>
               </div>
-            </div>
-
-            {/* regular price */}
-            <div style={{ background: "#FBF1EE", borderRadius: 12, padding: "26px 20px", marginTop: 20, textAlign: "center" }}>
-              <p style={{ margin: 0, fontSize: 14, color: "#4C4E45", letterSpacing: "0.04em" }}>さらに体験当日のご入会で</p>
-              <p style={{ margin: "6px 0 0", fontFamily: fontMincho, color: "#33352E", lineHeight: 1 }}>
-                <span style={{ fontSize: 15 }}>{c.offer.regular.prefix}</span>
-                <span style={{ fontWeight: 700, fontSize: 52, background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                  {c.offer.regular.amount}
-                </span>
-                <span style={{ fontSize: 20, fontWeight: 700 }}>円</span>
-              </p>
-              <p style={{ margin: "8px 0 0", fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.08em", color: "#33352E" }}>
-                {c.offer.regular.suffix}
-              </p>
             </div>
 
             <GoldCta text={c.offer.ctaText} />
