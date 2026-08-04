@@ -43,6 +43,20 @@ function nl(text: string): ReactNode {
 /* ── icon library (24x24 stroke line icons) ─────────────────────────── */
 const iconPaths: Record<string, ReactNode> = {
   check: <path d="M5 12.5l4.2 4.2L19 6.8" />,
+  bandage: (
+    <>
+      <rect x="3.5" y="8.5" width="17" height="7" rx="3.5" transform="rotate(-32 12 12)" />
+      <path d="M9.6 10.2l4.8 3.6M10.9 8.6l4.5 3.4M8.3 11.8l4.5 3.4" strokeWidth="1.1" />
+    </>
+  ),
+  stretch: (
+    <>
+      <circle cx="9.5" cy="4.8" r="1.8" />
+      <path d="M9.5 6.8v4.2l-2.2 3.4-1 4.3" />
+      <path d="M9.5 11l3.7-1.2 3.8 1.4" />
+      <path d="M9.5 11l1.6 4.2-.4 4.1" />
+    </>
+  ),
   hand: (
     <>
       <path d="M3.5 13.5c2-1.5 4-1.2 6 .2 1.2.9 2.4 1.3 3.8 1.3" />
@@ -288,7 +302,7 @@ export default function WpsPilatesPage() {
                   <span style={{ fontSize: 40, color: gold }}>{c.fv.catchLines[0]}</span>
                   <span style={{ fontSize: 26, color: forest }}>{c.fv.catchLines[1]}</span>
                   <br />
-                  <span style={{ fontSize: 21, color: forest }}>{c.fv.catchTail}</span>
+                  <span style={{ fontSize: 21, color: forest }}>{nl(c.fv.catchTail)}</span>
                 </h1>
               </div>
             </div>
@@ -392,7 +406,11 @@ export default function WpsPilatesPage() {
                 ))}
                 <span style={{ fontSize: 14, color: ink, fontWeight: 700 }}>{c.about.tagTail}</span>
               </div>
-              <p style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, color: gold, textAlign: "center", margin: "12px 0 0", letterSpacing: "0.04em" }}>パーソナルピラティススタジオ</p>
+              <p style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, color: gold, textAlign: "center", margin: "12px 0 0", letterSpacing: "0.04em", lineHeight: 1.4 }}>
+                パーソナル
+                <br />
+                ピラティススタジオ
+              </p>
 
               <div style={{ marginTop: 22, borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 26px rgba(30,59,41,0.14)" }}>
                 <ImageSlot src={c.about.photo.src} placeholder={c.about.photo.placeholder} objectPosition={c.about.photo.position} style={{ width: "100%", height: 210, background: sage }} />
@@ -455,7 +473,9 @@ export default function WpsPilatesPage() {
               {c.worry.traps.map((t) => (
                 <div key={t.label} style={{ borderRadius: 12, overflow: "hidden", background: white, border: `1px solid ${sageLine}` }}>
                   <div style={{ background: greenDeep, color: white, fontSize: 11.5, fontWeight: 700, textAlign: "center", padding: "8px 4px", lineHeight: 1.4 }}>{nl(t.label)}</div>
-                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 92, background: sage }} />
+                  <div style={{ height: 92, background: sage, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Icon name={t.icon} size={40} color={greenDeep} strokeWidth={1.5} />
+                  </div>
                 </div>
               ))}
             </div>

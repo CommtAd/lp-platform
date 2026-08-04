@@ -75,7 +75,7 @@ export interface WpsConfig {
     whyHeading: string;
     whyHi: string;
     whyBody: string;
-    traps: { label: string; img: Slot }[];
+    traps: { label: string; icon: string }[];
     closingPre: string;
     closingHi: string;
     closingPost: string;
@@ -180,7 +180,7 @@ const config: WpsConfig = {
     eyebrow: "理学療法士が身体を分析",
     catchTop: "マシン",
     catchLines: ["ピラティス", "で"],
-    catchTail: "不調の原因にアプローチ！",
+    catchTail: "不調の原因に\nアプローチ！",
     tags: ["肩こり", "腰痛", "姿勢改善"],
     band: "あらゆる不調を整える",
     punch: "1度で効果を実感",
@@ -250,9 +250,9 @@ const config: WpsConfig = {
     whyBody:
       "マッサージやその場のケアだけでは、一時的にラクになることはあっても身体の使い方が変わらなければ、不調を繰り返してしまうことも…",
     traps: [
-      { label: "湿布で\nごまかす", img: { placeholder: "イメージ", src: null } },
-      { label: "自己流で\nストレッチ", img: { placeholder: "イメージ", src: null } },
-      { label: "とりあえず\n筋トレ", img: { placeholder: "イメージ", src: null } },
+      { label: "湿布で\nごまかす", icon: "bandage" },
+      { label: "自己流で\nストレッチ", icon: "stretch" },
+      { label: "とりあえず\n筋トレ", icon: "dumbbell" },
     ],
     closingPre: "これだけでは、",
     closingHi: "根本原因に届かない",
@@ -345,7 +345,7 @@ const config: WpsConfig = {
         no: "04",
         title: "マシンピラティス体験",
         body: "お一人お一人に合わせたマシンピラティスで、身体を正しく動かします。",
-        photo: { placeholder: "マシンピラティス体験の写真", src: `${ASSET}/method-03.jpg`, position: "center 30%" },
+        photo: { placeholder: "マシンピラティス体験の写真", src: `${ASSET}/step-04.jpg`, position: "center 30%" },
       },
       {
         no: "05",
