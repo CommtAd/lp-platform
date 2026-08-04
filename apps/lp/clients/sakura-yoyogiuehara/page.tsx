@@ -46,41 +46,43 @@ const sakuraSoftText = "#F6D6DD";
 const fontMincho = "'Shippori Mincho', serif";
 const fontGothic = "'Zen Kaku Gothic New', serif";
 
-/* Fixed decorative icons for the six offer items (order matches config). */
+/* Line icons for the six offer items — each drawn to match its label (order = config). */
 const offerIcons: ReactNode[] = [
+  /* 丁寧なカウンセリング — 吹き出し（会話） */
+  <>
+    <path d="M4 5.5h16a1 1 0 011 1v8a1 1 0 01-1 1h-9l-4 3v-3H4a1 1 0 01-1-1v-8a1 1 0 011-1z" />
+    <circle cx="8.5" cy="10.5" r="0.6" />
+    <circle cx="12" cy="10.5" r="0.6" />
+    <circle cx="15.5" cy="10.5" r="0.6" />
+  </>,
+  /* マシンピラティス体験 — リフォーマー（マシン） */
+  <>
+    <rect x="3" y="12.5" width="18" height="2.6" rx="1" />
+    <path d="M5 15.1v2.4M19 15.1v2.4" />
+    <rect x="5.5" y="9.4" width="8" height="3.1" rx="1" />
+    <path d="M17 12.5V8M15.2 8h3.6" />
+  </>,
+  /* 専門的なフィードバック — チェック付きレポート */
   <>
     <rect x="5" y="3.5" width="14" height="17" rx="2" />
     <path d="M9 3.5h6v2.5H9z" />
-    <path d="M8.5 10h7M8.5 13.5h7M8.5 17h4" />
+    <path d="M8.7 12.3l2.3 2.2 4.3-4.6" />
   </>,
+  /* 完全個室でマンツーマン — 2人（1対1） */
   <>
-    <circle cx="12" cy="4.5" r="2" />
-    <path d="M12 6.5v7" />
-    <path d="M12 9l-4-1.5M12 9l4-1.5" />
-    <path d="M12 13.5l-3 6M12 13.5l3 6" />
-    <path d="M4 4.5v15M4 4.5l1.6.9M4 19.5l1.6-.9" />
+    <circle cx="8.4" cy="8" r="2.3" />
+    <path d="M5 18.5v-1.2a3.4 3.4 0 013.4-3.4 3.4 3.4 0 013.4 3.4v1.2" />
+    <circle cx="15.6" cy="8" r="2.3" />
+    <path d="M12.2 18.5v-1.2a3.4 3.4 0 013.4-3.4 3.4 3.4 0 013.4 3.4v1.2" />
   </>,
+  /* 全員女性のスタッフ — 女性記号 */
   <>
-    <path d="M3 8h18" />
-    <path d="M3 8v3a1.5 1.5 0 001.5 1.5h15A1.5 1.5 0 0021 11V8" />
-    <path d="M4.5 12.5l-1 4M19.5 12.5l1 4" />
-    <path d="M7 8V6.5M17 8V6.5" />
-    <circle cx="12" cy="8" r="1" />
+    <circle cx="12" cy="8" r="4.3" />
+    <path d="M12 12.3V20M8.7 16.4h6.6" />
   </>,
+  /* ウェア・靴下 無料レンタル — Tシャツ */
   <>
-    <circle cx="9" cy="4.5" r="2" />
-    <path d="M9 6.5l-1 5 4 1 2 6" />
-    <path d="M8 11.5l-3 1.5-1.5 4" />
-    <path d="M12 12.5l6-2.5" />
-  </>,
-  <>
-    <path d="M4 5.5h16a1 1 0 011 1V15a1 1 0 01-1 1H9l-4 3.5V16H4a1 1 0 01-1-1V6.5a1 1 0 011-1z" />
-    <path d="M8.5 11l2.2 2 4.3-4" />
-  </>,
-  <>
-    <rect x="5" y="3.5" width="14" height="17" rx="2" />
-    <path d="M8.5 15l2.5-3 2 2 3-4" />
-    <path d="M15 8h1M8.5 8h3.5" />
+    <path d="M8.8 4L4 6.7l1.9 3.1L8 8.5V20h8V8.5l2.1 1.3L20 6.7 15.2 4a3.3 3.3 0 01-6.4 0z" />
   </>,
 ];
 
@@ -362,13 +364,13 @@ export default function Page() {
             <div
               style={{
                 position: "absolute",
-                top: 34,
-                left: 26,
+                top: 22,
+                left: 20,
                 zIndex: 2,
                 display: "flex",
                 flexDirection: "row-reverse",
                 alignItems: "flex-start",
-                gap: 6,
+                gap: 5,
                 pointerEvents: "none",
               }}
             >
@@ -378,15 +380,15 @@ export default function Page() {
                   style={{
                     writingMode: "vertical-rl",
                     fontFamily: fontGothic,
-                    fontWeight: 400,
-                    fontSize: 20,
-                    letterSpacing: "0.12em",
-                    lineHeight: 1.7,
+                    fontWeight: 500,
+                    fontSize: 17,
+                    letterSpacing: "0.08em",
+                    lineHeight: 1.4,
                     color: "#3B3D36",
-                    background: "#FFFFFF",
-                    padding: "12px 6px",
+                    background: "rgba(255,255,255,0.94)",
+                    padding: "9px 5px",
                     borderRadius: 4,
-                    boxShadow: "0 4px 14px rgba(0,0,0,0.18)",
+                    boxShadow: "0 4px 14px rgba(0,0,0,0.16)",
                   }}
                 >
                   {line}
