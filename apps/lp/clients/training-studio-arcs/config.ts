@@ -4,8 +4,8 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
  * Training Studio ARCS（パーソナルジムARCS）— pattern A.
  *
  * 出典: 打ち合わせシート【アークス】+ 公式サイト https://arcs-trainingstudio.jp
- * ピラティス（美容整体×マシンピラティス）は牛久店・みらい平店限定のプログラムのため、
- * このLPはその2店舗に絞った訴求にしている（全5店舗のうち2店舗）。
+ * ピラティス（美容整体×マシンピラティス）はみらい平店限定のプログラムのため、
+ * このLPはみらい平店に絞った訴求にしている（全5店舗のうち1店舗）。
  *
  * ★未確認・要ご確認（顧客確認が取れるまで status は draft のまま）
  *  - トレーナー2・3の氏名／経歴（ヒアリングは「女性・管理栄養士・トレーニング系」のみ）
@@ -17,9 +17,9 @@ const config: PatternAConfig = {
   slug: "training-studio-arcs",
   status: "draft",
   meta: {
-    title: "パーソナルジムARCS 牛久・みらい平｜美容整体×マシンピラティス体験1,980円",
+    title: "パーソナルジムARCS みらい平｜美容整体×マシンピラティス体験1,980円",
     description:
-      "厚生労働大臣認定の病院併設施設で10年の経験を持つトレーナーが在籍。整えてから鍛えるマシンピラティスで、姿勢改善からダイエットまで対応します。牛久店・みらい平店では120分フルセット体験を1,980円・入会金0円でご案内中。無料駐車場・キッズスペース完備。",
+      "厚生労働大臣認定の病院併設施設で10年の経験を持つトレーナーが在籍。整えてから鍛えるマシンピラティスで、姿勢改善からダイエットまで対応します。みらい平店では120分フルセット体験を1,980円・入会金0円でご案内中。無料駐車場・キッズスペース完備。",
     ogpImage: undefined,
   },
   /*
@@ -32,10 +32,7 @@ const config: PatternAConfig = {
   header: {
     brand: "TRAINING STUDIO ARCS",
     brandSub: "美容整体 × マシンピラティス",
-    access: [
-      { station: "牛久店", walk: "車6分" },
-      { station: "みらい平店", walk: "徒歩7分" },
-    ],
+    access: [{ station: "みらい平店", walk: "徒歩7分" }],
   },
   offerBar: {
     badgeLines: ["毎月", "5名限定"],
@@ -170,7 +167,7 @@ const config: PatternAConfig = {
       {
         img: { placeholder: "シーンの写真", src: null },
         title: "「車で立ち寄って帰りたい」",
-        body: "牛久店は店舗前に7台、みらい平店は店舗裏に10台の無料駐車場。大通り沿いで買い物のついでにも通えます。",
+        body: "店舗裏に10台の無料駐車場を完備。大通り沿いで買い物のついでにも通えます。",
       },
       {
         img: { placeholder: "シーンの写真", src: null },
@@ -230,13 +227,6 @@ const config: PatternAConfig = {
     heading: "店舗のご案内",
     stores: [
       {
-        img: { placeholder: "牛久店の外観 / 内観写真", src: null },
-        name: "牛久店",
-        address: "〒300-1232 茨城県牛久市上柏田4丁目52-2 オークヒルズ 001号",
-        hours: "平日 10:00〜22:00／土日・祝 9:00〜21:00",
-        route: "（定休日 年末年始）\nJR上野・東京ライン「牛久駅」より車で約6分／店舗前に無料駐車場7台",
-      },
-      {
         img: { placeholder: "みらい平店の外観 / 内観写真", src: null },
         name: "みらい平店",
         address: "〒300-2359 茨城県つくばみらい市紫峰ヶ丘1-7-2 AJ-MIRAI 1B",
@@ -250,17 +240,6 @@ const config: PatternAConfig = {
     heading: "120分フルセット体験のご予約",
     lead: "下記フォームからお気軽にお申し込みください。\n担当より24時間以内にご連絡いたします。",
     fields: [
-      {
-        type: "toggle",
-        name: "store",
-        label: "ご希望店舗",
-        required: true,
-        columns: 2,
-        options: [
-          { value: "ushiku", label: "牛久店" },
-          { value: "miraidaira", label: "みらい平店" },
-        ],
-      },
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
@@ -278,7 +257,7 @@ const config: PatternAConfig = {
     submitLabel: "この内容で予約する",
     disclaimer:
       "送信いただいた内容は予約対応のみに利用します。\n120分体験1,980円｜入会金0円｜しつこい勧誘はいたしません。",
-    errorMessage: "店舗・お名前・電話番号は必須項目です。",
+    errorMessage: "お名前・電話番号は必須項目です。",
   },
 
   sticky: {
