@@ -21,6 +21,7 @@ export const clientRegistry: Record<
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/page"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/page"),
   "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/page"),
+  "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -66,4 +67,5 @@ export const clientMetaRegistry: Record<
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/config"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/config"),
   "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/config"),
+  "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/config"),
 };
