@@ -27,7 +27,7 @@ export interface PatternAConfig {
     logoAlt?: string;
     /** Optional line shown below the logo (e.g. business hours). Only used when `logo` is set. */
     hours?: string;
-    access: { station: string; walk: string }[];
+    access: { station: string; walk: string; note?: string }[];
   };
   offerBar: {
     badgeLines: [string, string];
@@ -101,6 +101,8 @@ export interface PatternAConfig {
   };
 
   trainers: {
+    /** Whether to render this section. Default true (shown). */
+    show?: boolean;
     heading: string;
     lead: string;
     swipeHint: string;

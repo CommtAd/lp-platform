@@ -262,6 +262,9 @@ export default function Page() {
               {c.header.access.map((a, i) => (
                 <div key={i} style={{ fontSize: 13, color: "#3B3D36", letterSpacing: "0.03em" }}>
                   {a.station} <span style={{ color: accentInk }}>{a.walk}</span>
+                  {a.note && (
+                    <div style={{ fontSize: 10.5, color: "#9A9C90", letterSpacing: "0.02em" }}>{a.note}</div>
+                  )}
                 </div>
               ))}
             </div>
@@ -688,40 +691,42 @@ export default function Page() {
           </section>
 
           {/* ── ④.5 trainers ── */}
-          <section style={{ background: navyGrad, padding: "40px 0 48px" }}>
-            <div style={{ textAlign: "center", padding: "0 26px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 24, letterSpacing: "0.08em", color: "#FFFFFF", lineHeight: 1.4, margin: 0 }}>
-                {c.trainers.heading}
-              </h2>
-              <div style={{ width: 30, height: 2, background: "rgba(255,255,255,0.55)", borderRadius: 2, margin: "14px auto 0" }} />
-              <p style={{ fontSize: 13, lineHeight: 1.9, color: "rgba(255,255,255,0.78)", margin: "18px 0 0" }}>{nl(c.trainers.lead)}</p>
-            </div>
-            <div
-              id="trainer-track"
-              className="no-scrollbar"
-              style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
-            >
-              {c.trainers.items.map((t, i) => (
-                <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 22px rgba(70,72,60,0.10)" }}>
-                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264 }} />
-                  <div style={{ padding: "18px 20px 22px" }}>
-                    <div style={{ fontSize: 11, letterSpacing: "0.14em", color: accentInk }}>{t.role}</div>
-                    <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#33352E", marginTop: 6 }}>{t.name}</div>
-                    <div style={{ fontSize: 12, color: "#9A9C90", marginTop: 2 }}>{t.nameEn}</div>
-                    <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "12px 0 0" }}>{t.body}</p>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
-                      {t.tags.map((tag, ti) => (
-                        <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: accentInk, border: `1px solid ${accentSoft}`, background: accentSoft, borderRadius: 999, padding: "4px 10px" }}>{tag}</span>
-                      ))}
+          {(c.trainers.show ?? true) && (
+            <section style={{ background: navyGrad, padding: "40px 0 48px" }}>
+              <div style={{ textAlign: "center", padding: "0 26px" }}>
+                <h2 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 24, letterSpacing: "0.08em", color: "#FFFFFF", lineHeight: 1.4, margin: 0 }}>
+                  {c.trainers.heading}
+                </h2>
+                <div style={{ width: 30, height: 2, background: "rgba(255,255,255,0.55)", borderRadius: 2, margin: "14px auto 0" }} />
+                <p style={{ fontSize: 13, lineHeight: 1.9, color: "rgba(255,255,255,0.78)", margin: "18px 0 0" }}>{nl(c.trainers.lead)}</p>
+              </div>
+              <div
+                id="trainer-track"
+                className="no-scrollbar"
+                style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
+              >
+                {c.trainers.items.map((t, i) => (
+                  <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 22px rgba(70,72,60,0.10)" }}>
+                    <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264 }} />
+                    <div style={{ padding: "18px 20px 22px" }}>
+                      <div style={{ fontSize: 11, letterSpacing: "0.14em", color: accentInk }}>{t.role}</div>
+                      <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#33352E", marginTop: 6 }}>{t.name}</div>
+                      <div style={{ fontSize: 12, color: "#9A9C90", marginTop: 2 }}>{t.nameEn}</div>
+                      <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "12px 0 0" }}>{t.body}</p>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
+                        {t.tags.map((tag, ti) => (
+                          <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: accentInk, border: `1px solid ${accentSoft}`, background: accentSoft, borderRadius: 999, padding: "4px 10px" }}>{tag}</span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 20 }}>
-              <span style={{ fontSize: 11, letterSpacing: "0.1em", color: "rgba(255,255,255,0.65)" }}>{c.trainers.swipeHint}</span>
-            </div>
-          </section>
+                ))}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 20 }}>
+                <span style={{ fontSize: 11, letterSpacing: "0.1em", color: "rgba(255,255,255,0.65)" }}>{c.trainers.swipeHint}</span>
+              </div>
+            </section>
+          )}
 
           {/* ── ⑤ scenes ── */}
           <section style={{ background: creamGrad, padding: "54px 26px" }}>

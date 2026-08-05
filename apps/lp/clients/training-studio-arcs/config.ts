@@ -32,7 +32,7 @@ const config: PatternAConfig = {
   header: {
     brand: "TRAINING STUDIO ARCS",
     brandSub: "美容整体 × マシンピラティス",
-    access: [{ station: "みらい平店", walk: "徒歩7分" }],
+    access: [{ station: "みらい平店", walk: "徒歩7分", note: "駐車場完備" }],
   },
   offerBar: {
     badgeLines: ["毎月", "5名限定"],
@@ -123,6 +123,7 @@ const config: PatternAConfig = {
   },
 
   trainers: {
+    show: false,
     heading: "トレーナー紹介",
     lead: "フィットネスから健康関連まで、多数の資格を持つトレーナーが在籍。\nお一人おひとりのお身体に合わせて担当いたします。",
     swipeHint: "スワイプで移動",
