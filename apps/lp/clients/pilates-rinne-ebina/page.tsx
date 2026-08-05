@@ -1025,7 +1025,7 @@ export default function Page() {
                   <ImageSlot
                     src={store.img.src}
                     placeholder={store.img.placeholder}
-                    style={{ width: "100%", height: 170 }}
+                    style={{ width: "100%", height: 290 }}
                   />
                   <div style={{ padding: 20 }}>
                     <h3
