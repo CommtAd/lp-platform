@@ -23,6 +23,7 @@ export const clientRegistry: Record<
   "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/page"),
   "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/page"),
   "estudio": () => import("./estudio/page"),
+  "training-studio-arcs": () => import("./training-studio-arcs/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -70,4 +71,5 @@ export const clientMetaRegistry: Record<
   "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/config"),
   "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/config"),
   "estudio": () => import("./estudio/config"),
+  "training-studio-arcs": () => import("./training-studio-arcs/config"),
 };

@@ -57,6 +57,12 @@ export interface PatternAConfig {
     heading: string;
     trialBadge: string;
     trialRegular: string;
+    /**
+     * Discounted trial price rendered as the large gold figure. Omit for the
+     * default "0" (free trial); set it when the trial is discounted but paid
+     * (e.g. "1,980").
+     */
+    trialNow?: string;
     /** Six experience items (icons are fixed in the design). */
     items: string[];
     photos: [Slot, Slot];
