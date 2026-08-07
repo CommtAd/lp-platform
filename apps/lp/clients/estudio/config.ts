@@ -11,6 +11,30 @@ const hourlySlots = (from: number, to: number) =>
   });
 
 /**
+ * 営業時間に合わせた予約時間の選択肢（日付連動）:
+ *  - 平日・土: 9:00〜20:00（21時閉店・体験60分の最終開始）
+ *  - 日祝    : 9:00〜18:00（19時閉店・最終受付18:00）
+ * 祝日は曜日判定で拾えないため byDate で個別に「日祝扱い(〜18:00)」へ上書きする
+ * （2026-08〜2027-12分を登録。以降は要更新）。
+ */
+const timeWeekdaySat = hourlySlots(9, 20);
+const timeSunHoliday = hourlySlots(9, 18);
+const HOLIDAY_DATES = [
+  "2026-08-11", "2026-09-21", "2026-09-22", "2026-09-23", "2026-10-12", "2026-11-03", "2026-11-23",
+  "2027-01-01", "2027-01-11", "2027-02-11", "2027-02-23", "2027-03-21", "2027-03-22", "2027-04-29",
+  "2027-05-03", "2027-05-04", "2027-05-05", "2027-07-19", "2027-08-11", "2027-09-20", "2027-09-23",
+  "2027-10-11", "2027-11-03", "2027-11-23",
+];
+const holidayByDate = Object.fromEntries(HOLIDAY_DATES.map((d) => [d, timeSunHoliday]));
+const timeSlotsFor = (dateField: string) => ({
+  dateField,
+  weekday: timeWeekdaySat,
+  saturday: timeWeekdaySat,
+  weekend: timeSunHoliday,
+  byDate: holidayByDate,
+});
+
+/**
  * Pilates E-studio（参宮橋 / 女性専用パーソナルピラティス）
  * ヒアリングシート（2026-08）より作成。パターンAをベージュ×ピンクベージュに
  * リテーマ（page.tsx 側でトークン変更済み）。単店舗構成。
@@ -230,9 +254,9 @@ const config: PatternAConfig = {
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
       { type: "date", name: "date1", label: "ご希望日(第1希望)", required: true },
-      { type: "select", name: "time1", label: "ご希望時間(第1希望)", required: true, placeholder: "時間を選択", options: hourlySlots(9, 20) },
+      { type: "select", name: "time1", label: "ご希望時間(第1希望)", required: true, placeholder: "先に日付をお選びください", dateLinkedOptions: timeSlotsFor("date1") },
       { type: "date", name: "date2", label: "ご希望日(第2希望)" },
-      { type: "select", name: "time2", label: "ご希望時間(第2希望)", placeholder: "時間を選択", options: hourlySlots(9, 20) },
+      { type: "select", name: "time2", label: "ご希望時間(第2希望)", placeholder: "先に日付をお選びください", dateLinkedOptions: timeSlotsFor("date2") },
       {
         type: "textarea",
         name: "note",
