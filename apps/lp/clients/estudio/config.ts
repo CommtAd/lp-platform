@@ -3,6 +3,13 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
 /** 画像は public/clients/estudio/ 配下（撮影データ 2026-08 より選定・Web最適化済み）。 */
 const ASSET = "/clients/estudio";
 
+/** 1時間刻みの予約時間スロット（例: 9:00〜20:00）。 */
+const hourlySlots = (from: number, to: number) =>
+  Array.from({ length: to - from + 1 }, (_, i) => {
+    const h = from + i;
+    return { value: `${String(h).padStart(2, "0")}:00`, label: `${h}:00` };
+  });
+
 /**
  * Pilates E-studio（参宮橋 / 女性専用パーソナルピラティス）
  * ヒアリングシート（2026-08）より作成。パターンAをベージュ×ピンクベージュに
@@ -223,9 +230,9 @@ const config: PatternAConfig = {
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
       { type: "date", name: "date1", label: "ご希望日(第1希望)", required: true },
-      { type: "time", name: "time1", label: "ご希望時間(第1希望)", required: true, min: "09:00", max: "20:00" },
+      { type: "select", name: "time1", label: "ご希望時間(第1希望)", required: true, placeholder: "時間を選択", options: hourlySlots(9, 20) },
       { type: "date", name: "date2", label: "ご希望日(第2希望)" },
-      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "09:00", max: "20:00" },
+      { type: "select", name: "time2", label: "ご希望時間(第2希望)", placeholder: "時間を選択", options: hourlySlots(9, 20) },
       {
         type: "textarea",
         name: "note",
