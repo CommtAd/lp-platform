@@ -670,7 +670,7 @@ export default function Page() {
             <div
               id="trainer-track"
               className="no-scrollbar"
-              style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
+              style={{ display: "flex", justifyContent: "center", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
             >
               {c.trainers.items.map((t, i) => (
                 <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 22px rgba(70,72,60,0.10)" }}>
