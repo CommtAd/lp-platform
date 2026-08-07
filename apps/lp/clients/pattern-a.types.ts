@@ -27,7 +27,7 @@ export interface PatternAConfig {
     logoAlt?: string;
     /** Optional line shown below the logo (e.g. business hours). Only used when `logo` is set. */
     hours?: string;
-    access: { station: string; walk: string }[];
+    access: { station: string; walk: string; note?: string }[];
   };
   offerBar: {
     badgeLines: [string, string];
@@ -57,6 +57,12 @@ export interface PatternAConfig {
     heading: string;
     trialBadge: string;
     trialRegular: string;
+    /**
+     * Discounted trial price rendered as the large gold figure. Omit for the
+     * default "0" (free trial); set it when the trial is discounted but paid
+     * (e.g. "1,980").
+     */
+    trialNow?: string;
     /** Six experience items (icons are fixed in the design). */
     items: string[];
     photos: [Slot, Slot];
@@ -95,6 +101,8 @@ export interface PatternAConfig {
   };
 
   trainers: {
+    /** Whether to render this section. Default true (shown). */
+    show?: boolean;
     heading: string;
     lead: string;
     swipeHint: string;
