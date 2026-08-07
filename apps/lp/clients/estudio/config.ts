@@ -217,13 +217,15 @@ const config: PatternAConfig = {
 
   form: {
     heading: "60分体験のご予約",
-    lead: "下記フォームからお気軽にお申し込みください。\n担当より24時間以内にご連絡いたします。",
+    lead: "ご希望の日時をお選びください。担当より24時間以内にご連絡いたします。\n営業時間：平日・土 9:00〜21:00／日祝 9:00〜19:00（日祝の最終受付18:00）",
     fields: [
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
       { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
-      { type: "text", name: "date1", label: "ご希望日時(第1希望)", placeholder: "例)平日夜、土曜午前など" },
-      { type: "text", name: "date2", label: "ご希望日時(第2希望)", placeholder: "例)日曜午後など" },
+      { type: "date", name: "date1", label: "ご希望日(第1希望)", required: true },
+      { type: "time", name: "time1", label: "ご希望時間(第1希望)", required: true, min: "09:00", max: "20:00" },
+      { type: "date", name: "date2", label: "ご希望日(第2希望)" },
+      { type: "time", name: "time2", label: "ご希望時間(第2希望)", min: "09:00", max: "20:00" },
       {
         type: "textarea",
         name: "note",
@@ -236,7 +238,7 @@ const config: PatternAConfig = {
     submitLabel: "この内容で予約する",
     disclaimer:
       "送信いただいた内容は予約対応のみに利用します。\n初回60分体験 ¥980｜入会金0円｜しつこい勧誘はいたしません。",
-    errorMessage: "お名前・電話番号は必須項目です。",
+    errorMessage: "お名前・電話番号・第1希望日時は必須項目です。ご希望日は明日以降の日付をお選びください。",
   },
 
   sticky: {
