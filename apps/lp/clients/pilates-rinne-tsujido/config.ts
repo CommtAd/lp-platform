@@ -538,9 +538,13 @@ const config: RinneConfig = {
 
   reserve: {
     eyebrow: "ご希望の日時をお選びください",
-    // ★TBD: hacomono 辻堂店の予約URL。null の間は非リンク描画になる。
-    stores: [{ label: "無料体験を予約する", url: null }],
-    note: "空き状況の確認のみでもご利用いただけます。",
+    stores: [
+      {
+        label: "無料体験を予約する",
+        url: "https://rinne-pilates.hacomono.jp/widgets/4?isShowProgramName=true&studioId=4",
+      },
+    ],
+    note: "初回体験0円｜しつこい勧誘はいたしません。",
   },
 
   sticky: {
