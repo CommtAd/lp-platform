@@ -121,24 +121,16 @@ const config: PatternAConfig = {
 
   trainers: {
     heading: "インストラクター紹介",
-    lead: "すべて女性インストラクターによる\nマンツーマン指導です。",
-    swipeHint: "スワイプで移動",
+    lead: "女性インストラクターによる\nマンツーマン指導です。",
+    swipeHint: "",
     items: [
       {
-        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-1.jpg` },
+        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer.jpg` },
         role: "PILATES INSTRUCTOR",
-        name: "女性インストラクター",
-        nameEn: "Woman Instructor",
+        name: "ERINA",
+        nameEn: "Erina",
         body: "女性ならではのお悩みに寄りそい、姿勢評価をもとにお一人おひとりに合わせたマンツーマン指導を行います。はじめての方も安心してお越しください。",
         tags: ["女性専用", "マンツーマン"],
-      },
-      {
-        img: { placeholder: "インストラクターの写真", src: `${ASSET}/trainer-2.jpg` },
-        role: "PILATES INSTRUCTOR",
-        name: "女性インストラクター",
-        nameEn: "Woman Instructor",
-        body: "骨格を本来の位置へ整え、インナーマッスルを活性化。機能改善の視点も取り入れ、体の使い方から一緒に見直していきます。",
-        tags: ["姿勢評価", "機能改善"],
       },
     ],
   },
