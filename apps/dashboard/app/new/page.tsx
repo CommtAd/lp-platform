@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { INDUSTRIES, INDUSTRY_LABEL } from "@shared/index";
 import { createClientRecord } from "../actions";
 
 export default async function NewClientPage({
@@ -45,6 +46,26 @@ export default async function NewClientPage({
           />
           <p className="mt-1 text-xs text-neutral-500">
             英小文字・数字・ハイフンのみ。<code>apps/lp/clients/&#123;slug&#125;/</code> と一致させます。
+          </p>
+        </div>
+        <div>
+          <label htmlFor="industry" className="mb-1 block text-sm font-medium">
+            業種
+          </label>
+          <select
+            id="industry"
+            name="industry"
+            defaultValue="fitness"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-navy"
+          >
+            {INDUSTRIES.map((key) => (
+              <option key={key} value={key}>
+                {INDUSTRY_LABEL[key]}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-neutral-500">
+            一覧のタブ分けに使います。LPの表示・タグ注入には影響しません。
           </p>
         </div>
         <button

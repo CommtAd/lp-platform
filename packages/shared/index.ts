@@ -2,6 +2,20 @@ export type ClientStatus = "draft" | "published" | "unpublished";
 
 export type CvEventType = "form_submit" | "tel_tap" | "line_tap";
 
+/**
+ * 業種タブ。ダッシュボードの一覧分類にのみ使う値で、LP配信側の挙動には
+ * 一切影響しない（タグ注入・公開判定は業種非依存）。
+ */
+export type Industry = "fitness" | "bridal" | "other";
+
+export const INDUSTRY_LABEL: Record<Industry, string> = {
+  fitness: "フィットネス",
+  bridal: "ブライダル",
+  other: "その他",
+};
+
+export const INDUSTRIES: Industry[] = ["fitness", "bridal", "other"];
+
 export interface CvEvents {
   form_submit?: boolean;
   tel_tap?: boolean;
@@ -25,6 +39,11 @@ export interface ClientRecord {
   line_tag_id: string | null;
   meta_domain_verification: string | null;
   cv_events: CvEvents;
+  /**
+   * 業種タブ。公開RPC `get_public_client` は返さない（LP側は業種を使わない）ため
+   * optional。ダッシュボードが clients テーブルを直接読むときは必ず入る。
+   */
+  industry?: Industry;
   created_at: string;
   updated_at: string;
 }
