@@ -595,7 +595,7 @@ export default function Page() {
             </div>
             <div style={{ position: "relative", margin: "40px 8px 0" }}>
               <div style={{ position: "absolute", inset: "-12px -12px 12px 12px", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 4, pointerEvents: "none" }} />
-              <ImageSlot src={c.about.photo.src} placeholder={c.about.photo.placeholder} radius={4} style={{ position: "relative", zIndex: 1, width: "100%", height: 300 }} />
+              <ImageSlot src={c.about.photo.src} placeholder={c.about.photo.placeholder} radius={4} objectPosition="top" style={{ position: "relative", zIndex: 1, width: "100%", height: 300 }} />
               <div style={{ position: "absolute", zIndex: 2, bottom: 16, left: 16, background: "rgba(20,21,18,0.55)", backdropFilter: "blur(4px)", color: "#FFFFFF", padding: "8px 14px", borderRadius: 2 }}>
                 <div style={{ fontFamily: fontMincho, fontSize: 13, letterSpacing: "0.14em" }}>{c.about.caption}</div>
               </div>
@@ -674,7 +674,7 @@ export default function Page() {
             >
               {c.trainers.items.map((t, i) => (
                 <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 22px rgba(70,72,60,0.10)" }}>
-                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264 }} />
+                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} objectPosition="top" style={{ width: "100%", height: 264 }} />
                   <div style={{ padding: "18px 20px 22px" }}>
                     <div style={{ fontSize: 11, letterSpacing: "0.14em", color: accent }}>{t.role}</div>
                     <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#3B342C", marginTop: 6 }}>{t.name}</div>
