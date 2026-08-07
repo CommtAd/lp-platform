@@ -38,7 +38,7 @@ const accentSoft = accent + "22";
 const accentGlow = accent + "55";
 const goldGrad = "linear-gradient(160deg, #DDA890 0%, #B47B60 100%)";
 const goldBtn = "linear-gradient(135deg, #D19A82 0%, #AE7358 100%)";
-const creamGrad = "linear-gradient(180deg, #F4EEE4 0%, #EAE2D3 100%)";
+const creamGrad = "linear-gradient(180deg, #F4EEE4 0%, #E5CCC0 100%)";
 const fontMincho = "'Shippori Mincho', serif";
 const fontGothic = "'Zen Kaku Gothic New', serif";
 
@@ -478,7 +478,7 @@ export default function Page() {
                     color: "#3B342C",
                     margin: 0,
                     whiteSpace: "nowrap",
-                    background: "linear-gradient(transparent 66%, #F3E1D6 66%)",
+                    background: "linear-gradient(transparent 66%, #E5CCC0 66%)",
                     padding: "0 4px",
                   }}
                 >
@@ -546,7 +546,7 @@ export default function Page() {
 
             {/* さらに */}
             <div style={{ display: "flex", justifyContent: "center", margin: "30px 0 20px" }}>
-              <div style={{ width: 66, height: 66, borderRadius: "50%", background: "#F3E1D6", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fontMincho, fontSize: 16, color: "#5A5044", boxShadow: "0 4px 12px rgba(150,110,90,0.18)" }}>
+              <div style={{ width: 66, height: 66, borderRadius: "50%", background: "#E5CCC0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fontMincho, fontSize: 16, color: "#5A5044", boxShadow: "0 4px 12px rgba(150,110,90,0.18)" }}>
                 さらに
               </div>
             </div>
@@ -646,7 +646,7 @@ export default function Page() {
                 {item.trio && (
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                     {item.trio.map((t, i) => (
-                      <div key={i} style={{ background: "#ECE8E0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
+                      <div key={i} style={{ background: "#E5CCC0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
                         <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accent }}>{t.label}</span>
                         <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#6E6455" }}>{nl(t.desc)}</span>
                       </div>
