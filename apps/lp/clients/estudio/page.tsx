@@ -38,7 +38,7 @@ const accentSoft = accent + "22";
 const accentGlow = accent + "55";
 const goldGrad = "linear-gradient(160deg, #DDA890 0%, #B47B60 100%)";
 const goldBtn = "linear-gradient(135deg, #D19A82 0%, #AE7358 100%)";
-const creamGrad = "linear-gradient(180deg, #F4EEE4 0%, #EAE2D3 100%)";
+const creamGrad = "linear-gradient(180deg, #F4EEE4 0%, #E5CCC0 100%)";
 const fontMincho = "'Shippori Mincho', serif";
 const fontGothic = "'Zen Kaku Gothic New', serif";
 
@@ -478,7 +478,7 @@ export default function Page() {
                     color: "#3B342C",
                     margin: 0,
                     whiteSpace: "nowrap",
-                    background: "linear-gradient(transparent 66%, #F3E1D6 66%)",
+                    background: "linear-gradient(transparent 66%, #E5CCC0 66%)",
                     padding: "0 4px",
                   }}
                 >
@@ -546,7 +546,7 @@ export default function Page() {
 
             {/* さらに */}
             <div style={{ display: "flex", justifyContent: "center", margin: "30px 0 20px" }}>
-              <div style={{ width: 66, height: 66, borderRadius: "50%", background: "#F3E1D6", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fontMincho, fontSize: 16, color: "#5A5044", boxShadow: "0 4px 12px rgba(150,110,90,0.18)" }}>
+              <div style={{ width: 66, height: 66, borderRadius: "50%", background: "#E5CCC0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fontMincho, fontSize: 16, color: "#5A5044", boxShadow: "0 4px 12px rgba(150,110,90,0.18)" }}>
                 さらに
               </div>
             </div>
@@ -595,7 +595,7 @@ export default function Page() {
             </div>
             <div style={{ position: "relative", margin: "40px 8px 0" }}>
               <div style={{ position: "absolute", inset: "-12px -12px 12px 12px", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 4, pointerEvents: "none" }} />
-              <ImageSlot src={c.about.photo.src} placeholder={c.about.photo.placeholder} radius={4} style={{ position: "relative", zIndex: 1, width: "100%", height: 300 }} />
+              <ImageSlot src={c.about.photo.src} placeholder={c.about.photo.placeholder} radius={4} objectPosition="top" style={{ position: "relative", zIndex: 1, width: "100%", height: 300 }} />
               <div style={{ position: "absolute", zIndex: 2, bottom: 16, left: 16, background: "rgba(20,21,18,0.55)", backdropFilter: "blur(4px)", color: "#FFFFFF", padding: "8px 14px", borderRadius: 2 }}>
                 <div style={{ fontFamily: fontMincho, fontSize: 13, letterSpacing: "0.14em" }}>{c.about.caption}</div>
               </div>
@@ -646,7 +646,7 @@ export default function Page() {
                 {item.trio && (
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                     {item.trio.map((t, i) => (
-                      <div key={i} style={{ background: "#ECE8E0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
+                      <div key={i} style={{ background: "#E5CCC0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
                         <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accent }}>{t.label}</span>
                         <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#6E6455" }}>{nl(t.desc)}</span>
                       </div>
@@ -670,11 +670,11 @@ export default function Page() {
             <div
               id="trainer-track"
               className="no-scrollbar"
-              style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
+              style={{ display: "flex", justifyContent: "center", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 26px 8px" }}
             >
               {c.trainers.items.map((t, i) => (
                 <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: "#FFFFFF", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 22px rgba(70,72,60,0.10)" }}>
-                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264 }} />
+                  <ImageSlot src={t.img.src} placeholder={t.img.placeholder} objectPosition="top" style={{ width: "100%", height: 264 }} />
                   <div style={{ padding: "18px 20px 22px" }}>
                     <div style={{ fontSize: 11, letterSpacing: "0.14em", color: accent }}>{t.role}</div>
                     <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#3B342C", marginTop: 6 }}>{t.name}</div>
