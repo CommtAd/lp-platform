@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
-import LPForm from "@/components/LPForm";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqList from "./FaqList";
@@ -158,27 +157,59 @@ function SectionHeading({
   );
 }
 
-const GoldCta = ({ text, sub }: { text: string; sub?: string }) => (
+/**
+ * 予約CTA。hacomono店舗別ウィジェットへ直接遷移する（LPFormは未使用）。
+ * url が null（未確定）の間は死んだリンクを出さず、設定待ちである旨を表示する。
+ */
+const GoldCta = ({ text, sub, url }: { text: string; sub?: string; url: string | null }) => (
   <div style={{ marginTop: 28 }}>
-    <a
-      href="#form"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: 60,
-        background: goldBtn,
-        color: "#FFFFFF",
-        textDecoration: "none",
-        fontSize: 16,
-        fontWeight: 700,
-        letterSpacing: "0.1em",
-        borderRadius: 999,
-        boxShadow: "0 10px 22px rgba(160,120,40,0.4)",
-      }}
-    >
-      {text}
-    </a>
+    {url ? (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: 60,
+          background: goldBtn,
+          color: "#FFFFFF",
+          textDecoration: "none",
+          fontSize: 16,
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          borderRadius: 999,
+          boxShadow: "0 10px 22px rgba(160,120,40,0.4)",
+        }}
+      >
+        {text}
+      </a>
+    ) : (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+          minHeight: 60,
+          background: "#D9D4C8",
+          color: "#6E7065",
+          fontSize: 15,
+          fontWeight: 700,
+          letterSpacing: "0.06em",
+          borderRadius: 999,
+          padding: "8px 12px",
+          textAlign: "center",
+        }}
+      >
+        {text}
+        <span style={{ fontSize: 10, fontWeight: 400, letterSpacing: "0.02em" }}>
+          hacomono予約URL設定待ち
+        </span>
+      </div>
+    )}
     {sub && (
       <p
         style={{
@@ -599,22 +630,7 @@ export default function Page() {
               </div>
             </div>
 
-            {/* regular price */}
-            <div style={{ background: "#F4F0E8", borderRadius: 12, padding: "26px 20px", marginTop: 20, textAlign: "center" }}>
-              <p style={{ margin: 0, fontSize: 14, color: "#4C4E45", letterSpacing: "0.04em" }}>入会後は</p>
-              <p style={{ margin: "6px 0 0", fontFamily: fontMincho, color: "#33352E", lineHeight: 1 }}>
-                <span style={{ fontSize: 15 }}>{c.offer.regular.prefix}</span>
-                <span style={{ fontWeight: 700, fontSize: 52, background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                  {c.offer.regular.amount}
-                </span>
-                <span style={{ fontSize: 20, fontWeight: 700 }}>円</span>
-              </p>
-              <p style={{ margin: "8px 0 0", fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.08em", color: "#33352E" }}>
-                {c.offer.regular.suffix}
-              </p>
-            </div>
-
-            <GoldCta text={c.offer.ctaText} />
+            <GoldCta text={c.offer.ctaText} url={c.reserve.url} />
           </section>
 
           {/* ── ② about ── */}
@@ -687,7 +703,7 @@ export default function Page() {
                 )}
               </div>
             ))}
-            <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} />
+            <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} url={c.reserve.url} />
           </section>
 
           {/* ── ④.5 trainers ── */}
@@ -759,7 +775,6 @@ export default function Page() {
                     <div style={{ paddingBottom: last ? 0 : 28 }}>
                       <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
                         <h3 style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.03em", margin: 0, color: "#33352E" }}>{step.title}</h3>
-                        <span style={{ fontSize: 11, color: "#9A9C90" }}>{step.time}</span>
                       </div>
                       <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>{step.body}</p>
                     </div>
@@ -796,18 +811,11 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── ⑩ form ── */}
-          <section id="form" style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.form.heading} />
-            <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.9, color: "#62655B", margin: "18px 0 0" }}>{nl(c.form.lead)}</p>
-            <LPForm
-              clientSlug={c.slug}
-              accent={accent}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              errorMessage={c.form.errorMessage}
-              disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
-            />
+          {/* ── ⑩ reserve（hacomono店舗別ウィジェットへ。LPFormは未使用） ── */}
+          <section id="reserve" style={{ background: "#FCFBF7", padding: "54px 26px" }}>
+            <SectionHeading text={c.reserve.heading} />
+            <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.9, color: "#62655B", margin: "18px 0 0" }}>{nl(c.reserve.lead)}</p>
+            <GoldCta text={c.reserve.ctaText} sub={c.reserve.note} url={c.reserve.url} />
           </section>
         </div>
       </div>

@@ -1,5 +1,23 @@
 import type { PatternAConfig } from "@/clients/pattern-a.types";
 
+const ASSET = "/clients/training-studio-arcs";
+
+/**
+ * pattern-a.types の `form`（LPForm）の代わりに `reserve` を使う。
+ * 予約導線はhacomono店舗別ウィジェットへ直接遷移し、LPFormは使用しない
+ * （check-rules.ts の FORM_EXEMPT に登録済み。LPShellは維持）。
+ */
+type Config = Omit<PatternAConfig, "form"> & {
+  reserve: {
+    heading: string;
+    lead: string;
+    /** hacomono みらい平店の予約URL。未確定はnull（非リンク描画になる）。 */
+    url: string | null;
+    ctaText: string;
+    note: string;
+  };
+};
+
 /**
  * Training Studio ARCS（パーソナルジムARCS）— pattern A.
  *
@@ -11,9 +29,12 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
  *  - トレーナー2・3の氏名／経歴（ヒアリングは「女性・管理栄養士・トレーニング系」のみ）
  *  - 体験120分の各ステップの所要時間（合計120分になるよう仮置き）
  *  - キャンペーン実施期間が「〜2026年7月末」表記のため、8月以降の取り扱い
- *  - 全画像（公式サイトの画像は流用不可・顧客支給待ちのため src:null プレースホルダ）
+ *  - 一部画像は顧客支給のレッスン風景素材（Google Drive「ピラティス素材」フォルダ）から選定済み。
+ *    悩み共感カードは他クライアントと共通の汎用イメージ素材を流用。
+ *    通い方シーン・選ばれる理由03（キッズスペース/駐車場）・店舗外観/内観は、
+ *    店舗固有の実写真が必要なため（他店舗の実写真は事実と異なるため転用不可）src:null のまま。
  */
-const config: PatternAConfig = {
+const config: Config = {
   slug: "training-studio-arcs",
   status: "draft",
   meta: {
@@ -42,7 +63,7 @@ const config: PatternAConfig = {
 
   fv: {
     catchLines: ["整えてから鍛える、", "ダイエットピラティス"],
-    hero: { placeholder: "メインビジュアルの写真（全面）", src: null },
+    hero: { placeholder: "メインビジュアルの写真（全面）", src: `${ASSET}/hero.jpg` },
     leftCard: { small: "整える", big: "美容整体" },
     rightCard: { small: "鍛える", big: "マシンピラティス" },
   },
@@ -62,8 +83,8 @@ const config: PatternAConfig = {
       "オリジナル\nメニュー提案",
     ],
     photos: [
-      { placeholder: "マシンピラティスのレッスン風景", src: null },
-      { placeholder: "スタジオ内観 / マシン設備", src: null },
+      { placeholder: "マシンピラティスのレッスン風景", src: `${ASSET}/lesson-1.jpg` },
+      { placeholder: "スタジオ内観 / マシン設備", src: `${ASSET}/studio-1.jpg` },
     ],
     joinLabel: "入会金",
     joinRegular: "22,000",
@@ -73,7 +94,7 @@ const config: PatternAConfig = {
 
   about: {
     heading: "TRAINING STUDIO ARCS\nについて",
-    photo: { placeholder: "トレーナー / スタジオの写真", src: null },
+    photo: { placeholder: "トレーナー / スタジオの写真", src: `${ASSET}/about.jpg` },
     caption: "All Round Care Service",
     lead: "一人ひとりの異なるご要望に、\n最善のサービスを。",
     body: "ARCSは「All Round Care Service」を掲げるパーソナルジムです。代表は女性専用ジムを経て、厚生労働大臣認定の病院併設の健康増進施設で約10年間、現場責任者を務めました。ダイエットや生活習慣病の予防から機能改善まで携わった知見をもとに、痛くなってからではなく、痛くならない身体づくりをご提案します。",
@@ -82,13 +103,13 @@ const config: PatternAConfig = {
   worry: {
     heading: "こんなお悩み、ありませんか？",
     cards: [
-      { img: { placeholder: "イメージ画像", src: null }, text: "ダイエットも姿勢改善も\n両方かなえたい" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "何から始めればいいか\n分からない" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "自己流ダイエットで\n失敗が続いている" },
-      { img: { placeholder: "イメージ画像", src: null }, text: "運動不足のままの\n将来の健康が不安" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg` }, text: "肩こり・腰痛が\nなかなか取れない" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg` }, text: "姿勢の崩れ・猫背が\n気になってきた" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg` }, text: "冷え・むくみ・\n便秘が続いている" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg` }, text: "運動が苦手で\n続けられるか不安" },
     ],
-    closingPre: "その願い、",
-    closingHighlight: "ARCSなら叶います。",
+    closingPre: "その不調、",
+    closingHighlight: "ARCSなら整います。",
   },
 
   reasons: {
@@ -96,24 +117,24 @@ const config: PatternAConfig = {
     items: [
       {
         num: "01",
-        img: { placeholder: "トレーナーの指導風景", src: null },
+        img: { placeholder: "トレーナーの指導風景", src: `${ASSET}/reason-1.jpg` },
         title: "国が認めた健康増進施設で\n10年間の現場責任者経験",
         body: "全国に350しかない厚生労働大臣認定の病院併設の健康増進施設で、10年間責任者を経験したトレーナーが在籍。ダイエットから生活習慣病の予防、機能改善まで、医学的な知見に基づいてサポートします。",
       },
       {
         num: "02",
-        img: { placeholder: "3つのコースを表す写真", src: null },
+        img: { placeholder: "3つのコースを表す写真", src: `${ASSET}/reason-2.jpg` },
         title: "目的とコンディションで\n選べる3つのコース",
         body: "「整えたい」「引き締めたい」「痩せたい」。目的に合わせてコースを組み合わせられるので、姿勢改善で終わらずダイエットまで対応できます。",
         trio: [
           { label: "ピラティス", desc: "正しいフォームで\n整えてから鍛える" },
           { label: "パーソナル", desc: "大きな筋肉を動かし\nボディメイク" },
-          { label: "食事管理付", desc: "続けられる食習慣を\n個別に設計" },
+          { label: "美容整体", desc: "骨格から整えて\n美しい姿勢へ導く" },
         ],
       },
       {
         num: "03",
-        img: { placeholder: "キッズスペース / 駐車場の写真", src: null },
+        img: { placeholder: "キッズスペース / 駐車場の写真", src: `${ASSET}/reason-3.jpg` },
         title: "毎回オリジナルメニュー\n通いやすさも妥協なし",
         body: "決まったメニューを当てはめるのではなく、その日のコンディションを確認して毎回オリジナルのメニューを作成。管理栄養士をはじめ多数の資格保有者が対応します。キッズスペースと無料駐車場を完備し、お子様連れでもお車でも通えます。",
       },
@@ -161,17 +182,17 @@ const config: PatternAConfig = {
     heading: "あなたの毎日に寄り添う通い方",
     items: [
       {
-        img: { placeholder: "シーンの写真", src: null },
+        img: { placeholder: "シーンの写真", src: `${ASSET}/scene-1.jpg` },
         title: "「子どもを預けずに通いたい」",
         body: "キッズスペースを完備。産後の身体づくりも、お子様連れのままレッスンを受けていただけます。",
       },
       {
-        img: { placeholder: "シーンの写真", src: null },
-        title: "「車で立ち寄って帰りたい」",
-        body: "店舗裏に10台の無料駐車場を完備。大通り沿いで買い物のついでにも通えます。",
+        img: { placeholder: "シーンの写真", src: `${ASSET}/scene-2.jpg` },
+        title: "「車で通える」",
+        body: "店舗裏に無料駐車場が10台。駐車場を探す心配なく、車でそのまま通えます。",
       },
       {
-        img: { placeholder: "シーンの写真", src: null },
+        img: { placeholder: "シーンの写真", src: `${ASSET}/scene-3.jpg` },
         title: "「仕事帰りに続けたい」",
         body: "平日は22時まで営業。完全予約制なので待ち時間なく、仕事帰りの時間を有効に使えます。",
       },
@@ -183,21 +204,27 @@ const config: PatternAConfig = {
     steps: [
       {
         num: "1",
-        title: "カウンセリング・姿勢確認",
+        title: "カウンセリング・姿勢確認（30分）",
         time: "約30分",
-        body: "お悩みや理想のカラダについてお伺いし、姿勢を確認します。必要に応じてInBodyで体組成を測定します。",
+        body: "お悩みや理想のカラダについてお伺いし、姿勢を確認します。必要に応じてInBodyで体組成を測定し、今のカラダの状態を可視化します。",
       },
       {
         num: "2",
-        title: "美容整体＆マシンピラティス",
-        time: "約40分",
-        body: "その場で組み立てたオリジナルメニューで、整えてから鍛える流れを体験いただきます。",
+        title: "美容整体＆マシンピラティス体験（50分）",
+        time: "約50分",
+        body: "カウンセリングの内容をもとに組み立てたオリジナルメニューで、美容整体とマシンピラティスを体験。整えてから鍛える流れを実際に感じていただきます。",
       },
       {
         num: "3",
-        title: "フィードバックとプランのご提案",
-        time: "約50分",
-        body: "体験の結果をフィードバックし、目標とライフスタイルに合わせた無理のない継続プランをご一緒に決めていきます。",
+        title: "体験フィードバック・プラン提案（20分）",
+        time: "約20分",
+        body: "体験の感想や気づきをうかがいながら結果をフィードバック。目標やライフスタイルに合わせた、無理のない継続プランをご提案します。",
+      },
+      {
+        num: "4",
+        title: "ご希望の方には手続きご案内（20分）",
+        time: "約20分",
+        body: "ご継続を希望される方には、その場でご入会のお手続きをご案内します。しつこい勧誘はいたしませんので、じっくりご検討いただいて構いません。",
       },
     ],
   },
@@ -228,7 +255,7 @@ const config: PatternAConfig = {
     heading: "店舗のご案内",
     stores: [
       {
-        img: { placeholder: "みらい平店の外観 / 内観写真", src: null },
+        img: { placeholder: "みらい平店の外観 / 内観写真", src: `${ASSET}/access.jpg` },
         name: "みらい平店",
         address: "〒300-2359 茨城県つくばみらい市紫峰ヶ丘1-7-2 AJ-MIRAI 1B",
         hours: "平日 10:00〜22:00／土日・祝 9:00〜21:00",
@@ -237,28 +264,13 @@ const config: PatternAConfig = {
     ],
   },
 
-  form: {
+  reserve: {
     heading: "120分フルセット体験のご予約",
-    lead: "下記フォームからお気軽にお申し込みください。\n担当より24時間以内にご連絡いたします。",
-    fields: [
-      { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
-      { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
-      { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
-      { type: "text", name: "date1", label: "ご希望日時(第1希望)", placeholder: "例)平日夜、土曜午前など" },
-      { type: "text", name: "date2", label: "ご希望日時(第2希望)", placeholder: "例)日曜午後など" },
-      {
-        type: "textarea",
-        name: "note",
-        label: "ご質問・ご相談内容",
-        optionalTag: "任意",
-        placeholder: "お身体のお悩みやご不安な点など、ご自由にお書きください。",
-        rows: 4,
-      },
-    ],
-    submitLabel: "この内容で予約する",
-    disclaimer:
-      "送信いただいた内容は予約対応のみに利用します。\n120分体験1,980円｜入会金0円｜しつこい勧誘はいたしません。",
-    errorMessage: "お名前・電話番号は必須項目です。",
+    lead: "下記のボタンからご希望の日時をお選びいただき、そのままご予約ください。",
+    // ★TBD: hacomono みらい平店の予約URL。null の間は非リンク描画になる。
+    url: null,
+    ctaText: "120分体験を予約する",
+    note: "120分体験1,980円｜入会金0円｜しつこい勧誘はいたしません。",
   },
 
   sticky: {
@@ -267,7 +279,7 @@ const config: PatternAConfig = {
       { label: "入会金", value: "¥0" },
     ],
     buttonText: "120分体験を予約する",
-    anchor: "#form",
+    anchor: "#reserve",
   },
 };
 
