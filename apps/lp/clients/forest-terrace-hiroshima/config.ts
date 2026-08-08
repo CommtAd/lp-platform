@@ -61,12 +61,11 @@ const config: PatternCConfig = {
       src: `${ASSET}/hero.jpg`,
       position: "center",
     },
-    // 挙式 → 披露宴 → 乾杯 → ラウンジ。当日の流れをなぞる順に並べる。
+    // 退場 → 挙式 → 披露宴 → 乾杯。当日の流れをなぞる順に並べる。
     heroSlides: [
       { placeholder: "挙式（指輪の交換）", src: `${ASSET}/hero-2.jpg` },
       { placeholder: "披露宴会場（長テーブル）", src: `${ASSET}/hero-3.jpg` },
       { placeholder: "披露宴の乾杯", src: `${ASSET}/hero-4.jpg` },
-      { placeholder: "ラウンジでくつろぐおふたり", src: `${ASSET}/hero-5.jpg` },
     ],
   },
 
