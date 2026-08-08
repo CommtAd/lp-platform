@@ -550,37 +550,35 @@ export default function Page() {
                 title={c.recommend.heading}
                 lead={c.recommend.lead}
               />
-              {/* アイコンとテキストを横並びにして、カードごと中央に寄せる。
-                  2列にするとテキスト幅が137pxしか取れず、長い項目が折り返してしまうため
-                  1列で通す。アイコン48px + 13px の組み合わせなら 320px 幅でも1行に収まる。 */}
-              <ul className="mt-8 flex flex-col gap-3">
+              {/* 2列のカードで幅いっぱいに敷き、アイコンを上・テキストを下に中央揃えで置く。
+                  項目が奇数なら最後の1枚を横一杯に伸ばす。
+                  テキスト幅は137px前後しか取れないので、`label` は10文字程度までなら1行に
+                  収まる。それより長い項目は折り返す（2列と1行組みは両立しない）。 */}
+              <ul className="mt-8 grid grid-cols-2 gap-3">
                 {recommendItems.map((item, i) => (
                   <li
                     key={`${item.label}-${i}`}
-                    className={`flex items-center justify-center gap-3 rounded-[3px] border px-4 py-4 ${oppositeLightBg()}`}
+                    className={`flex flex-col items-center justify-start rounded-[3px] border px-3 py-5 text-center ${oppositeLightBg()} ${
+                      recommendItems.length % 2 === 1 && i === recommendItems.length - 1
+                        ? "col-span-2"
+                        : ""
+                    }`}
                     style={{ borderColor: `${c.accent}59` }}
                   >
                     {item.icon ? (
-                      // アイコンは縦横比がまちまちなので、48pxの正方形に contain で収めて
-                      // 各行の占有幅を揃える。
+                      // アイコンは縦横比がまちまちなので、正方形に contain で収めて
+                      // 各カードの占有面積を揃える。
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={item.icon}
-                        alt=""
-                        className="h-12 w-12 shrink-0 object-contain"
-                      />
+                      <img src={item.icon} alt="" className="h-14 w-14 object-contain" />
                     ) : (
                       <span
-                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-[12px] font-bold leading-none"
+                        className="flex h-7 w-7 items-center justify-center rounded-full border text-[12px] font-bold leading-none"
                         style={{ borderColor: `${c.accent}99`, color: goldOnWhite }}
                       >
                         ✓
                       </span>
                     )}
-                    <p
-                      className="whitespace-nowrap text-[13px] leading-snug"
-                      style={{ fontFamily: mincho }}
-                    >
+                    <p className="mt-3 text-[13px] leading-[1.7]" style={{ fontFamily: mincho }}>
                       {item.label}
                     </p>
                   </li>
