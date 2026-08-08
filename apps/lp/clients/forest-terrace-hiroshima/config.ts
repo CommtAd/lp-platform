@@ -209,16 +209,19 @@ const config: PatternCConfig = {
       {
         num: "1",
         title: "受付",
+        icon: `${ASSET}/flow-01.png`,
         body: "ご希望の結婚式のイメージやご要望をお伺いします。",
       },
       {
         num: "2",
         title: "見学・試食",
+        icon: `${ASSET}/flow-02.png`,
         body: "チャペルや披露宴会場を実際にご見学いただきます。また、人気の婚礼メニューをご試食いただけます。",
       },
       {
         num: "3",
         title: "相談・見積り",
+        icon: `${ASSET}/flow-03.png`,
         body: "ご予算や日程について詳しくご案内いたします。",
       },
     ],

@@ -934,12 +934,12 @@ export default function Page() {
                     </div>
                     {flowHasIcons && (
                       <span
-                        className="flex h-[52px] w-[52px] flex-none items-center justify-center rounded-full"
+                        className="flex h-[58px] w-[58px] flex-none items-center justify-center rounded-full"
                         style={{ background: `${c.accent}1F` }}
                       >
                         {s.icon && (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={s.icon} alt="" className="h-7 w-7 object-contain" />
+                          <img src={s.icon} alt="" className="h-10 w-10 object-contain" />
                         )}
                       </span>
                     )}
