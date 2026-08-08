@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { CarouselItem } from "@/clients/pattern-c.types";
 import LPShell from "@/components/LPShell";
@@ -44,6 +45,19 @@ function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
       {tail && <span style={{ fontSize: sideSize }}>{tail}</span>}
     </>
   );
+}
+
+/**
+ * `#RRGGBB` のおおよその明るさ判定。バンドの地色に対してプレートを反転させるのに使う
+ * （濃色バンドに濃色プレートを置くと、枠が消えて素のテキストに見えてしまう）。
+ * パースできない値は明るい地として扱う。
+ */
+function isDarkHex(color: string): boolean {
+  const m = /^#([0-9a-f]{6})$/i.exec(color.trim());
+  if (!m) return false;
+  const n = parseInt(m[1], 16);
+  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 < 0.35;
 }
 
 /** 文中の金額語だけを金の明朝に置き換える。語が見つからなければそのまま返す。 */
@@ -604,41 +618,45 @@ export default function Page() {
               </h2>
               <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">{c.privilege.lead}</p>
             </div>
-            {/* 特典は1枚ずつ白いカードに立てる。バンド地に白文字で流すと、
-                金額が全部同じ重さになって「いくら分か」が読み取れない。 */}
-            <div className="mt-8 flex flex-col gap-3">
+            {/*
+              1万 + 3万 + 4万 = 10万 という加算を版面で見せる。縦に積むと個々の金額が
+              並ぶだけで「合計いくら分か」が伝わらないため、横3分割を「＋」で繋いで
+              合計へ収束させる。カード幅が100px前後しか取れないので説明文は載せない。
+            */}
+            <div className="mt-8 flex items-stretch justify-center gap-1">
               {c.privilege.items.map((p, i) => (
-                <div
-                  key={`${p.title}-${i}`}
-                  className="rounded-[3px] border px-5 py-5"
-                  style={{
-                    background: "rgba(255,255,255,0.94)",
-                    borderColor: `${c.accent}59`,
-                    color: c.ink,
-                  }}
-                >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <div className="flex min-w-0 items-baseline gap-2.5">
-                      <span
-                        className="shrink-0 text-[12px] italic"
-                        style={{ fontFamily: playfair, color: c.accent }}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <h3 className="text-[14.5px]" style={{ fontFamily: mincho }}>
-                        {p.title}
-                      </h3>
-                    </div>
+                <Fragment key={`${p.title}-${i}`}>
+                  {i > 0 && (
                     <span
-                      className="shrink-0 text-[20px] font-bold"
+                      className="flex shrink-0 items-center px-0.5 text-[15px] font-bold"
+                      style={{ color: band.accent }}
+                    >
+                      ＋
+                    </span>
+                  )}
+                  <div
+                    className="flex min-w-0 flex-1 flex-col items-center justify-center rounded-[3px] border px-1.5 py-5 text-center"
+                    style={{
+                      background: "rgba(255,255,255,0.94)",
+                      borderColor: `${c.accent}59`,
+                      color: c.ink,
+                    }}
+                  >
+                    <p
+                      className="whitespace-nowrap font-bold leading-none"
                       style={{ fontFamily: mincho, color: goldOnWhite }}
                     >
-                      {p.amount}
-                    </span>
+                      {amountEmphasis(p.amount, 26, 11)}
+                    </p>
+                    <p className="mt-2.5 text-[10.5px] leading-snug opacity-70">{p.title}</p>
                   </div>
-                  <p className="mt-2.5 text-[11.5px] leading-[1.85] opacity-60">{p.body}</p>
-                </div>
+                </Fragment>
               ))}
+            </div>
+            {/* 「＝」は文字で置くと字面が強すぎるので、細い罫2本で描く。 */}
+            <div className="mt-5 flex flex-col items-center gap-[3px]">
+              <span className="h-px w-4" style={{ background: band.accent }} />
+              <span className="h-px w-4" style={{ background: band.accent }} />
             </div>
             {/* 合計は生成り地＋太い金枠でカード群から一段持ち上げる。 */}
             <div
@@ -656,15 +674,23 @@ export default function Page() {
               </p>
             </div>
             {c.privilege.contract && (
-              // 成約特典だけ濃色に反転させ、来館特典より一段上であることを見せる。
+              // 成約特典は地と反転させ、来館特典より一段上であることを見せる。
+              // 濃色バンドではゴールド地に、明るいバンドでは濃色地に振る。
               <div
                 className="mt-4 rounded-[3px] px-5 py-7 text-center"
-                style={{ background: c.ink, color: "#F0DDB2" }}
+                style={
+                  isDarkHex(band.bg)
+                    ? { background: goldGrad(c.accent), color: c.ink }
+                    : { background: c.ink, color: "#F0DDB2" }
+                }
               >
                 <p className="text-[12px] font-bold tracking-[0.1em]">
                   {c.privilege.contract.label}
                 </p>
-                <span className="mx-auto mt-3 block h-px w-12" style={{ background: "#E2C892" }} />
+                <span
+                  className="mx-auto mt-3 block h-px w-12"
+                  style={{ background: isDarkHex(band.bg) ? `${c.ink}80` : "#E2C892" }}
+                />
                 <p className="mt-3 text-[28px] font-bold leading-none" style={{ fontFamily: mincho }}>
                   {amountEmphasis(c.privilege.contract.amount, 44, 19)}
                 </p>

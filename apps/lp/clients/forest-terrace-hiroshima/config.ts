@@ -149,17 +149,14 @@ const config: PatternCConfig = {
       {
         title: "JCBギフト券",
         amount: "1万円分",
-        body: "ご来館いただいた方にJCBギフト券をお渡しします。",
       },
       {
         title: "豪華無料試食",
         amount: "3万円相当",
-        body: "シェフ自慢の婚礼料理を無料でご試食いただけます。",
       },
       {
         title: "ご宿泊",
         amount: "4万円相当",
-        body: "オリエンタルホテル広島でのご宿泊をご用意。",
       },
     ],
     total: "最大 10万円分",

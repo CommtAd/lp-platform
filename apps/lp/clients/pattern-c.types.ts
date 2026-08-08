@@ -200,7 +200,11 @@ export interface PatternCConfig {
   privilege: {
     heading: string;
     lead: string;
-    items: { title: string; amount: string; body: string }[];
+    /**
+     * 横3分割で「＋」で繋いで合計へ収束させる版面。カード幅が100px前後しか取れないため
+     * 説明文は持たせない。`title` は6文字程度まで、`amount` は「1万円分」等の短い表記に。
+     */
+    items: { title: string; amount: string }[];
     /** 特典合計の訴求、例 "最大10万円分"。 */
     total: string;
     totalNote: string;
