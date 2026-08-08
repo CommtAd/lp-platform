@@ -107,6 +107,12 @@ export interface PatternCConfig {
     offers?: string[];
     ctaText: string;
     hero: Slot;
+    /**
+     * 2枚目以降のヒーロー写真。渡すと `hero` を1枚目としたスライドショーになる
+     * （CSSのみのクロスフェード＋微速ズーム。JSは使わない）。
+     * 全カットが同じトリミングで成立する必要があるので、寄りと引きを混ぜないこと。
+     */
+    heroSlides?: Slot[];
     /** ヒーロー写真のアスペクト比。既定 "3 / 4"。横位置素材なら "1 / 1" 等に緩める。 */
     heroAspect?: string;
   };
@@ -269,6 +275,12 @@ export interface PatternCConfig {
     /** 空配列なら経路リストを出さない。 */
     routes: string[];
     tel: string;
+    /**
+     * 電話番号を `tel:` リンクにするか。既定 true。
+     * false にするとプレーンテキストになり、`trackEvent('tel_tap')` も発火しない
+     * （＝ダッシュボードの tel_tap は計測されない）。WEBからの問い合わせに寄せたい案件で使う。
+     */
+    telLink?: boolean;
     /** 電話番号の下の補足（受付時間など）。不要なら省略する。 */
     telNote?: string;
     map: Slot;

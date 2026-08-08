@@ -198,6 +198,31 @@ export default function Page() {
   const framed = Boolean(c.fv.framed);
   const formLight = c.form.tone === "light";
   const recommendItems = c.recommend?.items ?? [];
+  /**
+   * ヒーローのスライドショー。`fv.heroSlides` があれば `fv.hero` を1枚目として繋ぐ。
+   * JSは使わず、全カットを重ねて opacity のキーフレームを1枚ずつずらして回す。
+   *
+   * 1枚目だけ負のディレイで「すでにフェードイン済み」の位置から始める。そうしないと
+   * 読み込み直後に一瞬なにも映らない。2枚目以降は正のディレイなので、開始までは
+   * 各自の初期 opacity: 0 が効く。
+   */
+  const heroSlides = [c.fv.hero, ...(c.fv.heroSlides ?? [])];
+  const heroPerSlide = 4.5;
+  const heroCycle = heroSlides.length * heroPerSlide;
+  const heroVisiblePct = 100 / heroSlides.length;
+  const heroFadePct = Math.min(6, heroVisiblePct / 3);
+  const heroFadeSec = (heroCycle * heroFadePct) / 100;
+  const heroSlideCss = `
+@keyframes lpFvSlide {
+  0% { opacity: 0; transform: scale(1.05); }
+  ${heroFadePct.toFixed(2)}% { opacity: 1; }
+  ${heroVisiblePct.toFixed(2)}% { opacity: 1; }
+  ${(heroVisiblePct + heroFadePct).toFixed(2)}% { opacity: 0; }
+  100% { opacity: 0; transform: scale(1.13); }
+}
+.lp-fv-slide { animation: lpFvSlide ${heroCycle}s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .lp-fv-slide { animation: none; } }
+`;
   // アイコンが1つでもあれば当日の流れを3カラムで組む（無ければ中央列ごと省く）。
   const flowHasIcons = c.flow.steps.some((s) => s.icon);
   /**
@@ -372,12 +397,38 @@ export default function Page() {
 
           {/* ── FV ── */}
           <section className="relative">
-            <ImageSlot
-              src={c.fv.hero.src}
-              placeholder={c.fv.hero.placeholder}
-              objectPosition={c.fv.hero.position ?? "center"}
-              style={{ width: "100%", aspectRatio: c.fv.heroAspect ?? "3 / 4" }}
-            />
+            {heroSlides.length === 1 ? (
+              <ImageSlot
+                src={c.fv.hero.src}
+                placeholder={c.fv.hero.placeholder}
+                objectPosition={c.fv.hero.position ?? "center"}
+                style={{ width: "100%", aspectRatio: c.fv.heroAspect ?? "3 / 4" }}
+              />
+            ) : (
+              <div
+                className="relative overflow-hidden"
+                style={{ width: "100%", aspectRatio: c.fv.heroAspect ?? "3 / 4" }}
+              >
+                <style dangerouslySetInnerHTML={{ __html: heroSlideCss }} />
+                {heroSlides.map((slide, i) => (
+                  <div
+                    key={`${slide.src ?? "slot"}-${i}`}
+                    className="lp-fv-slide absolute inset-0"
+                    style={{
+                      opacity: i === 0 ? 1 : 0,
+                      animationDelay: `${(i * heroPerSlide - heroFadeSec).toFixed(2)}s`,
+                    }}
+                  >
+                    <ImageSlot
+                      src={slide.src}
+                      placeholder={slide.placeholder}
+                      objectPosition={slide.position ?? "center"}
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             {/* 明るい会場写真でも文字が沈まないよう、コピーが載る側を強めに落とす。 */}
             <div className="absolute inset-0" style={{ background: heroScrim }} />
             {catchTop && (
@@ -998,14 +1049,25 @@ export default function Page() {
                   ))}
                 </ul>
               )}
-              <TelLink
-                clientSlug={c.slug}
-                tel={c.access.tel}
-                className="mt-5 flex items-center justify-center gap-2 rounded-full border py-4 text-[15px] tracking-wider"
-                style={{ borderColor: `${c.accent}80`, color: c.ink, fontFamily: mincho }}
-              >
-                TEL {c.access.tel}
-              </TelLink>
+              {/* telLink: false は「電話ではなくWEBから問い合わせてほしい」案件向け。
+                  リンクを外すので trackEvent('tel_tap') も発火しない（規約4の例外）。 */}
+              {c.access.telLink === false ? (
+                <p
+                  className="mt-5 flex items-center justify-center gap-2 rounded-full border py-4 text-[15px] tracking-wider"
+                  style={{ borderColor: `${c.accent}80`, color: c.ink, fontFamily: mincho }}
+                >
+                  TEL {c.access.tel}
+                </p>
+              ) : (
+                <TelLink
+                  clientSlug={c.slug}
+                  tel={c.access.tel}
+                  className="mt-5 flex items-center justify-center gap-2 rounded-full border py-4 text-[15px] tracking-wider"
+                  style={{ borderColor: `${c.accent}80`, color: c.ink, fontFamily: mincho }}
+                >
+                  TEL {c.access.tel}
+                </TelLink>
+              )}
               {c.access.telNote && (
                 <p className="mt-2 text-center text-[11px] opacity-55">{c.access.telNote}</p>
               )}

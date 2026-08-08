@@ -61,6 +61,13 @@ const config: PatternCConfig = {
       src: `${ASSET}/hero.jpg`,
       position: "center",
     },
+    // 挙式 → 披露宴 → 乾杯 → ラウンジ。当日の流れをなぞる順に並べる。
+    heroSlides: [
+      { placeholder: "挙式（指輪の交換）", src: `${ASSET}/hero-2.jpg` },
+      { placeholder: "披露宴会場（長テーブル）", src: `${ASSET}/hero-3.jpg` },
+      { placeholder: "披露宴の乾杯", src: `${ASSET}/hero-4.jpg` },
+      { placeholder: "ラウンジでくつろぐおふたり", src: `${ASSET}/hero-5.jpg` },
+    ],
   },
 
   // FVを離脱する前に金額だけ持ち帰ってもらうための要約。詳細は privilege 側。
@@ -233,6 +240,9 @@ const config: PatternCConfig = {
     address: "〒730-0026 広島県広島市中区田中町6-10 オリエンタルホテル広島内",
     routes: ["広島電鉄本線 八丁堀駅より徒歩9分"],
     tel: "082-240-5551",
+    // WEBからの問い合わせに寄せたいという顧客判断で tel: リンクを外している。
+    // これにより tel_tap は計測されない。
+    telLink: false,
     map: {
       placeholder: "オリエンタルホテル広島 外観",
       src: `${ASSET}/access.jpg`,
