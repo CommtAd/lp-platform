@@ -152,6 +152,18 @@ export default function Page() {
   const framed = Boolean(c.fv.framed);
   const formLight = c.form.tone === "light";
   const recommendItems = c.recommend?.items ?? [];
+  /**
+   * 最長ラベルが2列カードに1行で収まる文字サイズ。項目ごとに変えると不揃いに見えるので
+   * いちばん長い1本に全項目を合わせる。
+   *
+   * カード内の実幅は `(100vw - 左右余白40 - 溝8) / 2 - 内側余白16` = `50vw - 40px`。
+   * 全角は約1.07em幅なので、これを `文字数 × 1.07` で割った値が上限になる。
+   * 端末幅に追従させないと、狭い画面でラベルがカードから溢れる。
+   */
+  const recommendMaxLen = Math.max(...recommendItems.map((i) => i.label.length), 1);
+  const recommendFontSize = `min(13px, max(9px, calc((50vw - 40px) / ${(
+    recommendMaxLen * 1.07
+  ).toFixed(1)})))`;
 
   /**
    * 明るいセクションの地は白／生成りを交互に敷く。地色をセクションごとに
@@ -554,11 +566,11 @@ export default function Page() {
                   項目が奇数なら最後の1枚を横一杯に伸ばす。
                   テキスト幅は137px前後しか取れないので、`label` は10文字程度までなら1行に
                   収まる。それより長い項目は折り返す（2列と1行組みは両立しない）。 */}
-              <ul className="mt-8 grid grid-cols-2 gap-3">
+              <ul className="mt-8 grid grid-cols-2 gap-2">
                 {recommendItems.map((item, i) => (
                   <li
                     key={`${item.label}-${i}`}
-                    className={`flex flex-col items-center justify-start rounded-[3px] border px-3 py-5 text-center ${oppositeLightBg()} ${
+                    className={`flex flex-col items-center justify-start rounded-[3px] border px-2 py-5 text-center ${oppositeLightBg()} ${
                       recommendItems.length % 2 === 1 && i === recommendItems.length - 1
                         ? "col-span-2"
                         : ""
@@ -578,7 +590,10 @@ export default function Page() {
                         ✓
                       </span>
                     )}
-                    <p className="mt-3 text-[13px] leading-[1.7]" style={{ fontFamily: mincho }}>
+                    <p
+                      className="mt-3 whitespace-nowrap leading-[1.7]"
+                      style={{ fontFamily: mincho, fontSize: recommendFontSize }}
+                    >
                       {item.label}
                     </p>
                   </li>
