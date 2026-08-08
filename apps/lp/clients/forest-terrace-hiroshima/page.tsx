@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { CarouselItem, Slot } from "@/clients/pattern-c.types";
 import LPShell from "@/components/LPShell";
@@ -888,33 +889,58 @@ export default function Page() {
 
           {/* ── flow ── */}
           <section className={`${lightBg()} px-5 py-12`}>
-            <Heading kicker="FLOW" title={c.flow.heading} lead={c.flow.lead} />
-            <div className="mt-9 flex flex-col">
-              {c.flow.steps.map((s, i) => {
-                const last = i === c.flow.steps.length - 1;
-                return (
-                  <div key={`${s.num}-${i}`} className="flex gap-4">
-                    <div className="flex flex-none flex-col items-center">
+            <Heading kicker="FLOW" title={c.flow.heading} />
+            {/* 所要時間は本文で流すより、囲って独立させたほうが目に留まる。 */}
+            {c.flow.lead && (
+              <p className="mt-4 text-center">
+                <span
+                  className="inline-block rounded-[2px] border px-4 py-1.5 text-[11.5px] tracking-wide"
+                  style={{ borderColor: `${c.accent}80`, color: goldOnWhite }}
+                >
+                  {c.flow.lead}
+                </span>
+              </p>
+            )}
+            {/*
+              金の丸バッジに番号を入れる型は既視感が強く、装飾も番号1点に頼ることになる。
+              STEP の英字キッカー・明朝の見出し・金のヘアラインという、このページで
+              既に使っている語彙でカードに組み直し、菱形で次のカードへ繋ぐ。
+            */}
+            <div className="mt-8 flex flex-col">
+              {c.flow.steps.map((s, i) => (
+                <Fragment key={`${s.num}-${i}`}>
+                  {i > 0 && (
+                    <span className="my-3 flex justify-center">
                       <span
-                        className="flex h-10 w-10 items-center justify-center rounded-full text-[13px] italic text-white"
-                        style={{ background: c.accent, fontFamily: playfair }}
+                        className="h-[5px] w-[5px] rotate-45"
+                        style={{ background: c.accent }}
+                      />
+                    </span>
+                  )}
+                  <div
+                    className={`rounded-[3px] border px-5 py-6 ${oppositeLightBg()}`}
+                    style={{ borderColor: `${c.accent}59` }}
+                  >
+                    <div className="flex items-baseline justify-between gap-3">
+                      <span
+                        className="text-[10.5px] italic tracking-[0.22em]"
+                        style={{ fontFamily: playfair, color: goldOnWhite }}
                       >
-                        {s.num}
+                        STEP {s.num.padStart(2, "0")}
                       </span>
-                      {!last && <span className="w-px flex-1 bg-[var(--ink)]/15" />}
+                      {s.time && <span className="text-[11px] opacity-50">{s.time}</span>}
                     </div>
-                    <div className={last ? "pb-0" : "pb-8"}>
-                      <div className="flex items-baseline gap-2.5">
-                        <h3 className="text-[14.5px]" style={{ fontFamily: mincho }}>
-                          {s.title}
-                        </h3>
-                        {s.time && <span className="text-[11px] opacity-50">{s.time}</span>}
-                      </div>
-                      <p className="mt-2 text-[12px] leading-[1.9] opacity-65">{s.body}</p>
-                    </div>
+                    <h3 className="mt-2.5 text-[16px]" style={{ fontFamily: mincho }}>
+                      {s.title}
+                    </h3>
+                    <span
+                      className="mt-3.5 block h-px w-8"
+                      style={{ background: `${c.accent}99` }}
+                    />
+                    <p className="mt-3.5 text-[12px] leading-[1.9] opacity-65">{s.body}</p>
                   </div>
-                );
-              })}
+                </Fragment>
+              ))}
             </div>
           </section>
 
