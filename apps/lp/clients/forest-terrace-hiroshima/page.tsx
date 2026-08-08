@@ -417,14 +417,16 @@ export default function Page() {
                 <h2 className="mt-2 text-[21px] leading-snug" style={{ fontFamily: mincho }}>
                   {c.grandOffer.heading}
                 </h2>
-                <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">
+                {/* 幅いっぱいだと最終行に数文字だけ残る。字数を絞って行を揃える。 */}
+                <p className="mx-auto mt-3 max-w-[17.5em] text-[12.5px] leading-[1.9] opacity-75">
                   {c.grandOffer.lead}
                 </p>
               </div>
               {/* 金額プレート。金額は必ず白地＋深い金で置く（FVの訴求プレートと同じ扱い）。
-                  バンド地の上に白文字で置くと、一番見せたい桁が一番弱くなってしまう。 */}
+                  バンド地の上に白文字で置くと、一番見せたい桁が一番弱くなってしまう。
+                  二重罫＋枠に跨がる対象条件バッジで、招待状の体裁に寄せている。 */}
               <div
-                className="mt-8 rounded-[3px] border px-5 py-8 text-center"
+                className="relative mt-10 rounded-[3px] border p-2.5"
                 style={{
                   background: "rgba(255,255,255,0.94)",
                   borderColor: c.accent,
@@ -433,30 +435,40 @@ export default function Page() {
               >
                 {c.grandOffer.badge && (
                   <span
-                    className="inline-block rounded-[2px] px-3.5 py-1.5 text-[10.5px] font-bold tracking-wide"
+                    className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-[2px] px-4 py-1.5 text-[10.5px] font-bold tracking-wide"
                     style={{ background: c.ink, color: "#F0DDB2" }}
                   >
                     {c.grandOffer.badge}
                   </span>
                 )}
-                <p
-                  className="mt-5 text-[18px] leading-snug tracking-[0.08em]"
-                  style={{ fontFamily: mincho }}
+                <div
+                  className="border px-4 pb-8 pt-9 text-center"
+                  style={{ borderColor: `${c.accent}4D` }}
                 >
-                  {c.grandOffer.title}
-                </p>
-                <span
-                  className="mx-auto mt-5 block h-px w-14"
-                  style={{ background: `${c.accent}99` }}
-                />
-                {/* text-[30px] は数字を含まない文字列（テンプレのダミー等）のフォールバック。
-                    数字があれば amountEmphasis 側の span がサイズを上書きする。 */}
-                <p
-                  className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
-                  style={{ fontFamily: mincho, color: goldOnWhite }}
-                >
-                  {amountEmphasis(c.grandOffer.amount)}
-                </p>
+                  <p
+                    className="text-[17px] leading-snug tracking-[0.18em]"
+                    style={{ fontFamily: mincho }}
+                  >
+                    {c.grandOffer.title}
+                  </p>
+                  {/* 菱形を挟んだ罫。ただの直線より一段仕上がりが上がる。 */}
+                  <span className="mt-5 flex items-center justify-center gap-2.5">
+                    <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                    <span
+                      className="h-[5px] w-[5px] rotate-45"
+                      style={{ background: c.accent }}
+                    />
+                    <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                  </span>
+                  {/* text-[30px] は数字を含まない文字列（テンプレのダミー等）のフォールバック。
+                      数字があれば amountEmphasis 側の span がサイズを上書きする。 */}
+                  <p
+                    className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
+                    style={{ fontFamily: mincho, color: goldOnWhite }}
+                  >
+                    {amountEmphasis(c.grandOffer.amount)}
+                  </p>
+                </div>
               </div>
               {c.grandOffer.feature &&
                 (c.grandOffer.feature.image ? (
@@ -468,11 +480,12 @@ export default function Page() {
                       objectPosition={c.grandOffer.feature.image.position ?? "center"}
                       style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
                     />
-                    {/* 客室写真は壁も窓も明るいことが多いので、スクリムは強めに当てる。 */}
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.58)_0%,rgba(59,55,48,0.80)_100%)]" />
+                    {/* 写真の中央に文字を置くと構図が弱いので、上は写真を見せて下1/3にコピーを寄せる。
+                        客室写真は壁も窓も明るいので、下側のスクリムは強めに当てる。 */}
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.12)_0%,rgba(59,55,48,0.32)_38%,rgba(59,55,48,0.72)_68%,rgba(59,55,48,0.90)_100%)]" />
                     <div
-                      className="relative px-5 py-9 text-center text-white"
-                      style={{ textShadow: "0 2px 14px rgba(59,55,48,0.75)" }}
+                      className="relative px-5 pb-7 pt-28 text-center text-white"
+                      style={{ textShadow: "0 2px 14px rgba(59,55,48,0.85)" }}
                     >
                       <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
                         {nl(c.grandOffer.feature.title)}
