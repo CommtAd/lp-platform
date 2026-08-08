@@ -91,7 +91,6 @@ const config: PatternCConfig = {
         position: "center",
       },
     },
-    note: "※ 適用条件があります。詳細は当日ご案内いたします。",
   },
 
   experience: {

@@ -140,11 +140,13 @@ export interface PatternCConfig {
     /** 金額訴求、例 "最大180万円相当"。 */
     amount: string;
     /**
-     * 目玉特典をもう一段強調したいとき。
+     * 目玉特典。**金額プレートとは必ず別カードで描画される。**
+     * ひと続きにすると「180万円相当のホテル宿泊券」のように、金額が目玉特典の
+     * 中身だと誤読されるため。
      * `image` を渡すと写真を敷いてスクリム＋白文字で載せる（宿泊特典の客室写真など）。
      */
     feature?: { title: string; body: string; image?: Slot };
-    note: string;
+    note?: string;
   };
 
   /** フェア開催日程。日程を公開する案件のみ。 */
