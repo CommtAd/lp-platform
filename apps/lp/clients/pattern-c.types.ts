@@ -248,11 +248,15 @@ export interface PatternCConfig {
     items: { name: string; date: string; body: string; image: Slot }[];
   };
 
-  /** フェア当日の流れ。 */
+  /**
+   * フェア当日の流れ。
+   * `icon` は「STEP番号｜アイコン｜テキスト」の3カラムで並ぶ。全ステップに付けるか、
+   * 全ステップなしか（一部だけだと列が歯抜けになる）。無い場合は2カラムで組む。
+   */
   flow: {
     heading: string;
     lead: string;
-    steps: { num: string; title: string; time?: string; body: string }[];
+    steps: { num: string; title: string; time?: string; body: string; icon?: string }[];
   };
 
   faq?: { heading: string; items: { q: string; a: string }[] };

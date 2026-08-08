@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { CarouselItem, Slot } from "@/clients/pattern-c.types";
 import LPShell from "@/components/LPShell";
@@ -199,6 +198,8 @@ export default function Page() {
   const framed = Boolean(c.fv.framed);
   const formLight = c.form.tone === "light";
   const recommendItems = c.recommend?.items ?? [];
+  // アイコンが1つでもあれば当日の流れを3カラムで組む（無ければ中央列ごと省く）。
+  const flowHasIcons = c.flow.steps.some((s) => s.icon);
   /**
    * 限定特典のリードを1行に収める文字サイズ。セクション幅は `100vw - 左右余白40px`、
    * 全角は約1.07em幅なので、これを文字数で割った値が上限になる。
@@ -902,45 +903,58 @@ export default function Page() {
               </p>
             )}
             {/*
-              金の丸バッジに番号を入れる型は既視感が強く、装飾も番号1点に頼ることになる。
-              STEP の英字キッカー・明朝の見出し・金のヘアラインという、このページで
-              既に使っている語彙でカードに組み直し、菱形で次のカードへ繋ぐ。
+              「STEP番号｜アイコン｜テキスト」の3カラム。番号は左の列で縦罫に繋いで
+              進行を示し、見出しと本文は右の列に寄せる。囲みを持たないぶん軽く見える。
+              アイコンが1つも無い設定では中央列ごと省いて2カラムで組む。
             */}
-            <div className="mt-7 flex flex-col">
-              {c.flow.steps.map((s, i) => (
-                <Fragment key={`${s.num}-${i}`}>
-                  {i > 0 && (
-                    <span className="my-2 flex justify-center">
+            <div className="mt-8 flex flex-col">
+              {c.flow.steps.map((s, i) => {
+                const last = i === c.flow.steps.length - 1;
+                return (
+                  <div key={`${s.num}-${i}`} className="flex gap-3.5">
+                    <div className="flex w-11 flex-none flex-col items-center">
                       <span
-                        className="h-[5px] w-[5px] rotate-45"
-                        style={{ background: c.accent }}
-                      />
-                    </span>
-                  )}
-                  <div
-                    className={`rounded-[3px] border px-5 py-4 ${oppositeLightBg()}`}
-                    style={{ borderColor: `${c.accent}59` }}
-                  >
-                    <div className="flex items-baseline justify-between gap-3">
-                      <span
-                        className="text-[10.5px] italic tracking-[0.22em]"
+                        className="text-[9px] tracking-[0.2em]"
                         style={{ fontFamily: playfair, color: goldOnWhite }}
                       >
-                        STEP {s.num.padStart(2, "0")}
+                        STEP
                       </span>
-                      {s.time && <span className="text-[11px] opacity-50">{s.time}</span>}
+                      <span
+                        className="mt-0.5 text-[26px] leading-none"
+                        style={{ fontFamily: mincho }}
+                      >
+                        {s.num.padStart(2, "0")}
+                      </span>
+                      {!last && (
+                        <span
+                          className="mt-2.5 w-px flex-1"
+                          style={{ background: `${c.accent}59` }}
+                        />
+                      )}
                     </div>
-                    <h3 className="mt-1.5 text-[16px]" style={{ fontFamily: mincho }}>
-                      {s.title}
-                    </h3>
-                    <span
-                      className="mt-2.5 block h-px w-8"
-                      style={{ background: `${c.accent}99` }}
-                    />
-                    <p className="mt-2.5 text-[12px] leading-[1.85] opacity-65">{s.body}</p>
+                    {flowHasIcons && (
+                      <span
+                        className="flex h-[52px] w-[52px] flex-none items-center justify-center rounded-full"
+                        style={{ background: `${c.accent}1F` }}
+                      >
+                        {s.icon && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={s.icon} alt="" className="h-7 w-7 object-contain" />
+                        )}
+                      </span>
+                    )}
+                    <div className={last ? "pb-0" : "pb-7"}>
+                      <div className="flex items-baseline gap-2.5">
+                        <h3 className="text-[15.5px]" style={{ fontFamily: mincho }}>
+                          {s.title}
+                        </h3>
+                        {s.time && <span className="text-[11px] opacity-50">{s.time}</span>}
+                      </div>
+                      <p className="mt-2 text-[11.5px] leading-[1.85] opacity-65">{s.body}</p>
+                    </div>
                   </div>
-                </Fragment>
-              ))}
+                );
+              })}
             </div>
           </section>
 
