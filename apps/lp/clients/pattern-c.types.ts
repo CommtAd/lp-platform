@@ -184,11 +184,16 @@ export interface PatternCConfig {
     aspect?: string;
   };
 
-  /** こんな方におすすめ（チェックリスト）。 */
+  /**
+   * こんな方におすすめ。
+   * `icon` を渡すとイラストアイコンを、渡さなければ金の丸囲みチェックを描く。
+   * `label` は1行に収める前提なので、長くても14文字程度までに抑えること
+   * （320px幅の端末で折り返さない上限）。
+   */
   recommend?: {
     heading: string;
     lead?: string;
-    items: string[];
+    items: { label: string; icon?: string }[];
   };
 
   /** 来館特典。金額を添えて並べるのがブライダルの慣習。 */

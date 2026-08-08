@@ -134,10 +134,10 @@ const config: PatternCConfig = {
   recommend: {
     heading: "このフェアがおすすめな方",
     items: [
-      "初めて式場見学をする",
-      "何から始めればいいか分からない",
-      "費用が気になる",
-      "少人数婚も相談したい",
+      { label: "初めて式場見学をする", icon: `${ASSET}/rec-couple.png` },
+      { label: "何から始めればいいか分からない", icon: `${ASSET}/rec-question.png` },
+      { label: "費用が気になる", icon: `${ASSET}/rec-cost.png` },
+      { label: "少人数婚も相談したい", icon: `${ASSET}/rec-planner.png` },
     ],
   },
 
