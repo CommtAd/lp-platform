@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { CarouselItem } from "@/clients/pattern-c.types";
 import LPShell from "@/components/LPShell";
@@ -106,6 +105,41 @@ function Carousel({ items, aspect = "4 / 3" }: { items: CarouselItem[]; aspect?:
         横にスワイプ →
       </p>
     </>
+  );
+}
+
+/**
+ * 金額＋品目を縦罫で区切って横並びにする。FV直下のサマリーと来館特典セクションで
+ * 同じ見た目を共有するため、両方からこのコンポーネントを使う（別々に書くとずれる）。
+ */
+function AmountRow({
+  items,
+  ink,
+}: {
+  items: { amount: string; label: string }[];
+  ink: string;
+}) {
+  return (
+    <div
+      className="grid"
+      style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
+    >
+      {items.map((item, i) => (
+        <div
+          key={`${item.label}-${i}`}
+          className={`px-1.5 text-center ${i > 0 ? "border-l" : ""}`}
+          style={i > 0 ? { borderColor: `${ink}1F` } : undefined}
+        >
+          <p
+            className="whitespace-nowrap text-[17px] font-bold leading-none"
+            style={{ fontFamily: mincho, color: goldOnWhite }}
+          >
+            {item.amount}
+          </p>
+          <p className="mt-2.5 text-[10.5px] leading-snug opacity-65">{item.label}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -369,22 +403,11 @@ export default function Page() {
                 </span>
                 <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
               </div>
-              <div className="mt-7 grid grid-cols-3">
-                {c.fvSummary.items.map((item, i) => (
-                  <div
-                    key={`${item.name}-${i}`}
-                    className={`px-1.5 text-center ${i > 0 ? "border-l" : ""}`}
-                    style={i > 0 ? { borderColor: `${c.ink}1F` } : undefined}
-                  >
-                    <p
-                      className="whitespace-nowrap text-[17px] font-bold leading-none"
-                      style={{ fontFamily: mincho, color: goldOnWhite }}
-                    >
-                      {item.amount}
-                    </p>
-                    <p className="mt-2.5 text-[10.5px] leading-snug opacity-65">{item.name}</p>
-                  </div>
-                ))}
+              <div className="mt-7">
+                <AmountRow
+                  items={c.fvSummary.items.map((i) => ({ amount: i.amount, label: i.name }))}
+                  ink={c.ink}
+                />
               </div>
               <p className="mt-7 text-center text-[12px] leading-[1.9]">
                 {emphasize(c.fvSummary.note, c.fvSummary.noteEmphasis, goldOnWhite)}
@@ -606,55 +629,46 @@ export default function Page() {
               <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">{c.privilege.lead}</p>
             </div>
             {/*
-              地の上に小さい箱を並べると、面が細切れになってセクション全体が沈んで見える。
-              加算〜合計を1枚の生成りパネルに収め、明るい面でバンドを覆う。
-              個々の特典に枠は与えず、「＋」だけで列を分ける。
+              地の上に小さい箱を並べると面が細切れになってセクションが沈むため、
+              写真〜加算〜合計を1枚の生成りパネルに収めてバンドを覆う。
+              3列の見た目は FV直下のサマリーと `AmountRow` を共有して揃える。
             */}
             <div
-              className="mt-8 rounded-[3px] border px-4 pb-8 pt-7"
+              className="mt-8 overflow-hidden rounded-[3px] border"
               style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
             >
-              <div className="flex items-start justify-center">
-                {c.privilege.items.map((p, i) => (
-                  <Fragment key={`${p.title}-${i}`}>
-                    {i > 0 && (
-                      <span
-                        className="shrink-0 self-center px-0.5 pb-4 text-[14px] font-bold"
-                        style={{ color: `${c.accent}` }}
-                      >
-                        ＋
-                      </span>
-                    )}
-                    <div className="min-w-0 flex-1 text-center">
-                      <p
-                        className="whitespace-nowrap font-bold leading-none"
-                        style={{ fontFamily: mincho, color: goldOnWhite }}
-                      >
-                        {amountEmphasis(p.amount, 26, 11)}
-                      </p>
-                      <p className="mt-2.5 text-[10.5px] leading-snug opacity-65">{p.title}</p>
-                    </div>
-                  </Fragment>
-                ))}
+              {c.privilege.image && (
+                <ImageSlot
+                  src={c.privilege.image.src}
+                  placeholder={c.privilege.image.placeholder}
+                  objectPosition={c.privilege.image.position ?? "center"}
+                  style={{ width: "100%", aspectRatio: "16 / 9" }}
+                />
+              )}
+              <div className="px-4 pb-8 pt-7">
+                <AmountRow
+                  items={c.privilege.items.map((p) => ({ amount: p.amount, label: p.title }))}
+                  ink={c.ink}
+                />
+                {/* 菱形を挟んだ罫が「＝」の役割を兼ねる。 */}
+                <span className="mt-7 flex items-center justify-center gap-2.5">
+                  <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
+                  <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
+                  <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
+                </span>
+                <p
+                  className="mt-6 text-center text-[11px] tracking-[0.3em]"
+                  style={{ fontFamily: playfair }}
+                >
+                  TOTAL
+                </p>
+                <p
+                  className="mt-2 text-center text-[28px] font-bold leading-none"
+                  style={{ fontFamily: mincho, color: goldOnWhite }}
+                >
+                  {amountEmphasis(c.privilege.total, 44, 19)}
+                </p>
               </div>
-              {/* 菱形を挟んだ罫が「＝」の役割も兼ねる。 */}
-              <span className="mt-7 flex items-center justify-center gap-2.5">
-                <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
-                <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
-                <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
-              </span>
-              <p
-                className="mt-6 text-center text-[11px] tracking-[0.3em]"
-                style={{ fontFamily: playfair }}
-              >
-                TOTAL
-              </p>
-              <p
-                className="mt-2 text-center text-[28px] font-bold leading-none"
-                style={{ fontFamily: mincho, color: goldOnWhite }}
-              >
-                {amountEmphasis(c.privilege.total, 44, 19)}
-              </p>
             </div>
             {c.privilege.contract && (
               // 成約特典は二重枠＋跨ぎラベルで、来館特典より格上に見せる。

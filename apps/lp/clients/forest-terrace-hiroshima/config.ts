@@ -67,7 +67,7 @@ const config: PatternCConfig = {
   fvSummary: {
     label: "来館特典",
     items: [
-      { amount: "1万円", name: "JCBギフト券" },
+      { amount: "1万円分", name: "JCBギフト券" },
       { amount: "3万円相当", name: "豪華無料試食" },
       { amount: "4万円相当", name: "ご宿泊" },
     ],
@@ -145,6 +145,11 @@ const config: PatternCConfig = {
   privilege: {
     heading: "ご来館特典・ご成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
+    image: {
+      placeholder: "ラウンジでくつろぐおふたり",
+      src: `${ASSET}/privilege.jpg`,
+      position: "center",
+    },
     items: [
       {
         title: "JCBギフト券",
