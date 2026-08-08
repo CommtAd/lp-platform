@@ -906,11 +906,11 @@ export default function Page() {
               STEP の英字キッカー・明朝の見出し・金のヘアラインという、このページで
               既に使っている語彙でカードに組み直し、菱形で次のカードへ繋ぐ。
             */}
-            <div className="mt-8 flex flex-col">
+            <div className="mt-7 flex flex-col">
               {c.flow.steps.map((s, i) => (
                 <Fragment key={`${s.num}-${i}`}>
                   {i > 0 && (
-                    <span className="my-3 flex justify-center">
+                    <span className="my-2 flex justify-center">
                       <span
                         className="h-[5px] w-[5px] rotate-45"
                         style={{ background: c.accent }}
@@ -918,7 +918,7 @@ export default function Page() {
                     </span>
                   )}
                   <div
-                    className={`rounded-[3px] border px-5 py-6 ${oppositeLightBg()}`}
+                    className={`rounded-[3px] border px-5 py-4 ${oppositeLightBg()}`}
                     style={{ borderColor: `${c.accent}59` }}
                   >
                     <div className="flex items-baseline justify-between gap-3">
@@ -930,14 +930,14 @@ export default function Page() {
                       </span>
                       {s.time && <span className="text-[11px] opacity-50">{s.time}</span>}
                     </div>
-                    <h3 className="mt-2.5 text-[16px]" style={{ fontFamily: mincho }}>
+                    <h3 className="mt-1.5 text-[16px]" style={{ fontFamily: mincho }}>
                       {s.title}
                     </h3>
                     <span
-                      className="mt-3.5 block h-px w-8"
+                      className="mt-2.5 block h-px w-8"
                       style={{ background: `${c.accent}99` }}
                     />
-                    <p className="mt-3.5 text-[12px] leading-[1.9] opacity-65">{s.body}</p>
+                    <p className="mt-2.5 text-[12px] leading-[1.85] opacity-65">{s.body}</p>
                   </div>
                 </Fragment>
               ))}
