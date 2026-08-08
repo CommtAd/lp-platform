@@ -911,7 +911,12 @@ export default function Page() {
               {c.flow.steps.map((s, i) => {
                 const last = i === c.flow.steps.length - 1;
                 return (
-                  <div key={`${s.num}-${i}`} className="flex gap-3.5">
+                  // 本文の行数で行の高さが変わると STEP 間の間隔が不揃いに見えるため、
+                  // 最終行以外に下限の高さを持たせて等間隔にする。
+                  <div
+                    key={`${s.num}-${i}`}
+                    className={`flex gap-3.5 ${last ? "" : "min-h-[100px]"}`}
+                  >
                     <div className="flex w-11 flex-none flex-col items-center">
                       <span
                         className="text-[9px] tracking-[0.2em]"
@@ -934,8 +939,8 @@ export default function Page() {
                     </div>
                     {flowHasIcons && (
                       <span
-                        className="flex h-[58px] w-[58px] flex-none items-center justify-center rounded-full"
-                        style={{ background: `${c.accent}1F` }}
+                        className={`flex h-[58px] w-[58px] flex-none items-center justify-center rounded-full border ${oppositeLightBg()}`}
+                        style={{ borderColor: `${c.accent}33` }}
                       >
                         {s.icon && (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -943,7 +948,7 @@ export default function Page() {
                         )}
                       </span>
                     )}
-                    <div className={last ? "pb-0" : "pb-7"}>
+                    <div>
                       <div className="flex items-baseline gap-2.5">
                         <h3 className="text-[15.5px]" style={{ fontFamily: mincho }}>
                           {s.title}
