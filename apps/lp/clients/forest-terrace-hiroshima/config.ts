@@ -204,7 +204,7 @@ const config: PatternCConfig = {
 
   flow: {
     heading: "当日の流れ",
-    lead: "所要時間は2〜3時間です。",
+    lead: "所要時間：2〜3時間",
     steps: [
       {
         num: "1",
@@ -233,7 +233,6 @@ const config: PatternCConfig = {
     address: "〒730-0026 広島県広島市中区田中町6-10 オリエンタルホテル広島内",
     routes: ["広島電鉄本線 八丁堀駅より徒歩9分"],
     tel: "082-240-5551",
-    telNote: "お電話でのご予約・お問い合わせも承っております。",
     map: {
       placeholder: "オリエンタルホテル広島 外観",
       src: `${ASSET}/access.jpg`,

@@ -1006,7 +1006,9 @@ export default function Page() {
               >
                 TEL {c.access.tel}
               </TelLink>
-              <p className="mt-2 text-center text-[11px] opacity-55">{c.access.telNote}</p>
+              {c.access.telNote && (
+                <p className="mt-2 text-center text-[11px] opacity-55">{c.access.telNote}</p>
+              )}
             </div>
           </section>
 

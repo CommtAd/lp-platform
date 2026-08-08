@@ -269,7 +269,8 @@ export interface PatternCConfig {
     /** 空配列なら経路リストを出さない。 */
     routes: string[];
     tel: string;
-    telNote: string;
+    /** 電話番号の下の補足（受付時間など）。不要なら省略する。 */
+    telNote?: string;
     map: Slot;
   };
 
