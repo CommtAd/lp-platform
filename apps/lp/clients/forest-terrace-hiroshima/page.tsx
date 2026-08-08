@@ -523,7 +523,7 @@ export default function Page() {
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.46)_0%,rgba(59,55,48,0.64)_45%,rgba(59,55,48,0.88)_100%)]" />
                     <div
-                      className="relative px-5 pb-8 pt-24 text-center text-white"
+                      className="relative px-5 pb-7 pt-12 text-center text-white"
                       style={{ textShadow: "0 2px 14px rgba(59,55,48,0.9)" }}
                     >
                       <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
