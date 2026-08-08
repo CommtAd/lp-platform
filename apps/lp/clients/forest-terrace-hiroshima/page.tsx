@@ -151,6 +151,7 @@ export default function Page() {
     !catchTop || Boolean(c.fv.lead) || Boolean(c.fv.offers && c.fv.offers.length > 0);
   const framed = Boolean(c.fv.framed);
   const formLight = c.form.tone === "light";
+  const recommendItems = c.recommend?.items ?? [];
 
   /**
    * 明るいセクションの地は白／生成りを交互に敷く。地色をセクションごとに
@@ -549,19 +550,28 @@ export default function Page() {
                 title={c.recommend.heading}
                 lead={c.recommend.lead}
               />
-              <ul className="mt-8 flex flex-col gap-px overflow-hidden rounded-2xl bg-[var(--ink)]/10">
-                {c.recommend.items.map((item, i) => (
+              {/* 1列の左寄せリストだと右側が大きく空いて間延びするので、2列のカードで
+                  幅いっぱいに敷く。項目が奇数なら最後の1枚を横一杯に伸ばす。 */}
+              <ul className="mt-8 grid grid-cols-2 gap-3">
+                {recommendItems.map((item, i) => (
                   <li
                     key={`${item}-${i}`}
-                    className="flex items-center gap-3 bg-[var(--paper)] px-5 py-4"
+                    className={`flex flex-col items-center justify-center rounded-[3px] border px-3 py-6 text-center ${oppositeLightBg()} ${
+                      recommendItems.length % 2 === 1 && i === recommendItems.length - 1
+                        ? "col-span-2"
+                        : ""
+                    }`}
+                    style={{ borderColor: `${c.accent}59` }}
                   >
                     <span
-                      className="shrink-0 text-[15px] font-bold leading-none"
-                      style={{ color: c.accent }}
+                      className="flex h-7 w-7 items-center justify-center rounded-full border text-[12px] font-bold leading-none"
+                      style={{ borderColor: `${c.accent}99`, color: goldOnWhite }}
                     >
                       ✓
                     </span>
-                    <span className="text-[13.5px] leading-snug">{item}</span>
+                    <p className="mt-3 text-[13px] leading-[1.7]" style={{ fontFamily: mincho }}>
+                      {item}
+                    </p>
                   </li>
                 ))}
               </ul>
