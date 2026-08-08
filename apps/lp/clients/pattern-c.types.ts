@@ -201,15 +201,11 @@ export interface PatternCConfig {
     heading: string;
     lead: string;
     /**
-     * パネル上端に敷く写真。既出のカット（チャペル・料理・客室・会場・外観）と
-     * 被らない絵を選ぶこと。無い場合はセクションが文字と枠だけになる。
+     * 横3分割で並べて合計へ収束させる版面。列幅が100px前後しか取れないため説明文は
+     * 持たせない。`title` は6文字程度まで、`amount` は「1万円分」等の短い表記に。
+     * `image` を渡すと各列の頭に正方形のサムネイルが入る（全列に付けるか、全列なしか）。
      */
-    image?: Slot;
-    /**
-     * 横3分割で「＋」で繋いで合計へ収束させる版面。カード幅が100px前後しか取れないため
-     * 説明文は持たせない。`title` は6文字程度まで、`amount` は「1万円分」等の短い表記に。
-     */
-    items: { title: string; amount: string }[];
+    items: { title: string; amount: string; image?: Slot }[];
     /** 特典合計の訴求、例 "最大10万円分"。 */
     total: string;
     totalNote: string;

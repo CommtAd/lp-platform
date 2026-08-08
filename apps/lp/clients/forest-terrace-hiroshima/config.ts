@@ -145,23 +145,21 @@ const config: PatternCConfig = {
   privilege: {
     heading: "ご来館特典・ご成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
-    image: {
-      placeholder: "ラウンジでくつろぐおふたり",
-      src: `${ASSET}/privilege.jpg`,
-      position: "center",
-    },
     items: [
       {
         title: "JCBギフト券",
         amount: "1万円分",
+        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
       },
       {
         title: "豪華無料試食",
         amount: "3万円相当",
+        image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
       },
       {
         title: "ご宿泊",
         amount: "4万円相当",
+        image: { placeholder: "客室（ツイン）", src: `${ASSET}/gift-stay.jpg` },
       },
     ],
     total: "最大 10万円分",

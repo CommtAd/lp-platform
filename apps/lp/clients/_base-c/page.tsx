@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { CarouselItem } from "@/clients/pattern-c.types";
+import type { CarouselItem, Slot } from "@/clients/pattern-c.types";
 import LPShell from "@/components/LPShell";
 import LPForm from "@/components/LPForm";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
@@ -116,20 +116,31 @@ function AmountRow({
   items,
   ink,
 }: {
-  items: { amount: string; label: string }[];
+  items: { amount: string; label: string; image?: Slot }[];
   ink: string;
 }) {
+  // 写真を伴う場合は列同士が写真で分かれるので、縦罫は引かず溝で離す。
+  const withImages = items.some((i) => i.image);
   return (
     <div
-      className="grid"
+      className={`grid ${withImages ? "gap-2" : ""}`}
       style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
     >
       {items.map((item, i) => (
         <div
           key={`${item.label}-${i}`}
-          className={`px-1.5 text-center ${i > 0 ? "border-l" : ""}`}
-          style={i > 0 ? { borderColor: `${ink}1F` } : undefined}
+          className={`px-1.5 text-center ${!withImages && i > 0 ? "border-l" : ""}`}
+          style={!withImages && i > 0 ? { borderColor: `${ink}1F` } : undefined}
         >
+          {item.image && (
+            <ImageSlot
+              src={item.image.src}
+              placeholder={item.image.placeholder}
+              objectPosition={item.image.position ?? "center"}
+              radius={2}
+              style={{ width: "100%", aspectRatio: "1 / 1", marginBottom: 12 }}
+            />
+          )}
           <p
             className="whitespace-nowrap text-[17px] font-bold leading-none"
             style={{ fontFamily: mincho, color: goldOnWhite }}
@@ -634,20 +645,16 @@ export default function Page() {
               3列の見た目は FV直下のサマリーと `AmountRow` を共有して揃える。
             */}
             <div
-              className="mt-8 overflow-hidden rounded-[3px] border"
+              className="mt-8 rounded-[3px] border"
               style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
             >
-              {c.privilege.image && (
-                <ImageSlot
-                  src={c.privilege.image.src}
-                  placeholder={c.privilege.image.placeholder}
-                  objectPosition={c.privilege.image.position ?? "center"}
-                  style={{ width: "100%", aspectRatio: "16 / 9" }}
-                />
-              )}
               <div className="px-4 pb-8 pt-7">
                 <AmountRow
-                  items={c.privilege.items.map((p) => ({ amount: p.amount, label: p.title }))}
+                  items={c.privilege.items.map((p) => ({
+                    amount: p.amount,
+                    label: p.title,
+                    image: p.image,
+                  }))}
                   ink={c.ink}
                 />
                 {/* 菱形を挟んだ罫が「＝」の役割を兼ねる。 */}
