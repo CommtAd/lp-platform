@@ -78,7 +78,8 @@ const config: PatternCConfig = {
   grandOffer: {
     eyebrow: "GRAND OPEN",
     heading: "グランドオープン限定特典",
-    lead: "＼グランドオープンを記念したスペシャルなフェアを開催！／",
+    // 幅任せに折り返すと小書き文字が行頭に来るので、改行位置を明示する。
+    lead: "＼グランドオープンを記念した\nスペシャルなフェアを開催！／",
     badge: "2027年5月までの挙式披露宴が対象",
     title: "豪華10大特典",
     amount: "最大180万円相当",

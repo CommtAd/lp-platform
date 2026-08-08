@@ -403,10 +403,7 @@ export default function Page() {
 
           {/* ── grand offer（成約特典） ── */}
           {c.grandOffer && (
-            <section
-              className="px-5 py-12"
-              style={{ background: band.bg, color: band.text }}
-            >
+            <section className="px-5 py-12" style={{ background: band.bg, color: band.text }}>
               <div className="text-center">
                 <span
                   className="text-[11px] italic tracking-[0.2em]"
@@ -417,22 +414,71 @@ export default function Page() {
                 <h2 className="mt-2 text-[21px] leading-snug" style={{ fontFamily: mincho }}>
                   {c.grandOffer.heading}
                 </h2>
-                {/* 幅いっぱいだと最終行に数文字だけ残る。字数を絞って行を揃える。 */}
-                <p className="mx-auto mt-3 max-w-[17.5em] text-[12.5px] leading-[1.9] opacity-75">
-                  {c.grandOffer.lead}
+                {/* 改行位置は config 側で \n を入れて決める。幅任せにすると
+                    小書き文字が行頭に来る（禁則違反）ことがある。 */}
+                <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">
+                  {nl(c.grandOffer.lead)}
                 </p>
               </div>
-              {/* 金額プレート。金額は必ず白地＋深い金で置く（FVの訴求プレートと同じ扱い）。
-                  バンド地の上に白文字で置くと、一番見せたい桁が一番弱くなってしまう。
-                  二重罫＋枠に跨がる対象条件バッジで、招待状の体裁に寄せている。 */}
-              <div
-                className="relative mt-10 rounded-[3px] border p-2.5"
-                style={{
-                  background: "rgba(255,255,255,0.94)",
-                  borderColor: c.accent,
-                  color: c.ink,
-                }}
-              >
+
+              {/*
+                特典は「金額プレート」「写真」「目玉特典」を積むのではなく、1枚のカードに束ねる。
+                文字は生成り地の上にだけ置き、写真には一切載せない — 客室写真は窓が明るく、
+                スクリムを重ねても文字が沈むため。写真はカード下端に断ち落としで敷く。
+              */}
+              <div className="relative mt-10">
+                <div
+                  className="overflow-hidden rounded-[3px] border"
+                  style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
+                >
+                  <div className="px-5 pb-8 pt-11 text-center">
+                    <p
+                      className="text-[17px] leading-snug tracking-[0.18em]"
+                      style={{ fontFamily: mincho }}
+                    >
+                      {c.grandOffer.title}
+                    </p>
+                    {/* 菱形を挟んだ罫。直線1本より装飾として効く。 */}
+                    <span className="mt-5 flex items-center justify-center gap-2.5">
+                      <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                      <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
+                      <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                    </span>
+                    {/* text-[30px] は数字を含まない文字列（テンプレのダミー等）のフォールバック。
+                        数字があれば amountEmphasis 側の span がサイズを上書きする。 */}
+                    <p
+                      className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
+                      style={{ fontFamily: mincho, color: goldOnWhite }}
+                    >
+                      {amountEmphasis(c.grandOffer.amount)}
+                    </p>
+                  </div>
+
+                  {c.grandOffer.feature && (
+                    <>
+                      <div className="bg-white px-5 py-7 text-center">
+                        <p
+                          className="text-[15.5px] leading-relaxed"
+                          style={{ fontFamily: mincho }}
+                        >
+                          {nl(c.grandOffer.feature.title)}
+                        </p>
+                        <p className="mt-2.5 text-[12px] leading-[1.9] opacity-65">
+                          {c.grandOffer.feature.body}
+                        </p>
+                      </div>
+                      {c.grandOffer.feature.image && (
+                        <ImageSlot
+                          src={c.grandOffer.feature.image.src}
+                          placeholder={c.grandOffer.feature.image.placeholder}
+                          objectPosition={c.grandOffer.feature.image.position ?? "center"}
+                          style={{ width: "100%", aspectRatio: "16 / 9" }}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
+                {/* バッジはカード上端に跨がらせる。overflow-hidden の外に出さないと切れる。 */}
                 {c.grandOffer.badge && (
                   <span
                     className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-[2px] px-4 py-1.5 text-[10.5px] font-bold tracking-wide"
@@ -441,79 +487,8 @@ export default function Page() {
                     {c.grandOffer.badge}
                   </span>
                 )}
-                <div
-                  className="border px-4 pb-8 pt-9 text-center"
-                  style={{ borderColor: `${c.accent}4D` }}
-                >
-                  <p
-                    className="text-[17px] leading-snug tracking-[0.18em]"
-                    style={{ fontFamily: mincho }}
-                  >
-                    {c.grandOffer.title}
-                  </p>
-                  {/* 菱形を挟んだ罫。ただの直線より一段仕上がりが上がる。 */}
-                  <span className="mt-5 flex items-center justify-center gap-2.5">
-                    <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
-                    <span
-                      className="h-[5px] w-[5px] rotate-45"
-                      style={{ background: c.accent }}
-                    />
-                    <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
-                  </span>
-                  {/* text-[30px] は数字を含まない文字列（テンプレのダミー等）のフォールバック。
-                      数字があれば amountEmphasis 側の span がサイズを上書きする。 */}
-                  <p
-                    className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
-                    style={{ fontFamily: mincho, color: goldOnWhite }}
-                  >
-                    {amountEmphasis(c.grandOffer.amount)}
-                  </p>
-                </div>
               </div>
-              {c.grandOffer.feature &&
-                (c.grandOffer.feature.image ? (
-                  // 写真つきの目玉特典。金額プレートの下に敷いて「金額 → 中身」の順に読ませる。
-                  <div className="relative mt-4 overflow-hidden rounded-[3px]">
-                    <ImageSlot
-                      src={c.grandOffer.feature.image.src}
-                      placeholder={c.grandOffer.feature.image.placeholder}
-                      objectPosition={c.grandOffer.feature.image.position ?? "center"}
-                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-                    />
-                    {/* 写真の中央に文字を置くと構図が弱いので、上は写真を見せて下1/3にコピーを寄せる。
-                        客室写真は壁も窓も明るいので、下側のスクリムは強めに当てる。 */}
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.12)_0%,rgba(59,55,48,0.32)_38%,rgba(59,55,48,0.72)_68%,rgba(59,55,48,0.90)_100%)]" />
-                    <div
-                      className="relative px-5 pb-7 pt-28 text-center text-white"
-                      style={{ textShadow: "0 2px 14px rgba(59,55,48,0.85)" }}
-                    >
-                      <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
-                        {nl(c.grandOffer.feature.title)}
-                      </p>
-                      {/* 写真の上ではブランドゴールドの罫線が沈むので、淡いシャンパンで引く。 */}
-                      <span
-                        className="mx-auto mt-4 block h-px w-12"
-                        style={{ background: "#E2C892" }}
-                      />
-                      <p className="mt-4 text-[12px] leading-[1.9] text-white/85">
-                        {c.grandOffer.feature.body}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  // 目玉特典は金額プレートより一段弱く。白で塗ると金額と主役を奪い合う。
-                  <div
-                    className="mt-4 rounded-[3px] border px-5 py-5 text-center"
-                    style={{ background: "rgba(255,255,255,0.14)", borderColor: band.rule }}
-                  >
-                    <p className="text-[14.5px] leading-relaxed" style={{ fontFamily: mincho }}>
-                      {nl(c.grandOffer.feature.title)}
-                    </p>
-                    <p className="mt-2 text-[12px] leading-[1.9] opacity-80">
-                      {c.grandOffer.feature.body}
-                    </p>
-                  </div>
-                ))}
+
               <p className="mt-4 text-[11px] leading-[1.9] opacity-75">{c.grandOffer.note}</p>
             </section>
           )}
