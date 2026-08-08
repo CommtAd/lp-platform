@@ -199,6 +199,16 @@ export default function Page() {
   const formLight = c.form.tone === "light";
   const recommendItems = c.recommend?.items ?? [];
   /**
+   * 限定特典のリードを1行に収める文字サイズ。セクション幅は `100vw - 左右余白40px`、
+   * 全角は約1.07em幅なので、これを文字数で割った値が上限になる。
+   * 端末幅に追従させないと狭い画面で折り返す（幅任せだと小書き文字が行頭に来る）。
+   */
+  const grandOfferLeadSize = c.grandOffer
+    ? `min(12.5px, max(9px, calc((100vw - 42px) / ${(
+        c.grandOffer.lead.replace(/\n/g, "").length * 1.07
+      ).toFixed(1)})))`
+    : undefined;
+  /**
    * 最長ラベルが2列カードに1行で収まる文字サイズ。項目ごとに変えると不揃いに見えるので
    * いちばん長い1本に全項目を合わせる。
    *
@@ -449,17 +459,20 @@ export default function Page() {
                 <h2 className="mt-2 text-[21px] leading-snug" style={{ fontFamily: mincho }}>
                   {c.grandOffer.heading}
                 </h2>
-                {/* 改行位置は config 側で \n を入れて決める。幅任せにすると
-                    小書き文字が行頭に来る（禁則違反）ことがある。 */}
-                <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">
+                {/* 1行に収まるサイズを端末幅から算出する。幅任せに折り返すと
+                    小書き文字が行頭に来る（禁則違反）ことがあるため。 */}
+                <p
+                  className="mt-3 whitespace-nowrap leading-[1.9] opacity-75"
+                  style={{ fontSize: grandOfferLeadSize }}
+                >
                   {nl(c.grandOffer.lead)}
                 </p>
               </div>
 
               {/*
                 特典は「金額プレート」「写真」「目玉特典」を積むのではなく、1枚のカードに束ねる。
-                文字は生成り地の上にだけ置き、写真には一切載せない — 客室写真は窓が明るく、
-                スクリムを重ねても文字が沈むため。写真はカード下端に断ち落としで敷く。
+                上段は生成り地に金額、下段は客室写真の上に目玉特典のコピーを重ねる。
+                写真はカード下端に断ち落とすので、カード側で overflow-hidden する。
               */}
               <div className="relative mt-10">
                 <div
@@ -489,29 +502,45 @@ export default function Page() {
                     </p>
                   </div>
 
-                  {c.grandOffer.feature && (
-                    <>
-                      <div className="bg-white px-5 py-7 text-center">
-                        <p
-                          className="text-[15.5px] leading-relaxed"
-                          style={{ fontFamily: mincho }}
+                  {c.grandOffer.feature &&
+                    (c.grandOffer.feature.image ? (
+                      // 写真の上にコピーを載せる構成。客室写真は窓から強い光が入るので
+                      // スクリムは全面に強く当て、下へ向かってさらに落とす。
+                      <div className="relative">
+                        <ImageSlot
+                          src={c.grandOffer.feature.image.src}
+                          placeholder={c.grandOffer.feature.image.placeholder}
+                          objectPosition={c.grandOffer.feature.image.position ?? "center"}
+                          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+                        />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.46)_0%,rgba(59,55,48,0.64)_45%,rgba(59,55,48,0.88)_100%)]" />
+                        <div
+                          className="relative px-5 pb-8 pt-24 text-center text-white"
+                          style={{ textShadow: "0 2px 14px rgba(59,55,48,0.9)" }}
                         >
+                          <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
+                            {nl(c.grandOffer.feature.title)}
+                          </p>
+                          {/* 写真の上ではブランドゴールドの罫線が沈むので淡いシャンパンで引く。 */}
+                          <span
+                            className="mx-auto mt-4 block h-px w-12"
+                            style={{ background: "#E2C892" }}
+                          />
+                          <p className="mt-4 text-[12px] leading-[1.9] text-white/85">
+                            {c.grandOffer.feature.body}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-white px-5 py-7 text-center">
+                        <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
                           {nl(c.grandOffer.feature.title)}
                         </p>
                         <p className="mt-2.5 text-[12px] leading-[1.9] opacity-65">
                           {c.grandOffer.feature.body}
                         </p>
                       </div>
-                      {c.grandOffer.feature.image && (
-                        <ImageSlot
-                          src={c.grandOffer.feature.image.src}
-                          placeholder={c.grandOffer.feature.image.placeholder}
-                          objectPosition={c.grandOffer.feature.image.position ?? "center"}
-                          style={{ width: "100%", aspectRatio: "16 / 9" }}
-                        />
-                      )}
-                    </>
-                  )}
+                    ))}
                 </div>
                 {/* バッジはカード上端に跨がらせる。overflow-hidden の外に出さないと切れる。 */}
                 {c.grandOffer.badge && (
