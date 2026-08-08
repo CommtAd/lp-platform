@@ -161,7 +161,6 @@ const config: PatternCConfig = {
       },
     ],
     total: "最大 10万円分",
-    totalNote: "※ 特典の適用には条件があります。詳細は当日ご案内いたします。",
     contract: { label: "さらに、ご成約で", amount: "最大180万円優待" },
   },
 
@@ -242,10 +241,7 @@ const config: PatternCConfig = {
 
   overview: {
     heading: "ご予約概要",
-    items: [
-      { label: "適用期間", value: "2027年5月までに結婚式を実施可能な方" },
-      { label: "所要時間", value: "2〜3時間" },
-    ],
+    items: [{ label: "適用期間", value: "2027年5月までに結婚式を実施可能な方" }],
     note: "※ 組数限定のため、上限に達しましたら終了とさせていただきます。",
   },
 

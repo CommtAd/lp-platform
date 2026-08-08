@@ -210,7 +210,7 @@ export interface PatternCConfig {
     items: { title: string; amount: string; image?: Slot }[];
     /** 特典合計の訴求、例 "最大10万円分"。 */
     total: string;
-    totalNote: string;
+    totalNote?: string;
     /** 成約特典への導線をこのセクションの末尾に置く場合。 */
     contract?: { label: string; amount: string };
   };

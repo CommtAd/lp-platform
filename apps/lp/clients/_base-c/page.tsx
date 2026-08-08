@@ -736,7 +736,9 @@ export default function Page() {
                 </span>
               </div>
             )}
-            <p className="mt-4 text-[11px] leading-[1.9] opacity-75">{c.privilege.totalNote}</p>
+            {c.privilege.totalNote && (
+              <p className="mt-4 text-[11px] leading-[1.9] opacity-75">{c.privilege.totalNote}</p>
+            )}
           </section>
 
           {/* ── gallery ── */}
