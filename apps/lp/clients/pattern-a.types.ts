@@ -123,7 +123,7 @@ export interface PatternAConfig {
 
   flow: {
     heading: string;
-    steps: { num: string; title: string; time: string; body: string }[];
+    steps: { num: string; title: string; time: string; body: string; trio?: { label: string; desc: string }[] }[];
   };
 
   faq: { heading: string; items: { q: string; a: string }[] };
