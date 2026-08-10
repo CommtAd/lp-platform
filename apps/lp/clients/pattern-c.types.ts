@@ -104,7 +104,17 @@ export interface PatternCConfig {
      * 横長の透過PNG/SVGを想定し、プレート幅の `width` ぶんで中央に置く。
      * 上下1対の素材を使う前提なので、片側だけ渡すと収まりが悪くなる。
      */
-    ornament?: { top?: string; bottom?: string; width?: string };
+    ornament?: {
+      top?: string;
+      bottom?: string;
+      /** 既定 "100%"（プレートの内寸いっぱい）。 */
+      width?: string;
+      /**
+       * 高さ(px)。既定 44。幅と高さを両方指定するので画像は縦横比を保たず伸縮する。
+       * 素材を横いっぱいに広げてもプレートが縦に伸びないようにするための割り切り。
+       */
+      height?: number;
+    };
     /** 最も強い単一訴求（例 "最大180万円相当 優待"）。金額系はここに置く。 */
     highlight?: string;
     /** 補足リード。`highlight` だけで足りるなら省略してFVを締める。 */

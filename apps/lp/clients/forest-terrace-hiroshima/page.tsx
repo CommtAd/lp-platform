@@ -340,7 +340,10 @@ export default function Page() {
           src={c.fv.ornament.top}
           alt=""
           className="mx-auto mb-2 block"
-          style={{ width: c.fv.ornament.width ?? "72%" }}
+          style={{
+            width: c.fv.ornament.width ?? "100%",
+            height: c.fv.ornament.height ?? 44,
+          }}
         />
       )}
       {fvKicker}
@@ -352,7 +355,10 @@ export default function Page() {
           src={c.fv.ornament.bottom}
           alt=""
           className="mx-auto mt-2 block"
-          style={{ width: c.fv.ornament.width ?? "72%" }}
+          style={{
+            width: c.fv.ornament.width ?? "100%",
+            height: c.fv.ornament.height ?? 44,
+          }}
         />
       )}
     </div>
