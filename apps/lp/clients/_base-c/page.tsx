@@ -334,9 +334,27 @@ export default function Page() {
         textShadow: "none",
       }}
     >
+      {c.fv.ornament?.top && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={c.fv.ornament.top}
+          alt=""
+          className="mx-auto mb-3 block"
+          style={{ width: c.fv.ornament.width ?? "72%" }}
+        />
+      )}
       {fvKicker}
       {fvCatch}
       {fvHighlight}
+      {c.fv.ornament?.bottom && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={c.fv.ornament.bottom}
+          alt=""
+          className="mx-auto mt-3 block"
+          style={{ width: c.fv.ornament.width ?? "72%" }}
+        />
+      )}
     </div>
   ) : (
     <>

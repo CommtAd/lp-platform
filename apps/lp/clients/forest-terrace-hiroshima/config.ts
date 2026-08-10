@@ -48,6 +48,10 @@ const config: PatternCConfig = {
     catchSize: 19,
     // キッカー・キャッチ・訴求を1枚のプレートにまとめる。
     framed: true,
+    ornament: {
+      top: `${ASSET}/fv-ornament-top.png`,
+      bottom: `${ASSET}/fv-ornament-bottom.png`,
+    },
     highlight: "最大180万円相当 優待",
     // リードとオファーチップは顧客要望で非表示。FVは訴求を highlight 1点に絞る。
     ctaText: "最短30秒で予約する",

@@ -99,6 +99,12 @@ export interface PatternCConfig {
      * 明るい会場写真でも可読性が安定する。
      */
     framed?: boolean;
+    /**
+     * プレートの上下に置く飾り罫（唐草など）。`framed` のときだけ効く。
+     * 横長の透過PNG/SVGを想定し、プレート幅の `width` ぶんで中央に置く。
+     * 上下1対の素材を使う前提なので、片側だけ渡すと収まりが悪くなる。
+     */
+    ornament?: { top?: string; bottom?: string; width?: string };
     /** 最も強い単一訴求（例 "最大180万円相当 優待"）。金額系はここに置く。 */
     highlight?: string;
     /** 補足リード。`highlight` だけで足りるなら省略してFVを締める。 */
