@@ -92,6 +92,7 @@ const config: PatternCConfig = {
     badge: "2027年5月までの挙式披露宴が対象",
     title: "豪華10大特典",
     amount: "最大180万円相当",
+    frame: `${ASSET}/grand-offer-frame.png`,
     feature: {
       title: "エグゼクティブルームを\n2泊3日でプレゼント",
       body: "人生で最も特別な2泊3日を。",
@@ -170,6 +171,7 @@ const config: PatternCConfig = {
         image: { placeholder: "客室（ツイン）", src: `${ASSET}/gift-stay.jpg` },
       },
     ],
+    frame: `${ASSET}/privilege-frame.png`,
     total: "最大 10万円分",
     contract: { label: "さらに、ご成約で", amount: "最大180万円優待" },
   },

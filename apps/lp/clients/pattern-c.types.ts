@@ -167,6 +167,11 @@ export interface PatternCConfig {
     /** 金額訴求、例 "最大180万円相当"。 */
     amount: string;
     /**
+     * 金額カードに重ねる四隅のフレーム装飾（中央が透明の横長PNG）。
+     * カードの縦横比に合わせて伸縮するので、四隅の意匠が対称な素材を使うこと。
+     */
+    frame?: string;
+    /**
      * 目玉特典。**金額プレートとは必ず別カードで描画される。**
      * ひと続きにすると「180万円相当のホテル宿泊券」のように、金額が目玉特典の
      * 中身だと誤読されるため。
@@ -235,6 +240,8 @@ export interface PatternCConfig {
      * `image` を渡すと各列の頭に正方形のサムネイルが入る（全列に付けるか、全列なしか）。
      */
     items: { title: string; amount: string; image?: Slot }[];
+    /** パネルに重ねる四隅のフレーム装飾（中央が透明のPNG）。`grandOffer.frame` と同じ扱い。 */
+    frame?: string;
     /** 特典合計の訴求、例 "最大10万円分"。 */
     total: string;
     totalNote?: string;

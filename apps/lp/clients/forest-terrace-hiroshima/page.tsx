@@ -552,9 +552,15 @@ export default function Page() {
               */}
               <div className="relative mt-10">
                 <div
-                  className="rounded-[3px] border px-5 pb-8 pt-11 text-center"
+                  className="relative rounded-[3px] border px-5 pb-8 pt-11 text-center"
                   style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
                 >
+                  {c.grandOffer.frame && (
+                    <span className="pointer-events-none absolute inset-1.5">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={c.grandOffer.frame} alt="" className="h-full w-full" />
+                    </span>
+                  )}
                   <p
                     className="text-[17px] leading-snug tracking-[0.18em]"
                     style={{ fontFamily: mincho }}
@@ -753,9 +759,15 @@ export default function Page() {
               3列の見た目は FV直下のサマリーと `AmountRow` を共有して揃える。
             */}
             <div
-              className="mt-8 rounded-[3px] border"
+              className="relative mt-8 rounded-[3px] border"
               style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
             >
+              {c.privilege.frame && (
+                <span className="pointer-events-none absolute inset-1.5">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={c.privilege.frame} alt="" className="h-full w-full" />
+                </span>
+              )}
               <div className="px-4 pb-8 pt-7">
                 <AmountRow
                   items={c.privilege.items.map((p) => ({
