@@ -43,9 +43,6 @@ const config: PatternCConfig = {
   fv: {
     kicker: "GRAND OPEN BRIDAL FAIR",
     catch: ["グランドオープン記念BIGフェア"],
-    // 14文字を1行で収めるため既定26pxから下げる。プレートの内側パディングぶん、
-    // 枠なしのときより1px小さい19pxが360px幅の端末で折り返さない上限。
-    catchSize: 20,
     // キッカー・キャッチ・訴求を1枚のプレートにまとめる。
     framed: true,
     ornament: {

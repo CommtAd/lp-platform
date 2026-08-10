@@ -197,6 +197,24 @@ export default function Page() {
     !catchTop || Boolean(c.fv.lead) || Boolean(c.fv.offers && c.fv.offers.length > 0);
   const framed = Boolean(c.fv.framed);
   const formLight = c.form.tone === "light";
+  /**
+   * framed プレートのキャッチサイズ。`catchSize` を指定しなければ、端末幅に対して
+   * 1行で収まる最大値まで自動で上げる（カードは max-width 480px なのでそこで頭打ち）。
+   * 内寸は `min(100vw,480px) - 外側24 - 内側20`。
+   * 全角は約1.07em・半角は約0.62em幅。文字数だけで割ると "BIG" のような半角混じりを
+   * 過大に見積もり、必要以上に小さくなる。
+   */
+  const fvCatchEm = Math.max(
+    ...c.fv.catch.map((line) =>
+      [...line].reduce((w, ch) => w + (ch.charCodeAt(0) < 128 ? 0.62 : 1.07), 0),
+    ),
+    1,
+  );
+  const fvCatchSize = c.fv.catchSize
+    ? `${c.fv.catchSize}px`
+    : framed
+      ? `min(26px, calc((min(100vw, 480px) - 44px) / ${fvCatchEm.toFixed(2)}))`
+      : "26px";
   const recommendItems = c.recommend?.items ?? [];
   /**
    * ヒーローのスライドショー。`fv.heroSlides` があれば `fv.hero` を1枚目として繋ぐ。
@@ -285,7 +303,7 @@ export default function Page() {
   const fvCatch = (
     <h1
       className="mt-1 leading-[1.4]"
-      style={{ fontFamily: mincho, fontSize: c.fv.catchSize ?? 26 }}
+      style={{ fontFamily: mincho, fontSize: fvCatchSize }}
     >
       {/* 改行位置は config の配列で決める。狭い端末で入り切らない行は折り返させる
           （nowrap にすると 320px 幅で末尾が切れてしまう）。 */}
@@ -302,7 +320,7 @@ export default function Page() {
     <>
       <span className="mt-2.5 block h-px" style={{ background: `${c.accent}66` }} />
       <p
-        className="mt-2.5 text-[20px] font-bold tracking-[0.08em]"
+        className="mt-2.5 text-[22px] font-bold tracking-[0.06em]"
         style={{ fontFamily: mincho, color: goldOnWhite }}
       >
         {c.fv.highlight}
@@ -326,7 +344,7 @@ export default function Page() {
   /** キッカー・キャッチ・訴求の3点セット。framed なら1枚のプレートに封じる。 */
   const fvGroup = framed ? (
     <div
-      className="rounded-[3px] border px-3 py-3 text-center backdrop-blur-[3px]"
+      className="rounded-[3px] border px-2.5 py-3 text-center backdrop-blur-[3px]"
       style={{
         background: "rgba(255,255,255,0.9)",
         borderColor: c.accent,
@@ -457,7 +475,7 @@ export default function Page() {
             <div className="absolute inset-0" style={{ background: heroScrim }} />
             {catchTop && (
               <div
-                className={`absolute inset-x-0 top-0 pt-7 text-white ${framed ? "px-4" : "px-6"}`}
+                className={`absolute inset-x-0 top-0 pt-7 text-white ${framed ? "px-3" : "px-6"}`}
                 // 明るい天井や白ドレスに白文字が重なっても読めるよう、影で輪郭を作る。
                 style={{ textShadow: heroTextShadow }}
               >
@@ -466,7 +484,7 @@ export default function Page() {
             )}
             {fvBottomHasContent && (
               <div
-                className={`absolute inset-x-0 bottom-0 pb-8 text-white ${framed ? "px-4" : "px-6"}`}
+                className={`absolute inset-x-0 bottom-0 pb-8 text-white ${framed ? "px-3" : "px-6"}`}
                 style={{ textShadow: heroTextShadow }}
               >
                 {!catchTop && fvGroup}
