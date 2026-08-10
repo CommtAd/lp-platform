@@ -284,7 +284,7 @@ export default function Page() {
   );
   const fvCatch = (
     <h1
-      className="mt-2.5 leading-[1.5]"
+      className="mt-1.5 leading-[1.45]"
       style={{ fontFamily: mincho, fontSize: c.fv.catchSize ?? 26 }}
     >
       {/* 改行位置は config の配列で決める。狭い端末で入り切らない行は折り返させる
@@ -300,9 +300,9 @@ export default function Page() {
   // 単独で置く場合は、角を落とした矩形のすりガラスプレートで受ける（角丸ピルは安っぽく見える）。
   const fvHighlight = !c.fv.highlight ? null : framed ? (
     <>
-      <span className="mt-4 block h-px" style={{ background: `${c.accent}66` }} />
+      <span className="mt-3 block h-px" style={{ background: `${c.accent}66` }} />
       <p
-        className="mt-4 text-[17px] font-bold tracking-[0.1em]"
+        className="mt-3 text-[17px] font-bold tracking-[0.1em]"
         style={{ fontFamily: mincho, color: goldOnWhite }}
       >
         {c.fv.highlight}
@@ -326,7 +326,7 @@ export default function Page() {
   /** キッカー・キャッチ・訴求の3点セット。framed なら1枚のプレートに封じる。 */
   const fvGroup = framed ? (
     <div
-      className="rounded-[3px] border px-4 py-5 text-center backdrop-blur-[3px]"
+      className="rounded-[3px] border px-4 py-3.5 text-center backdrop-blur-[3px]"
       style={{
         background: "rgba(255,255,255,0.9)",
         borderColor: c.accent,
@@ -339,7 +339,7 @@ export default function Page() {
         <img
           src={c.fv.ornament.top}
           alt=""
-          className="mx-auto mb-3 block"
+          className="mx-auto mb-2 block"
           style={{ width: c.fv.ornament.width ?? "72%" }}
         />
       )}
@@ -351,7 +351,7 @@ export default function Page() {
         <img
           src={c.fv.ornament.bottom}
           alt=""
-          className="mx-auto mt-3 block"
+          className="mx-auto mt-2 block"
           style={{ width: c.fv.ornament.width ?? "72%" }}
         />
       )}
