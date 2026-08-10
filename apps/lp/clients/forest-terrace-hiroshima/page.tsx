@@ -276,7 +276,7 @@ export default function Page() {
 
   const fvKicker = (
     <span
-      className="text-[11px] italic tracking-[0.28em]"
+      className="text-[12px] italic tracking-[0.28em]"
       style={{ fontFamily: playfair, color: framed ? goldOnWhite : undefined }}
     >
       {c.fv.kicker}
@@ -284,7 +284,7 @@ export default function Page() {
   );
   const fvCatch = (
     <h1
-      className="mt-1.5 leading-[1.45]"
+      className="mt-1 leading-[1.4]"
       style={{ fontFamily: mincho, fontSize: c.fv.catchSize ?? 26 }}
     >
       {/* 改行位置は config の配列で決める。狭い端末で入り切らない行は折り返させる
@@ -300,9 +300,9 @@ export default function Page() {
   // 単独で置く場合は、角を落とした矩形のすりガラスプレートで受ける（角丸ピルは安っぽく見える）。
   const fvHighlight = !c.fv.highlight ? null : framed ? (
     <>
-      <span className="mt-3 block h-px" style={{ background: `${c.accent}66` }} />
+      <span className="mt-2.5 block h-px" style={{ background: `${c.accent}66` }} />
       <p
-        className="mt-3 text-[17px] font-bold tracking-[0.1em]"
+        className="mt-2.5 text-[20px] font-bold tracking-[0.08em]"
         style={{ fontFamily: mincho, color: goldOnWhite }}
       >
         {c.fv.highlight}
@@ -326,7 +326,7 @@ export default function Page() {
   /** キッカー・キャッチ・訴求の3点セット。framed なら1枚のプレートに封じる。 */
   const fvGroup = framed ? (
     <div
-      className="rounded-[3px] border px-4 py-3.5 text-center backdrop-blur-[3px]"
+      className="rounded-[3px] border px-3 py-3 text-center backdrop-blur-[3px]"
       style={{
         background: "rgba(255,255,255,0.9)",
         borderColor: c.accent,
@@ -339,7 +339,7 @@ export default function Page() {
         <img
           src={c.fv.ornament.top}
           alt=""
-          className="mx-auto mb-2 block"
+          className="mx-auto mb-1.5 block"
           style={{
             width: c.fv.ornament.width ?? "100%",
             height: c.fv.ornament.height ?? 44,
@@ -354,7 +354,7 @@ export default function Page() {
         <img
           src={c.fv.ornament.bottom}
           alt=""
-          className="mx-auto mt-2 block"
+          className="mx-auto mt-1.5 block"
           style={{
             width: c.fv.ornament.width ?? "100%",
             height: c.fv.ornament.height ?? 44,
@@ -457,7 +457,7 @@ export default function Page() {
             <div className="absolute inset-0" style={{ background: heroScrim }} />
             {catchTop && (
               <div
-                className={`absolute inset-x-0 top-0 pt-7 text-white ${framed ? "px-5" : "px-6"}`}
+                className={`absolute inset-x-0 top-0 pt-7 text-white ${framed ? "px-4" : "px-6"}`}
                 // 明るい天井や白ドレスに白文字が重なっても読めるよう、影で輪郭を作る。
                 style={{ textShadow: heroTextShadow }}
               >
@@ -466,7 +466,7 @@ export default function Page() {
             )}
             {fvBottomHasContent && (
               <div
-                className={`absolute inset-x-0 bottom-0 pb-8 text-white ${framed ? "px-5" : "px-6"}`}
+                className={`absolute inset-x-0 bottom-0 pb-8 text-white ${framed ? "px-4" : "px-6"}`}
                 style={{ textShadow: heroTextShadow }}
               >
                 {!catchTop && fvGroup}
