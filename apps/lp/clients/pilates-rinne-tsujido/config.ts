@@ -492,10 +492,13 @@ const config: RinneConfig = {
         tel: null,
         access: ["辻堂駅から徒歩2分", "近隣に無料駐輪場あり"],
         map: { placeholder: "辻堂店の地図", src: null },
+        // Googleマップ共有リンク（https://maps.app.goo.gl/FurAdYzjGvcXvR8h7）が指す
+        // Googleビジネスプロフィール名で検索し、店名ラベル付きピンを表示。
+        // 住所テキスト検索だと別店舗のピンにマッチしていたため、正式な店名指定に変更。
         mapEmbedSrc:
           "https://maps.google.com/maps?q=" +
-          encodeURIComponent("神奈川県茅ヶ崎市本宿町12-11 辻堂NWビル") +
-          "&z=16&output=embed",
+          encodeURIComponent("パーソナルマシンピラティス RINNE 辻堂スタジオ") +
+          "&z=17&output=embed",
       },
     ],
   },
