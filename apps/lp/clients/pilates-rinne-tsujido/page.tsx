@@ -68,10 +68,12 @@ function SectionHeading({
   text,
   variant = "accent",
   fontSize = 22,
+  nowrap = false,
 }: {
   text: string;
   variant?: "accent" | "white";
   fontSize?: number;
+  nowrap?: boolean;
 }) {
   const color = variant === "white" ? "#FFFFFF" : accent;
   const rule = variant === "white" ? "rgba(255,255,255,0.55)" : accent;
@@ -86,6 +88,7 @@ function SectionHeading({
           color,
           lineHeight: 1.5,
           margin: 0,
+          whiteSpace: nowrap ? "nowrap" : undefined,
         }}
       >
         {nl(text)}
@@ -867,7 +870,7 @@ export default function Page() {
 
           {/* ── ⑤ 姿勢診断について ── */}
           <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.posture.heading} fontSize={21} />
+            <SectionHeading text={c.posture.heading} fontSize={17} nowrap />
             <ImageSlot
               src={c.posture.photo.src}
               placeholder={c.posture.photo.placeholder}
@@ -967,7 +970,7 @@ export default function Page() {
 
           {/* ── ⑦ 初心者でも参加しやすい理由 ── */}
           <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.beginner.heading} fontSize={21} />
+            <SectionHeading text={c.beginner.heading} fontSize={15} nowrap />
             <p style={{ fontSize: 13, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
               {c.beginner.body}
             </p>
