@@ -23,6 +23,10 @@ const ctaGradAngle = (cta: string) => `linear-gradient(135deg, ${cta} 0%, #FF8A5
  * Pattern B — mobile-only single-column layout (matches pattern A's fixed
  * ~480px card convention). Desktop viewers just see the same mobile card
  * centered on a neutral background; there is no separate desktop layout.
+ *
+ * kaigyo-support は既存店舗オーナー向け「新規集客保証パック」LP。
+ * config.ts でこのクライアント専用に拡張したセクション（audience / guarantee /
+ * comparison / results / beforeAfter / industries）を追加で描画する。
  */
 export default function Page() {
   const c = config;
@@ -61,14 +65,16 @@ export default function Page() {
 
           {/* ── FV ── */}
           <section className="bg-[linear-gradient(160deg,var(--navy)_0%,#132C52_55%,#0A1E3B_100%)] px-5 py-12">
-            <h1 className="text-[24px] font-bold leading-[1.5] text-white">
+            <span className="text-[12px] font-bold tracking-wide text-white/60">{c.fv.eyebrow}</span>
+            <h1 className="mt-2 text-[24px] font-bold leading-[1.5] text-white">
               {c.fv.heading.map((line, i) => (
                 <span key={i} className="block">
                   {line}
                 </span>
               ))}
             </h1>
-            <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--cta)]/15 px-4 py-2 text-[13.5px] font-bold text-[var(--cta)]">
+            <p className="mt-2 text-[14.5px] font-bold text-[var(--blue)]">{c.fv.tagline}</p>
+            <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--cta)]/15 px-4 py-2 text-[13.5px] font-bold leading-snug text-[var(--cta)]">
               {c.fv.highlight}
             </div>
             <p className="mt-4 text-[13px] leading-[1.85] text-white/75">{nl(c.fv.sub)}</p>
@@ -94,6 +100,25 @@ export default function Page() {
             </div>
           </section>
 
+          {/* ── audience（対象者明記） ── */}
+          <section className="bg-white px-5 py-11">
+            <h2 className="text-[18.5px] font-bold leading-snug">{c.audience.heading}</h2>
+            <div className="mt-5 flex flex-col gap-2.5">
+              {c.audience.items.map((item) => (
+                <div key={item} className="flex items-start gap-2.5 rounded-xl bg-slate-50 px-4 py-3">
+                  <span
+                    className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
+                    style={{ background: c.cta }}
+                  >
+                    ✓
+                  </span>
+                  <span className="text-[13.5px] font-bold leading-relaxed">{item}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-[11px] leading-[1.85] text-slate-400">{c.audience.note}</p>
+          </section>
+
           {/* ── problem ── */}
           <section className="bg-slate-50 px-5 py-12">
             <span className="text-[11.5px] font-bold tracking-[0.15em] text-[var(--cta)]">
@@ -101,32 +126,23 @@ export default function Page() {
             </span>
             <h2 className="mt-2 text-[21px] font-bold leading-snug">{c.problem.heading}</h2>
             <p className="mt-4 text-[13px] leading-[1.85] text-slate-500">{nl(c.problem.lead)}</p>
-            <div className="relative mt-7">
+            <div className="mt-7">
               <ImageSlot
                 src={c.problem.persona.src}
                 placeholder={c.problem.persona.placeholder}
                 radius={16}
-                style={{ width: "100%", aspectRatio: "1 / 1" }}
+                style={{ width: "100%", aspectRatio: "16 / 10" }}
               />
-              <div className="pointer-events-none absolute inset-0">
-                {c.problem.tasks.map((t, i) => {
-                  const pos = [
-                    "left-[3%] top-[8%] -rotate-6",
-                    "right-[3%] top-[24%] rotate-3",
-                    "left-[5%] bottom-[18%] rotate-2",
-                    "right-[2%] bottom-[3%] -rotate-3",
-                  ][i % 4];
-                  return (
-                    <span
-                      key={t}
-                      className={`absolute ${pos} whitespace-nowrap rounded-xl bg-white px-3 py-1.5 text-[11px] font-bold text-slate-500 shadow-[0_8px_20px_rgba(11,37,69,0.16)]`}
-                    >
-                      {t}
-                    </span>
-                  );
-                })}
-              </div>
             </div>
+            <div className="mt-6 flex flex-col gap-3">
+              {c.problem.tasks.map((t) => (
+                <div key={t} className="flex items-start gap-2.5 rounded-xl bg-white px-4 py-3 shadow-[0_4px_14px_rgba(11,37,69,0.08)]">
+                  <span className="mt-0.5 shrink-0 text-[13px] font-bold text-[var(--cta)]">×</span>
+                  <span className="text-[12.5px] leading-relaxed text-slate-600">{t}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 text-center text-[14.5px] font-bold leading-snug">{nl(c.problem.closingLine)}</p>
           </section>
 
           {/* ── solution ── */}
@@ -137,35 +153,121 @@ export default function Page() {
             <h2 className="mt-2 text-[21px] font-bold leading-snug">{nl(c.solution.heading)}</h2>
             <p className="mt-4 text-[13px] leading-[1.85] text-slate-500">{nl(c.solution.lead)}</p>
             <div className="mt-7 rounded-3xl bg-slate-50 p-4">
-              <div className="flex items-center justify-center gap-1">
-                {c.solution.steps.map((s, i) => (
-                  <span key={s} className="flex items-center gap-1">
-                    <span className="flex h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-2xl bg-white px-2.5 text-[10px] font-bold text-[var(--navy)] shadow-[0_4px_14px_rgba(11,37,69,0.14)]">
-                      {s}
-                    </span>
-                    {i < c.solution.steps.length - 1 && (
-                      <span className="shrink-0 text-xs text-[var(--blue)]">→</span>
-                    )}
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {c.solution.steps.map((s) => (
+                  <span
+                    key={s}
+                    className="flex h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-2xl bg-white px-2.5 text-[10px] font-bold text-[var(--navy)] shadow-[0_4px_14px_rgba(11,37,69,0.14)]"
+                  >
+                    {s}
                   </span>
                 ))}
               </div>
               <div className="mt-5 text-center text-xl leading-none text-[var(--blue)]">↓</div>
               <div className="mx-auto mt-3 flex h-14 w-full max-w-[220px] items-center justify-center rounded-2xl bg-[var(--navy)] px-4 text-center text-[12.5px] font-bold text-white shadow-[0_10px_24px_rgba(11,37,69,0.3)]">
-                まとめてお任せください
+                新規顧客獲得を実現
+              </div>
+            </div>
+            <div className="mt-9 rounded-2xl bg-slate-50 p-5">
+              <h3 className="text-[16px] font-bold leading-snug">{nl(c.solution.scopeHeading)}</h3>
+              <p className="mt-3 text-[12.5px] leading-[1.9] text-slate-500">{nl(c.solution.scopeBody)}</p>
+            </div>
+          </section>
+
+          {/* ── funnel（広告だけでは完結しない／集客導線） ── */}
+          <section className="bg-[var(--navy)] px-5 py-12 text-white">
+            <h2 className="text-[21px] font-bold leading-snug">{nl(c.funnel.heading)}</h2>
+            <div className="mt-6 flex flex-col gap-2.5">
+              {c.funnel.painPoints.map((p) => (
+                <div key={p} className="flex items-start gap-2.5 rounded-xl bg-white/[0.06] px-4 py-3">
+                  <span className="mt-0.5 shrink-0 text-[13px] font-bold text-[var(--cta)]">×</span>
+                  <span className="text-[12.5px] leading-relaxed text-white/80">{p}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 text-[14px] font-bold leading-snug text-[var(--blue)]">{nl(c.funnel.statement)}</p>
+            <div className="mt-8 flex flex-col items-center gap-2">
+              {c.funnel.steps.map((s, i) => (
+                <div key={s} className="flex flex-col items-center gap-2">
+                  <span className="flex h-12 w-full max-w-[240px] items-center justify-center rounded-2xl bg-white px-4 text-center text-[13px] font-bold text-[var(--navy)] shadow-[0_8px_20px_rgba(0,0,0,0.2)]">
+                    {s}
+                  </span>
+                  {i < c.funnel.steps.length - 1 && <span className="text-lg leading-none text-[var(--blue)]">↓</span>}
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 text-center text-[13px] font-bold leading-snug text-white/80">{nl(c.funnel.caption)}</p>
+          </section>
+
+          {/* ── onestop（ワンストップ支援） ── */}
+          <section className="bg-white px-5 py-12">
+            <h2 className="text-center text-[21px] font-bold leading-snug">{nl(c.onestop.heading)}</h2>
+            <div className="mt-7 flex flex-col gap-2.5">
+              {c.onestop.items.map((item) => (
+                <div key={item} className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3">
+                  <span
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white"
+                    style={{ background: c.cta }}
+                  >
+                    ✓
+                  </span>
+                  <span className="text-[13px] font-bold">{item}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-[11px] leading-[1.85] text-slate-400">{c.onestop.note}</p>
+          </section>
+
+          {/* ── guarantee（成果保証訴求） ── */}
+          <section className="bg-[var(--navy)] px-5 py-12 text-center text-white">
+            <h2 className="text-[21px] font-bold leading-snug">{nl(c.guarantee.heading)}</h2>
+            <div className="mx-auto mt-6 inline-block rounded-2xl bg-white/[0.08] px-6 py-5">
+              <p className="text-[16px] font-bold leading-snug text-[var(--blue)]">{nl(c.guarantee.highlight)}</p>
+            </div>
+            <p className="mt-6 text-left text-[12.5px] leading-[1.9] text-white/75">{nl(c.guarantee.body)}</p>
+            <p className="mt-5 text-left text-[10.5px] leading-[1.8] text-white/40">{c.guarantee.footnote}</p>
+          </section>
+
+          {/* ── comparison（一般的な広告運用との違い） ── */}
+          <section className="bg-slate-50 px-5 py-12">
+            <h2 className="text-center text-[21px] font-bold">{c.comparison.heading}</h2>
+            <div className="mt-8 flex flex-col gap-4">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5">
+                <p className="text-[13.5px] font-bold text-slate-400">{c.comparison.general.label}</p>
+                <div className="mt-3 flex flex-col gap-2.5">
+                  {c.comparison.general.items.map((item) => (
+                    <div key={item} className="flex items-start gap-2 text-[12.5px] leading-relaxed text-slate-500">
+                      <span className="shrink-0 font-bold text-slate-400">×</span>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="text-center text-lg leading-none text-[var(--blue)]">↓</div>
+              <div className="rounded-2xl p-5 text-white shadow-[0_14px_34px_rgba(11,37,69,0.2)]" style={{ background: c.accent }}>
+                <p className="text-[13.5px] font-bold text-[var(--blue)]">{c.comparison.ours.label}</p>
+                <div className="mt-3 flex flex-col gap-2.5">
+                  {c.comparison.ours.items.map((item) => (
+                    <div key={item} className="flex items-start gap-2 text-[12.5px] font-bold leading-relaxed">
+                      <span className="shrink-0" style={{ color: c.cta }}>✓</span>
+                      {item}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
 
-          {/* ── benefits ── */}
-          <section id="benefits" className="bg-slate-50 px-5 py-12">
+          {/* ── benefits（支援内容） ── */}
+          <section id="benefits" className="bg-white px-5 py-12">
             <div className="text-center">
-              <h2 className="text-[21px] font-bold">{c.benefits.heading}</h2>
+              <h2 className="text-[21px] font-bold">{nl(c.benefits.heading)}</h2>
               <p className="mt-2 text-[13px] text-slate-500">{nl(c.benefits.lead)}</p>
             </div>
             <div className="mt-10 flex flex-col gap-12">
               {c.benefits.items.map((item) => (
                 <div key={item.num}>
-                  <div className="overflow-hidden rounded-2xl bg-white shadow-[0_14px_34px_rgba(11,37,69,0.12)]">
+                  <div className="overflow-hidden rounded-2xl bg-slate-50 shadow-[0_14px_34px_rgba(11,37,69,0.12)]">
                     <div className="flex items-center gap-1.5 border-b border-slate-100 bg-slate-50 px-4 py-2.5">
                       <span className="h-2 w-2 rounded-full bg-slate-300" />
                       <span className="h-2 w-2 rounded-full bg-slate-300" />
@@ -192,21 +294,82 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── advantage ── */}
-          <section id="advantage" className="bg-[var(--navy)] px-5 py-12 text-white">
-            <h2 className="text-center text-[21px] font-bold">{c.advantage.heading}</h2>
-            <div className="mt-10 flex flex-col gap-5">
-              {c.advantage.items.map((a, i) => (
-                <div key={a.title} className="rounded-2xl bg-white/[0.06] p-6">
+          {/* ── results（集客実績） ── */}
+          <section id="results" className="bg-slate-50 px-5 py-12">
+            <h2 className="text-center text-[21px] font-bold leading-snug">{nl(c.results.heading)}</h2>
+            <div className="mt-8 rounded-2xl bg-white p-6 text-center shadow-[0_14px_34px_rgba(11,37,69,0.1)]">
+              <p className="text-[13px] font-bold text-slate-400">{c.results.headline.label}</p>
+              <div className="mt-4 flex items-center justify-center gap-4">
+                <div>
+                  <p className="text-[10.5px] text-slate-400">導入前</p>
+                  <p className="mt-1 text-[15px] font-bold text-slate-400">{c.results.headline.before}</p>
+                </div>
+                <span className="text-xl text-[var(--blue)]">→</span>
+                <div>
+                  <p className="text-[10.5px] font-bold text-[var(--cta)]">導入後</p>
+                  <p className="mt-1 text-[19px] font-bold text-[var(--navy)]">{c.results.headline.after}</p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 grid grid-cols-3 gap-3">
+              {c.results.stats.map((s) => (
+                <div key={s.label} className="rounded-2xl bg-white p-4 text-center shadow-[0_6px_18px_rgba(11,37,69,0.08)]">
+                  <p className="text-[10px] font-bold text-slate-400">{s.label}</p>
+                  <p className="mt-2 text-[15px] font-bold text-[var(--navy)]">{s.value}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-center text-[10.5px] text-slate-400">{c.results.disclaimer}</p>
+          </section>
+
+          {/* ── beforeAfter（ビフォーアフター） ── */}
+          <section className="bg-white px-5 py-12">
+            <h2 className="text-center text-[21px] font-bold leading-snug">{nl(c.beforeAfter.heading)}</h2>
+            <div className="mt-8 flex flex-col gap-4">
+              {c.beforeAfter.items.map((item) => (
+                <div key={item.before} className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4">
+                  <div className="flex-1 text-center">
+                    <p className="text-[10px] font-bold text-slate-400">BEFORE</p>
+                    <p className="mt-1.5 text-[12.5px] font-bold leading-snug text-slate-500">{item.before}</p>
+                  </div>
+                  <span className="shrink-0 text-lg text-[var(--blue)]">→</span>
+                  <div className="flex-1 text-center">
+                    <p className="text-[10px] font-bold text-[var(--cta)]">AFTER</p>
+                    <p className="mt-1.5 text-[12.5px] font-bold leading-snug text-[var(--navy)]">{item.after}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── industries（対象業種） ── */}
+          <section className="bg-slate-50 px-5 py-12">
+            <h2 className="text-center text-[21px] font-bold">{c.industries.heading}</h2>
+            <div className="mt-7 flex flex-wrap justify-center gap-2.5">
+              {c.industries.items.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full bg-white px-4 py-2 text-[12px] font-bold text-[var(--navy)] shadow-[0_4px_14px_rgba(11,37,69,0.1)]"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </section>
+
+          {/* ── advantage（こんな方におすすめ） ── */}
+          <section className="bg-[var(--navy)] px-5 py-12 text-white">
+            <h2 className="text-center text-[21px] font-bold leading-snug">{c.advantage.heading}</h2>
+            <div className="mt-9 flex flex-col gap-3">
+              {c.advantage.items.map((a) => (
+                <div key={a.title} className="flex items-center gap-3 rounded-2xl bg-white/[0.06] px-5 py-4">
                   <span
-                    className="flex h-10 w-10 items-center justify-center rounded-xl text-[14px] font-bold text-white"
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white"
                     style={{ background: c.cta }}
                   >
-                    {i + 1}
+                    ✓
                   </span>
-                  <h3 className="mt-4 text-[15.5px] font-bold">{a.title}</h3>
-                  <p className="mt-2 text-[12.5px] leading-[1.85] text-white/70">{a.body}</p>
-                  {a.stat && <p className="mt-3 text-[12.5px] font-bold text-[var(--blue)]">{a.stat}</p>}
+                  <h3 className="text-[14px] font-bold leading-snug">{a.title}</h3>
                 </div>
               ))}
             </div>
@@ -255,7 +418,7 @@ export default function Page() {
             <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(11,37,69,0.92),rgba(10,30,59,0.86))]" />
             <div className="relative">
               <h2 className="text-[21px] font-bold leading-snug">{nl(c.closing.heading)}</h2>
-              <p className="mt-4 text-[13px] leading-[1.85] text-white/80">{c.closing.body}</p>
+              <p className="mt-4 text-[13px] leading-[1.85] text-white/80">{nl(c.closing.body)}</p>
               <a
                 href="#form"
                 className="mt-7 inline-flex h-14 items-center justify-center gap-2 rounded-full px-7 text-[14.5px] font-bold text-white shadow-[0_10px_26px_rgba(255,106,43,0.45)]"

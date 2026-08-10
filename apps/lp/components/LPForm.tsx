@@ -34,6 +34,11 @@ export type TextareaField = FieldBase & {
   placeholder?: string;
   rows?: number;
 };
+export type CheckboxGroupField = FieldBase & {
+  type: "checkboxGroup";
+  options: { value: string; label: string }[];
+  columns?: number;
+};
 export type SelectField = FieldBase & {
   type: "select";
   /** Flat option list. Use `groups` instead for a grouped <optgroup> layout. */
@@ -60,7 +65,7 @@ export type SelectField = FieldBase & {
   };
   placeholder?: string;
 };
-export type LPFormField = ToggleField | InputField | TextareaField | SelectField;
+export type LPFormField = ToggleField | InputField | TextareaField | SelectField | CheckboxGroupField;
 
 export interface LPFormProps {
   /** Slug of the owning client — sent with every submission. */
@@ -228,6 +233,17 @@ export default function LPForm({
       return next;
     });
 
+  // Checkbox-group values are stored as a comma-joined string to fit the
+  // flat Record<string, string> shape the backend expects.
+  const toggleCheckboxOption = (name: string, value: string) =>
+    setValues((v) => {
+      const current = (v[name] ?? "").split(",").filter(Boolean);
+      const next = current.includes(value)
+        ? current.filter((x) => x !== value)
+        : [...current, value];
+      return { ...v, [name]: next.join(",") };
+    });
+
   const requiredTag = (f: FieldBase) =>
     f.required ? (
       <span className="lpform-required-tag" style={{ color: "#C25B4B", fontSize: 11, marginLeft: 6 }}>必須</span>
@@ -373,6 +389,50 @@ export default function LPForm({
                         fontSize: 14,
                         fontWeight: 700,
                         cursor: "pointer",
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        if (f.type === "checkboxGroup") {
+          const current = (values[f.name] ?? "").split(",").filter(Boolean);
+          return (
+            <div key={f.name} style={fieldWrapperStyle}>
+              <label style={labelStyle}>
+                {f.label}
+                {requiredTag(f)}
+              </label>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: `repeat(${f.columns ?? 2}, 1fr)`,
+                  gap: 10,
+                }}
+              >
+                {f.options.map((opt) => {
+                  const active = current.includes(opt.value);
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => toggleCheckboxOption(f.name, opt.value)}
+                      style={{
+                        height: 48,
+                        borderRadius: 8,
+                        border: `1.5px solid ${active ? accent : "#DDD6C8"}`,
+                        background: active ? accent : "#FFFFFF",
+                        color: active ? "#FFFFFF" : "#4C4E45",
+                        fontFamily: "inherit",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        padding: "0 8px",
                       }}
                     >
                       {opt.label}
