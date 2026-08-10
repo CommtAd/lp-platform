@@ -697,6 +697,20 @@ export default function Page() {
             </section>
           )}
 
+          {/* ── facility（施設紹介） ── */}
+          {c.facility && (
+            <section className={`${lightBg()} py-12`}>
+              <div className="px-5">
+                <Heading
+                  kicker="FACILITY"
+                  title={c.facility.heading}
+                  lead={c.facility.lead}
+                />
+              </div>
+              <Carousel items={c.facility.items} aspect={c.facility.aspect} />
+            </section>
+          )}
+
           {/* ── experience（カルーセル） ── */}
           <section className={`${lightBg()} py-12`}>
             <div className="px-5">
@@ -976,20 +990,6 @@ export default function Page() {
                   </div>
                 ))}
               </div>
-            </section>
-          )}
-
-          {/* ── facility（施設紹介） ── */}
-          {c.facility && (
-            <section className={`${lightBg()} py-12`}>
-              <div className="px-5">
-                <Heading
-                  kicker="FACILITY"
-                  title={c.facility.heading}
-                  lead={c.facility.lead}
-                />
-              </div>
-              <Carousel items={c.facility.items} aspect={c.facility.aspect} />
             </section>
           )}
 
