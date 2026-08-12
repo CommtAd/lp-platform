@@ -16,6 +16,30 @@ export const INDUSTRY_LABEL: Record<Industry, string> = {
 
 export const INDUSTRIES: Industry[] = ["fitness", "bridal", "other"];
 
+/**
+ * 独自ドメインを持たない顧客LPの配信ホスト。業種で振り分ける。
+ * どちらも同一のVercelプロジェクトを指すので、技術的にはどちらのホストでも
+ * 全slugが表示できる。顧客に案内するURLを分けるための対応表。
+ */
+export const INDUSTRY_LP_HOST: Record<Industry, string> = {
+  fitness: "fitness-lp.commitad.com",
+  bridal: "bridal-lp.commitad.com",
+  other: "fitness-lp.commitad.com",
+};
+
+/**
+ * 顧客LPの公開URL。独自ドメインが設定されていればそちらを優先する
+ * （LPShell も canonical 指定時はそこへリダイレクトする）。
+ */
+export function publicLpUrl(client: {
+  slug: string;
+  industry?: Industry | null;
+  custom_domain?: string | null;
+}): string {
+  if (client.custom_domain) return `https://${client.custom_domain}/`;
+  return `https://${INDUSTRY_LP_HOST[client.industry ?? "fitness"]}/${client.slug}`;
+}
+
 export interface CvEvents {
   form_submit?: boolean;
   tel_tap?: boolean;

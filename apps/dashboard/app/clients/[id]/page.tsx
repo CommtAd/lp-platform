@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { setPublishState, updateClientRecord, updateCustomDomain } from "../../actions";
 import { getDomainStatus, type DomainStatus } from "@/lib/vercel-domains";
-import { INDUSTRIES, INDUSTRY_LABEL, type ClientRecord } from "@shared/index";
+import { INDUSTRIES, INDUSTRY_LABEL, publicLpUrl, type ClientRecord } from "@shared/index";
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "下書き",
@@ -31,6 +31,8 @@ export default async function ClientDetailPage({
   const unpublish = setPublishState.bind(null, client.id, "unpublished");
   const domainUpdate = updateCustomDomain.bind(null, client.id);
   const domainStatus = client.custom_domain ? await getDomainStatus(client.custom_domain) : null;
+  // 独自ドメインがあればそちら、無ければ業種で fitness-lp / bridal-lp に振り分ける。
+  const lpUrl = publicLpUrl(client);
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
@@ -38,14 +40,25 @@ export default async function ClientDetailPage({
         ← 一覧に戻る
       </Link>
 
-      <div className="mb-6 mt-4 flex items-center justify-between">
-        <div>
+      <div className="mb-6 mt-4 flex items-start justify-between gap-4">
+        <div className="min-w-0">
           <h1 className="text-xl font-semibold text-navy">{client.name}</h1>
           <p className="text-sm text-neutral-500">/{client.slug}</p>
         </div>
-        <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600">
-          {STATUS_LABEL[client.status]}
-        </span>
+        <div className="flex shrink-0 items-center gap-3">
+          <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600">
+            {STATUS_LABEL[client.status]}
+          </span>
+          {/* 下書き・非公開でも開けるようにしておく（LPShell が noindex を出すだけで表示はされる）。 */}
+          <a
+            href={lpUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-50"
+          >
+            公開ページを開く ↗
+          </a>
+        </div>
       </div>
 
       {saved ? (
@@ -60,8 +73,14 @@ export default async function ClientDetailPage({
       {/* 公開状態の切替 */}
       <section className="mb-8 rounded-lg border border-neutral-200 bg-white p-5">
         <h2 className="mb-1 text-sm font-semibold">公開状態</h2>
-        <p className="mb-4 text-xs text-neutral-500">
+        <p className="mb-3 text-xs text-neutral-500">
           切替時に Vercel Deploy Hook が発火し、LPサイトが再ビルドされます。
+        </p>
+        <p className="mb-4 break-all text-xs text-neutral-500">
+          公開URL:{" "}
+          <a href={lpUrl} target="_blank" rel="noreferrer" className="text-navy underline">
+            {lpUrl}
+          </a>
         </p>
         <div className="flex gap-3">
           {client.status === "published" ? (

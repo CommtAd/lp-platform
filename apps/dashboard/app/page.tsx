@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signout } from "./login/actions";
-import { INDUSTRIES, INDUSTRY_LABEL, type ClientRecord, type Industry } from "@shared/index";
+import {
+  INDUSTRIES,
+  INDUSTRY_LABEL,
+  publicLpUrl,
+  type ClientRecord,
+  type Industry,
+} from "@shared/index";
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "下書き",
@@ -30,12 +36,19 @@ export default async function HomePage({
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("clients")
-    .select("id, slug, name, status, industry, meta_pixel_id, commitad_client_id")
+    .select("id, slug, name, status, industry, custom_domain, meta_pixel_id, commitad_client_id")
     .order("created_at", { ascending: false });
 
   const all = (data ?? []) as Pick<
     ClientRecord,
-    "id" | "slug" | "name" | "status" | "industry" | "meta_pixel_id" | "commitad_client_id"
+    | "id"
+    | "slug"
+    | "name"
+    | "status"
+    | "industry"
+    | "custom_domain"
+    | "meta_pixel_id"
+    | "commitad_client_id"
   >[];
 
   // 0015 以前に作られた行は industry が入っていない可能性があるため fitness に寄せる。
@@ -106,26 +119,32 @@ export default async function HomePage({
       ) : (
         <ul className="divide-y divide-neutral-200 overflow-hidden rounded-lg border border-neutral-200 bg-white">
           {clients.map((c) => (
-            <li key={c.id}>
-              <Link
-                href={`/clients/${c.id}`}
-                className="flex items-center justify-between px-4 py-4 transition hover:bg-neutral-50"
-              >
-                <div>
-                  <p className="font-medium">{c.name}</p>
-                  <p className="text-xs text-neutral-500">
-                    /{c.slug}
-                    {` · ${INDUSTRY_LABEL[industryOf(c)]}`}
-                    {c.meta_pixel_id ? " · Pixel設定済" : " · Pixel未設定"}
-                    {c.commitad_client_id ? " · CommitAd連携済" : ""}
-                  </p>
-                </div>
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLE[c.status]}`}
-                >
-                  {STATUS_LABEL[c.status]}
-                </span>
+            // 行全体は詳細へのリンク。公開ページへのリンクは入れ子にできないので
+            // 兄弟要素として並べる。
+            <li key={c.id} className="flex items-center transition hover:bg-neutral-50">
+              <Link href={`/clients/${c.id}`} className="min-w-0 flex-1 px-4 py-4">
+                <p className="font-medium">{c.name}</p>
+                <p className="text-xs text-neutral-500">
+                  /{c.slug}
+                  {` · ${INDUSTRY_LABEL[industryOf(c)]}`}
+                  {c.meta_pixel_id ? " · Pixel設定済" : " · Pixel未設定"}
+                  {c.commitad_client_id ? " · CommitAd連携済" : ""}
+                </p>
               </Link>
+              <span
+                className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLE[c.status]}`}
+              >
+                {STATUS_LABEL[c.status]}
+              </span>
+              <a
+                href={publicLpUrl({ ...c, industry: industryOf(c) })}
+                target="_blank"
+                rel="noreferrer"
+                title="公開ページを開く"
+                className="shrink-0 px-4 py-4 text-sm text-neutral-400 transition hover:text-navy"
+              >
+                ↗
+              </a>
             </li>
           ))}
         </ul>
