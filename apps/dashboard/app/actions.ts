@@ -5,10 +5,16 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { VERCEL_DEPLOY_HOOK_URL } from "@/lib/env";
 import { addDomainToProject, removeDomainFromProject } from "@/lib/vercel-domains";
-import type { ClientStatus } from "@shared/index";
+import { INDUSTRIES, type ClientStatus, type Industry } from "@shared/index";
 
 const SLUG_RE = /^[a-z0-9-]+$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Read the industry tab from a form, falling back to fitness for unknown values. */
+function readIndustry(formData: FormData): Industry {
+  const v = String(formData.get("industry") ?? "");
+  return (INDUSTRIES as string[]).includes(v) ? (v as Industry) : "fitness";
+}
 
 /** Create a new client row owned by the current user. */
 export async function createClientRecord(formData: FormData) {
@@ -32,6 +38,7 @@ export async function createClientRecord(formData: FormData) {
     slug,
     name,
     status: "draft",
+    industry: readIndustry(formData),
     owner_user_id: user.id,
   });
 
@@ -69,6 +76,7 @@ export async function updateClientRecord(clientId: string, formData: FormData) {
     .from("clients")
     .update({
       name: String(formData.get("name") ?? "").trim(),
+      industry: readIndustry(formData),
       meta_pixel_id: emptyToNull(formData.get("meta_pixel_id")),
       ga4_id: emptyToNull(formData.get("ga4_id")),
       gtm_id: emptyToNull(formData.get("gtm_id")),
