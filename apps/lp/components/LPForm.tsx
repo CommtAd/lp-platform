@@ -34,6 +34,11 @@ export type TextareaField = FieldBase & {
   placeholder?: string;
   rows?: number;
 };
+export type CheckboxGroupField = FieldBase & {
+  type: "checkboxGroup";
+  options: { value: string; label: string }[];
+  columns?: number;
+};
 export type SelectField = FieldBase & {
   type: "select";
   /** Flat option list. Use `groups` instead for a grouped <optgroup> layout. */
@@ -44,17 +49,23 @@ export type SelectField = FieldBase & {
    * Resolve the option list from another field's date value instead of a
    * static list: weekday → `weekday`, Sat/Sun → `weekend`. The select is
    * disabled with a hint until that date field has a value.
+   *
+   * Optional `saturday` splits Saturday out from `weekend` (e.g. a studio open
+   * full weekday hours on Sat but shorter on Sun). When omitted, Saturday keeps
+   * using `weekend` (backward compatible). `byDate` still overrides everything.
    */
   dateLinkedOptions?: {
     dateField: string;
     weekday: { value: string; label: string }[];
     weekend: { value: string; label: string }[];
-    /** Exact-date overrides ("YYYY-MM-DD" → options), e.g. for a manually-managed weekly schedule. Takes priority over weekday/weekend. */
+    /** Saturday-only options. Takes priority over `weekend` for Saturdays; falls back to `weekend` when omitted. */
+    saturday?: { value: string; label: string }[];
+    /** Exact-date overrides ("YYYY-MM-DD" → options), e.g. for holidays or a manually-managed weekly schedule. Takes priority over weekday/saturday/weekend. */
     byDate?: Record<string, { value: string; label: string }[]>;
   };
   placeholder?: string;
 };
-export type LPFormField = ToggleField | InputField | TextareaField | SelectField;
+export type LPFormField = ToggleField | InputField | TextareaField | SelectField | CheckboxGroupField;
 
 export interface LPFormProps {
   /** Slug of the owning client — sent with every submission. */
@@ -149,6 +160,13 @@ function isWeekendISODate(iso: string): boolean {
   return day === 0 || day === 6;
 }
 
+/** True for Saturday. Parses "YYYY-MM-DD" as local calendar date. */
+function isSaturdayISODate(iso: string): boolean {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return false;
+  return new Date(y, m - 1, d).getDay() === 6;
+}
+
 /* ── default styles (match pattern A design) ────────────────── */
 
 const labelStyle: CSSProperties = {
@@ -213,6 +231,17 @@ export default function LPForm({
         }
       }
       return next;
+    });
+
+  // Checkbox-group values are stored as a comma-joined string to fit the
+  // flat Record<string, string> shape the backend expects.
+  const toggleCheckboxOption = (name: string, value: string) =>
+    setValues((v) => {
+      const current = (v[name] ?? "").split(",").filter(Boolean);
+      const next = current.includes(value)
+        ? current.filter((x) => x !== value)
+        : [...current, value];
+      return { ...v, [name]: next.join(",") };
     });
 
   const requiredTag = (f: FieldBase) =>
@@ -371,6 +400,50 @@ export default function LPForm({
           );
         }
 
+        if (f.type === "checkboxGroup") {
+          const current = (values[f.name] ?? "").split(",").filter(Boolean);
+          return (
+            <div key={f.name} style={fieldWrapperStyle}>
+              <label style={labelStyle}>
+                {f.label}
+                {requiredTag(f)}
+              </label>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: `repeat(${f.columns ?? 2}, 1fr)`,
+                  gap: 10,
+                }}
+              >
+                {f.options.map((opt) => {
+                  const active = current.includes(opt.value);
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => toggleCheckboxOption(f.name, opt.value)}
+                      style={{
+                        height: 48,
+                        borderRadius: 8,
+                        border: `1.5px solid ${active ? accent : "#DDD6C8"}`,
+                        background: active ? accent : "#FFFFFF",
+                        color: active ? "#FFFFFF" : "#4C4E45",
+                        fontFamily: "inherit",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        padding: "0 8px",
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
         const focusStyle: CSSProperties =
           focused === f.name
             ? { borderColor: accent, outline: "none" }
@@ -382,7 +455,11 @@ export default function LPForm({
           const linkedDateValue = linked ? values[linked.dateField] ?? "" : "";
           const linkedOptions = linked
             ? linked.byDate?.[linkedDateValue] ??
-              (isWeekendISODate(linkedDateValue) ? linked.weekend : linked.weekday)
+              (isSaturdayISODate(linkedDateValue) && linked.saturday
+                ? linked.saturday
+                : isWeekendISODate(linkedDateValue)
+                  ? linked.weekend
+                  : linked.weekday)
             : undefined;
           const disabled = !!linked && !linkedDateValue;
           return (

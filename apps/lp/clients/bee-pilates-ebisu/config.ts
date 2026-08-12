@@ -87,7 +87,8 @@ export interface BeeConfig {
 
   reasons: {
     heading: string;
-    items: { num: string; img: Slot; title: string; body: string }[];
+    /** imgContain: 写真ではなくロゴ等を余白付き・全体表示（object-fit: contain）で見せる */
+    items: { num: string; img: Slot; title: string; body: string; imgContain?: boolean }[];
     ctaText: string;
     ctaSub: string;
   };
@@ -173,15 +174,15 @@ const config: BeeConfig = {
   ctaUrl: CTA_URL,
   meta: {
     title:
-      "Pilates Studio Beê 恵比寿店｜完全個室パーソナルピラティス｜2026.8.1 GRAND OPEN 体験500円",
+      "Pilates Studio Beê 恵比寿店｜女性専用・完全個室パーソナルピラティス｜2026.8.1 GRAND OPEN 体験500円",
     description:
-      "恵比寿駅徒歩2分、完全個室のパーソナルピラティス専門スタジオ。2026年8月1日グランドオープン。オープン記念で55分の体験レッスンが通常5,500円→500円（税込）。入会金22,000円も体験レッスン時の入会で0円。初めての方も、何歳からでも、プロによる一対一のオーダーメイドレッスンで、姿勢を整え、芯から美しい身体を。",
+      "恵比寿駅徒歩2分、女性専用・完全個室のパーソナルピラティス専門スタジオ。2026年8月1日グランドオープン。オープン記念で55分の体験レッスンが通常5,500円→500円（税込）。入会金22,000円も体験レッスン時の入会で0円。初めての方も、何歳からでも、プロによる一対一のオーダーメイドレッスンで、姿勢を整え、芯から美しい身体を。",
     ogpImage: `${ASSET}/ogp.jpg`,
   },
 
   header: {
     brand: "Pilates Studio Beê",
-    brandSub: "恵比寿店｜完全個室パーソナルピラティス",
+    brandSub: "恵比寿店｜女性専用・完全個室パーソナル",
     access: [{ station: "恵比寿駅", walk: "徒歩2分" }],
   },
 
@@ -192,7 +193,7 @@ const config: BeeConfig = {
 
   fv: {
     openBadge: { small: "2026", big: "8.1", en: "GRAND OPEN" },
-    catchTop: "恵比寿駅 徒歩2分｜完全個室パーソナル",
+    catchTop: "恵比寿駅 徒歩2分｜女性専用・完全個室",
     catchLines: ["ずっと、", "もっと、", "美しく。"],
     lead: "身体の芯から整え、内側から輝く美しさを育てる。\nもっと自由に、もっと快適に、ずっと自分らしく。\nプロと一対一で向き合う、あなただけのためのピラティス。",
     hero: { placeholder: "スタジオ内観 / マシンピラティスの写真（全面）", src: `${ASSET}/hero.jpg`, position: "center" },
@@ -204,7 +205,7 @@ const config: BeeConfig = {
       unit: "円",
       priceNote: "（税込）",
     },
-    tags: ["完全個室", "マンツーマン", "初心者歓迎"],
+    tags: ["女性専用", "完全個室", "初心者歓迎"],
     notes: [
       "※体験レッスンが500円（税込）となるのはオープン記念キャンペーン期間中に初めてご予約された方です。",
       "※体験レッスンは1名さま1回限りとなります。",
@@ -302,19 +303,19 @@ const config: BeeConfig = {
       },
       {
         num: "03",
-        img: { placeholder: "スタジオ内観 / マシン設備の写真", src: `${ASSET}/reason-3.jpg`, position: "center 38%" },
+        img: { placeholder: "スタジオ内観 / マシン設備の写真", src: `${ASSET}/reason-3.jpg`, position: "center" },
         title: "充実の\nマシン設備",
         body: "本格的なピラティスマシンを完備。マシンならではのサポートと負荷で、初心者の方でも正しい動きを効率よく身につけられます。",
       },
       {
         num: "04",
-        img: { placeholder: "レッスン風景の写真", src: `${ASSET}/reason-4.jpg`, position: "center 30%" },
+        img: { placeholder: "レッスン風景の写真", src: `${ASSET}/reason-4.jpg`, position: "center 42%" },
         title: "続けやすい\n価格設定",
-        body: "55分のレッスンを、続けやすい料金で。月4回プランなら1回あたり税込7,425円（女性）から。無理なく通い続けられます。",
+        body: "55分のレッスンを、続けやすい料金で。月4回プランなら1回あたり税込7,425円から。無理なく通い続けられます。",
       },
       {
         num: "05",
-        img: { placeholder: "恵比寿駅前 / 店舗外観の写真", src: `${ASSET}/reason-5.jpg` },
+        img: { placeholder: "スタジオ / Beêロゴの写真", src: `${ASSET}/reason-5.jpg`, position: "center" },
         title: "恵比寿駅から\n徒歩2分の好立地",
         body: "恵比寿駅から徒歩2分。お仕事帰りやお出かけのついでにも通いやすい立地です。さらに五反田・目黒・新富町・奥沢・船橋の姉妹店を追加料金なしで相互利用でき、その日のご予定やお近くの店舗に合わせて通えます。",
       },
@@ -332,7 +333,7 @@ const config: BeeConfig = {
         name: "月4回プラン",
         note: "月4回・55分パーソナル",
         perLesson: "7,425",
-        genderNote: "女性・1回あたり（税込）",
+        genderNote: "1回あたり（税込）",
       },
     ],
     joinFee: {
@@ -342,8 +343,8 @@ const config: BeeConfig = {
       note: "体験レッスン時のご入会で0円（税込）",
     },
     notes: [
+      "※Beê 恵比寿店は女性専用スタジオです。",
       "※表示は月4回プランの1回あたりの料金（税込）です。",
-      "※男性の月4回プランは1回あたり税込9,625円です。",
       "※そのほかのプランや詳細は、体験レッスン時にご案内いたします。",
     ],
   },
@@ -442,6 +443,10 @@ const config: BeeConfig = {
       {
         q: "運動経験がなくても大丈夫ですか？",
         a: "はい、ご安心ください。Beê は完全個室のマンツーマン指導です。プロのインストラクターがお一人おひとりの体力やペースに合わせてレッスンを組み立てますので、初めての方や運動が苦手な方でも無理なく取り組めます。何歳からでも安心してお始めいただけます。",
+      },
+      {
+        q: "男性も通えますか？",
+        a: "申し訳ございません。Beê 恵比寿店は女性専用スタジオです。女性のお客様が安心して集中してレッスンに取り組める空間づくりをしています。",
       },
       {
         q: "何を持っていけばよいですか？",

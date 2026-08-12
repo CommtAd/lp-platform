@@ -21,6 +21,11 @@ export const clientRegistry: Record<
   "demo01": () => import("./demo01/page"),
   "wps-pilates": () => import("./wps-pilates/page"),
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/page"),
+  "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/page"),
+  "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/page"),
+  "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/page"),
+  "estudio": () => import("./estudio/page"),
+  "training-studio-arcs": () => import("./training-studio-arcs/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -35,6 +40,7 @@ export const clientThanksRegistry: Partial<
 > = {
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/thanks"),
   "kaigyo-support": () => import("./kaigyo-support/thanks"),
+  "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/thanks"),
 };
 
 interface ClientMeta {
@@ -65,4 +71,9 @@ export const clientMetaRegistry: Record<
   "demo01": () => import("./demo01/config"),
   "wps-pilates": () => import("./wps-pilates/config"),
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/config"),
+  "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/config"),
+  "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/config"),
+  "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/config"),
+  "estudio": () => import("./estudio/config"),
+  "training-studio-arcs": () => import("./training-studio-arcs/config"),
 };

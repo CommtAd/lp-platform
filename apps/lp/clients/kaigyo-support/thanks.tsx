@@ -41,7 +41,7 @@ export default function ThanksPage() {
               お問い合わせありがとうございます
             </p>
             <p className="mt-4 text-[13px] leading-[1.9] text-slate-500">
-              ご相談・お見積りのお申し込みを受け付けました。
+              新規集客に関するご相談のお申し込みを受け付けました。
               <br />
               担当より24時間以内にご連絡いたします。
               <br />
