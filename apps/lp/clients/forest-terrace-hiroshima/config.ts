@@ -276,18 +276,18 @@ const config: PatternCConfig = {
       { type: "date", name: "visit_date_1", label: "ご来館希望日（第一希望）", required: true },
       { type: "date", name: "visit_date_2", label: "ご来館希望日（第二希望）", required: true },
       {
+        // 挙式の招待人数ではなく、フェア当日に来館する人数。
+        // おふたりだけか、ご両親が同席するかで案内の準備が変わる。
         type: "select",
         name: "guests",
-        label: "ご人数",
+        label: "ご来館人数",
         required: true,
         placeholder: "選択してください",
         options: [
-          { value: "u20", label: "〜20名" },
-          { value: "u40", label: "21〜40名" },
-          { value: "u60", label: "41〜60名" },
-          { value: "u80", label: "61〜80名" },
-          { value: "o80", label: "81名以上" },
-          { value: "unset", label: "未定" },
+          { value: "1", label: "1名" },
+          { value: "2", label: "2名" },
+          { value: "3", label: "3名" },
+          { value: "4over", label: "4名以上" },
         ],
       },
       {
