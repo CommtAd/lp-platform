@@ -47,7 +47,7 @@ export default function ThanksPage() {
             <p style={{ fontSize: 13, lineHeight: 1.9, color: textDim, margin: "16px 0 0" }}>
               お申し込みを受け付けました。
               <br />
-              担当より24時間以内にご連絡いたします。
+              ご登録いただいたメールアドレス宛にご予約完了メールを送信しましたのでご確認ください。
               <br />
               今しばらくお待ちくださいませ。
             </p>
