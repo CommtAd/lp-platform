@@ -804,7 +804,6 @@ export default function Page() {
             <StoreCtaButtons
               stores={[
                 { value: "umeda", label: "梅田店の体験予約する", url: c.storeUrls.umeda },
-                { value: "shinsaibashi", label: "心斎橋店の体験予約する", url: c.storeUrls.shinsaibashi },
               ]}
             />
             {c.form.disclaimer && (
