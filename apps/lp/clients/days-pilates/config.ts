@@ -40,9 +40,9 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
   slug: "days-pilates",
   status: "draft",
   meta: {
-    title: "DAYS PILATES｜梅田・心斎橋の女性専用マシンピラティススタジオ",
+    title: "DAYS PILATES｜梅田の女性専用マシンピラティススタジオ",
     description:
-      "整体×マシンピラティスで肩こり・腰痛・むくみ・姿勢の崩れなど身体の不調を整える女性専用スタジオ。初回体験0円・入会金＋事務手数料0円。梅田駅・心斎橋駅 徒歩2分、定休日なし。",
+      "整体×マシンピラティスで肩こり・腰痛・むくみ・姿勢の崩れなど身体の不調を整える女性専用スタジオ。初回体験0円・入会金＋事務手数料0円。梅田駅 徒歩2分、定休日なし。",
     ogpImage: undefined,
   },
   // 公式サイト https://dayspilates.com/ の配色に合わせた accent。
@@ -54,10 +54,7 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
   header: {
     brand: "DAYS PILATES",
     brandSub: "整体×マシンピラティス｜女性専用スタジオ",
-    access: [
-      { station: "梅田駅", walk: "徒歩2分" },
-      { station: "心斎橋駅", walk: "徒歩2分" },
-    ],
+    access: [{ station: "梅田駅", walk: "徒歩2分" }],
   },
   offerBar: {
     badgeLines: ["初回", "特典"],
@@ -66,7 +63,7 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
     badgeFontFamily: "mincho",
     text: "初回体験0円・入会金0円",
   },
-  achievement: { pre: "大阪", num: "2", post: "店舗｜女性専用の整体×マシンピラティススタジオ" },
+  achievement: { pre: "", num: "", post: "女性専用の整体×マシンピラティススタジオ" },
   storeUrls: STORE_URLS,
 
   fv: {
@@ -301,13 +298,6 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
         route:
           "（定休日なし）\n地下鉄 東梅田駅・梅田駅「M14」出口 徒歩2分／阪急梅田駅・JR大阪駅 徒歩5分",
       },
-      {
-        img: { placeholder: "心斎橋店の外観 / 内観写真", src: `${ASSET}/store-shinsaibashi.jpg` },
-        name: "心斎橋店",
-        address: "大阪府大阪市中央区西心斎橋1-1-10 プレリー心斎橋ビル5F",
-        hours: "営業時間 7:40〜21:00",
-        route: "（定休日なし）\n地下鉄 心斎橋駅 徒歩2分／クリスタ長堀 南14番出口すぐ",
-      },
     ],
   },
 
@@ -321,10 +311,7 @@ const config: PatternAConfig & { storeUrls: StoreUrls } = {
         label: "ご希望店舗",
         required: true,
         columns: 2,
-        options: [
-          { value: "umeda", label: "梅田店" },
-          { value: "shinsaibashi", label: "心斎橋店" },
-        ],
+        options: [{ value: "umeda", label: "梅田店" }],
       },
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
