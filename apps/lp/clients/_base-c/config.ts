@@ -37,6 +37,14 @@ const config: PatternCConfig = {
     hero: { placeholder: "チャペルまたはガーデンの引き写真（横位置・人物入り）", src: null },
   },
 
+  // 新規オープンで会場名の認知がない場合のみ入れる。不要なら丸ごと削除する。
+  brand: {
+    heading: "0000年0月 GRAND OPEN",
+    lead: "〇〇から\n新たに生まれたブライダルブランド\n〇〇〇〇",
+    image: { placeholder: "会場を象徴する写真（新郎新婦入り）", src: null },
+    body: "ブランドの紹介文がここに入ります。\n改行位置は \\n で指定できます。\nダミーテキストのため実データに\n差し替えてください。",
+  },
+
   fvSummary: {
     headline: "最大〇万円の来館ギフトがついてくる",
     headlineEmphasis: "最大〇万円",
@@ -260,6 +268,8 @@ const config: PatternCConfig = {
     routes: ["〇〇線「〇〇駅」より徒歩0分", "〇〇ICより車で0分／駐車場00台"],
     tel: "000-0000-0000",
     telNote: "受付時間 00:00 - 00:00（〇曜定休）",
+    // Googleマップの埋め込み。同意取得が必要な案件では削除する。
+    mapEmbed: { query: "〇〇〇〇 〇〇県〇〇市〇〇0-0-0" },
     map: { placeholder: "会場の外観写真または地図キャプチャ", src: null },
   },
 

@@ -327,12 +327,23 @@ export default function Page() {
         : "linear-gradient(180deg,rgba(59,55,48,0.70) 0%,rgba(59,55,48,0.38) 34%,rgba(59,55,48,0.06) 60%,rgba(59,55,48,0.12) 100%)";
 
   const fvKicker = (
-    <span
-      className="text-[12px] italic tracking-[0.28em]"
-      style={{ fontFamily: playfair, color: framed ? goldOnWhite : undefined }}
-    >
-      {c.fv.kicker}
-    </span>
+    <>
+      {c.fv.brand && (
+        // 会場名はキッカーの上。フェア名より一段細く置いて、主役をフェア名に残す。
+        <span
+          className="mb-2 block text-[12.5px] tracking-[0.18em]"
+          style={{ fontFamily: mincho }}
+        >
+          {c.fv.brand}
+        </span>
+      )}
+      <span
+        className="text-[12px] italic tracking-[0.28em]"
+        style={{ fontFamily: playfair, color: framed ? goldOnWhite : undefined }}
+      >
+        {c.fv.kicker}
+      </span>
+    </>
   );
   const fvCatch = (
     <h1
@@ -540,6 +551,39 @@ export default function Page() {
               </div>
             )}
           </section>
+
+          {/*
+            ── ブランド紹介 ──
+            会場が新規オープンで認知がない場合に、FVの直後で「何者か」を先に伝える。
+            既存の認知がある会場では丸ごと省く（brand 未設定でスキップ）。
+          */}
+          {c.brand && (
+            <section className={`${lightBg()} px-5 py-12 text-center`}>
+              <p
+                className="text-[19px] leading-snug"
+                style={{ fontFamily: mincho, color: c.brand.accent }}
+              >
+                {c.brand.heading}
+              </p>
+              <p
+                className="mt-4 text-[15px] leading-[1.9]"
+                style={{ fontFamily: mincho, color: c.brand.accent }}
+              >
+                {nl(c.brand.lead)}
+              </p>
+              <div className="mt-7">
+                <ImageSlot
+                  src={c.brand.image.src}
+                  placeholder={c.brand.image.placeholder}
+                  objectPosition={c.brand.image.position ?? "center"}
+                  radius={3}
+                  style={{ width: "100%", aspectRatio: "3 / 2" }}
+                />
+              </div>
+              <p className="mt-7 text-[12.5px] leading-[2.1] opacity-75">{nl(c.brand.body)}</p>
+            </section>
+          )}
+
           {/* ── FV直下の特典サマリー ── */}
           {c.fvSummary && (
             <div className="bg-[var(--paper)] px-5 pt-9">
@@ -1231,6 +1275,44 @@ export default function Page() {
                     </li>
                   ))}
                 </ul>
+              )}
+              {/*
+                Googleマップの埋め込み。APIキー不要の output=embed を使う。
+                地図はスクロール中に踏むと画面が持っていかれるので、下に経路リンクを
+                置いて「タップして地図アプリで開く」導線を別に用意しておく。
+              */}
+              {c.access.mapEmbed && (
+                <div className="mt-6">
+                  <div
+                    className="overflow-hidden rounded-[3px] border"
+                    style={{ borderColor: `${c.accent}59` }}
+                  >
+                    <iframe
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(
+                        c.access.mapEmbed.query,
+                      )}&hl=ja&z=${c.access.mapEmbed.zoom ?? 16}&output=embed`}
+                      title={`${c.access.venueName}の地図`}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      style={{
+                        width: "100%",
+                        height: c.access.mapEmbed.height ?? 220,
+                        border: 0,
+                        display: "block",
+                      }}
+                    />
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                      c.access.mapEmbed.query,
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 block text-center text-[12px] underline underline-offset-4 opacity-75"
+                  >
+                    {c.access.mapEmbed.linkLabel ?? "Googleマップで経路を見る"}
+                  </a>
+                </div>
               )}
               {/* telLink: false は「電話ではなくWEBから問い合わせてほしい」案件向け。
                   リンクを外すので trackEvent('tel_tap') も発火しない（規約4の例外）。 */}

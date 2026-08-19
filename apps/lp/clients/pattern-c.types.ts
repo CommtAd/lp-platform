@@ -86,6 +86,11 @@ export interface PatternCConfig {
   };
 
   fv: {
+    /**
+     * キッカーのさらに上に置く会場名。新規オープンで会場名の認知がない場合に使う。
+     * フェア名より一段細く出るので、主役はあくまでキャッチ側。
+     */
+    brand?: string;
     /** Small English kicker above the catch, e.g. "BRIDAL FAIR". */
     kicker: string;
     /** Main catch, one line per array entry. */
@@ -141,6 +146,28 @@ export interface PatternCConfig {
     heroSlides?: Slot[];
     /** ヒーロー写真のアスペクト比。既定 "3 / 4"。横位置素材なら "1 / 1" 等に緩める。 */
     heroAspect?: string;
+  };
+
+  /**
+   * ブランド紹介。FVの直後・特典サマリーの上に入る。
+   * 新規オープンで会場名の認知がない場合に「何者か」を先に伝えるためのもので、
+   * 既存の認知がある会場では省く（未設定でセクションごと消える）。
+   * `lead` / `body` は `\n` で改行位置を指定できる。
+   */
+  brand?: {
+    /** 例 "2026年6月 GRAND OPEN"。 */
+    heading: string;
+    /** 見出しの下の3行程度のリード。 */
+    lead: string;
+    /**
+     * `heading` と `lead` の文字色。未指定なら本文色（ink）。
+     * 明るい地の上に薄い色を置くと読めなくなるので、指定するときは
+     * 白地とのコントラストを確認すること（本文は4.5:1、大きな見出しは3:1が目安）。
+     */
+    accent?: string;
+    image: Slot;
+    /** 写真の下の説明文。 */
+    body: string;
   };
 
   /**
@@ -347,6 +374,25 @@ export interface PatternCConfig {
     telLink?: boolean;
     /** 電話番号の下の補足（受付時間など）。不要なら省略する。 */
     telNote?: string;
+    /**
+     * Googleマップの埋め込み。APIキーは不要（`output=embed`）。
+     * `query` は Google に登録済みの施設名だけを渡すのが基本。住所を足すと
+     * 検索結果が住所側に寄ってピンが中央から外れることがある（実際に発生）。
+     * 施設名で一意に決まらない場合だけ住所を併記する。
+     * 埋め込みはGoogleのCookieを読むので、同意が必要な案件では設定しない。
+     * 地図の下には経路リンク（`maps/dir`）が自動で付く。スクロール中に地図を
+     * 踏むと画面が持っていかれるため、地図アプリへの導線を別に確保している。
+     */
+    mapEmbed?: {
+      query: string;
+      /** 埋め込みの高さ(px)。既定 220。 */
+      height?: number;
+      /** ズーム。既定 16（建物が特定できる程度）。 */
+      zoom?: number;
+      /** 経路リンクの文言。既定「Googleマップで経路を見る」。 */
+      linkLabel?: string;
+    };
+    /** 外観写真または地図キャプチャ。`mapEmbed` とは別枠で、両方出せる。 */
     map: Slot;
   };
 

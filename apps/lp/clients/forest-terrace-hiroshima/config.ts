@@ -44,6 +44,7 @@ const config: PatternCConfig = {
   },
 
   fv: {
+    brand: "ザ・フォレストテラス広島",
     kicker: "GRAND OPEN BRIDAL FAIR",
     catch: ["グランドオープン記念BIGフェア"],
     // キッカー・キャッチ・訴求を1枚のプレートにまとめる。
@@ -76,6 +77,21 @@ const config: PatternCConfig = {
       { placeholder: "披露宴会場（長テーブル・新婦）", src: `${ASSET}/hero-2.jpg` },
       { placeholder: "披露宴の乾杯", src: `${ASSET}/hero-3.jpg` },
     ],
+  },
+
+  // 2026年6月オープンで会場名の認知がないため、特典より先に「何者か」を置く。
+  brand: {
+    heading: "2026年6月 GRAND OPEN",
+    lead: "オリエンタルホテル広島から\n新たに生まれたブライダルブランド\nザ・フォレストテラス広島",
+    // 支給指定は #BCC7B1 だが白地で 1.76:1 しか出ず読めないため、
+    // 同系色のまま濃さだけ落として 4.4:1 にしている（顧客確認済み）。
+    accent: "#6E7D62",
+    image: {
+      placeholder: "披露宴会場での新郎新婦",
+      src: `${ASSET}/brand.jpg`,
+      position: "center",
+    },
+    body: "オリエンタルホテル広島の信頼と伝統を受け継ぎ、\nザ・フォレストテラス広島が誕生\nホテル品質×1日1組貸切で、\n心に残る特別な一日を創り上げます",
   },
 
   // FVを離脱する前に金額だけ持ち帰ってもらうための要約。詳細は privilege 側。
@@ -272,6 +288,8 @@ const config: PatternCConfig = {
     // WEBからの問い合わせに寄せたいという顧客判断で tel: リンクを外している。
     // これにより tel_tap は計測されない。
     telLink: false,
+    // 施設名だけで渡す。住所を足すと検索結果が住所側に寄ってピンが中央から外れる。
+    mapEmbed: { query: "オリエンタルホテル広島" },
     map: {
       placeholder: "オリエンタルホテル広島 外観",
       src: `${ASSET}/access.jpg`,
