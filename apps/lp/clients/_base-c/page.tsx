@@ -70,6 +70,32 @@ function emphasize(
 }
 
 /**
+ * パネルに重ねる四隅の装飾。中央が透明のPNGを、上半分＝上の角・下半分＝下の角として
+ * 貼り分ける。`h-full w-full` で1枚に引き伸ばすとパネルの縦横比しだいで角が歪むため
+ * （パネルの高さは中身で変わる）、横幅にだけ合わせて縦は自然比のまま置く。
+ */
+function CornerFrame({ src }: { src: string }) {
+  return (
+    <span className="pointer-events-none absolute inset-1.5 overflow-hidden">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        className="absolute left-0 top-0 w-full"
+        style={{ clipPath: "inset(0 0 50% 0)" }}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        className="absolute bottom-0 left-0 w-full"
+        style={{ clipPath: "inset(50% 0 0 0)" }}
+      />
+    </span>
+  );
+}
+
+/**
  * 横スクロールカルーセル。`experience`（体験できること）と `facility`（施設紹介）で
  * 同じ見せ方を共有する。写真の比率だけセクションごとに変えられる。
  */
@@ -604,6 +630,11 @@ export default function Page() {
                   className="relative rounded-[3px] border px-5 pb-8 pt-11 text-center"
                   style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
                 >
+                  {/*
+                    ここは箱の高さがほぼ固定なので、装飾は1枚を引き伸ばして使う
+                    （枠いっぱいに角が回るぶん privilege より重厚に見える）。
+                    高さが中身で変わる箱には CornerFrame を使うこと。
+                  */}
                   {c.grandOffer.frame && (
                     <span className="pointer-events-none absolute inset-1.5">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -827,17 +858,6 @@ export default function Page() {
                 {c.privilege.heading}
               </h2>
               <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">{c.privilege.lead}</p>
-              {c.privilege.headline && (
-                // バンドの地の上なので、強調は色ではなく級数で付ける。
-                <p className="mt-4 text-[14px] leading-[1.7]" style={{ fontFamily: mincho }}>
-                  {emphasize(
-                    c.privilege.headline,
-                    c.privilege.headlineEmphasis,
-                    band.accent,
-                    20,
-                  )}
-                </p>
-              )}
             </div>
             {/*
               地の上に小さい箱を並べると面が細切れになってセクションが沈むため、
@@ -848,13 +868,22 @@ export default function Page() {
               className="relative mt-8 rounded-[3px] border"
               style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
             >
-              {c.privilege.frame && (
-                <span className="pointer-events-none absolute inset-1.5">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={c.privilege.frame} alt="" className="h-full w-full" />
-                </span>
-              )}
-              <div className={`px-4 pt-7 ${c.privilege.total ? "pb-8" : "pb-7"}`}>
+              {c.privilege.frame && <CornerFrame src={c.privilege.frame} />}
+              <div className={`px-4 ${c.privilege.headline ? "pt-9" : "pt-7"} ${c.privilege.total ? "pb-8" : "pb-7"}`}>
+                {c.privilege.headline && (
+                  // パネル内＝生成りの地なので、金額は深い金で置ける（バンドの地では消える）。
+                  <p
+                    className="mb-8 text-center text-[14px] leading-[1.7]"
+                    style={{ fontFamily: mincho }}
+                  >
+                    {emphasize(
+                      c.privilege.headline,
+                      c.privilege.headlineEmphasis,
+                      goldOnWhite,
+                      21,
+                    )}
+                  </p>
+                )}
                 <AmountRow
                   items={c.privilege.items.map((p) => ({
                     amount: p.amount,
