@@ -93,7 +93,7 @@ const config: PatternCConfig = {
     feature: {
       title: "エグゼクティブルームを\n1泊2日でプレゼント",
       body: "人生で最も特別な1泊2日を。",
-      disclaimer: "※特典のお渡しには適用条件がございます",
+      disclaimer: "※宿泊特典に関しては、ご希望に合わせ変更いたします。",
       image: {
         placeholder: "エグゼクティブルーム（リビング・市街地ビュー）",
         src: `${ASSET}/executive-room.jpg`,
