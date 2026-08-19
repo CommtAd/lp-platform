@@ -543,19 +543,46 @@ export default function Page() {
           {/* ── FV直下の特典サマリー ── */}
           {c.fvSummary && (
             <div className="bg-[var(--paper)] px-5 pt-9">
-              {c.fvSummary.headline && (
-                <p
-                  className="mb-8 text-center text-[15px] leading-[1.7]"
-                  style={{ fontFamily: mincho }}
-                >
-                  {emphasize(
-                    c.fvSummary.headline,
-                    c.fvSummary.headlineEmphasis,
-                    goldOnWhite,
-                    21,
-                  )}
-                </p>
-              )}
+              {c.fvSummary.headline &&
+                (c.fvSummary.headlineOrnament ? (
+                  // 装飾は自然比のまま横幅に合わせ、その高さの中央に文字を置く。
+                  // 文字の分量で箱を作って装飾を引き伸ばすと角飾りが歪む。
+                  <div className="relative mb-8">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={c.fvSummary.headlineOrnament}
+                      alt=""
+                      className="pointer-events-none block w-full"
+                    />
+                    {/*
+                      flex で中央寄せにすると強調部分と地の文が別々の flex item になり、
+                      それぞれ独立に折り返してしまう。インラインのまま縦中央に置く。
+                    */}
+                    <p
+                      className="absolute left-0 right-0 top-1/2 -translate-y-1/2 px-5 text-center text-[15px] leading-[1.7]"
+                      style={{ fontFamily: mincho }}
+                    >
+                      {emphasize(
+                        c.fvSummary.headline,
+                        c.fvSummary.headlineEmphasis,
+                        goldOnWhite,
+                        21,
+                      )}
+                    </p>
+                  </div>
+                ) : (
+                  <p
+                    className="mb-8 text-center text-[15px] leading-[1.7]"
+                    style={{ fontFamily: mincho }}
+                  >
+                    {emphasize(
+                      c.fvSummary.headline,
+                      c.fvSummary.headlineEmphasis,
+                      goldOnWhite,
+                      21,
+                    )}
+                  </p>
+                ))}
               <div className="flex items-center gap-4">
                 <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
                 <span

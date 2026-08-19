@@ -73,6 +73,7 @@ const config: PatternCConfig = {
   fvSummary: {
     headline: "最大10万円の来館ギフトがついてくる",
     headlineEmphasis: "最大10万円",
+    headlineOrnament: `${ASSET}/fv-summary-ornament.png`,
     label: "来館特典",
     items: [
       { amount: "1万円分", name: "JCBギフト券" },

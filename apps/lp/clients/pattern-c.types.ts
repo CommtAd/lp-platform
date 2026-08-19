@@ -147,6 +147,14 @@ export interface PatternCConfig {
     headline?: string;
     /** `headline` の中で金額として強調する部分文字列（21pxの深い金になる）。 */
     headlineEmphasis?: string;
+    /**
+     * `headline` を囲む装飾（中央が透明のPNG）。横幅いっぱいに自然比で敷き、
+     * その高さの中央に文字が乗る。装飾側が高さを決めるので、文字が2行に
+     * なるほど長い `headline` には使わない。
+     * 375px幅で1行に収まる長さが目安（この文言で左右21pxの余裕）。
+     * 320px幅では2行になるが装飾の内側には収まる。
+     */
+    headlineOrnament?: string;
     /** 中央の小見出し、例 "来館特典"。 */
     label: string;
     /** 3点程度に絞る。横3分割で並ぶため、`amount` は6文字以内が目安。 */
