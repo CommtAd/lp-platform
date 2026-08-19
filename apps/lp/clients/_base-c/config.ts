@@ -38,14 +38,15 @@ const config: PatternCConfig = {
   },
 
   fvSummary: {
+    headline: "最大〇万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大〇万円",
     label: "来館特典",
     items: [
       { amount: "〇万円", name: "特典名A" },
       { amount: "〇万円相当", name: "特典名B" },
       { amount: "〇万円相当", name: "特典名C" },
     ],
-    note: "他にも最大〇万円分のご来館特典がついてくる",
-    noteEmphasis: "最大〇万円分",
+    disclaimer: "※特典のお渡しには適用条件がございます",
   },
 
   grandOffer: {
@@ -58,6 +59,7 @@ const config: PatternCConfig = {
     feature: {
       title: "目玉特典の見出しをここに記載",
       body: "目玉特典の説明文がここに入ります。ダミーテキストのため実データに差し替えてください。",
+      disclaimer: "※特典のお渡しには適用条件がございます",
     },
     note: "※ 適用条件があります。詳細は当日ご案内いたします。",
   },
@@ -83,8 +85,9 @@ const config: PatternCConfig = {
       { title: "特典名B", amount: "〇万円分" },
       { title: "特典名C", amount: "〇万円分" },
     ],
+    disclaimer: "※特典のお渡しには適用条件がございます",
+    // 合計を lead の下で言い切る構成にするなら headline を足して total を外す。
     total: "最大 〇万円分",
-    totalNote: "※ 特典の適用には条件があります。詳細は当日ご説明いたします。",
     contract: { label: "ご成約で", amount: "最大〇万円優待" },
   },
 

@@ -14,8 +14,11 @@ const config: PatternCConfig = {
   meta: {
     title: "ザ・フォレストテラス広島｜グランドオープン記念BIGフェア",
     description:
-      "広島市中区のホテルウェディング「ザ・フォレストテラス広島」。グランドオープンを記念したBIGフェアを開催中。ご成約で最大180万円相当の優待、ご来館で最大10万円分の特典をご用意。チャペル見学・豪華無料試食・ドレス見学・お見積り相談を最短30秒でご予約いただけます。",
-    ogpImage: `${ASSET}/hero.jpg`,
+      "広島市中区のホテルウェディング「ザ・フォレストテラス広島」。グランドオープンを記念したBIGフェアを開催中。ご成約で最大180万円相当の優待、ご来館で最大10万円分の特典をご用意。チャペル見学・披露宴会場見学・豪華無料試食・お見積り相談を最短30秒でご予約いただけます。",
+    // OGP専用の1枚（1200x630）。FVの hero.jpg を共用すると、FVを差し替えても
+    // URLが変わらずSNS側のキャッシュが古い画像を出し続ける（実際に発生）。
+    // 差し替えるときは必ずファイル名も変えること。
+    ogpImage: `${ASSET}/ogp-2026-08.jpg`,
   },
   ink: "#3B3730",
   accent: "#B99653",
@@ -54,32 +57,52 @@ const config: PatternCConfig = {
     ctaText: "最短30秒で予約する",
     // 新郎新婦が写真中央にいるため、キャッチを上に逃がして顔にかぶらないようにする。
     catchPosition: "top",
-    // 横位置（3:2）の引き写真を縦長に受ける。左右のフラワーシャワーは切れるが、
-    // キャッチの下に写真の余白が残るぶんFV全体の見え方が良くなる。
+    // スライドは全て 1360x1700。DPR3の端末（枠500px x ズーム1.13倍 x 3 = 1695px）でも
+    // 等倍以上になる解像度で、これ以上は上げても見た目が変わらない。
+    // 幅は枠の 0.75 に対して 0.80 まで持たせてある（Ken Burns のズーム用の余白）。
+    //
+    // プレートがFVの上53%を覆うので、素材は顔が60%前後に来るよう切り出す。
+    // 縦長の枠では横しか切られず position では上下に動かせないため、
+    // 顔が隠れたら素材そのものの下側を落として相対位置を下げるしかない。
+    // 支給素材（1792x2392・顔が約49%）は下を21%落として当てている。
     heroAspect: "3 / 4",
     hero: {
       placeholder: "チャペル退場・フラワーシャワー",
       src: `${ASSET}/hero.jpg`,
       position: "center",
     },
-    // 退場 → 挙式 → 披露宴 → 乾杯。当日の流れをなぞる順に並べる。
+    // 退場 → 披露宴 → 乾杯。当日の流れをなぞる順に並べる。
     heroSlides: [
-      { placeholder: "挙式（指輪の交換）", src: `${ASSET}/hero-2.jpg` },
-      { placeholder: "披露宴会場（長テーブル）", src: `${ASSET}/hero-3.jpg` },
-      { placeholder: "披露宴の乾杯", src: `${ASSET}/hero-4.jpg` },
+      { placeholder: "披露宴会場（長テーブル・新婦）", src: `${ASSET}/hero-2.jpg` },
+      { placeholder: "披露宴の乾杯", src: `${ASSET}/hero-3.jpg` },
     ],
   },
 
   // FVを離脱する前に金額だけ持ち帰ってもらうための要約。詳細は privilege 側。
   fvSummary: {
+    headline: "最大10万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大10万円",
+    headlineOrnament: `${ASSET}/fv-summary-ornament.png`,
     label: "来館特典",
+    // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
     items: [
-      { amount: "1万円分", name: "JCBギフト券" },
-      { amount: "3万円相当", name: "豪華無料試食" },
-      { amount: "4万円相当", name: "ご宿泊" },
+      {
+        amount: "1万円分",
+        name: "JCBギフト券",
+        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
+      },
+      {
+        amount: "3万円相当",
+        name: "豪華無料試食",
+        image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
+      },
+      {
+        amount: "4万円相当",
+        name: "ご宿泊",
+        image: { placeholder: "客室（ツイン）", src: `${ASSET}/gift-stay.jpg` },
+      },
     ],
-    note: "他にも最大10万円分のご来館特典がついてくる",
-    noteEmphasis: "最大10万円分",
+    disclaimer: "※特典のお渡しには適用条件がございます",
   },
 
   grandOffer: {
@@ -91,8 +114,9 @@ const config: PatternCConfig = {
     amount: "最大180万円相当",
     frame: `${ASSET}/grand-offer-frame.png`,
     feature: {
-      title: "エグゼクティブルームを\n2泊3日でプレゼント",
-      body: "人生で最も特別な2泊3日を。",
+      title: "エグゼクティブルームを\n1泊2日でプレゼント",
+      body: "人生で最も特別な1泊2日を。",
+      disclaimer: "※宿泊特典に関しては、ご希望に合わせ変更いたします。",
       image: {
         placeholder: "エグゼクティブルーム（リビング・市街地ビュー）",
         src: `${ASSET}/executive-room.jpg`,
@@ -116,15 +140,15 @@ const config: PatternCConfig = {
       },
       {
         tag: "02",
-        title: "豪華無料試食",
-        body: "シェフ自慢の婚礼料理をご試食いただき、おもてなしのイメージをご確認いただけます。",
-        image: { placeholder: "婚礼料理", src: `${ASSET}/tasting.jpg` },
+        title: "披露宴会場見学",
+        body: "披露宴会場をご覧いただきながら、おふたりらしい結婚式をご提案いたします。",
+        image: { placeholder: "披露宴会場とドレス", src: `${ASSET}/dress.jpg` },
       },
       {
         tag: "03",
-        title: "ドレス見学",
-        body: "披露宴会場やドレスをご覧いただきながら、おふたりらしい結婚式をご提案いたします。",
-        image: { placeholder: "披露宴会場とドレス", src: `${ASSET}/dress.jpg` },
+        title: "豪華無料試食",
+        body: "シェフ自慢の婚礼料理をご試食いただき、おもてなしのイメージをご確認いただけます。",
+        image: { placeholder: "婚礼料理", src: `${ASSET}/tasting.jpg` },
       },
       {
         tag: "04",
@@ -151,6 +175,9 @@ const config: PatternCConfig = {
   privilege: {
     heading: "ご来館特典・ご成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
+    // 合計はここで言い切るので、パネル下部の TOTAL ブロックは出さない（total 未設定）。
+    headline: "最大10万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大10万円",
     items: [
       {
         title: "JCBギフト券",
@@ -169,7 +196,7 @@ const config: PatternCConfig = {
       },
     ],
     frame: `${ASSET}/privilege-frame.png`,
-    total: "最大 10万円分",
+    disclaimer: "※特典のお渡しには適用条件がございます",
     contract: { label: "さらに、ご成約で", amount: "最大180万円優待" },
   },
 
