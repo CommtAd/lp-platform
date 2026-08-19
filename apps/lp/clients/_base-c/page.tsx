@@ -1216,12 +1216,36 @@ export default function Page() {
                 {c.access.venueName}
               </h3>
               <p className="mt-2 text-[12.5px] leading-[1.9] opacity-70">{c.access.address}</p>
+              {/*
+                所要時間は来館の判断材料になるので、住所の補足ではなく独立した行として置く。
+                罫線の組みは overview の dl と揃えてある。
+              */}
               {c.access.routes.length > 0 && (
-                <ul className="mt-3 flex flex-col gap-1">
+                <ul className="mt-5 flex flex-col">
                   {c.access.routes.map((r, i) => (
-                    <li key={`${r}-${i}`} className="flex items-start gap-2 text-[12px] opacity-70">
-                      <span className="text-[var(--accent)]">・</span>
-                      {r}
+                    <li
+                      key={`${r.from}-${i}`}
+                      className="flex items-end justify-between gap-4 border-t border-[var(--ink)]/15 py-3.5 last:border-b"
+                    >
+                      <span className="min-w-0">
+                        {r.via && (
+                          <span className="block text-[10.5px] tracking-[0.12em] opacity-55">
+                            {r.via}
+                          </span>
+                        )}
+                        <span
+                          className="mt-0.5 block text-[14px] leading-snug"
+                          style={{ fontFamily: mincho }}
+                        >
+                          {r.from}
+                        </span>
+                      </span>
+                      <span
+                        className="shrink-0 text-[12px] leading-none"
+                        style={{ fontFamily: mincho, color: goldOnWhite }}
+                      >
+                        {amountEmphasis(r.time, 21, 12)}
+                      </span>
                     </li>
                   ))}
                 </ul>

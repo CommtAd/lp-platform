@@ -327,8 +327,12 @@ export interface PatternCConfig {
     heading: string;
     venueName: string;
     address: string;
-    /** 空配列なら経路リストを出さない。 */
-    routes: string[];
+    /**
+     * 交通経路。空配列なら経路リストを出さない。
+     * `from` は起点（駅名・IC名など）、`via` はその上に小さく出る路線名。
+     * `time` の数字は `amountEmphasis()` が自動で大きくするので "徒歩9分" のように素で渡す。
+     */
+    routes: { via?: string; from: string; time: string }[];
     tel: string;
     /**
      * 電話番号を `tel:` リンクにするか。既定 true。

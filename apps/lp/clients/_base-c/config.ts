@@ -257,7 +257,11 @@ const config: PatternCConfig = {
     heading: "アクセス",
     venueName: "SAMPLE WEDDING",
     address: "〒000-0000 〇〇県〇〇市〇〇1-2-3",
-    routes: ["〇〇線「〇〇駅」より徒歩0分", "〇〇ICより車で0分／駐車場00台"],
+    routes: [
+      { via: "〇〇線", from: "〇〇駅より", time: "徒歩0分" },
+      // 路線名がない経路は via を省く。
+      { from: "〇〇ICより", time: "車で0分" },
+    ],
     tel: "000-0000-0000",
     telNote: "受付時間 00:00 - 00:00（〇曜定休）",
     map: { placeholder: "会場の外観写真または地図キャプチャ", src: null },
