@@ -54,15 +54,16 @@ const config: PatternCConfig = {
     ctaText: "最短30秒で予約する",
     // 新郎新婦が写真中央にいるため、キャッチを上に逃がして顔にかぶらないようにする。
     catchPosition: "top",
-    // 横位置素材を縦長に受ける。左右は切れるが、キャッチの下に写真の余白が残る。
+    // 横位置素材を縦長に受ける。1枚目のフラワーシャワーは左右の参列者が切れるが、
+    // キャッチの下に写真の余白が残るぶんFV全体の見え方が良くなる。
     // 各スライドは人物が下半分に来るよう素材側で切り出し済み（プレートが上55%を覆うため）。
     heroAspect: "3 / 4",
     hero: {
-      placeholder: "挙式（指輪の交換）",
+      placeholder: "チャペル退場・フラワーシャワー",
       src: `${ASSET}/hero.jpg`,
       position: "center",
     },
-    // 挙式 → 披露宴 → 乾杯。当日の流れをなぞる順に並べる。
+    // 退場 → 披露宴 → 乾杯。当日の流れをなぞる順に並べる。
     heroSlides: [
       { placeholder: "披露宴会場（長テーブル）", src: `${ASSET}/hero-2.jpg` },
       { placeholder: "披露宴の乾杯", src: `${ASSET}/hero-3.jpg` },
