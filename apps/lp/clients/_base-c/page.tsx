@@ -70,6 +70,32 @@ function emphasize(
 }
 
 /**
+ * パネルに重ねる四隅の装飾。中央が透明のPNGを、上半分＝上の角・下半分＝下の角として
+ * 貼り分ける。`h-full w-full` で1枚に引き伸ばすとパネルの縦横比しだいで角が歪むため
+ * （パネルの高さは中身で変わる）、横幅にだけ合わせて縦は自然比のまま置く。
+ */
+function CornerFrame({ src }: { src: string }) {
+  return (
+    <span className="pointer-events-none absolute inset-1.5 overflow-hidden">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        className="absolute left-0 top-0 w-full"
+        style={{ clipPath: "inset(0 0 50% 0)" }}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        className="absolute bottom-0 left-0 w-full"
+        style={{ clipPath: "inset(50% 0 0 0)" }}
+      />
+    </span>
+  );
+}
+
+/**
  * 横スクロールカルーセル。`experience`（体験できること）と `facility`（施設紹介）で
  * 同じ見せ方を共有する。写真の比率だけセクションごとに変えられる。
  */
@@ -517,19 +543,46 @@ export default function Page() {
           {/* ── FV直下の特典サマリー ── */}
           {c.fvSummary && (
             <div className="bg-[var(--paper)] px-5 pt-9">
-              {c.fvSummary.headline && (
-                <p
-                  className="mb-8 text-center text-[15px] leading-[1.7]"
-                  style={{ fontFamily: mincho }}
-                >
-                  {emphasize(
-                    c.fvSummary.headline,
-                    c.fvSummary.headlineEmphasis,
-                    goldOnWhite,
-                    21,
-                  )}
-                </p>
-              )}
+              {c.fvSummary.headline &&
+                (c.fvSummary.headlineOrnament ? (
+                  // 装飾は自然比のまま横幅に合わせ、その高さの中央に文字を置く。
+                  // 文字の分量で箱を作って装飾を引き伸ばすと角飾りが歪む。
+                  <div className="relative mb-8">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={c.fvSummary.headlineOrnament}
+                      alt=""
+                      className="pointer-events-none block w-full"
+                    />
+                    {/*
+                      flex で中央寄せにすると強調部分と地の文が別々の flex item になり、
+                      それぞれ独立に折り返してしまう。インラインのまま縦中央に置く。
+                    */}
+                    <p
+                      className="absolute left-0 right-0 top-1/2 -translate-y-1/2 px-5 text-center text-[15px] leading-[1.7]"
+                      style={{ fontFamily: mincho }}
+                    >
+                      {emphasize(
+                        c.fvSummary.headline,
+                        c.fvSummary.headlineEmphasis,
+                        goldOnWhite,
+                        21,
+                      )}
+                    </p>
+                  </div>
+                ) : (
+                  <p
+                    className="mb-8 text-center text-[15px] leading-[1.7]"
+                    style={{ fontFamily: mincho }}
+                  >
+                    {emphasize(
+                      c.fvSummary.headline,
+                      c.fvSummary.headlineEmphasis,
+                      goldOnWhite,
+                      21,
+                    )}
+                  </p>
+                ))}
               <div className="flex items-center gap-4">
                 <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
                 <span
@@ -542,7 +595,11 @@ export default function Page() {
               </div>
               <div className="mt-7">
                 <AmountRow
-                  items={c.fvSummary.items.map((i) => ({ amount: i.amount, label: i.name }))}
+                  items={c.fvSummary.items.map((i) => ({
+                    amount: i.amount,
+                    label: i.name,
+                    image: i.image,
+                  }))}
                   ink={c.ink}
                 />
               </div>
@@ -604,6 +661,11 @@ export default function Page() {
                   className="relative rounded-[3px] border px-5 pb-8 pt-11 text-center"
                   style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
                 >
+                  {/*
+                    ここは箱の高さがほぼ固定なので、装飾は1枚を引き伸ばして使う
+                    （枠いっぱいに角が回るぶん privilege より重厚に見える）。
+                    高さが中身で変わる箱には CornerFrame を使うこと。
+                  */}
                   {c.grandOffer.frame && (
                     <span className="pointer-events-none absolute inset-1.5">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -642,48 +704,60 @@ export default function Page() {
                 )}
               </div>
 
-              {c.grandOffer.feature &&
-                (c.grandOffer.feature.image ? (
-                  // 写真の上にコピーを載せる。客室写真は窓から強い光が入るので
-                  // スクリムは全面に強く当て、下へ向かってさらに落とす。
-                  <div className="relative mt-4 overflow-hidden rounded-[3px]">
-                    <ImageSlot
-                      src={c.grandOffer.feature.image.src}
-                      placeholder={c.grandOffer.feature.image.placeholder}
-                      objectPosition={c.grandOffer.feature.image.position ?? "center"}
-                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-                    />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.46)_0%,rgba(59,55,48,0.64)_45%,rgba(59,55,48,0.88)_100%)]" />
+              {c.grandOffer.feature && (
+                <>
+                  {c.grandOffer.feature.image ? (
+                    // 写真の上にコピーを載せる。客室写真は窓から強い光が入るので
+                    // スクリムは全面に強く当て、下へ向かってさらに落とす。
+                    <div className="relative mt-4 overflow-hidden rounded-[3px]">
+                      <ImageSlot
+                        src={c.grandOffer.feature.image.src}
+                        placeholder={c.grandOffer.feature.image.placeholder}
+                        objectPosition={c.grandOffer.feature.image.position ?? "center"}
+                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+                      />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.46)_0%,rgba(59,55,48,0.64)_45%,rgba(59,55,48,0.88)_100%)]" />
+                      <div
+                        className="relative px-5 pb-7 pt-12 text-center text-white"
+                        style={{ textShadow: "0 2px 14px rgba(59,55,48,0.9)" }}
+                      >
+                        <p
+                          className="text-[15.5px] leading-relaxed"
+                          style={{ fontFamily: mincho }}
+                        >
+                          {nl(c.grandOffer.feature.title)}
+                        </p>
+                        {/* 写真の上ではブランドゴールドの罫線が沈むので淡いシャンパンで引く。 */}
+                        <span
+                          className="mx-auto mt-4 block h-px w-12"
+                          style={{ background: "#E2C892" }}
+                        />
+                        <p className="mt-4 text-[12px] leading-[1.9] text-white/85">
+                          {c.grandOffer.feature.body}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
                     <div
-                      className="relative px-5 pb-7 pt-12 text-center text-white"
-                      style={{ textShadow: "0 2px 14px rgba(59,55,48,0.9)" }}
+                      className="mt-4 rounded-[3px] border px-5 py-7 text-center"
+                      style={{ background: c.paper, borderColor: `${c.accent}59`, color: c.ink }}
                     >
                       <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
                         {nl(c.grandOffer.feature.title)}
                       </p>
-                      {/* 写真の上ではブランドゴールドの罫線が沈むので淡いシャンパンで引く。 */}
-                      <span
-                        className="mx-auto mt-4 block h-px w-12"
-                        style={{ background: "#E2C892" }}
-                      />
-                      <p className="mt-4 text-[12px] leading-[1.9] text-white/85">
+                      <p className="mt-2.5 text-[12px] leading-[1.9] opacity-65">
                         {c.grandOffer.feature.body}
                       </p>
                     </div>
-                  </div>
-                ) : (
-                  <div
-                    className="mt-4 rounded-[3px] border px-5 py-7 text-center"
-                    style={{ background: c.paper, borderColor: `${c.accent}59`, color: c.ink }}
-                  >
-                    <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
-                      {nl(c.grandOffer.feature.title)}
+                  )}
+                  {/* 注記はカードの外。カードの中に入れると特典の一部に読めてしまう。 */}
+                  {c.grandOffer.feature.disclaimer && (
+                    <p className="mt-2.5 text-right text-[10px] leading-[1.6] opacity-65">
+                      {c.grandOffer.feature.disclaimer}
                     </p>
-                    <p className="mt-2.5 text-[12px] leading-[1.9] opacity-65">
-                      {c.grandOffer.feature.body}
-                    </p>
-                  </div>
-                ))}
+                  )}
+                </>
+              )}
 
               {c.grandOffer.note && (
                 <p className="mt-4 text-[11px] leading-[1.9] opacity-75">{c.grandOffer.note}</p>
@@ -825,13 +899,22 @@ export default function Page() {
               className="relative mt-8 rounded-[3px] border"
               style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
             >
-              {c.privilege.frame && (
-                <span className="pointer-events-none absolute inset-1.5">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={c.privilege.frame} alt="" className="h-full w-full" />
-                </span>
-              )}
-              <div className="px-4 pb-8 pt-7">
+              {c.privilege.frame && <CornerFrame src={c.privilege.frame} />}
+              <div className={`px-4 ${c.privilege.headline ? "pt-9" : "pt-7"} ${c.privilege.total ? "pb-8" : "pb-7"}`}>
+                {c.privilege.headline && (
+                  // パネル内＝生成りの地なので、金額は深い金で置ける（バンドの地では消える）。
+                  <p
+                    className="mb-8 text-center text-[14px] leading-[1.7]"
+                    style={{ fontFamily: mincho }}
+                  >
+                    {emphasize(
+                      c.privilege.headline,
+                      c.privilege.headlineEmphasis,
+                      goldOnWhite,
+                      21,
+                    )}
+                  </p>
+                )}
                 <AmountRow
                   items={c.privilege.items.map((p) => ({
                     amount: p.amount,
@@ -840,26 +923,39 @@ export default function Page() {
                   }))}
                   ink={c.ink}
                 />
-                {/* 菱形を挟んだ罫が「＝」の役割を兼ねる。 */}
-                <span className="mt-7 flex items-center justify-center gap-2.5">
-                  <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
-                  <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
-                  <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
-                </span>
-                <p
-                  className="mt-6 text-center text-[11px] tracking-[0.3em]"
-                  style={{ fontFamily: playfair }}
-                >
-                  TOTAL
-                </p>
-                <p
-                  className="mt-2 text-center text-[28px] font-bold leading-none"
-                  style={{ fontFamily: mincho, color: goldOnWhite }}
-                >
-                  {amountEmphasis(c.privilege.total, 44, 19)}
-                </p>
+                {c.privilege.total && (
+                  <>
+                    {/* 菱形を挟んだ罫が「＝」の役割を兼ねる。 */}
+                    <span className="mt-7 flex items-center justify-center gap-2.5">
+                      <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
+                      <span
+                        className="h-[5px] w-[5px] rotate-45"
+                        style={{ background: c.accent }}
+                      />
+                      <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
+                    </span>
+                    <p
+                      className="mt-6 text-center text-[11px] tracking-[0.3em]"
+                      style={{ fontFamily: playfair }}
+                    >
+                      TOTAL
+                    </p>
+                    <p
+                      className="mt-2 text-center text-[28px] font-bold leading-none"
+                      style={{ fontFamily: mincho, color: goldOnWhite }}
+                    >
+                      {amountEmphasis(c.privilege.total, 44, 19)}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
+            {/* 注記はパネルの外。中に入れると特典の一部に読めてしまう。 */}
+            {c.privilege.disclaimer && (
+              <p className="mt-2.5 text-right text-[10px] leading-[1.6] opacity-65">
+                {c.privilege.disclaimer}
+              </p>
+            )}
             {c.privilege.contract && (
               // 成約特典は二重枠＋跨ぎラベルで、来館特典より格上に見せる。
               // 暗い箱で締めるとセクション全体が沈むので、明るいまま枠の強さで差をつける。
@@ -1127,8 +1223,10 @@ export default function Page() {
               {c.access.routes.length > 0 && (
                 <ul className="mt-3 flex flex-col gap-1">
                   {c.access.routes.map((r, i) => (
-                    <li key={`${r}-${i}`} className="flex items-start gap-2 text-[12px] opacity-70">
-                      <span className="text-[var(--accent)]">・</span>
+                    <li
+                      key={`${r}-${i}`}
+                      className="text-[12.5px] font-bold leading-[1.9] opacity-70"
+                    >
                       {r}
                     </li>
                   ))}

@@ -147,10 +147,22 @@ export interface PatternCConfig {
     headline?: string;
     /** `headline` の中で金額として強調する部分文字列（21pxの深い金になる）。 */
     headlineEmphasis?: string;
+    /**
+     * `headline` を囲む装飾（中央が透明のPNG）。横幅いっぱいに自然比で敷き、
+     * その高さの中央に文字が乗る。装飾側が高さを決めるので、文字が2行に
+     * なるほど長い `headline` には使わない。
+     * 375px幅で1行に収まる長さが目安（この文言で左右21pxの余裕）。
+     * 320px幅では2行になるが装飾の内側には収まる。
+     */
+    headlineOrnament?: string;
     /** 中央の小見出し、例 "来館特典"。 */
     label: string;
-    /** 3点程度に絞る。横3分割で並ぶため、`amount` は6文字以内が目安。 */
-    items: { amount: string; name: string }[];
+    /**
+     * 3点程度に絞る。横3分割で並ぶため、`amount` は6文字以内が目安。
+     * `image` を渡すと各列の頭に正方形のサムネイルが入る（全列に付けるか、全列なしか）。
+     * 写真がある場合は列を分ける縦罫が消え、溝で離れる。
+     */
+    items: { amount: string; name: string; image?: Slot }[];
     /** 金額の右下に小さく置く注記（適用条件など）。 */
     disclaimer?: string;
     note?: string;
@@ -183,7 +195,8 @@ export interface PatternCConfig {
      * 中身だと誤読されるため。
      * `image` を渡すと写真を敷いてスクリム＋白文字で載せる（宿泊特典の客室写真など）。
      */
-    feature?: { title: string; body: string; image?: Slot };
+    /** `disclaimer` はカード右下に小さく入る注記（適用条件など）。 */
+    feature?: { title: string; body: string; image?: Slot; disclaimer?: string };
     note?: string;
   };
 
@@ -241,6 +254,13 @@ export interface PatternCConfig {
     heading: string;
     lead: string;
     /**
+     * `lead` の下に置く訴求文。バンドの地に載るため、強調は色ではなく級数で付ける
+     * （ゴールドは中間トーンの地で消える）。強調部分は `band.accent` になる。
+     */
+    headline?: string;
+    /** `headline` の中で大きく見せる部分文字列。含まれない場合は無視される。 */
+    headlineEmphasis?: string;
+    /**
      * 横3分割で並べて合計へ収束させる版面。列幅が100px前後しか取れないため説明文は
      * 持たせない。`title` は6文字程度まで、`amount` は「1万円分」等の短い表記に。
      * `image` を渡すと各列の頭に正方形のサムネイルが入る（全列に付けるか、全列なしか）。
@@ -248,8 +268,13 @@ export interface PatternCConfig {
     items: { title: string; amount: string; image?: Slot }[];
     /** パネルに重ねる四隅のフレーム装飾（中央が透明のPNG）。`grandOffer.frame` と同じ扱い。 */
     frame?: string;
-    /** 特典合計の訴求、例 "最大10万円分"。 */
-    total: string;
+    /** パネル直下・右寄せの注記（適用条件など）。カードの外に出る。 */
+    disclaimer?: string;
+    /**
+     * 特典合計の訴求、例 "最大10万円分"。省略するとパネル下部の TOTAL ブロック
+     * （罫・TOTAL・合計額）ごと消える。合計を `headline` 側で言う場合は省略する。
+     */
+    total?: string;
     totalNote?: string;
     /** 成約特典への導線をこのセクションの末尾に置く場合。 */
     contract?: { label: string; amount: string };
@@ -306,7 +331,7 @@ export interface PatternCConfig {
     heading: string;
     venueName: string;
     address: string;
-    /** 空配列なら経路リストを出さない。 */
+    /** 交通経路。1行1経路で、そのまま太字で並ぶ。空配列なら経路リストを出さない。 */
     routes: string[];
     tel: string;
     /**

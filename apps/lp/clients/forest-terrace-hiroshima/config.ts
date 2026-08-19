@@ -73,11 +73,25 @@ const config: PatternCConfig = {
   fvSummary: {
     headline: "最大10万円の来館ギフトがついてくる",
     headlineEmphasis: "最大10万円",
+    headlineOrnament: `${ASSET}/fv-summary-ornament.png`,
     label: "来館特典",
+    // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
     items: [
-      { amount: "1万円分", name: "JCBギフト券" },
-      { amount: "3万円相当", name: "豪華無料試食" },
-      { amount: "4万円相当", name: "ご宿泊" },
+      {
+        amount: "1万円分",
+        name: "JCBギフト券",
+        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
+      },
+      {
+        amount: "3万円相当",
+        name: "豪華無料試食",
+        image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
+      },
+      {
+        amount: "4万円相当",
+        name: "ご宿泊",
+        image: { placeholder: "客室（ツイン）", src: `${ASSET}/gift-stay.jpg` },
+      },
     ],
     disclaimer: "※特典のお渡しには適用条件がございます",
   },
@@ -91,8 +105,9 @@ const config: PatternCConfig = {
     amount: "最大180万円相当",
     frame: `${ASSET}/grand-offer-frame.png`,
     feature: {
-      title: "エグゼクティブルームを\n2泊3日でプレゼント",
-      body: "人生で最も特別な2泊3日を。",
+      title: "エグゼクティブルームを\n1泊2日でプレゼント",
+      body: "人生で最も特別な1泊2日を。",
+      disclaimer: "※宿泊特典に関しては、ご希望に合わせ変更いたします。",
       image: {
         placeholder: "エグゼクティブルーム（リビング・市街地ビュー）",
         src: `${ASSET}/executive-room.jpg`,
@@ -116,15 +131,15 @@ const config: PatternCConfig = {
       },
       {
         tag: "02",
-        title: "豪華無料試食",
-        body: "シェフ自慢の婚礼料理をご試食いただき、おもてなしのイメージをご確認いただけます。",
-        image: { placeholder: "婚礼料理", src: `${ASSET}/tasting.jpg` },
+        title: "披露宴会場見学",
+        body: "披露宴会場をご覧いただきながら、おふたりらしい結婚式をご提案いたします。",
+        image: { placeholder: "披露宴会場とドレス", src: `${ASSET}/dress.jpg` },
       },
       {
         tag: "03",
-        title: "ドレス見学",
-        body: "披露宴会場やドレスをご覧いただきながら、おふたりらしい結婚式をご提案いたします。",
-        image: { placeholder: "披露宴会場とドレス", src: `${ASSET}/dress.jpg` },
+        title: "豪華無料試食",
+        body: "シェフ自慢の婚礼料理をご試食いただき、おもてなしのイメージをご確認いただけます。",
+        image: { placeholder: "婚礼料理", src: `${ASSET}/tasting.jpg` },
       },
       {
         tag: "04",
@@ -151,6 +166,9 @@ const config: PatternCConfig = {
   privilege: {
     heading: "ご来館特典・ご成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
+    // 合計はここで言い切るので、パネル下部の TOTAL ブロックは出さない（total 未設定）。
+    headline: "最大10万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大10万円",
     items: [
       {
         title: "JCBギフト券",
@@ -169,7 +187,7 @@ const config: PatternCConfig = {
       },
     ],
     frame: `${ASSET}/privilege-frame.png`,
-    total: "最大 10万円分",
+    disclaimer: "※特典のお渡しには適用条件がございます",
     contract: { label: "さらに、ご成約で", amount: "最大180万円優待" },
   },
 
