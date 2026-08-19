@@ -270,7 +270,7 @@ const config: BeatPilatesConfig = {
   meta: {
     title: "BEAT PILATES 名古屋伏見店｜暗闇×音楽×マシンピラティス",
     description:
-      "女性専用の暗闇空間で、周りの目を気にせず自分のペースでボディメイク。初回体験1,000円・今なら入会金0円。伏見駅徒歩8分／大須観音駅徒歩10分。",
+      "女性専用の暗闇空間で、周りの目を気にせず自分のペースでボディメイク。初回体験0円・今なら入会金0円。伏見駅徒歩8分／大須観音駅徒歩10分。",
   },
 
   header: {
@@ -285,7 +285,7 @@ const config: BeatPilatesConfig = {
     subCatch: "暗闇×音楽×マシンピラティス",
     body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
     hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-nagoyafushimi/fv-hero.jpg", position: "3% 30%" },
-    trialBadge: { label: "初回体験", price: "1,000", unit: "円" },
+    trialBadge: { label: "初回体験", price: "0", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
     tags: ["女性専用", "初心者歓迎"],
     access: [
@@ -352,7 +352,7 @@ const config: BeatPilatesConfig = {
   offer: {
     headingParts: [
       { t: "まずは初回体験" },
-      { t: "1,000円", hl: true },
+      { t: "0円", hl: true },
       { t: "から" },
     ],
     cards: [
@@ -360,7 +360,7 @@ const config: BeatPilatesConfig = {
         num: "01",
         img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates-nagoyafushimi/reason-01-studio.jpg", position: "center" },
         label: "45分\n体験レッスン",
-        price: "1,000",
+        price: "0",
         unit: "円",
         note: "(税込)",
       },
@@ -431,7 +431,7 @@ const config: BeatPilatesConfig = {
       },
     ],
     ctaText: "体験レッスンを予約する",
-    ctaSub: "初回体験1,000円｜入会金0円",
+    ctaSub: "初回体験0円｜入会金0円",
   },
 
   trainers: {
@@ -590,13 +590,13 @@ const config: BeatPilatesConfig = {
       },
     ],
     submitLabel: "この内容で予約する",
-    disclaimer: "45分体験レッスン1,000円｜今なら入会金0円｜しつこい勧誘はいたしません。",
+    disclaimer: "45分体験レッスン0円｜今なら入会金0円｜しつこい勧誘はいたしません。",
     errorMessage: "お名前・電話番号・メールアドレス・ご希望日・ご希望時間は必須項目です。ご希望日は明日以降の日付をお選びください。",
   },
 
   sticky: {
     offers: [
-      { label: "初回体験", value: "¥1,000" },
+      { label: "初回体験", value: "¥0" },
       { label: "入会金", value: "¥0" },
     ],
     buttonText: "体験レッスンを予約する",
