@@ -389,6 +389,31 @@ export default function Page() {
                 </div>
               ))}
             </div>
+
+            {/* Google review badge — authority signal, top-right of the FV. */}
+            <div
+              style={{
+                position: "absolute",
+                top: 30,
+                right: 22,
+                zIndex: 3,
+                background: "rgba(255,255,255,0.96)",
+                borderRadius: 12,
+                padding: "9px 13px",
+                textAlign: "center",
+                boxShadow: "0 6px 16px rgba(0,0,0,0.22)",
+                pointerEvents: "none",
+              }}
+            >
+              <div style={{ fontSize: 13, letterSpacing: "0.12em", color: "#E0A93F", lineHeight: 1 }}>★★★★★</div>
+              <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 4, marginTop: 5 }}>
+                <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 18, lineHeight: 1, color: accent }}>
+                  {c.achievement.num.replace(/^★/, "")}
+                </span>
+                <span style={{ fontSize: 9, letterSpacing: "0.04em", color: "#6E6455" }}>{c.achievement.pre}</span>
+              </div>
+            </div>
+
             <div
               style={{
                 position: "relative",
@@ -401,6 +426,28 @@ export default function Page() {
               }}
             >
               <div style={{ marginTop: "auto" }}>
+                {c.fv.heroTag && (
+                  <div style={{ textAlign: "center", marginBottom: 14 }}>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        fontFamily: fontGothic,
+                        fontWeight: 700,
+                        fontSize: 12,
+                        letterSpacing: "0.01em",
+                        whiteSpace: "nowrap",
+                        color: "#FFFFFF",
+                        background: "rgba(59,52,44,0.44)",
+                        backdropFilter: "blur(3px)",
+                        padding: "7px 14px",
+                        borderRadius: 999,
+                        textShadow: "0 1px 4px rgba(0,0,0,0.45)",
+                      }}
+                    >
+                      {c.fv.heroTag}
+                    </span>
+                  </div>
+                )}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 4 }}>
                   <div
                     style={{
@@ -490,6 +537,27 @@ export default function Page() {
               </div>
             </div>
 
+            {/* urgency band — scarcity to push booking now */}
+            {c.campaign && (
+              <div
+                style={{
+                  margin: "24px 0 0",
+                  padding: "13px 16px",
+                  background: "linear-gradient(120deg, #C99A85 0%, #A96E58 100%)",
+                  borderRadius: 12,
+                  boxShadow: "0 6px 16px rgba(150,110,85,0.28)",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.06em", color: "#FFFFFF", textShadow: "0 1px 4px rgba(120,80,60,0.4)" }}>
+                  {c.campaign.limitText}
+                </div>
+                <div style={{ fontSize: 11, letterSpacing: "0.04em", color: "rgba(255,255,255,0.9)", marginTop: 4 }}>
+                  定員に達し次第、受付を終了いたします
+                </div>
+              </div>
+            )}
+
             {/* 0円 hero */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginTop: 26 }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
@@ -506,6 +574,24 @@ export default function Page() {
                   <span style={{ fontSize: 10, color: "#9C9285" }}>税込</span>
                   <span style={{ fontSize: 17, color: "#C49A85", marginLeft: 2 }}>→</span>
                 </div>
+                {c.offer.discountBadge && (
+                  <span
+                    style={{
+                      alignSelf: "flex-start",
+                      background: "#C25B4B",
+                      color: "#FFFFFF",
+                      fontFamily: fontGothic,
+                      fontSize: 12,
+                      fontWeight: 700,
+                      letterSpacing: "0.04em",
+                      padding: "4px 10px",
+                      borderRadius: 4,
+                      boxShadow: "0 3px 8px rgba(194,91,75,0.35)",
+                    }}
+                  >
+                    {c.offer.discountBadge}
+                  </span>
+                )}
               </div>
               <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 68, lineHeight: 0.9, letterSpacing: "0.01em", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
                 980<span style={{ fontSize: 34 }}>円</span>
@@ -680,11 +766,39 @@ export default function Page() {
                     <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#3B342C", marginTop: 6 }}>{t.name}</div>
                     <div style={{ fontSize: 12, color: "#9C9285", marginTop: 2 }}>{t.nameEn}</div>
                     <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#6E6455", margin: "12px 0 0" }}>{t.body}</p>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
-                      {t.tags.map((tag, ti) => (
-                        <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: accent, border: `1px solid ${accentSoft}`, background: accentSoft, borderRadius: 999, padding: "4px 10px" }}>{tag}</span>
-                      ))}
-                    </div>
+                    {t.certs ? (
+                      <div style={{ marginTop: 16 }}>
+                        <div
+                          style={{
+                            display: "inline-block",
+                            fontFamily: fontGothic,
+                            fontSize: 11,
+                            fontWeight: 700,
+                            letterSpacing: "0.12em",
+                            color: accent,
+                            borderBottom: `1px solid ${accentSoft}`,
+                            paddingBottom: 5,
+                            marginBottom: 9,
+                          }}
+                        >
+                          所有資格
+                        </div>
+                        <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 5 }}>
+                          {t.certs.map((cert, ci) => (
+                            <li key={ci} style={{ display: "flex", gap: 6, fontSize: 11.5, lineHeight: 1.6, color: "#6E6455" }}>
+                              <span style={{ color: accent, flex: "none" }}>・</span>
+                              <span>{cert}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
+                        {t.tags.map((tag, ti) => (
+                          <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: accent, border: `1px solid ${accentSoft}`, background: accentSoft, borderRadius: 999, padding: "4px 10px" }}>{tag}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -772,6 +886,7 @@ export default function Page() {
               fields={c.form.fields}
               submitLabel={c.form.submitLabel}
               errorMessage={c.form.errorMessage}
+              microcopy={c.form.microcopy ? nl(c.form.microcopy) : undefined}
               disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
             />
           </section>
@@ -782,6 +897,13 @@ export default function Page() {
         anchor={c.sticky.anchor}
         buttonText={c.sticky.buttonText}
         showAfter={c.sticky.showAfter}
+        note={
+          c.campaign ? (
+            <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.04em", color: "#A96E58" }}>
+              {c.campaign.limitText}
+            </span>
+          ) : undefined
+        }
         buttonGradient={goldBtn}
         shadowColor="rgba(150,110,85,0.4)"
         borderColor="rgba(190,150,120,0.35)"

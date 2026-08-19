@@ -19,6 +19,13 @@ export interface PatternAConfig {
   /** Monitor-recruiting badge on the offer bar. Default ON. */
   showMonitorBadge: boolean;
 
+  /**
+   * Optional scarcity/urgency line (e.g. "8月 先着10名様限定"). When set, it is
+   * shown as an attention band above the trial price and as the sticky CTA's
+   * note. Update monthly. Omit to hide all urgency banding.
+   */
+  campaign?: { limitText: string };
+
   header: {
     brand: string;
     brandSub: string;
@@ -63,6 +70,8 @@ export interface PatternAConfig {
      * (e.g. "1,980").
      */
     trialNow?: string;
+    /** Optional savings badge shown by the trial price (e.g. "92%OFF"). */
+    discountBadge?: string;
     /** Six experience items (icons are fixed in the design). */
     items: string[];
     photos: [Slot, Slot];
@@ -113,6 +122,8 @@ export interface PatternAConfig {
       nameEn: string;
       body: string;
       tags: string[];
+      /** Optional qualifications list ("所有資格"). When set, it replaces the tag pills for this trainer. */
+      certs?: string[];
     }[];
   };
 
@@ -144,6 +155,8 @@ export interface PatternAConfig {
     lead: string;
     fields: LPFormField[];
     submitLabel: string;
+    /** Optional bold reassurance line shown directly under the submit button (e.g. "※約1分で予約完了／強引な勧誘は一切ございません"). */
+    microcopy?: string;
     disclaimer: string;
     errorMessage: string;
   };
