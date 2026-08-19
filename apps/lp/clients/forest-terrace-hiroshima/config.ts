@@ -285,6 +285,8 @@ const config: PatternCConfig = {
     // WEBからの問い合わせに寄せたいという顧客判断で tel: リンクを外している。
     // これにより tel_tap は計測されない。
     telLink: false,
+    // 施設名だけで渡す。住所を足すと検索結果が住所側に寄ってピンが中央から外れる。
+    mapEmbed: { query: "オリエンタルホテル広島" },
     map: {
       placeholder: "オリエンタルホテル広島 外観",
       src: `${ASSET}/access.jpg`,

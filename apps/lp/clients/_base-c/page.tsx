@@ -1270,6 +1270,44 @@ export default function Page() {
                   ))}
                 </ul>
               )}
+              {/*
+                Googleマップの埋め込み。APIキー不要の output=embed を使う。
+                地図はスクロール中に踏むと画面が持っていかれるので、下に経路リンクを
+                置いて「タップして地図アプリで開く」導線を別に用意しておく。
+              */}
+              {c.access.mapEmbed && (
+                <div className="mt-6">
+                  <div
+                    className="overflow-hidden rounded-[3px] border"
+                    style={{ borderColor: `${c.accent}59` }}
+                  >
+                    <iframe
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(
+                        c.access.mapEmbed.query,
+                      )}&hl=ja&z=${c.access.mapEmbed.zoom ?? 16}&output=embed`}
+                      title={`${c.access.venueName}の地図`}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      style={{
+                        width: "100%",
+                        height: c.access.mapEmbed.height ?? 220,
+                        border: 0,
+                        display: "block",
+                      }}
+                    />
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                      c.access.mapEmbed.query,
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 block text-center text-[12px] underline underline-offset-4 opacity-75"
+                  >
+                    {c.access.mapEmbed.linkLabel ?? "Googleマップで経路を見る"}
+                  </a>
+                </div>
+              )}
               {/* telLink: false は「電話ではなくWEBから問い合わせてほしい」案件向け。
                   リンクを外すので trackEvent('tel_tap') も発火しない（規約4の例外）。 */}
               {c.access.telLink === false ? (

@@ -268,6 +268,8 @@ const config: PatternCConfig = {
     routes: ["〇〇線「〇〇駅」より徒歩0分", "〇〇ICより車で0分／駐車場00台"],
     tel: "000-0000-0000",
     telNote: "受付時間 00:00 - 00:00（〇曜定休）",
+    // Googleマップの埋め込み。同意取得が必要な案件では削除する。
+    mapEmbed: { query: "〇〇〇〇 〇〇県〇〇市〇〇0-0-0" },
     map: { placeholder: "会場の外観写真または地図キャプチャ", src: null },
   },
 
