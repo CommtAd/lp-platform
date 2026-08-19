@@ -38,14 +38,15 @@ const config: PatternCConfig = {
   },
 
   fvSummary: {
+    headline: "最大〇万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大〇万円",
     label: "来館特典",
     items: [
       { amount: "〇万円", name: "特典名A" },
       { amount: "〇万円相当", name: "特典名B" },
       { amount: "〇万円相当", name: "特典名C" },
     ],
-    note: "他にも最大〇万円分のご来館特典がついてくる",
-    noteEmphasis: "最大〇万円分",
+    disclaimer: "※特典のお渡しには適用条件がございます",
   },
 
   grandOffer: {

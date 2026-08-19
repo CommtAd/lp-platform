@@ -143,11 +143,17 @@ export interface PatternCConfig {
    * 金額だけ持ち帰ってもらうための要約なので、詳細は `privilege` 側に置く。
    */
   fvSummary?: {
+    /** FV写真の直下・`label` の上に置く訴求文。1行に収まる長さにする。 */
+    headline?: string;
+    /** `headline` の中で金額として強調する部分文字列（21pxの深い金になる）。 */
+    headlineEmphasis?: string;
     /** 中央の小見出し、例 "来館特典"。 */
     label: string;
     /** 3点程度に絞る。横3分割で並ぶため、`amount` は6文字以内が目安。 */
     items: { amount: string; name: string }[];
-    note: string;
+    /** 金額の右下に小さく置く注記（適用条件など）。 */
+    disclaimer?: string;
+    note?: string;
     /** `note` の中で金額として強調する部分文字列。含まれない場合は無視される。 */
     noteEmphasis?: string;
   };

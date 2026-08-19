@@ -71,14 +71,15 @@ const config: PatternCConfig = {
 
   // FVを離脱する前に金額だけ持ち帰ってもらうための要約。詳細は privilege 側。
   fvSummary: {
+    headline: "最大10万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大10万円",
     label: "来館特典",
     items: [
       { amount: "1万円分", name: "JCBギフト券" },
       { amount: "3万円相当", name: "豪華無料試食" },
       { amount: "4万円相当", name: "ご宿泊" },
     ],
-    note: "他にも最大10万円分のご来館特典がついてくる",
-    noteEmphasis: "最大10万円分",
+    disclaimer: "※特典のお渡しには適用条件がございます",
   },
 
   grandOffer: {
