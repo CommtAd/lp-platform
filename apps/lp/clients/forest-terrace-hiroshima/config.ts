@@ -245,7 +245,7 @@ const config: PatternCConfig = {
     heading: "アクセス",
     venueName: "The Forest Terrace Hiroshima",
     address: "〒730-0026 広島県広島市中区田中町6-10 オリエンタルホテル広島内",
-    routes: [{ via: "広島電鉄本線", from: "八丁堀駅より", time: "徒歩9分" }],
+    routes: ["広島電鉄本線 八丁堀駅より徒歩9分"],
     tel: "082-240-5551",
     // WEBからの問い合わせに寄せたいという顧客判断で tel: リンクを外している。
     // これにより tel_tap は計測されない。
