@@ -47,13 +47,21 @@ function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
 }
 
 /** 文中の金額語だけを金の明朝に置き換える。語が見つからなければそのまま返す。 */
-function emphasize(text: string, word: string | undefined, color: string): ReactNode {
+function emphasize(
+  text: string,
+  word: string | undefined,
+  color: string,
+  size = 15,
+): ReactNode {
   if (!word || !text.includes(word)) return text;
   const [head, ...rest] = text.split(word);
   return (
     <>
       {head}
-      <span className="text-[15px] font-bold" style={{ fontFamily: mincho, color }}>
+      <span
+        className="font-bold"
+        style={{ fontFamily: mincho, color, fontSize: `${size}px` }}
+      >
         {word}
       </span>
       {rest.join(word)}
@@ -509,6 +517,19 @@ export default function Page() {
           {/* ── FV直下の特典サマリー ── */}
           {c.fvSummary && (
             <div className="bg-[var(--paper)] px-5 pt-9">
+              {c.fvSummary.headline && (
+                <p
+                  className="mb-8 text-center text-[15px] leading-[1.7]"
+                  style={{ fontFamily: mincho }}
+                >
+                  {emphasize(
+                    c.fvSummary.headline,
+                    c.fvSummary.headlineEmphasis,
+                    goldOnWhite,
+                    21,
+                  )}
+                </p>
+              )}
               <div className="flex items-center gap-4">
                 <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
                 <span
@@ -525,9 +546,19 @@ export default function Page() {
                   ink={c.ink}
                 />
               </div>
-              <p className="mt-7 text-center text-[12px] leading-[1.9]">
-                {emphasize(c.fvSummary.note, c.fvSummary.noteEmphasis, goldOnWhite)}
-              </p>
+              {c.fvSummary.disclaimer && (
+                <p
+                  className="mt-3 text-right text-[10px] leading-[1.6]"
+                  style={{ color: `${c.ink}80` }}
+                >
+                  {c.fvSummary.disclaimer}
+                </p>
+              )}
+              {c.fvSummary.note && (
+                <p className="mt-7 text-center text-[12px] leading-[1.9]">
+                  {emphasize(c.fvSummary.note, c.fvSummary.noteEmphasis, goldOnWhite)}
+                </p>
+              )}
             </div>
           )}
 
