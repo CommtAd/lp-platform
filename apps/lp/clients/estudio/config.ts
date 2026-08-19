@@ -58,6 +58,9 @@ const config: PatternAConfig = {
   accent: "#6B5645",
   showMonitorBadge: true,
 
+  // 緊急性・限定性（月ごとに更新する。定員が変わったら人数・月表記を差し替え）。
+  campaign: { limitText: "8月 先着10名様限定" },
+
   header: {
     brand: "Pilates E-studio",
     brandSub: "女性専用パーソナルピラティス｜代々木・参宮橋",
@@ -70,7 +73,9 @@ const config: PatternAConfig = {
   achievement: { pre: "Google口コミ", num: "★4.95", post: "｜女性専用スタジオ" },
 
   fv: {
-    catchLines: ["女性の悩みに寄りそう", "パーソナルピラティス"],
+    // ベネフィット型キャッチ（縦書きプレート・右→左の順で読ませる）。
+    catchLines: ["姿勢が変われば、", "見た目印象まで変わる。"],
+    heroTag: "手ぶらで通える、女性専用パーソナルピラティス",
     hero: { placeholder: "スタジオ内観／マシンピラティスの写真（全面）", src: `${ASSET}/hero.jpg`, position: "center" },
     leftCard: { small: "初回60分体験", big: "¥980" },
     rightCard: { small: "入会金", big: "0円" },
@@ -81,6 +86,8 @@ const config: PatternAConfig = {
     heading: "60分の体験レッスン",
     trialBadge: "当日入会で入会金0円",
     trialRegular: "13,200",
+    discountBadge: "92%OFF", // 通常13,200円 → 980円（92.6%OFF）を丸めた表記。
+
     items: [
       "カウンセリング\n10分",
       "マシンピラティス\n体験40分",
@@ -161,7 +168,16 @@ const config: PatternAConfig = {
         name: "ERINA",
         nameEn: "Erina",
         body: "女性ならではのお悩みに寄りそい、姿勢評価をもとにお一人おひとりに合わせたマンツーマン指導を行います。はじめての方も安心してお越しください。",
+        // certs を設定しているため tags（下記）は表示されない（page.tsx が所有資格一覧を優先描画）。
         tags: ["女性専用", "マンツーマン"],
+        certs: [
+          "PHI MatⅠ/Ⅱ",
+          "ReformerⅠ",
+          "Tower",
+          "Barrel",
+          "Props",
+          "ヴィオラトリコロール　マタニティピラティスインストラクター",
+        ],
       },
     ],
   },
@@ -267,6 +283,7 @@ const config: PatternAConfig = {
       },
     ],
     submitLabel: "この内容で予約する",
+    microcopy: "約1分で予約完了／強引な勧誘は一切ございません",
     disclaimer:
       "送信いただいた内容は予約対応のみに利用します。\n初回60分体験 ¥980｜入会金0円｜しつこい勧誘はいたしません。",
     errorMessage: "お名前・電話番号・第1希望日時は必須項目です。ご希望日は明日以降の日付をお選びください。",
@@ -279,6 +296,7 @@ const config: PatternAConfig = {
     ],
     buttonText: "60分体験を予約する",
     anchor: "#form",
+    showAfter: 460, // FVを見た直後（スクロール開始まもなく）に追従バーを出す。
   },
 };
 

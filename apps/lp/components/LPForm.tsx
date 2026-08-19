@@ -75,6 +75,8 @@ export interface LPFormProps {
   accent?: string;
   submitLabel?: string;
   submitStyle?: CSSProperties;
+  /** Bold reassurance line rendered directly under the submit button (above the disclaimer). */
+  microcopy?: ReactNode;
   disclaimer?: ReactNode;
   errorMessage?: string;
   /** Optional custom thank-you content (defaults to a simple card). Ignored when `thanksHref` is set. */
@@ -204,6 +206,7 @@ export default function LPForm({
   accent = "#2E4269",
   submitLabel = "この内容で予約する",
   submitStyle,
+  microcopy,
   disclaimer,
   errorMessage = "必須項目を入力してください。",
   thanks,
@@ -604,6 +607,22 @@ export default function LPForm({
       >
         {submitting ? "送信中…" : submitLabel}
       </button>
+
+      {microcopy && (
+        <p
+          className="lpform-microcopy"
+          style={{
+            fontSize: 12.5,
+            lineHeight: 1.7,
+            fontWeight: 700,
+            color: "#4C4E45",
+            margin: "-8px 0 0",
+            textAlign: "center",
+          }}
+        >
+          {microcopy}
+        </p>
+      )}
 
       {disclaimer && (
         <p
