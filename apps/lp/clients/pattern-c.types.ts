@@ -86,6 +86,11 @@ export interface PatternCConfig {
   };
 
   fv: {
+    /**
+     * キッカーのさらに上に置く会場名。新規オープンで会場名の認知がない場合に使う。
+     * フェア名より一段細く出るので、主役はあくまでキャッチ側。
+     */
+    brand?: string;
     /** Small English kicker above the catch, e.g. "BRIDAL FAIR". */
     kicker: string;
     /** Main catch, one line per array entry. */
@@ -141,6 +146,22 @@ export interface PatternCConfig {
     heroSlides?: Slot[];
     /** ヒーロー写真のアスペクト比。既定 "3 / 4"。横位置素材なら "1 / 1" 等に緩める。 */
     heroAspect?: string;
+  };
+
+  /**
+   * ブランド紹介。FVの直後・特典サマリーの上に入る。
+   * 新規オープンで会場名の認知がない場合に「何者か」を先に伝えるためのもので、
+   * 既存の認知がある会場では省く（未設定でセクションごと消える）。
+   * `lead` / `body` は `\n` で改行位置を指定できる。
+   */
+  brand?: {
+    /** 例 "2026年6月 GRAND OPEN"。 */
+    heading: string;
+    /** 見出しの下の3行程度のリード。 */
+    lead: string;
+    image: Slot;
+    /** 写真の下の説明文。 */
+    body: string;
   };
 
   /**

@@ -37,6 +37,14 @@ const config: PatternCConfig = {
     hero: { placeholder: "チャペルまたはガーデンの引き写真（横位置・人物入り）", src: null },
   },
 
+  // 新規オープンで会場名の認知がない場合のみ入れる。不要なら丸ごと削除する。
+  brand: {
+    heading: "0000年0月 GRAND OPEN",
+    lead: "〇〇から\n新たに生まれたブライダルブランド\n〇〇〇〇",
+    image: { placeholder: "会場を象徴する写真（新郎新婦入り）", src: null },
+    body: "ブランドの紹介文がここに入ります。\n改行位置は \\n で指定できます。\nダミーテキストのため実データに\n差し替えてください。",
+  },
+
   fvSummary: {
     headline: "最大〇万円の来館ギフトがついてくる",
     headlineEmphasis: "最大〇万円",
