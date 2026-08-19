@@ -642,48 +642,60 @@ export default function Page() {
                 )}
               </div>
 
-              {c.grandOffer.feature &&
-                (c.grandOffer.feature.image ? (
-                  // 写真の上にコピーを載せる。客室写真は窓から強い光が入るので
-                  // スクリムは全面に強く当て、下へ向かってさらに落とす。
-                  <div className="relative mt-4 overflow-hidden rounded-[3px]">
-                    <ImageSlot
-                      src={c.grandOffer.feature.image.src}
-                      placeholder={c.grandOffer.feature.image.placeholder}
-                      objectPosition={c.grandOffer.feature.image.position ?? "center"}
-                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-                    />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.46)_0%,rgba(59,55,48,0.64)_45%,rgba(59,55,48,0.88)_100%)]" />
+              {c.grandOffer.feature && (
+                <>
+                  {c.grandOffer.feature.image ? (
+                    // 写真の上にコピーを載せる。客室写真は窓から強い光が入るので
+                    // スクリムは全面に強く当て、下へ向かってさらに落とす。
+                    <div className="relative mt-4 overflow-hidden rounded-[3px]">
+                      <ImageSlot
+                        src={c.grandOffer.feature.image.src}
+                        placeholder={c.grandOffer.feature.image.placeholder}
+                        objectPosition={c.grandOffer.feature.image.position ?? "center"}
+                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+                      />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(59,55,48,0.46)_0%,rgba(59,55,48,0.64)_45%,rgba(59,55,48,0.88)_100%)]" />
+                      <div
+                        className="relative px-5 pb-7 pt-12 text-center text-white"
+                        style={{ textShadow: "0 2px 14px rgba(59,55,48,0.9)" }}
+                      >
+                        <p
+                          className="text-[15.5px] leading-relaxed"
+                          style={{ fontFamily: mincho }}
+                        >
+                          {nl(c.grandOffer.feature.title)}
+                        </p>
+                        {/* 写真の上ではブランドゴールドの罫線が沈むので淡いシャンパンで引く。 */}
+                        <span
+                          className="mx-auto mt-4 block h-px w-12"
+                          style={{ background: "#E2C892" }}
+                        />
+                        <p className="mt-4 text-[12px] leading-[1.9] text-white/85">
+                          {c.grandOffer.feature.body}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
                     <div
-                      className="relative px-5 pb-7 pt-12 text-center text-white"
-                      style={{ textShadow: "0 2px 14px rgba(59,55,48,0.9)" }}
+                      className="mt-4 rounded-[3px] border px-5 py-7 text-center"
+                      style={{ background: c.paper, borderColor: `${c.accent}59`, color: c.ink }}
                     >
                       <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
                         {nl(c.grandOffer.feature.title)}
                       </p>
-                      {/* 写真の上ではブランドゴールドの罫線が沈むので淡いシャンパンで引く。 */}
-                      <span
-                        className="mx-auto mt-4 block h-px w-12"
-                        style={{ background: "#E2C892" }}
-                      />
-                      <p className="mt-4 text-[12px] leading-[1.9] text-white/85">
+                      <p className="mt-2.5 text-[12px] leading-[1.9] opacity-65">
                         {c.grandOffer.feature.body}
                       </p>
                     </div>
-                  </div>
-                ) : (
-                  <div
-                    className="mt-4 rounded-[3px] border px-5 py-7 text-center"
-                    style={{ background: c.paper, borderColor: `${c.accent}59`, color: c.ink }}
-                  >
-                    <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
-                      {nl(c.grandOffer.feature.title)}
+                  )}
+                  {/* 注記はカードの外。カードの中に入れると特典の一部に読めてしまう。 */}
+                  {c.grandOffer.feature.disclaimer && (
+                    <p className="mt-2.5 text-right text-[10px] leading-[1.6] opacity-65">
+                      {c.grandOffer.feature.disclaimer}
                     </p>
-                    <p className="mt-2.5 text-[12px] leading-[1.9] opacity-65">
-                      {c.grandOffer.feature.body}
-                    </p>
-                  </div>
-                ))}
+                  )}
+                </>
+              )}
 
               {c.grandOffer.note && (
                 <p className="mt-4 text-[11px] leading-[1.9] opacity-75">{c.grandOffer.note}</p>

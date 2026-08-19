@@ -183,7 +183,8 @@ export interface PatternCConfig {
      * 中身だと誤読されるため。
      * `image` を渡すと写真を敷いてスクリム＋白文字で載せる（宿泊特典の客室写真など）。
      */
-    feature?: { title: string; body: string; image?: Slot };
+    /** `disclaimer` はカード右下に小さく入る注記（適用条件など）。 */
+    feature?: { title: string; body: string; image?: Slot; disclaimer?: string };
     note?: string;
   };
 

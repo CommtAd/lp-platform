@@ -91,8 +91,9 @@ const config: PatternCConfig = {
     amount: "最大180万円相当",
     frame: `${ASSET}/grand-offer-frame.png`,
     feature: {
-      title: "エグゼクティブルームを\n2泊3日でプレゼント",
-      body: "人生で最も特別な2泊3日を。",
+      title: "エグゼクティブルームを\n1泊2日でプレゼント",
+      body: "人生で最も特別な1泊2日を。",
+      disclaimer: "※特典のお渡しには適用条件がございます",
       image: {
         placeholder: "エグゼクティブルーム（リビング・市街地ビュー）",
         src: `${ASSET}/executive-room.jpg`,
