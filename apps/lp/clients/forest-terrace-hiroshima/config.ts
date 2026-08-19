@@ -117,15 +117,15 @@ const config: PatternCConfig = {
       },
       {
         tag: "02",
-        title: "豪華無料試食",
-        body: "シェフ自慢の婚礼料理をご試食いただき、おもてなしのイメージをご確認いただけます。",
-        image: { placeholder: "婚礼料理", src: `${ASSET}/tasting.jpg` },
+        title: "披露宴会場見学",
+        body: "披露宴会場をご覧いただきながら、おふたりらしい結婚式をご提案いたします。",
+        image: { placeholder: "披露宴会場とドレス", src: `${ASSET}/dress.jpg` },
       },
       {
         tag: "03",
-        title: "ドレス見学",
-        body: "披露宴会場やドレスをご覧いただきながら、おふたりらしい結婚式をご提案いたします。",
-        image: { placeholder: "披露宴会場とドレス", src: `${ASSET}/dress.jpg` },
+        title: "豪華無料試食",
+        body: "シェフ自慢の婚礼料理をご試食いただき、おもてなしのイメージをご確認いただけます。",
+        image: { placeholder: "婚礼料理", src: `${ASSET}/tasting.jpg` },
       },
       {
         tag: "04",
