@@ -559,10 +559,16 @@ export default function Page() {
           */}
           {c.brand && (
             <section className={`${lightBg()} px-5 py-12 text-center`}>
-              <p className="text-[19px] leading-snug" style={{ fontFamily: mincho }}>
+              <p
+                className="text-[19px] leading-snug"
+                style={{ fontFamily: mincho, color: c.brand.accent }}
+              >
                 {c.brand.heading}
               </p>
-              <p className="mt-4 text-[15px] leading-[1.9]" style={{ fontFamily: mincho }}>
+              <p
+                className="mt-4 text-[15px] leading-[1.9]"
+                style={{ fontFamily: mincho, color: c.brand.accent }}
+              >
                 {nl(c.brand.lead)}
               </p>
               <div className="mt-7">

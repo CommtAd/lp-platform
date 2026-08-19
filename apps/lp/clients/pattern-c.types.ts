@@ -159,6 +159,12 @@ export interface PatternCConfig {
     heading: string;
     /** 見出しの下の3行程度のリード。 */
     lead: string;
+    /**
+     * `heading` と `lead` の文字色。未指定なら本文色（ink）。
+     * 明るい地の上に薄い色を置くと読めなくなるので、指定するときは
+     * 白地とのコントラストを確認すること（本文は4.5:1、大きな見出しは3:1が目安）。
+     */
+    accent?: string;
     image: Slot;
     /** 写真の下の説明文。 */
     body: string;
