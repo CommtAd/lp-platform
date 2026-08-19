@@ -595,7 +595,11 @@ export default function Page() {
               </div>
               <div className="mt-7">
                 <AmountRow
-                  items={c.fvSummary.items.map((i) => ({ amount: i.amount, label: i.name }))}
+                  items={c.fvSummary.items.map((i) => ({
+                    amount: i.amount,
+                    label: i.name,
+                    image: i.image,
+                  }))}
                   ink={c.ink}
                 />
               </div>

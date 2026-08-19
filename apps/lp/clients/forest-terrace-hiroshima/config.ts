@@ -75,10 +75,23 @@ const config: PatternCConfig = {
     headlineEmphasis: "最大10万円",
     headlineOrnament: `${ASSET}/fv-summary-ornament.png`,
     label: "来館特典",
+    // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
     items: [
-      { amount: "1万円分", name: "JCBギフト券" },
-      { amount: "3万円相当", name: "豪華無料試食" },
-      { amount: "4万円相当", name: "ご宿泊" },
+      {
+        amount: "1万円分",
+        name: "JCBギフト券",
+        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
+      },
+      {
+        amount: "3万円相当",
+        name: "豪華無料試食",
+        image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
+      },
+      {
+        amount: "4万円相当",
+        name: "ご宿泊",
+        image: { placeholder: "客室（ツイン）", src: `${ASSET}/gift-stay.jpg` },
+      },
     ],
     disclaimer: "※特典のお渡しには適用条件がございます",
   },

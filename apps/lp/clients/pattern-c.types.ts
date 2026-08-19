@@ -157,8 +157,12 @@ export interface PatternCConfig {
     headlineOrnament?: string;
     /** 中央の小見出し、例 "来館特典"。 */
     label: string;
-    /** 3点程度に絞る。横3分割で並ぶため、`amount` は6文字以内が目安。 */
-    items: { amount: string; name: string }[];
+    /**
+     * 3点程度に絞る。横3分割で並ぶため、`amount` は6文字以内が目安。
+     * `image` を渡すと各列の頭に正方形のサムネイルが入る（全列に付けるか、全列なしか）。
+     * 写真がある場合は列を分ける縦罫が消え、溝で離れる。
+     */
+    items: { amount: string; name: string; image?: Slot }[];
     /** 金額の右下に小さく置く注記（適用条件など）。 */
     disclaimer?: string;
     note?: string;
