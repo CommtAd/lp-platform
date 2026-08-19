@@ -152,6 +152,9 @@ const config: PatternCConfig = {
   privilege: {
     heading: "ご来館特典・ご成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
+    // 合計はここで言い切るので、パネル下部の TOTAL ブロックは出さない（total 未設定）。
+    headline: "最大10万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大10万円",
     items: [
       {
         title: "JCBギフト券",
@@ -170,7 +173,7 @@ const config: PatternCConfig = {
       },
     ],
     frame: `${ASSET}/privilege-frame.png`,
-    total: "最大 10万円分",
+    disclaimer: "※特典のお渡しには適用条件がございます",
     contract: { label: "さらに、ご成約で", amount: "最大180万円優待" },
   },
 

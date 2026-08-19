@@ -827,6 +827,17 @@ export default function Page() {
                 {c.privilege.heading}
               </h2>
               <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">{c.privilege.lead}</p>
+              {c.privilege.headline && (
+                // バンドの地の上なので、強調は色ではなく級数で付ける。
+                <p className="mt-4 text-[14px] leading-[1.7]" style={{ fontFamily: mincho }}>
+                  {emphasize(
+                    c.privilege.headline,
+                    c.privilege.headlineEmphasis,
+                    band.accent,
+                    20,
+                  )}
+                </p>
+              )}
             </div>
             {/*
               地の上に小さい箱を並べると面が細切れになってセクションが沈むため、
@@ -843,7 +854,7 @@ export default function Page() {
                   <img src={c.privilege.frame} alt="" className="h-full w-full" />
                 </span>
               )}
-              <div className="px-4 pb-8 pt-7">
+              <div className={`px-4 pt-7 ${c.privilege.total ? "pb-8" : "pb-7"}`}>
                 <AmountRow
                   items={c.privilege.items.map((p) => ({
                     amount: p.amount,
@@ -852,26 +863,39 @@ export default function Page() {
                   }))}
                   ink={c.ink}
                 />
-                {/* 菱形を挟んだ罫が「＝」の役割を兼ねる。 */}
-                <span className="mt-7 flex items-center justify-center gap-2.5">
-                  <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
-                  <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
-                  <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
-                </span>
-                <p
-                  className="mt-6 text-center text-[11px] tracking-[0.3em]"
-                  style={{ fontFamily: playfair }}
-                >
-                  TOTAL
-                </p>
-                <p
-                  className="mt-2 text-center text-[28px] font-bold leading-none"
-                  style={{ fontFamily: mincho, color: goldOnWhite }}
-                >
-                  {amountEmphasis(c.privilege.total, 44, 19)}
-                </p>
+                {c.privilege.total && (
+                  <>
+                    {/* 菱形を挟んだ罫が「＝」の役割を兼ねる。 */}
+                    <span className="mt-7 flex items-center justify-center gap-2.5">
+                      <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
+                      <span
+                        className="h-[5px] w-[5px] rotate-45"
+                        style={{ background: c.accent }}
+                      />
+                      <span className="h-px flex-1" style={{ background: `${c.accent}59` }} />
+                    </span>
+                    <p
+                      className="mt-6 text-center text-[11px] tracking-[0.3em]"
+                      style={{ fontFamily: playfair }}
+                    >
+                      TOTAL
+                    </p>
+                    <p
+                      className="mt-2 text-center text-[28px] font-bold leading-none"
+                      style={{ fontFamily: mincho, color: goldOnWhite }}
+                    >
+                      {amountEmphasis(c.privilege.total, 44, 19)}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
+            {/* 注記はパネルの外。中に入れると特典の一部に読めてしまう。 */}
+            {c.privilege.disclaimer && (
+              <p className="mt-2.5 text-right text-[10px] leading-[1.6] opacity-65">
+                {c.privilege.disclaimer}
+              </p>
+            )}
             {c.privilege.contract && (
               // 成約特典は二重枠＋跨ぎラベルで、来館特典より格上に見せる。
               // 暗い箱で締めるとセクション全体が沈むので、明るいまま枠の強さで差をつける。

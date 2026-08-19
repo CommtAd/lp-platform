@@ -242,6 +242,13 @@ export interface PatternCConfig {
     heading: string;
     lead: string;
     /**
+     * `lead` の下に置く訴求文。バンドの地に載るため、強調は色ではなく級数で付ける
+     * （ゴールドは中間トーンの地で消える）。強調部分は `band.accent` になる。
+     */
+    headline?: string;
+    /** `headline` の中で大きく見せる部分文字列。含まれない場合は無視される。 */
+    headlineEmphasis?: string;
+    /**
      * 横3分割で並べて合計へ収束させる版面。列幅が100px前後しか取れないため説明文は
      * 持たせない。`title` は6文字程度まで、`amount` は「1万円分」等の短い表記に。
      * `image` を渡すと各列の頭に正方形のサムネイルが入る（全列に付けるか、全列なしか）。
@@ -249,8 +256,13 @@ export interface PatternCConfig {
     items: { title: string; amount: string; image?: Slot }[];
     /** パネルに重ねる四隅のフレーム装飾（中央が透明のPNG）。`grandOffer.frame` と同じ扱い。 */
     frame?: string;
-    /** 特典合計の訴求、例 "最大10万円分"。 */
-    total: string;
+    /** パネル直下・右寄せの注記（適用条件など）。カードの外に出る。 */
+    disclaimer?: string;
+    /**
+     * 特典合計の訴求、例 "最大10万円分"。省略するとパネル下部の TOTAL ブロック
+     * （罫・TOTAL・合計額）ごと消える。合計を `headline` 側で言う場合は省略する。
+     */
+    total?: string;
     totalNote?: string;
     /** 成約特典への導線をこのセクションの末尾に置く場合。 */
     contract?: { label: string; amount: string };

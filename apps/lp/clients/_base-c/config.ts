@@ -85,8 +85,9 @@ const config: PatternCConfig = {
       { title: "特典名B", amount: "〇万円分" },
       { title: "特典名C", amount: "〇万円分" },
     ],
+    disclaimer: "※特典のお渡しには適用条件がございます",
+    // 合計を lead の下で言い切る構成にするなら headline を足して total を外す。
     total: "最大 〇万円分",
-    totalNote: "※ 特典の適用には条件があります。詳細は当日ご説明いたします。",
     contract: { label: "ご成約で", amount: "最大〇万円優待" },
   },
 
