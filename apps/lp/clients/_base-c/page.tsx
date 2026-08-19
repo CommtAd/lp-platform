@@ -327,12 +327,23 @@ export default function Page() {
         : "linear-gradient(180deg,rgba(59,55,48,0.70) 0%,rgba(59,55,48,0.38) 34%,rgba(59,55,48,0.06) 60%,rgba(59,55,48,0.12) 100%)";
 
   const fvKicker = (
-    <span
-      className="text-[12px] italic tracking-[0.28em]"
-      style={{ fontFamily: playfair, color: framed ? goldOnWhite : undefined }}
-    >
-      {c.fv.kicker}
-    </span>
+    <>
+      {c.fv.brand && (
+        // 会場名はキッカーの上。フェア名より一段細く置いて、主役をフェア名に残す。
+        <span
+          className="mb-2 block text-[12.5px] tracking-[0.18em]"
+          style={{ fontFamily: mincho }}
+        >
+          {c.fv.brand}
+        </span>
+      )}
+      <span
+        className="text-[12px] italic tracking-[0.28em]"
+        style={{ fontFamily: playfair, color: framed ? goldOnWhite : undefined }}
+      >
+        {c.fv.kicker}
+      </span>
+    </>
   );
   const fvCatch = (
     <h1
@@ -540,6 +551,33 @@ export default function Page() {
               </div>
             )}
           </section>
+
+          {/*
+            ── ブランド紹介 ──
+            会場が新規オープンで認知がない場合に、FVの直後で「何者か」を先に伝える。
+            既存の認知がある会場では丸ごと省く（brand 未設定でスキップ）。
+          */}
+          {c.brand && (
+            <section className={`${lightBg()} px-5 py-12 text-center`}>
+              <p className="text-[19px] leading-snug" style={{ fontFamily: mincho }}>
+                {c.brand.heading}
+              </p>
+              <p className="mt-4 text-[15px] leading-[1.9]" style={{ fontFamily: mincho }}>
+                {nl(c.brand.lead)}
+              </p>
+              <div className="mt-7">
+                <ImageSlot
+                  src={c.brand.image.src}
+                  placeholder={c.brand.image.placeholder}
+                  objectPosition={c.brand.image.position ?? "center"}
+                  radius={3}
+                  style={{ width: "100%", aspectRatio: "3 / 2" }}
+                />
+              </div>
+              <p className="mt-7 text-[12.5px] leading-[2.1] opacity-75">{nl(c.brand.body)}</p>
+            </section>
+          )}
+
           {/* ── FV直下の特典サマリー ── */}
           {c.fvSummary && (
             <div className="bg-[var(--paper)] px-5 pt-9">
