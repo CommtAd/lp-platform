@@ -41,6 +41,11 @@ export interface PatternCConfig {
   slug: string;
   /** Local fallback status when no clients row exists (dev only). */
   status?: ClientStatus;
+  /**
+   * `ogpImage` はOGP専用の1枚を 1200x630（1.91:1）で用意する。
+   * FVの写真を使い回すとURLが変わらないままFVだけ差し替わり、SNS側のキャッシュが
+   * 古い画像を出し続ける。差し替えるときはファイル名も変えてキャッシュを切ること。
+   */
   meta: { title: string; description: string; ogpImage?: string };
   /** Base ink color (deep greige/charcoal). */
   ink: string;
