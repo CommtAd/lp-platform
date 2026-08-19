@@ -83,6 +83,9 @@ const config: PatternCConfig = {
   brand: {
     heading: "2026年6月 GRAND OPEN",
     lead: "オリエンタルホテル広島から\n新たに生まれたブライダルブランド\nザ・フォレストテラス広島",
+    // 支給指定は #BCC7B1 だが白地で 1.76:1 しか出ず読めないため、
+    // 同系色のまま濃さだけ落として 4.4:1 にしている（顧客確認済み）。
+    accent: "#6E7D62",
     image: {
       placeholder: "披露宴会場での新郎新婦",
       src: `${ASSET}/brand.jpg`,
