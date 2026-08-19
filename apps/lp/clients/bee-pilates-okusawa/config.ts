@@ -1,11 +1,10 @@
 import type { ClientStatus } from "@shared/index";
 import type { LPFormField } from "@/components/LPForm";
 
-const ASSET = "/clients/bee-pilates-ebisu";
+const ASSET = "/clients/bee-pilates-okusawa";
 
-/** 予約システム（hacomono）。全CTAの共通遷移先。 */
-const CTA_URL =
-  "https://pilatesbee.hacomono.jp/reserve/schedule/12/7?date_from=2026-08-03";
+/** 予約システム（hacomono）。全CTAの共通遷移先（奥沢店のスケジュール）。 */
+const CTA_URL = "https://pilatesbee.hacomono.jp/reserve/schedule/6/4";
 
 /** An image position in the layout. `src` empty → placeholder box. */
 export interface Slot {
@@ -27,7 +26,7 @@ export interface BeeConfig {
     access: { station: string; walk: string }[];
   };
 
-  /** ヘッダー直下のオープン記念オファー帯 */
+  /** ヘッダー直下のキャンペーンオファー帯 */
   offerBar: { text: string; sub: string };
 
   fv: {
@@ -175,37 +174,37 @@ export interface BeeConfig {
 }
 
 const config: BeeConfig = {
-  slug: "bee-pilates-ebisu",
+  slug: "bee-pilates-okusawa",
   status: "published",
   ctaUrl: CTA_URL,
   meta: {
     title:
-      "Pilates Studio Beê 恵比寿店｜女性専用・完全個室パーソナルピラティス｜2026.8.1 GRAND OPEN 体験500円",
+      "Pilates Studio Beê 奥沢店｜女性専用・完全個室パーソナルピラティス｜サマーキャンペーン 体験500円",
     description:
-      "恵比寿駅徒歩2分、女性専用・完全個室のパーソナルピラティス専門スタジオ。2026年8月1日グランドオープン。オープン記念で55分の体験レッスンが通常5,500円→500円（税込）。入会金22,000円も体験レッスン時の入会で0円。初めての方も、何歳からでも、プロによる一対一のオーダーメイドレッスンで、姿勢を整え、芯から美しい身体を。",
+      "奥沢駅徒歩2分、女性専用・完全個室のパーソナルピラティス専門スタジオ。サマーキャンペーンで55分の体験レッスンが通常5,500円→500円（税込）。入会金22,000円も体験レッスン時の入会で0円。初めての方も、何歳からでも、プロによる一対一のオーダーメイドレッスンで、姿勢を整え、芯から美しい身体を。",
     ogpImage: `${ASSET}/ogp.jpg`,
   },
 
   header: {
     brand: "Pilates Studio Beê",
-    brandSub: "恵比寿店｜女性専用・完全個室パーソナル",
-    access: [{ station: "恵比寿駅", walk: "徒歩2分" }],
+    brandSub: "奥沢店｜女性専用・完全個室パーソナル",
+    access: [{ station: "奥沢駅", walk: "徒歩2分" }],
   },
 
   offerBar: {
-    text: "＼ 2026.8.1 GRAND OPEN｜オープン記念キャンペーン ／",
+    text: "＼ SUMMER CAMPAIGN｜夏の体験キャンペーン ／",
     sub: "55分の体験レッスンが 通常5,500円 → 500円（税込）",
   },
 
   fv: {
-    openBadge: { small: "2026", big: "8.1", en: "GRAND OPEN" },
-    catchTop: "恵比寿駅 徒歩2分｜女性専用・完全個室",
+    openBadge: { small: "SUMMER", big: "¥500", en: "CAMPAIGN" },
+    catchTop: "奥沢駅 徒歩2分｜女性専用・完全個室",
     catchLines: ["ずっと、", "もっと、", "美しく。"],
     lead: "身体の芯から整え、内側から輝く美しさを育てる。\nもっと自由に、もっと快適に、ずっと自分らしく。\nプロと一対一で向き合う、あなただけのためのピラティス。",
     hero: { placeholder: "スタジオ内観 / マシンピラティスの写真（全面）", src: `${ASSET}/hero.jpg`, position: "center" },
     trial: {
       label: "55分 体験レッスン",
-      time: "オープン記念価格",
+      time: "サマー特別価格",
       normal: "5,500",
       price: "500",
       unit: "円",
@@ -213,11 +212,11 @@ const config: BeeConfig = {
     },
     tags: ["女性専用", "完全個室", "初心者歓迎"],
     notes: [
-      "※体験レッスンが500円（税込）となるのはオープン記念キャンペーン期間中に初めてご予約された方です。",
+      "※体験レッスンが500円（税込）となるのはサマーキャンペーン期間中に初めてご予約された方です。",
       "※体験レッスンは1名さま1回限りとなります。",
     ],
-    ctaText: "オープン記念で体験を予約する",
-    urgencyText: "オープン記念キャンペーン実施中",
+    ctaText: "サマーキャンペーンで体験を予約する",
+    urgencyText: "サマーキャンペーン実施中",
   },
 
   philosophy: {
@@ -253,7 +252,7 @@ const config: BeeConfig = {
   trial: {
     eyebrow: "TRIAL LESSON",
     headingPre: "55分の体験レッスンが",
-    headingHighlight: "オープン記念500円",
+    headingHighlight: "サマー特別500円",
     lead: "プロのインストラクターによる一対一のカウンセリングから、実際のマシンピラティスまで。\n初めての方も、体験だけでも、お気軽にお越しください。",
     photos: [
       { placeholder: "カウンセリングのシーン写真", src: `${ASSET}/trial-counseling.jpg` },
@@ -286,11 +285,11 @@ const config: BeeConfig = {
       note: "入会金（税込）",
     },
     notes: [
-      "※体験レッスンが500円（税込）となるのはオープン記念キャンペーン期間中に初めてご予約された方です。",
+      "※体験レッスンが500円（税込）となるのはサマーキャンペーン期間中に初めてご予約された方です。",
       "※入会金0円は体験レッスン時にご入会された方が対象です。",
       "※動きやすい服装でお越しください（お着替えスペースもございます）。",
     ],
-    ctaText: "オープン記念で体験を予約する",
+    ctaText: "サマーキャンペーンで体験を予約する",
   },
 
   reasons: {
@@ -323,12 +322,12 @@ const config: BeeConfig = {
       {
         num: "05",
         img: { placeholder: "スタジオ / Beêロゴの写真", src: `${ASSET}/reason-5.jpg`, position: "center" },
-        title: "恵比寿駅から\n徒歩2分の好立地",
-        body: "恵比寿駅から徒歩2分。お仕事帰りやお出かけのついでにも通いやすい立地です。さらに五反田・目黒・新富町・奥沢・船橋の姉妹店を追加料金なしで相互利用でき、その日のご予定やお近くの店舗に合わせて通えます。",
+        title: "奥沢駅から\n徒歩2分の好立地",
+        body: "奥沢駅から徒歩2分。お仕事帰りやお出かけのついでにも通いやすい立地です。さらに五反田・目黒・新富町・恵比寿・船橋の姉妹店を追加料金なしで相互利用でき、その日のご予定やお近くの店舗に合わせて通えます。",
       },
     ],
-    ctaText: "オープン記念で体験を予約する",
-    ctaSub: "55分体験レッスン オープン記念500円（税込）",
+    ctaText: "サマーキャンペーンで体験を予約する",
+    ctaSub: "55分体験レッスン サマー特別500円（税込）",
   },
 
   pricing: {
@@ -350,7 +349,7 @@ const config: BeeConfig = {
       note: "体験レッスン時のご入会で0円（税込）",
     },
     notes: [
-      "※Beê 恵比寿店は女性専用スタジオです。",
+      "※Beê 奥沢店は女性専用スタジオです。",
       "※表示は月4回プランの1回あたりの料金（税込）です。",
       "※そのほかのプランや詳細は、体験レッスン時にご案内いたします。",
     ],
@@ -423,7 +422,7 @@ const config: BeeConfig = {
       {
         num: "1",
         title: "ご予約・ご来店",
-        body: "フォームからご予約後、当日は動きやすい服装で恵比寿店へお越しください。手ぶらでもOKです。",
+        body: "フォームからご予約後、当日は動きやすい服装で奥沢店へお越しください。手ぶらでもOKです。",
       },
       {
         num: "2",
@@ -453,7 +452,7 @@ const config: BeeConfig = {
       },
       {
         q: "男性も通えますか？",
-        a: "申し訳ございません。Beê 恵比寿店は女性専用スタジオです。女性のお客様が安心して集中してレッスンに取り組める空間づくりをしています。",
+        a: "申し訳ございません。Beê 奥沢店は女性専用スタジオです。女性のお客様が安心して集中してレッスンに取り組める空間づくりをしています。",
       },
       {
         q: "何を持っていけばよいですか？",
@@ -469,7 +468,7 @@ const config: BeeConfig = {
       },
       {
         q: "予約は取りやすいですか？",
-        a: "営業時間は8:00〜21:45（最終レッスン枠20:50）、定休日なしで、朝から夜までご自身のタイミングで通えます。さらに五反田・目黒・新富町・奥沢・船橋の姉妹店も追加料金なしで相互利用いただけるので、ご予定やお近くの店舗に合わせて柔軟にご予約いただけます。",
+        a: "営業時間は8:00〜21:45（最終レッスン枠20:50）、定休日なしで、朝から夜までご自身のタイミングで通えます。さらに五反田・目黒・新富町・恵比寿・船橋の姉妹店も追加料金なしで相互利用いただけるので、ご予定やお近くの店舗に合わせて柔軟にご予約いただけます。",
       },
     ],
   },
@@ -477,20 +476,22 @@ const config: BeeConfig = {
   access: {
     heading: "店舗のご案内",
     store: {
-      img: { placeholder: "恵比寿店の外観 / 内観の写真", src: `${ASSET}/store.jpg` },
-      name: "Pilates Studio Beê 恵比寿店",
-      address: "〒150-0021 東京都渋谷区恵比寿西1丁目8-1 かづさやビル 301",
+      img: { placeholder: "奥沢店の外観 / 内観の写真", src: `${ASSET}/store.jpg` },
+      name: "Pilates Studio Beê 奥沢店",
+      address: "〒158-0083 東京都世田谷区奥沢3丁目35-9 エスペランサ奥沢 401",
       hours: "営業時間 8:00〜21:45",
       holiday: "定休日なし",
-      route: "各線 恵比寿駅 徒歩2分（最終レッスン枠 20:50）",
-      mapQuery: "東京都渋谷区恵比寿西1丁目8-1 かづさやビル",
+      route: "東急目黒線 奥沢駅 徒歩2分（最終レッスン枠 20:50）",
+      mapQuery: "東京都世田谷区奥沢3丁目35-9 エスペランサ奥沢",
+      mapEmbed:
+        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3243.9863910923023!2d139.67046797652117!3d35.603402272612534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f501a9aaf063%3A0x2c10239d100511f4!2zUGlsYXRlcyBTdHVkaW8gQmXDqiDlpaXmsqLlupc!5e0!3m2!1sja!2sjp!4v1787120798998!5m2!1sja!2sjp",
     },
   },
 
   form: {
     heading: "体験レッスンのご予約",
-    lead: "ご予約ページで空き状況をご確認のうえ、ご希望の日時をお選びください。\nオープン記念 体験55分500円（税込）、体験レッスン時のご入会で入会金0円。",
-    ctaText: "オープン記念で体験を予約する",
+    lead: "ご予約ページで空き状況をご確認のうえ、ご希望の日時をお選びください。\nサマーキャンペーン 体験55分500円（税込）、体験レッスン時のご入会で入会金0円。",
+    ctaText: "サマーキャンペーンで体験を予約する",
     fields: [
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
@@ -510,9 +511,9 @@ const config: BeeConfig = {
     ],
     submitLabel: "この内容で予約する",
     disclaimer:
-      "オープン記念 体験55分500円（税込）｜体験レッスン時の入会で入会金0円｜無理な勧誘はいたしません。",
+      "サマーキャンペーン 体験55分500円（税込）｜体験レッスン時の入会で入会金0円｜無理な勧誘はいたしません。",
     errorMessage: "お名前・電話番号・第1希望日時は必須です。ご希望日は明日以降の日付をお選びください。",
-    reserveBadge: "オープン記念 体験500円・入会金0円",
+    reserveBadge: "サマーキャンペーン 体験500円・入会金0円",
   },
 
   sticky: {
@@ -520,14 +521,14 @@ const config: BeeConfig = {
       { label: "55分体験", value: "¥500" },
       { label: "入会金", value: "¥0" },
     ],
-    buttonText: "オープン記念で体験を予約する",
+    buttonText: "サマーキャンペーンで体験を予約する",
     anchor: CTA_URL,
   },
 
   footer: {
     lines: [
-      "Pilates Studio Beê 恵比寿店",
-      "〒150-0021 東京都渋谷区恵比寿西1丁目8-1 かづさやビル 301",
+      "Pilates Studio Beê 奥沢店",
+      "〒158-0083 東京都世田谷区奥沢3丁目35-9 エスペランサ奥沢 401",
       "営業時間 8:00〜21:45（最終枠 20:50）｜定休日なし",
     ],
   },
