@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CTAButton } from "./ui";
 
 /**
  * 追従CTA（元LPの #follow / setupFollowVisibility を再現）。
  * 1画面分スクロールしたら表示し、予約フォーム（#contact）が見えている間は隠す。
- * ボタンは元LPと同じ btn-follow.png 画像を使う。
  */
 export default function FollowCTA({
-  src,
+  label,
   anchor = "#contact",
-  maxWidth = 500,
+  maxWidth = 620,
 }: {
-  src: string;
+  label: string;
   anchor?: string;
   maxWidth?: number;
 }) {
@@ -25,8 +25,7 @@ export default function FollowCTA({
 
     const update = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-      const threshold = window.innerWidth;
-      setVisible(scrollTop >= threshold && !targetVisible);
+      setVisible(scrollTop >= window.innerHeight && !targetVisible);
     };
 
     let observer: IntersectionObserver | undefined;
@@ -63,22 +62,13 @@ export default function FollowCTA({
         zIndex: 50,
         display: "flex",
         justifyContent: "center",
+        padding: "0 5% 10px",
         pointerEvents: "none",
       }}
     >
-      <a
-        href={anchor}
-        style={{
-          display: "block",
-          width: "100%",
-          maxWidth,
-          padding: "0 5% 8px",
-          pointerEvents: "auto",
-        }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt="無料体験を予約する" style={{ width: "100%", display: "block" }} />
-      </a>
+      <div style={{ width: "100%", maxWidth, pointerEvents: "auto" }}>
+        <CTAButton label={label} small />
+      </div>
     </div>
   );
 }
