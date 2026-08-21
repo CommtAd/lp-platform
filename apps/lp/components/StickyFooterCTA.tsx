@@ -8,8 +8,10 @@ export interface StickyFooterCTAProps {
   /** Optional scarcity/urgency line shown above the offer chips. */
   note?: ReactNode;
   buttonText: string;
-  /** In-page anchor the button scrolls to (e.g. "#form"). */
-  anchor: string;
+  /** In-page anchor the button scrolls to (e.g. "#form"). Also used to hide the bar once that section is in view. Optional when `href` points elsewhere. */
+  anchor?: string;
+  /** Explicit link target. When it's an external URL (http/https) the button opens in a new tab. Falls back to `anchor`. */
+  href?: string;
   /** Show only after scrolling past this Y offset (px). */
   showAfter?: number;
   /** Button background. Default matches pattern A's gold gradient. */
@@ -31,6 +33,7 @@ export default function StickyFooterCTA({
   note,
   buttonText,
   anchor,
+  href,
   showAfter = 620,
   buttonGradient = "linear-gradient(135deg, #E8C877 0%, #C1902F 100%)",
   shadowColor = "rgba(160,120,40,0.4)",
@@ -38,10 +41,16 @@ export default function StickyFooterCTA({
 }: StickyFooterCTAProps) {
   const [visible, setVisible] = useState(false);
 
+  // Resolve the link target and whether it leaves the page.
+  const linkHref = href ?? anchor ?? "#";
+  const external = /^https?:\/\//.test(linkHref);
+
   useEffect(() => {
     const onScroll = () => {
       const past = window.scrollY >= showAfter;
-      const target = document.querySelector(anchor);
+      // Only in-page anchors ("#…") gate visibility; external links keep the bar
+      // shown for the rest of the page.
+      const target = anchor && anchor.startsWith("#") ? document.querySelector(anchor) : null;
       const reached = target
         ? target.getBoundingClientRect().top <= window.innerHeight * 0.9
         : false;
@@ -119,7 +128,8 @@ export default function StickyFooterCTA({
           ))}
         </div>
         <a
-          href={anchor}
+          href={linkHref}
+          {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           style={{
             position: "relative",
             overflow: "hidden",
