@@ -12,7 +12,8 @@
     "start": "npm run start --workspace apps/lp",
     "lint": "npm run lint --workspace apps/lp",
     "check-rules": "tsx scripts/check-rules.ts",
-    "check-slug-sync": "tsx scripts/check-slug-sync.ts"
+    "check-slug-sync": "tsx scripts/check-slug-sync.ts",
+    "check-responsive": "tsx scripts/check-responsive.ts"
   },
   "devDependencies": {
     "tsx": "^4.19.2",

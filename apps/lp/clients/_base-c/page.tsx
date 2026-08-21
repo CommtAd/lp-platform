@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import type { CarouselItem, Slot } from "@/clients/pattern-c.types";
 import LPShell from "@/components/LPShell";
 import LPForm from "@/components/LPForm";
+import LPCanvas, { DESIGN_WIDTH } from "@/components/LPCanvas";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqAccordion from "./FaqAccordion";
@@ -232,11 +233,14 @@ export default function Page() {
   const framed = Boolean(c.fv.framed);
   const formLight = c.form.tone === "light";
   /**
-   * framed プレートのキャッチサイズ。`catchSize` を指定しなければ、端末幅に対して
-   * 1行で収まる最大値まで自動で上げる（カードは max-width 480px なのでそこで頭打ち）。
-   * 内寸は `min(100vw,480px) - 外側24 - 内側20`。
+   * framed プレートのキャッチサイズ。`catchSize` を指定しなければ、設計幅に対して
+   * 1行で収まる最大値まで自動で上げる。プレートの内寸は
+   * `DESIGN_WIDTH - 外側24 - 内側20`。
    * 全角は約1.07em・半角は約0.62em幅。文字数だけで割ると "BIG" のような半角混じりを
    * 過大に見積もり、必要以上に小さくなる。
+   *
+   * キャンバスは常に DESIGN_WIDTH で組まれるので、ここは vw ではなく素の割り算でよい
+   * （vw を使うと zoom の外側＝ウィンドウ幅で解決され、PCと実機で値が食い違う）。
    */
   const fvCatchEm = Math.max(
     ...c.fv.catch.map((line) =>
@@ -247,7 +251,7 @@ export default function Page() {
   const fvCatchSize = c.fv.catchSize
     ? `${c.fv.catchSize}px`
     : framed
-      ? `min(26px, calc((min(100vw, 480px) - 44px) / ${fvCatchEm.toFixed(2)}))`
+      ? `${Math.min(26, (DESIGN_WIDTH - 44) / fvCatchEm).toFixed(2)}px`
       : "26px";
   const recommendItems = c.recommend?.items ?? [];
   /**
@@ -278,27 +282,33 @@ export default function Page() {
   // アイコンが1つでもあれば当日の流れを3カラムで組む（無ければ中央列ごと省く）。
   const flowHasIcons = c.flow.steps.some((s) => s.icon);
   /**
-   * 限定特典のリードを1行に収める文字サイズ。セクション幅は `100vw - 左右余白40px`、
+   * 限定特典のリードを1行に収める文字サイズ。セクション幅は `DESIGN_WIDTH - 左右余白40px`、
    * 全角は約1.07em幅なので、これを文字数で割った値が上限になる。
-   * 端末幅に追従させないと狭い画面で折り返す（幅任せだと小書き文字が行頭に来る）。
+   * 文字数に追従させないと長いリードが折り返す（幅任せだと小書き文字が行頭に来る）。
    */
   const grandOfferLeadSize = c.grandOffer
-    ? `min(12.5px, max(9px, calc((100vw - 42px) / ${(
-        c.grandOffer.lead.replace(/\n/g, "").length * 1.07
-      ).toFixed(1)})))`
+    ? `${Math.min(
+        12.5,
+        Math.max(
+          9,
+          (DESIGN_WIDTH - 42) /
+            (c.grandOffer.lead.replace(/\n/g, "").length * 1.07),
+        ),
+      ).toFixed(2)}px`
     : undefined;
   /**
    * 最長ラベルが2列カードに1行で収まる文字サイズ。項目ごとに変えると不揃いに見えるので
    * いちばん長い1本に全項目を合わせる。
    *
-   * カード内の実幅は `(100vw - 左右余白40 - 溝8) / 2 - 内側余白16` = `50vw - 40px`。
+   * カード内の実幅は `(DESIGN_WIDTH - 左右余白40 - 溝8) / 2 - 内側余白16`。
    * 全角は約1.07em幅なので、これを `文字数 × 1.07` で割った値が上限になる。
-   * 端末幅に追従させないと、狭い画面でラベルがカードから溢れる。
    */
   const recommendMaxLen = Math.max(...recommendItems.map((i) => i.label.length), 1);
-  const recommendFontSize = `min(13px, max(9px, calc((50vw - 40px) / ${(
-    recommendMaxLen * 1.07
-  ).toFixed(1)})))`;
+  const recommendCardWidth = (DESIGN_WIDTH - 40 - 8) / 2 - 16;
+  const recommendFontSize = `${Math.min(
+    13,
+    Math.max(9, recommendCardWidth / (recommendMaxLen * 1.07)),
+  ).toFixed(2)}px`;
 
   /**
    * 明るいセクションの地は白／生成りを交互に敷く。地色をセクションごとに
@@ -442,10 +452,7 @@ export default function Page() {
   return (
     <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
       <div style={{ ...vars, background: "#EFEAE2", minHeight: "100vh" }} className="text-[var(--ink)]">
-        <div
-          className="mx-auto overflow-x-hidden bg-[var(--paper)]"
-          style={{ maxWidth: 480, boxShadow: "0 0 60px rgba(59,55,48,0.14)" }}
-        >
+        <LPCanvas className="bg-[var(--paper)]" boxShadow="0 0 60px rgba(59,55,48,0.14)">
           {/* ── header ── */}
           <header className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-[var(--ink)]/10 bg-[var(--paper)]/95 px-5 py-3.5 backdrop-blur">
             <div className="min-w-0 leading-tight">
@@ -1409,7 +1416,7 @@ export default function Page() {
               />
             </div>
           </section>
-        </div>
+        </LPCanvas>
       </div>
 
       <StickyFooterCTA
