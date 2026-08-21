@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import LPForm from "@/components/LPForm";
+import LPCanvas from "@/components/LPCanvas";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqList from "./FaqList";
@@ -184,14 +185,9 @@ export default function Page() {
           color: "#3B3D36",
         }}
       >
-        <div
-          style={{
-            maxWidth: 480,
-            margin: "0 auto",
-            background: "#FCFBF7",
-            boxShadow: "0 0 60px rgba(70,72,60,0.16)",
-            overflow: "hidden",
-          }}
+        <LPCanvas
+          background="#FCFBF7"
+          boxShadow="0 0 60px rgba(70,72,60,0.16)"
         >
           {/* ── header ── */}
           <div
@@ -780,7 +776,7 @@ export default function Page() {
               disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
             />
           </section>
-        </div>
+        </LPCanvas>
       </div>
 
       <StickyFooterCTA

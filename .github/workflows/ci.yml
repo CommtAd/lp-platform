@@ -22,5 +22,8 @@ jobs:
       - name: Rule check (LPShell + LPForm required)
         run: npm run check-rules
 
+      - name: Responsive check (LPCanvas required / no viewport units)
+        run: npm run check-responsive
+
       - name: Build LP app
         run: npm run build

@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import LPForm from "@/components/LPForm";
+import LPCanvas from "@/components/LPCanvas";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqAccordion from "./FaqAccordion";
@@ -36,10 +37,7 @@ export default function Page() {
   return (
     <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
       <div style={{ ...vars, background: "#EDF1F6", minHeight: "100vh" }} className="text-[var(--navy)]">
-        <div
-          className="mx-auto overflow-x-hidden bg-white"
-          style={{ maxWidth: 480, boxShadow: "0 0 60px rgba(11,37,69,0.14)" }}
-        >
+        <LPCanvas className="bg-white" boxShadow="0 0 60px rgba(11,37,69,0.14)">
           {/* ── header ── */}
           <header className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur">
             <div className="flex items-center gap-2.5">
@@ -283,7 +281,7 @@ export default function Page() {
               }}
             />
           </section>
-        </div>
+        </LPCanvas>
       </div>
 
       <StickyFooterCTA
