@@ -27,6 +27,7 @@ export const clientRegistry: Record<
   "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/page"),
   "estudio": () => import("./estudio/page"),
   "training-studio-arcs": () => import("./training-studio-arcs/page"),
+  "bloom-pilates": () => import("./bloom-pilates/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -78,4 +79,5 @@ export const clientMetaRegistry: Record<
   "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/config"),
   "estudio": () => import("./estudio/config"),
   "training-studio-arcs": () => import("./training-studio-arcs/config"),
+  "bloom-pilates": () => import("./bloom-pilates/config"),
 };
