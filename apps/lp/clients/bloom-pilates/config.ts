@@ -2,7 +2,7 @@ import type { ClientStatus } from "@shared/index";
 import type { LPFormField } from "@/components/LPForm";
 
 /**
- * BLOOM PILATES（錦糸町）— 既存LPの忠実移植。
+ * ritsu pilates（錦糸町 / 旧 bloom pilates）— 既存LPの忠実移植。
  *
  * 元LP: https://pilates.commitad.com/bloom-pilates/01/
  * 成果が出ているため構成・デザインは変更せず、画像スタック構成をそのまま再現する。

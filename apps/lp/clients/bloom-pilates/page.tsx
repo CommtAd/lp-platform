@@ -33,7 +33,7 @@ function CampaignBlock({ cp, btn }: { cp: string; btn: string }) {
 }
 
 /**
- * BLOOM PILATES（錦糸町）— 既存LPの忠実移植。
+ * ritsu pilates（錦糸町 / 旧 bloom pilates）— 既存LPの忠実移植。
  * 成果が出ているため元LPの画像スタック構成をそのまま再現し、
  * 基盤要件（タグ注入・CV受信）を満たすため LPShell + LPForm でラップする。
  */
@@ -157,7 +157,7 @@ export default function Page() {
             >
               <div style={{ width: "100%", aspectRatio: "16 / 9" }}>
                 <iframe
-                  title="BLOOM PILATES アクセスマップ"
+                  title="ritsu pilates アクセスマップ"
                   src={c.mapEmbed}
                   style={{ width: "100%", height: "100%", border: 0 }}
                   allowFullScreen
