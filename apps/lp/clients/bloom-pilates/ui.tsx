@@ -66,35 +66,31 @@ export function Pillars({
   primary: string;
 }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
+    <div style={{ display: "flex", alignItems: "stretch", justifyContent: "center", gap: 4 }}>
       {items.map((p, i) => (
         <span key={i} style={{ display: "contents" }}>
           {i > 0 && (
-            <span style={{ color: primary, fontSize: 26, fontWeight: 300, margin: "0 2px", flexShrink: 0 }}>
-              ×
-            </span>
+            <span style={{ color: primary, fontSize: 26, fontWeight: 300, flexShrink: 0, alignSelf: "center" }}>×</span>
           )}
           <div
             style={{
               position: "relative",
               flex: "1 1 0",
-              maxWidth: 200,
+              minWidth: 0,
+              minHeight: 108,
               border: `1.5px solid ${primary}55`,
               borderRadius: 999,
               background: "#fff",
-              padding: "20px 8px 14px",
+              padding: "16px 8px 14px",
               textAlign: "center",
               boxShadow: "0 6px 16px rgba(120,90,40,0.08)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <span
-              style={{
-                position: "absolute",
-                top: -13,
-                left: "50%",
-                transform: "translateX(-50%)",
-              }}
-            >
+            <span style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)" }}>
               <Crown />
             </span>
             <div style={{ color: primary, fontSize: 11.5, fontWeight: 700, letterSpacing: "0.02em" }}>

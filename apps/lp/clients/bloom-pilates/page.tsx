@@ -26,8 +26,8 @@ function Bubble({ text }: { text: string }) {
           color: "#fff",
           fontFamily: MINCHO,
           fontWeight: 700,
-          fontSize: 18,
-          padding: "8px 16px",
+          fontSize: 20,
+          padding: "10px 14px",
           borderRadius: 999,
           whiteSpace: "nowrap",
         }}
@@ -37,14 +37,14 @@ function Bubble({ text }: { text: string }) {
       <span
         style={{
           position: "absolute",
-          bottom: -6,
+          bottom: -7,
           left: "50%",
           transform: "translateX(-50%)",
           width: 0,
           height: 0,
-          borderLeft: "7px solid transparent",
-          borderRight: "7px solid transparent",
-          borderTop: `8px solid ${P}`,
+          borderLeft: "8px solid transparent",
+          borderRight: "8px solid transparent",
+          borderTop: `9px solid ${P}`,
         }}
       />
     </span>
@@ -187,7 +187,7 @@ export default function Page() {
               </div>
             </div>
             <div style={{ padding: "0 5%", marginTop: -14, position: "relative" }}>
-              <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
                 {c.hero.bubbles.map((b) => <Bubble key={b} text={b} />)}
               </div>
               <div style={{ marginTop: 22 }}><RuledLead>{c.hero.lead}</RuledLead></div>
