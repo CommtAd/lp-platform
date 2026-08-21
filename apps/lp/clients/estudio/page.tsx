@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
-import LPForm from "@/components/LPForm";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqList from "./FaqList";
@@ -41,6 +40,10 @@ const goldBtn = "linear-gradient(135deg, #D19A82 0%, #AE7358 100%)";
 const creamGrad = "linear-gradient(180deg, #F4EEE4 0%, #E5CCC0 100%)";
 const fontMincho = "'Shippori Mincho', serif";
 const fontGothic = "'Zen Kaku Gothic New', serif";
+
+/* All CTAs link to the external STORES 予約 page (opens a new tab). */
+const ctaHref = config.reserve.url;
+const ctaLinkProps = { target: "_blank" as const, rel: "noopener noreferrer" };
 
 /* Fixed decorative icons for the six offer items (order matches config). */
 const offerIcons: ReactNode[] = [
@@ -138,7 +141,8 @@ function SectionHeading({
 const GoldCta = ({ text, sub }: { text: string; sub?: string }) => (
   <div style={{ marginTop: 28 }}>
     <a
-      href="#form"
+      href={ctaHref}
+      {...ctaLinkProps}
       style={{
         display: "flex",
         alignItems: "center",
@@ -876,25 +880,47 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── ⑩ form ── */}
-          <section id="form" style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.form.heading} />
-            <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.9, color: "#6E6455", margin: "18px 0 0" }}>{nl(c.form.lead)}</p>
-            <LPForm
-              clientSlug={c.slug}
-              accent={accent}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              errorMessage={c.form.errorMessage}
-              microcopy={c.form.microcopy ? nl(c.form.microcopy) : undefined}
-              disclaimer={c.form.disclaimer ? nl(c.form.disclaimer) : undefined}
-            />
+          {/* ── ⑩ 予約（外部 STORES 予約へ。LPFormは未使用） ── */}
+          <section id="reserve" style={{ background: "#FCFBF7", padding: "54px 26px" }}>
+            <SectionHeading text={c.reserve.heading} />
+            <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.9, color: "#6E6455", margin: "18px 0 0" }}>
+              {nl(c.reserve.lead)}
+            </p>
+            <div style={{ marginTop: 28 }}>
+              <a
+                href={c.reserve.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  height: 60,
+                  background: goldBtn,
+                  color: "#FFFFFF",
+                  textDecoration: "none",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
+                  borderRadius: 999,
+                  boxShadow: "0 10px 22px rgba(150,110,85,0.4)",
+                }}
+              >
+                {c.reserve.ctaText}
+                <span style={{ fontSize: 13 }}>↗</span>
+              </a>
+              <p style={{ textAlign: "center", fontSize: 12.5, fontWeight: 700, lineHeight: 1.7, color: "#4C4E45", margin: "14px 0 0" }}>
+                {nl(c.reserve.note)}
+              </p>
+            </div>
           </section>
         </div>
       </div>
 
       <StickyFooterCTA
         anchor={c.sticky.anchor}
+        href={c.reserve.url}
         buttonText={c.sticky.buttonText}
         showAfter={c.sticky.showAfter}
         note={
