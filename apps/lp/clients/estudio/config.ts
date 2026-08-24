@@ -18,6 +18,8 @@ type Config = Omit<PatternAConfig, "form"> & {
     ctaText: string;
     note: string;
   };
+  /** 帯（旧・実績バー）に出すブランドタグライン。Google口コミはFV右上バッジ側に集約。 */
+  tagline: string;
 };
 
 /**
@@ -57,23 +59,29 @@ const config: Config = {
   },
 
   header: {
+    // 所在地（代々木・参宮橋）は右側アクセス表示と重複するため brandSub からは省略。
     brand: "Pilates E-studio",
-    brandSub: "女性専用パーソナルピラティス｜代々木・参宮橋",
+    brandSub: "女性専用パーソナルピラティス",
     access: [{ station: "参宮橋駅", walk: "西口 徒歩1分" }],
   },
   offerBar: {
-    badgeLines: ["体験", "¥980"],
-    text: "初回60分体験 ¥980｜入会金0円",
+    // 左上の円バッジ：980円訴求が多いため「新規オープンキャンペーン」に変更。
+    badgeLines: ["新規オープン", "キャンペーン"],
+    badgeFontSize: 9.5,
+    // スマホで「入会金」が途中改行しないよう、意図的に2行に割る。
+    text: "初回60分体験 ¥980\n入会金0円",
   },
+  // 帯：Google口コミはFV右上バッジに集約し、ここはブランドタグラインに。
+  tagline: "女性専用パーソナルピラティススタジオ",
   achievement: { pre: "Google口コミ", num: "★4.95", post: "｜女性専用スタジオ" },
 
   fv: {
     // ベネフィット型キャッチ（縦書きプレート・右→左の順で読ませる）。
     catchLines: ["姿勢が変われば、", "見た目印象まで変わる。"],
-    heroTag: "手ぶらで通える、女性専用パーソナルピラティス",
     hero: { placeholder: "スタジオ内観／マシンピラティスの写真（全面）", src: `${ASSET}/hero.jpg`, position: "center" },
-    leftCard: { small: "初回60分体験", big: "¥980" },
-    rightCard: { small: "入会金", big: "0円" },
+    // 下部2カードはベネフィット訴求（980円・入会金0円はオファーセクションで訴求）。
+    leftCard: { small: "", big: "手ぶらで\n通える" },
+    rightCard: { small: "", big: "駅チカで\n通いやすい" },
   },
 
   offer: {
