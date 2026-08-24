@@ -242,7 +242,8 @@ export default function Page() {
             <div style={{ textAlign: "right", lineHeight: 1.55, marginTop: 5 }}>
               {c.header.access.map((a, i) => (
                 <div key={i} style={{ fontSize: 13, color: "#3E3A31", letterSpacing: "0.03em" }}>
-                  {a.station} <span style={{ color: accent }}>{a.walk}</span>
+                  <span style={{ whiteSpace: "nowrap" }}>{a.station}</span>{" "}
+                  <span style={{ color: accent, whiteSpace: "nowrap" }}>{a.walk}</span>
                 </div>
               ))}
             </div>
@@ -309,37 +310,34 @@ export default function Page() {
                 style={{
                   fontFamily: fontGothic,
                   fontWeight: 700,
-                  fontSize: 20,
-                  letterSpacing: "0.06em",
+                  fontSize: 19,
+                  letterSpacing: "0.04em",
                   color: "#FFFFFF",
                   textShadow: "0 1px 5px rgba(150,100,80,0.45)",
-                  lineHeight: 1.2,
+                  lineHeight: 1.35,
                   textAlign: "center",
                 }}
               >
-                {c.offerBar.text}
+                {nl(c.offerBar.text)}
               </div>
             </div>
           </div>
 
-          {/* ── achievement bar ── */}
+          {/* ── tagline bar（旧・実績バー。Google口コミはFV右上バッジに集約） ── */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 6,
               background: "#FFFFFF",
               color: "#3E3A31",
-              padding: "7px 18px",
+              padding: "8px 18px",
               boxShadow: "0 2px 6px rgba(70,72,60,0.08)",
             }}
           >
-            <span style={{ fontSize: 13, letterSpacing: "0.03em" }}>{c.achievement.pre}</span>
-            <span style={{ fontWeight: 700, fontSize: 16, lineHeight: 1, color: accent }}>
-              {c.achievement.num}
+            <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: accent }}>
+              {c.tagline}
             </span>
-            <span style={{ fontSize: 13, letterSpacing: "0.03em" }}>{c.achievement.post}</span>
           </div>
 
           {/* ── ① FV ── */}
@@ -465,11 +463,13 @@ export default function Page() {
                       boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
                     }}
                   >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E7C8B8" }}>
-                      {c.fv.leftCard.small}
-                    </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
-                      {c.fv.leftCard.big}
+                    {c.fv.leftCard.small && (
+                      <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E7C8B8" }}>
+                        {c.fv.leftCard.small}
+                      </div>
+                    )}
+                    <div style={{ fontFamily: fontGothic, fontWeight: 600, fontSize: 16.5, letterSpacing: "0.04em", lineHeight: 1.5, marginTop: c.fv.leftCard.small ? 3 : 0 }}>
+                      {nl(c.fv.leftCard.big)}
                     </div>
                   </div>
                   <div
@@ -498,11 +498,13 @@ export default function Page() {
                       boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
                     }}
                   >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E7C8B8" }}>
-                      {c.fv.rightCard.small}
-                    </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
-                      {c.fv.rightCard.big}
+                    {c.fv.rightCard.small && (
+                      <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#E7C8B8" }}>
+                        {c.fv.rightCard.small}
+                      </div>
+                    )}
+                    <div style={{ fontFamily: fontGothic, fontWeight: 600, fontSize: 16.5, letterSpacing: "0.04em", lineHeight: 1.5, marginTop: c.fv.rightCard.small ? 3 : 0 }}>
+                      {nl(c.fv.rightCard.big)}
                     </div>
                   </div>
                 </div>
