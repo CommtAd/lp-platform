@@ -374,20 +374,25 @@ function OfferSection({ topPad = 48 }: { topPad?: number }) {
           )
         )}
       </h2>
+      {/* Price font shrinks for multi-digit amounts so "1,000" doesn't overflow the half-width card.
+          Both cards share one size (driven by the longest price) so they stay visually balanced. */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 26 }}>
         {o.cards.map((card, i) => {
           const accent = i === 1 ? blue : pink;
+          const maxPriceLen = Math.max(...o.cards.map((cc) => cc.price.length));
+          const priceFont = maxPriceLen >= 4 ? 40 : 56;
+          const unitFont = maxPriceLen >= 4 ? 22 : 28;
           return (
             <div key={i} style={{ position: "relative", borderRadius: 18, overflow: "hidden", border: `1px solid ${accent}66`, boxShadow: `0 0 22px ${accent}33` }}>
               <ImageSlot src={card.img.src} placeholder={card.img.placeholder} objectPosition={card.img.position ?? "center"} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#12121A" }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(10,10,16,0.55) 0%, rgba(10,10,16,0.8) 100%)" }} />
               <div style={{ position: "relative", zIndex: 2, padding: "22px 14px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <p style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 20, lineHeight: 1.35, textAlign: "center", color: "#FFFFFF", margin: 0, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>{nl(card.label)}</p>
-                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", marginTop: 4 }}>
-                  <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 56, lineHeight: 1, background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}88)` }}>{card.price}</span>
+                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", marginTop: 4, whiteSpace: "nowrap" }}>
+                  <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: priceFont, lineHeight: 1, background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}88)` }}>{card.price}</span>
                   <span style={{ position: "relative", marginLeft: 3 }}>
                     <span style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)", whiteSpace: "nowrap", fontSize: 10, color: "rgba(255,255,255,0.7)" }}>{card.note}</span>
-                    <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 28, lineHeight: 1, color: "#FFFFFF" }}>{card.unit}</span>
+                    <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: unitFont, lineHeight: 1, color: "#FFFFFF" }}>{card.unit}</span>
                   </span>
                 </div>
               </div>
