@@ -442,8 +442,8 @@ const config: BeatPilatesConfig = {
     heading: "通いやすい",
     headingHighlight: "料金プラン",
     plans: [
-      { label: "月3回プラン", price: "7,800円〜" },
-      { label: "月4回プラン", price: "10,000円〜" },
+      { label: "月3回プラン", price: "6,800円〜" },
+      { label: "月4回プラン", price: "9,000円〜" },
       { label: "デイタイム", sublabel: "平日9:00〜17:00", price: "11,800円〜" },
       { label: "ナイトタイム", sublabel: "全日17:00〜21:00", price: "11,800円〜" },
       { label: "フルプラン", sublabel: "回数無制限", price: "15,600円〜" },
