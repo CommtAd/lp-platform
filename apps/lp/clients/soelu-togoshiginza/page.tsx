@@ -359,7 +359,6 @@ export default function Page() {
                   <span style={{ padding: "4px 12px", borderRadius: 999, background: `${green}20`, color: "#48705C", fontSize: 12, fontWeight: 700 }}>{c.fv.trial.time}</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 6, marginTop: 8 }}>
-                  <span style={{ fontFamily: fontMincho, fontSize: 19, fontWeight: 600, color: deep, marginBottom: 10 }}>いつでも</span>
                   <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 72, lineHeight: 1, color: blue }}>{c.fv.trial.price}</span>
                   <span style={{ fontFamily: fontMincho, fontSize: 26, fontWeight: 600, color: deep, marginBottom: 6 }}>
                     {c.fv.trial.unit}
@@ -680,6 +679,9 @@ export default function Page() {
                 </h3>
                 <div style={{ width: 36, height: 2, background: blue, margin: "12px auto 0", borderRadius: 2 }} />
                 <p style={{ fontSize: 12.5, lineHeight: 1.95, color: ink, margin: "14px 0 0" }}>{item.body}</p>
+                {item.note && (
+                  <p style={{ fontSize: 11, lineHeight: 1.7, color: dim, margin: "8px 0 0" }}>{item.note}</p>
+                )}
               </div>
             ))}
             <CtaButton text={c.reasons.ctaText} />
