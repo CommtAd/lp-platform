@@ -3,36 +3,24 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
 /** 画像は public/clients/estudio/ 配下（撮影データ 2026-08 より選定・Web最適化済み）。 */
 const ASSET = "/clients/estudio";
 
-/** 1時間刻みの予約時間スロット（例: 9:00〜20:00）。 */
-const hourlySlots = (from: number, to: number) =>
-  Array.from({ length: to - from + 1 }, (_, i) => {
-    const h = from + i;
-    return { value: `${String(h).padStart(2, "0")}:00`, label: `${h}:00` };
-  });
-
 /**
- * 営業時間に合わせた予約時間の選択肢（日付連動）:
- *  - 平日・土: 9:00〜20:00（21時閉店・体験60分の最終開始）
- *  - 日祝    : 9:00〜18:00（19時閉店・最終受付18:00）
- * 祝日は曜日判定で拾えないため byDate で個別に「日祝扱い(〜18:00)」へ上書きする
- * （2026-08〜2027-12分を登録。以降は要更新）。
+ * 予約は STORES 予約（外部）で受け付けるため、pattern-a.types の `form`（LPForm）の
+ * 代わりに `reserve` を使う（training-studio-arcs と同じ方式）。
+ * 全CTAが reserve.url（新規タブ）へ接続し、LPFormは使用しない。
+ * → check-rules.ts の FORM_EXEMPT に "estudio" を登録済み。LPShell は維持。
+ * NOTE: この方式では基盤側にフォームCVは届かない（予約はすべて STORES 側に入る）。
  */
-const timeWeekdaySat = hourlySlots(9, 20);
-const timeSunHoliday = hourlySlots(9, 18);
-const HOLIDAY_DATES = [
-  "2026-08-11", "2026-09-21", "2026-09-22", "2026-09-23", "2026-10-12", "2026-11-03", "2026-11-23",
-  "2027-01-01", "2027-01-11", "2027-02-11", "2027-02-23", "2027-03-21", "2027-03-22", "2027-04-29",
-  "2027-05-03", "2027-05-04", "2027-05-05", "2027-07-19", "2027-08-11", "2027-09-20", "2027-09-23",
-  "2027-10-11", "2027-11-03", "2027-11-23",
-];
-const holidayByDate = Object.fromEntries(HOLIDAY_DATES.map((d) => [d, timeSunHoliday]));
-const timeSlotsFor = (dateField: string) => ({
-  dateField,
-  weekday: timeWeekdaySat,
-  saturday: timeWeekdaySat,
-  weekend: timeSunHoliday,
-  byDate: holidayByDate,
-});
+type Config = Omit<PatternAConfig, "form"> & {
+  reserve: {
+    heading: string;
+    lead: string;
+    url: string;
+    ctaText: string;
+    note: string;
+  };
+  /** 帯（旧・実績バー）に出すブランドタグライン。Google口コミはFV右上バッジ側に集約。 */
+  tagline: string;
+};
 
 /**
  * Pilates E-studio（参宮橋 / 女性専用パーソナルピラティス）
@@ -46,7 +34,7 @@ const timeSlotsFor = (dateField: string) => ({
  *    → 現状は事実ベースの汎用文＋実写真。氏名・経歴が来たら trainers を差し替え
  *  - 入会後の月額プラン / 会員価格、通常入会金額
  */
-const config: PatternAConfig = {
+const config: Config = {
   slug: "estudio",
   status: "draft",
   meta: {
@@ -61,24 +49,39 @@ const config: PatternAConfig = {
   // 緊急性・限定性（月ごとに更新する。定員が変わったら人数・月表記を差し替え）。
   campaign: { limitText: "8月 先着10名様限定" },
 
+  // 予約導線（外部 STORES 予約）。全CTAがこの url（新規タブ）へ接続する。
+  reserve: {
+    heading: "60分体験のご予約",
+    lead: "下記ボタンから、STORES予約でご希望の日時をお選びいただけます。\n（外部の予約ページが新しいタブで開きます）",
+    url: "https://sanguubashi.stores.jp/reserve/pilates-e-studio88/1479210#pageContent",
+    ctaText: "60分体験を予約する",
+    note: "約1分で予約完了／強引な勧誘は一切ございません",
+  },
+
   header: {
+    // 所在地（代々木・参宮橋）は右側アクセス表示と重複するため brandSub からは省略。
     brand: "Pilates E-studio",
-    brandSub: "女性専用パーソナルピラティス｜代々木・参宮橋",
+    brandSub: "女性専用パーソナルピラティス",
     access: [{ station: "参宮橋駅", walk: "西口 徒歩1分" }],
   },
   offerBar: {
-    badgeLines: ["体験", "¥980"],
-    text: "初回60分体験 ¥980｜入会金0円",
+    // 左上の円バッジ：980円訴求が多いため「新規オープンキャンペーン」に変更。
+    badgeLines: ["新規オープン", "キャンペーン"],
+    badgeFontSize: 9.5,
+    // スマホで「入会金」が途中改行しないよう、意図的に2行に割る。
+    text: "初回60分体験 ¥980\n入会金0円",
   },
+  // 帯：Google口コミはFV右上バッジに集約し、ここはブランドタグラインに。
+  tagline: "女性専用パーソナルピラティススタジオ",
   achievement: { pre: "Google口コミ", num: "★4.95", post: "｜女性専用スタジオ" },
 
   fv: {
     // ベネフィット型キャッチ（縦書きプレート・右→左の順で読ませる）。
     catchLines: ["姿勢が変われば、", "見た目印象まで変わる。"],
-    heroTag: "手ぶらで通える、女性専用パーソナルピラティス",
     hero: { placeholder: "スタジオ内観／マシンピラティスの写真（全面）", src: `${ASSET}/hero.jpg`, position: "center" },
-    leftCard: { small: "初回60分体験", big: "¥980" },
-    rightCard: { small: "入会金", big: "0円" },
+    // 下部2カードはベネフィット訴求（980円・入会金0円はオファーセクションで訴求）。
+    leftCard: { small: "", big: "手ぶらで\n通える" },
+    rightCard: { small: "", big: "駅チカで\n通いやすい" },
   },
 
   offer: {
@@ -262,40 +265,13 @@ const config: PatternAConfig = {
     ],
   },
 
-  form: {
-    heading: "60分体験のご予約",
-    lead: "ご希望の日時をお選びください。担当より24時間以内にご連絡いたします。\n営業時間：平日・土 9:00〜21:00／日祝 9:00〜19:00（日祝の最終受付18:00）",
-    fields: [
-      { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
-      { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
-      { type: "email", name: "email", label: "メールアドレス", placeholder: "example@mail.com" },
-      { type: "date", name: "date1", label: "ご希望日(第1希望)", required: true },
-      { type: "select", name: "time1", label: "ご希望時間(第1希望)", required: true, placeholder: "先に日付をお選びください", dateLinkedOptions: timeSlotsFor("date1") },
-      { type: "date", name: "date2", label: "ご希望日(第2希望)" },
-      { type: "select", name: "time2", label: "ご希望時間(第2希望)", placeholder: "先に日付をお選びください", dateLinkedOptions: timeSlotsFor("date2") },
-      {
-        type: "textarea",
-        name: "note",
-        label: "ご質問・ご相談内容",
-        optionalTag: "任意",
-        placeholder: "お悩みやご希望など、ご自由にお書きください。",
-        rows: 4,
-      },
-    ],
-    submitLabel: "この内容で予約する",
-    microcopy: "約1分で予約完了／強引な勧誘は一切ございません",
-    disclaimer:
-      "送信いただいた内容は予約対応のみに利用します。\n初回60分体験 ¥980｜入会金0円｜しつこい勧誘はいたしません。",
-    errorMessage: "お名前・電話番号・第1希望日時は必須項目です。ご希望日は明日以降の日付をお選びください。",
-  },
-
   sticky: {
     offers: [
       { label: "60分体験", value: "¥980" },
       { label: "入会金", value: "0円" },
     ],
     buttonText: "60分体験を予約する",
-    anchor: "#form",
+    anchor: "#reserve", // 予約セクションが見えたら追従バーを隠す（リンク自体は reserve.url へ）。
     showAfter: 460, // FVを見た直後（スクロール開始まもなく）に追従バーを出す。
   },
 };

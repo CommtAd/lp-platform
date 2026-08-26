@@ -501,7 +501,14 @@ export default function Page() {
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
               objectPosition={c.fv.hero.position ?? "center"}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                // 元写真が店内の暗めの照明で撮影されているため、MVとして少し明るく補正。
+                filter: "brightness(1.18) saturate(1.05)",
+              }}
             />
             <div
               style={{
