@@ -37,6 +37,8 @@ const FORM_EXEMPT = new Set<string>([
   "training-studio-arcs",
   // 予約導線を外部 STORES 予約に接続（顧客要望、2026-08）。
   "estudio",
+  // 予約導線を外部 Hacomono 予約に接続（顧客要望、2026-08）。名古屋伏見店とは別オーナー・別LP。
+  "beat-pilates-toyota",
 ]);
 
 function clientSlugs(): string[] {
