@@ -1172,7 +1172,7 @@ export default function Page() {
                 const accent = blue;
                 return (
                 <div key={i} style={{ borderRadius: 16, overflow: "hidden", border: `1.5px solid ${accent}`, background: panel, boxShadow: `0 0 14px ${accent}66, inset 0 0 10px ${accent}22` }}>
-                  <ImageSlot src={store.img.src} placeholder={store.img.placeholder} style={{ width: "100%", height: 160, background: "#161620" }} />
+                  <ImageSlot src={store.img.src} placeholder={store.img.placeholder} objectPosition={store.img.position ?? "center"} style={{ width: "100%", height: 160, background: "#161620" }} />
                   <div style={{ padding: 20 }}>
                     <h3 style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 17, letterSpacing: "0.04em", margin: 0, color: "#FFFFFF" }}>{store.name}</h3>
                     <p style={{ fontSize: 12, lineHeight: 1.9, color: textDim, margin: "8px 0 0" }}>

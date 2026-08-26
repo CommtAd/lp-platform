@@ -457,7 +457,9 @@ const config: BeatPilatesConfig = {
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.865852692026!2d137.15456609999998!3d35.0850844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6004a15a18532229%3A0xc9c569e465580d50!2zQmVhdCBQaWxhdGVz6LGK55Sw5bqX!5e0!3m2!1sja!2sjp!4v1787730326689!5m2!1sja!2sjp",
     stores: [
       {
-        img: { placeholder: "豊田店の外観／内観写真", src: "/clients/beat-pilates-toyota/access-store.jpg" },
+        // position: 店舗ロゴが壁面上部にあるため、160px高の帯にトリミングしても
+        // ロゴが確実に映るよう縦位置を調整（center=50%だとロゴ上端が際どい）。
+        img: { placeholder: "豊田店の外観／内観写真", src: "/clients/beat-pilates-toyota/access-store.jpg", position: "center 40%" },
         name: "BEAT PILATES 豊田店",
         address: "〒471-0025 愛知県豊田市西町5-5 VITS豊田タウン2階",
         hours: "営業時間 平日 9:00〜21:00／土日祝 9:00〜18:00",
