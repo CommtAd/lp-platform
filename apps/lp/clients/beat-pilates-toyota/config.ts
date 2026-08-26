@@ -168,7 +168,7 @@ const config: BeatPilatesConfig = {
   meta: {
     title: "BEAT PILATES 豊田店｜暗闇×音楽×マシンピラティス",
     description:
-      "女性専用の暗闇空間で、周りの目を気にせず自分のペースでボディメイク。初回体験0円・今なら入会金0円。名鉄豊田市駅 西口 徒歩3分。",
+      "女性専用の暗闇空間で、周りの目を気にせず自分のペースでボディメイク。初回体験1,000円・今なら入会金0円。名鉄豊田市駅 西口 徒歩3分。",
   },
 
   header: {
@@ -183,7 +183,7 @@ const config: BeatPilatesConfig = {
     subCatch: "暗闇×音楽×マシンピラティス",
     body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
     hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-toyota/fv-hero.jpg", position: "3% 30%" },
-    trialBadge: { label: "初回体験", price: "0", unit: "円" },
+    trialBadge: { label: "初回体験", price: "1,000", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
     tags: ["女性専用", "初心者歓迎"],
     access: [
@@ -249,7 +249,7 @@ const config: BeatPilatesConfig = {
   offer: {
     headingParts: [
       { t: "まずは初回体験" },
-      { t: "0円", hl: true },
+      { t: "1,000円", hl: true },
       { t: "から" },
     ],
     cards: [
@@ -257,7 +257,7 @@ const config: BeatPilatesConfig = {
         num: "01",
         img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates-toyota/reason-01-studio.jpg", position: "center" },
         label: "45分\n体験レッスン",
-        price: "0",
+        price: "1,000",
         unit: "円",
         note: "(税込)",
       },
@@ -328,7 +328,7 @@ const config: BeatPilatesConfig = {
       },
     ],
     ctaText: "体験レッスンを予約する",
-    ctaSub: "初回体験0円｜入会金0円",
+    ctaSub: "初回体験1,000円｜入会金0円",
   },
 
   trainers: {
@@ -472,12 +472,12 @@ const config: BeatPilatesConfig = {
     lead: "下記ボタンから、予約ページでご希望の日時をお選びいただけます。\n（外部の予約ページが新しいタブで開きます）",
     url: "https://beatpilates-toyota.hacomono.jp/reserve/schedule/1/1/?trial",
     ctaText: "体験レッスンを予約する",
-    note: "45分体験レッスン0円｜今なら入会金0円｜しつこい勧誘はいたしません。",
+    note: "45分体験レッスン1,000円｜今なら入会金0円｜しつこい勧誘はいたしません。",
   },
 
   sticky: {
     offers: [
-      { label: "初回体験", value: "¥0" },
+      { label: "初回体験", value: "¥1,000" },
       { label: "入会金", value: "¥0" },
     ],
     buttonText: "体験レッスンを予約する",

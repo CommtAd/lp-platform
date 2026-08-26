@@ -1202,7 +1202,7 @@ export default function Page() {
           <section id="reserve" style={{ padding: "34px 22px 30px", background: "linear-gradient(160deg, #0B1030 0%, #171436 55%, #2A1A47 100%)" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 20px", borderRadius: 999, border: `1px solid ${pink}`, background: `${pink}14`, color: "#FFFFFF", fontSize: 12, fontWeight: 800, letterSpacing: "0.04em", boxShadow: `0 0 14px ${pink}55, inset 0 0 8px ${pink}22`, textShadow: `0 0 8px ${pink}` }}>
-                ＼ 今なら初回体験0円 ／
+                ＼ 今なら初回体験1,000円 ／
               </span>
             </div>
             <SectionHeading plain={c.reserve.heading} />
