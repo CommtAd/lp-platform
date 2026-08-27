@@ -1052,7 +1052,7 @@ export default function Page() {
                 const accent = i === 1 ? violet : i === 2 ? blue : pink;
                 return (
                   <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: panel, borderRadius: 18, overflow: "hidden", border: `1px solid ${accent}55`, boxShadow: `0 0 20px ${accent}33` }}>
-                    <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264, background: "#161620" }} />
+                    <ImageSlot src={t.img.src} placeholder={t.img.placeholder} objectPosition={t.img.position ?? "center"} style={{ width: "100%", height: 264, background: "#161620" }} />
                     <div style={{ padding: "18px 20px 22px" }}>
                       <div style={{ fontSize: 11, letterSpacing: "0.14em", color: accent }}>{t.role}</div>
                       <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#FFFFFF", marginTop: 6 }}>{t.name}</div>
