@@ -337,11 +337,11 @@ const config: BeatPilatesConfig = {
     swipeHint: "スワイプで移動",
     items: [
       {
-        img: { placeholder: "インストラクター Asami の写真", src: "/clients/beat-pilates-toyota/trainer-asami.jpg", position: "center 20%" },
+        img: { placeholder: "インストラクター Asami の写真", src: "/clients/beat-pilates-toyota/trainer-asami.jpg", position: "center 100%" },
         role: "PILATES INSTRUCTOR",
         name: "ASAMI",
         nameEn: "Asami",
-        body: "幼少期からのバレエやダンスの経験を経て、ヨガ、そしてマシンピラティスに出会いました。私のとりえは、とにかく元気なこと！初めての方でも安心して動けるよう、お一人おひとりに寄り添って丁寧に説明します。ぜひ一緒に心地よい汗を流しましょう。",
+        body: "運動歴24年以上！「身体を動かすって楽しい！」と笑顔になれる、リフレッシュできる時間をお届けします✨",
         tags: ["マシンピラティス", "初心者歓迎"],
       },
       {
