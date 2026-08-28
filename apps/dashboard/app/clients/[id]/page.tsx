@@ -3,7 +3,14 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { setPublishState, updateClientRecord, updateCustomDomain } from "../../actions";
 import { getDomainStatus, type DomainStatus } from "@/lib/vercel-domains";
-import { INDUSTRIES, INDUSTRY_LABEL, publicLpUrl, type ClientRecord } from "@shared/index";
+import {
+  DEFAULT_META_CV_EVENT,
+  INDUSTRIES,
+  INDUSTRY_LABEL,
+  META_CV_EVENTS,
+  publicLpUrl,
+  type ClientRecord,
+} from "@shared/index";
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "下書き",
@@ -175,6 +182,36 @@ export default async function ClientDetailPage({
             name="meta_domain_verification"
             defaultValue={client.meta_domain_verification}
           />
+        </section>
+
+        <section className="space-y-3 rounded-lg border border-neutral-200 bg-white p-5">
+          <h2 className="text-sm font-semibold">Meta CVイベント</h2>
+          <p className="text-xs text-neutral-500">
+            フォーム送信が完了したときに Meta ピクセルへ送るイベント名です。広告の最適化対象に
+            合わせて運用担当が選びます。「業種の既定」のままにしておくと、ブライダルは
+            Purchase、それ以外は Lead になります。
+          </p>
+          <label className="block">
+            <span className="mb-1 block text-xs text-neutral-600">イベント名</span>
+            <select
+              name="meta_cv_event"
+              defaultValue={client.meta_cv_event ?? ""}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+            >
+              <option value="">
+                業種の既定（{DEFAULT_META_CV_EVENT[client.industry ?? "fitness"]}）
+              </option>
+              {META_CV_EVENTS.map((e) => (
+                <option key={e} value={e}>
+                  {e}
+                </option>
+              ))}
+            </select>
+          </label>
+          <p className="text-xs text-neutral-500">
+            Purchase は本来 value / currency が必須のイベントです。金額を付けていないため
+            イベントマネージャに警告が出ますが、件数は計上されます（価値ベースの最適化は使えません）。
+          </p>
         </section>
 
         <section className="space-y-3 rounded-lg border border-neutral-200 bg-white p-5">

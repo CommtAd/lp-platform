@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState, type CSSProperties, type ReactNode } from "react";
-import type { CvEventType, FormSubmitPayload } from "@shared/index";
+import type { CvEventType, FormSubmitPayload, MetaCvEvent } from "@shared/index";
+import { useCvEvent } from "./CvEventProvider";
 import { FORM_SUBMIT_URL } from "@/lib/form-endpoint";
 import { readUtm } from "@/lib/utm";
 
@@ -122,8 +123,16 @@ async function postEvent(
   }
 }
 
-/** Fire a Meta Pixel event de-duplicated by event_id (no-op without a pixel). */
-function firePixel(event: "Lead", eventId: string) {
+/**
+ * Fire a Meta Pixel event de-duplicated by event_id (no-op without a pixel).
+ * イベント名は案件ごとに変えられる（`clients.meta_cv_event`）。ブライダルは
+ * 運用側の指定で "Purchase"、フィットネスは "Lead" が既定。
+ *
+ * value / currency は付けていない。Purchase では Meta が必須としているが、
+ * 来館予約に金額を割り当てる根拠が無いため、運用の指定どおり省いている
+ * （イベントマネージャに警告が出るが計上はされる。価値ベース最適化は使えない）。
+ */
+function firePixel(event: MetaCvEvent, eventId: string) {
   const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq;
   if (typeof fbq === "function") fbq("track", event, {}, { eventID: eventId });
 }
@@ -222,6 +231,7 @@ export default function LPForm({
   // alone can't block a burst of clicks — the ref updates immediately.
   const submittingRef = useRef(false);
   const [focused, setFocused] = useState<string | null>(null);
+  const cvEvent = useCvEvent();
 
   const setField = (name: string, value: string) =>
     setValues((v) => {
@@ -282,7 +292,7 @@ export default function LPForm({
     setSubmitting(true);
     const { ok, eventId } = await postEvent(clientSlug, "form_submit", values);
     if (ok) {
-      firePixel("Lead", eventId);
+      firePixel(cvEvent, eventId);
       if (thanksHref) {
         window.location.assign(thanksHref);
         return;
