@@ -1,7 +1,9 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { ClientRecord, ClientStatus } from "@shared/index";
+import { resolveMetaCvEvent } from "@shared/index";
 import { fetchClientRecord } from "@/lib/client-record";
+import { CvEventProvider } from "./CvEventProvider";
 import TagInjector from "./TagInjector";
 import UtmCapture from "./UtmCapture";
 
@@ -36,6 +38,7 @@ function buildDefault(
     line_tag_id: null,
     meta_domain_verification: null,
     cv_events: {},
+    meta_cv_event: null,
     created_at: now,
     updated_at: now,
   };
@@ -98,7 +101,9 @@ export default async function LPShell({
         </div>
       )}
 
-      {children}
+      {/* LPForm がピクセルのイベント名を知るための context。
+          各LPの page.tsx に触らずに済むよう、children ごと包んでいる。 */}
+      <CvEventProvider value={resolveMetaCvEvent(record)}>{children}</CvEventProvider>
     </>
   );
 }
