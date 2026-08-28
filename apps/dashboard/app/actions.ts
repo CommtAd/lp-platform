@@ -5,7 +5,13 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { VERCEL_DEPLOY_HOOK_URL } from "@/lib/env";
 import { addDomainToProject, removeDomainFromProject } from "@/lib/vercel-domains";
-import { INDUSTRIES, type ClientStatus, type Industry } from "@shared/index";
+import {
+  INDUSTRIES,
+  META_CV_EVENTS,
+  type ClientStatus,
+  type Industry,
+  type MetaCvEvent,
+} from "@shared/index";
 
 const SLUG_RE = /^[a-z0-9-]+$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -14,6 +20,15 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function readIndustry(formData: FormData): Industry {
   const v = String(formData.get("industry") ?? "");
   return (INDUSTRIES as string[]).includes(v) ? (v as Industry) : "fitness";
+}
+
+/**
+ * Meta のCVイベント名。空文字は「業種の既定に従う」の意味で null に落とす
+ * （bridal → Purchase / それ以外 → Lead。解決は LP 側と get_public_client が行う）。
+ */
+function readMetaCvEvent(formData: FormData): MetaCvEvent | null {
+  const v = String(formData.get("meta_cv_event") ?? "");
+  return (META_CV_EVENTS as string[]).includes(v) ? (v as MetaCvEvent) : null;
 }
 
 /** Create a new client row owned by the current user. */
@@ -83,6 +98,7 @@ export async function updateClientRecord(clientId: string, formData: FormData) {
       line_tag_id: emptyToNull(formData.get("line_tag_id")),
       meta_domain_verification: emptyToNull(formData.get("meta_domain_verification")),
       commitad_client_id: emptyToNull(formData.get("commitad_client_id")),
+      meta_cv_event: readMetaCvEvent(formData),
       notify_emails: notifyEmails,
       cv_events: {
         form_submit: formData.get("cv_form_submit") === "on",

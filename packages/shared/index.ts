@@ -40,6 +40,47 @@ export function publicLpUrl(client: {
   return `https://${INDUSTRY_LP_HOST[client.industry ?? "fitness"]}/${client.slug}`;
 }
 
+/**
+ * フォーム送信成功時に送る Meta ピクセルのイベント名。
+ * Meta の標準イベントに限定してある。任意文字列を許すと打ち間違いに気づけない
+ * （ピクセルは未知のイベント名でもエラーを出さず、ただ計上されないだけ）。
+ */
+export type MetaCvEvent =
+  | "Lead"
+  | "Purchase"
+  | "CompleteRegistration"
+  | "Contact"
+  | "Schedule"
+  | "SubmitApplication";
+
+export const META_CV_EVENTS: MetaCvEvent[] = [
+  "Lead",
+  "Purchase",
+  "CompleteRegistration",
+  "Contact",
+  "Schedule",
+  "SubmitApplication",
+];
+
+/**
+ * 業種ごとの既定イベント。`clients.meta_cv_event` が null のときに使う。
+ * DBの default では業種を参照できないため、SQL側（`get_public_client`）と
+ * ここの2箇所に同じ規則がある。**片方だけ変えないこと。**
+ */
+export const DEFAULT_META_CV_EVENT: Record<Industry, MetaCvEvent> = {
+  fitness: "Lead",
+  bridal: "Purchase",
+  other: "Lead",
+};
+
+/** `meta_cv_event` が未設定なら業種の既定に解決する。 */
+export function resolveMetaCvEvent(client: {
+  meta_cv_event?: MetaCvEvent | null;
+  industry?: Industry | null;
+}): MetaCvEvent {
+  return client.meta_cv_event ?? DEFAULT_META_CV_EVENT[client.industry ?? "fitness"];
+}
+
 export interface CvEvents {
   form_submit?: boolean;
   tel_tap?: boolean;
@@ -63,6 +104,12 @@ export interface ClientRecord {
   line_tag_id: string | null;
   meta_domain_verification: string | null;
   cv_events: CvEvents;
+  /**
+   * フォーム送信成功時に送る Meta ピクセルのイベント名。
+   * 公開RPC経由では業種の既定に解決済みの値が入る（null にならない）。
+   * ダッシュボードが clients テーブルを直接読むときは null＝業種の既定に従う。
+   */
+  meta_cv_event?: MetaCvEvent | null;
   /**
    * 業種タブ。公開RPC `get_public_client` は返さない（LP側は業種を使わない）ため
    * optional。ダッシュボードが clients テーブルを直接読むときは必ず入る。
