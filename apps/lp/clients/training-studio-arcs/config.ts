@@ -71,7 +71,7 @@ const config: Config = {
   offer: {
     eyebrow: "毎月5名様限定キャンペーン",
     heading: "120分のフルセット体験",
-    trialBadge: "当日ご入会予約で体験料金 全額キャッシュバック",
+    trialBadge: "当日ご入会予約で体験料金\n全額キャッシュバック",
     trialRegular: "5,500",
     trialNow: "1,980",
     items: [
@@ -97,7 +97,7 @@ const config: Config = {
     photo: { placeholder: "トレーナー / スタジオの写真", src: `${ASSET}/about.jpg` },
     caption: "All Round Care Service",
     lead: "一人ひとりの異なるご要望に、\n最善のサービスを。",
-    body: "ARCSは「All Round Care Service」を掲げるパーソナルジムです。代表は女性専用ジムを経て、厚生労働大臣認定の病院併設の健康増進施設で約10年間、現場責任者を務めました。ダイエットや生活習慣病の予防から機能改善まで携わった知見をもとに、痛くなってからではなく、痛くならない身体づくりをご提案します。",
+    body: "ARCSは「All Round Care Service」を掲げるパーソナルジムです。代表は女性専用ジムを経て、厚生労働大臣認定の健康増進施設で10年間現場責任者を務めた経験をもとに、痛くなってからではなく痛くならない身体づくりをご提案します。なかでも美容整体は、骨格の歪みを整え、姿勢の崩れや肩こり・冷えにアプローチするARCSならではのメニューです。",
   },
 
   worry: {
@@ -272,8 +272,7 @@ const config: Config = {
   reserve: {
     heading: "120分フルセット体験のご予約",
     lead: "下記のボタンからご希望の日時をお選びいただき、そのままご予約ください。",
-    // ★TBD: hacomono みらい平店の予約URL。null の間は非リンク描画になる。
-    url: null,
+    url: "https://arcs.hacomono.jp/widgets/8?isFilterableByCategory=false&isShowStudioInfo=true&studioIds=3",
     ctaText: "120分体験を予約する",
     note: "120分体験1,980円｜入会金0円｜しつこい勧誘はいたしません。",
   },

@@ -102,6 +102,32 @@ const offerIcons: ReactNode[] = [
   </>,
 ];
 
+/** 3コース比較カード。reasons/flow の両方で使う共通レイアウト。 */
+function TrioGrid({ trio }: { trio: { label: string; desc: string }[] }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+      {trio.map((t, i) => (
+        <div
+          key={i}
+          style={{
+            background: "#ECE8E0",
+            borderRadius: 12,
+            padding: "18px 8px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 8,
+            textAlign: "center",
+          }}
+        >
+          <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accentInk }}>{t.label}</span>
+          <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const Icon = ({ children }: { children: ReactNode }) => (
   <svg
     width="32"
@@ -550,8 +576,8 @@ export default function Page() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginTop: 26 }}>
               <div style={{ minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
                 {/* ARCS's badge is longer than the template's, so it wraps instead of forcing the row wide. */}
-                <span style={{ display: "inline-flex", background: "#4A4E57", color: "#FFFFFF", fontSize: 10.5, fontWeight: 700, letterSpacing: "0.02em", lineHeight: 1.5, padding: "6px 10px", borderRadius: 4, maxWidth: 190 }}>
-                  {c.offer.trialBadge}
+                <span style={{ display: "inline-block", background: "#4A4E57", color: "#FFFFFF", fontSize: 10.5, fontWeight: 700, letterSpacing: "0.02em", lineHeight: 1.5, padding: "6px 10px", borderRadius: 4, maxWidth: 190 }}>
+                  {nl(c.offer.trialBadge)}
                 </span>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
                   <span style={{ fontSize: 11, color: "#62655B" }}>通常価格</span>
@@ -691,16 +717,7 @@ export default function Page() {
                 </h3>
                 <div style={{ width: 40, height: 2, background: "#DAD5C9", margin: "12px auto 0" }} />
                 <p style={{ fontSize: 13, lineHeight: 2, color: "#62655B", margin: item.trio ? "16px 0 20px" : "16px 0 0" }}>{item.body}</p>
-                {item.trio && (
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                    {item.trio.map((t, i) => (
-                      <div key={i} style={{ background: "#ECE8E0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
-                        <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accentInk }}>{t.label}</span>
-                        <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {item.trio && <TrioGrid trio={item.trio} />}
               </div>
             ))}
             <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} url={c.reserve.url} />
@@ -778,13 +795,8 @@ export default function Page() {
                       </div>
                       <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>{step.body}</p>
                       {step.trio && (
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 16 }}>
-                          {step.trio.map((t, ti) => (
-                            <div key={ti} style={{ background: "#ECE8E0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
-                              <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accentInk }}>{t.label}</span>
-                              <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
-                            </div>
-                          ))}
+                        <div style={{ marginTop: 16 }}>
+                          <TrioGrid trio={step.trio} />
                         </div>
                       )}
                     </div>
