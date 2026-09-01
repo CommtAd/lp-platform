@@ -31,42 +31,45 @@ const BODY = "#5C545A";
 const MINCHO = "'Shippori Mincho', 'Hiragino Mincho ProN', serif";
 
 /* ── 集客予測ロジック ───────────────────────────────────────────
-   実績が出たら BASE_LO / BASE_HI で全体の水準を、係数テーブルで条件差を動かす。
-   表示は5件刻みに丸める（1件単位で出すと精度を持っているように見えてしまう）。 */
+   顧客指定の条件表（2026-09-01）をそのまま実装している。係数の掛け算ではなく
+   素の分岐にしてあるのは、営業が数字を直接読めて、直したい行だけ直せるため。
 
-const AREA_TIER: Record<string, number> = {
-  東京都: 1.3,
-  神奈川県: 1.2,
-  大阪府: 1.2,
-  愛知県: 1.15,
-  埼玉県: 1.1,
-  千葉県: 1.1,
-  福岡県: 1.1,
-  兵庫県: 1.05,
-  京都府: 1.05,
-  北海道: 1.0,
-  宮城県: 1.0,
-  広島県: 1.0,
-};
-const STYLE_W: Record<string, number> = {
-  マシンピラティス: 1.15,
-  両方: 1.1,
-  マットピラティス: 1.0,
-  その他: 0.95,
-};
-const TAIKEN_W: Record<string, number> = { あり: 1.2, なし: 1.0 };
-const BASE_LO = 12;
-const BASE_HI = 20;
+     無料体験あり × 東京・愛知(名古屋)・大阪・福岡  → 15〜20件
+     無料体験あり × 関東（東京以外）                → 10〜20件
+     無料体験あり × 上記以外のエリア                → 10〜15件
+     有料（無料体験なし）※エリア不問               →  5〜15件
+
+   注意点:
+   - 「名古屋」「大阪」「福岡」は市名で指定されたが、フォームの選択肢は都道府県
+     なので愛知県 / 大阪府 / 福岡県として扱う。市区町村は任意の自由入力のため
+     判定には使えない。
+   - **有料はエリアを問わず一律**なので、「東京の有料（5〜15件）」が
+     「地方の無料体験あり（10〜15件）」を下回る。無料体験の有無を最も強い要因と
+     置く指定のため意図どおり。
+   - ピラティスのタイプ（style）は結果に影響しない。入力は営業情報として
+     TimeRex と通知メールには引き継がれる。 */
+
+/** 無料体験ありのとき最上位になるエリア。 */
+const TOP_AREAS = new Set(["東京都", "愛知県", "大阪府", "福岡県"]);
+
+/** 関東のうち東京以外。東京は TOP_AREAS 側で拾う。 */
+const KANTO_EXCEPT_TOKYO = new Set([
+  "神奈川県",
+  "埼玉県",
+  "千葉県",
+  "茨城県",
+  "栃木県",
+  "群馬県",
+]);
 
 function forecast(values: Record<string, string>): { lo: number; hi: number } {
-  const w =
-    (AREA_TIER[values.prefecture ?? ""] ?? 0.9) *
-    (STYLE_W[values.style ?? ""] ?? 1) *
-    (TAIKEN_W[values.taiken ?? ""] ?? 1);
-  const lo = Math.max(5, Math.round((BASE_LO * w) / 5) * 5);
-  let hi = Math.round((BASE_HI * w) / 5) * 5;
-  if (hi <= lo) hi = lo + 5;
-  return { lo, hi };
+  // 有料（無料体験なし）はエリアを問わず一律。
+  if (values.taiken !== "あり") return { lo: 5, hi: 15 };
+
+  const pref = values.prefecture ?? "";
+  if (TOP_AREAS.has(pref)) return { lo: 15, hi: 20 };
+  if (KANTO_EXCEPT_TOKYO.has(pref)) return { lo: 10, hi: 20 };
+  return { lo: 10, hi: 15 };
 }
 
 /* ── ステップインジケーター ─────────────────────────────────── */
