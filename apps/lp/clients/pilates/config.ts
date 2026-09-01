@@ -1,22 +1,84 @@
-import type { PatternBConfig } from "@/clients/pattern-b.types";
+import type { ClientStatus } from "@shared/index";
+import type { LPFormField } from "@/components/LPForm";
 
 /**
  * コミットアドforピラティス — 集客シミュレーションLP。
  *
  * 対象: ピラティススタジオのオーナー（BtoB）。Meta広告からのスマホ流入が中心。
- * 導線: LP閲覧 → 店舗情報入力 → TimeRexで日程予約 → 予約完了 → 集客予測を公開。
+ * 導線: 店舗情報入力 → TimeRexで日程予約 → 予約完了 → 集客予測を公開。
  *
  * **最終CVは「TimeRex予約完了」（`Schedule`）で、フォーム送信ではない。**
  * フォーム送信では LPForm が `clients.meta_cv_event`（fitness既定 = Lead）を
  * 発火する＝中間指標。広告側の最適化イベントは `Schedule` に向けること。
  * 実装は `SimulationSection.tsx`。
  *
- * 配色は既存LP（旧 pilates.commitad.com）から継承:
- *   ブランドパープル #C88DC2 / CTA緑 #39BA36。
+ * **PatternBConfig は使わない。** 参照元（旧 pilates.commitad.com/lp/simulation/）が
+ * 「MV → 訴求 → フォーム」だけの極端に短いLPで、パターンBの
+ * problem / solution / benefits / advantage / closing を持たないため。
+ * 使わないセクションのconfigを残すと「直したのに反映されない」罠になるので、
+ * このLP専用の型にしてある。
+ *
+ * 配色は参照元から継承: ブランドパープル #C88DC2 / CTA緑 #39BA36。
  * ただし #C88DC2 は白地で 2.6:1 しか出ないため、文字・数字には
- * 深いプラム #4A2F47 を使う（accent）。#C88DC2 は accent2＝面と装飾のみ。
+ * 深いプラム #4A2F47 を使う（`page.tsx` の PLUM）。
  */
-const config: PatternBConfig = {
+
+interface Slot {
+  placeholder: string;
+  src?: string | null;
+  position?: string;
+}
+
+export interface PilatesConfig {
+  slug: string;
+  status?: ClientStatus;
+  meta: { title: string; description: string; ogpImage?: string };
+
+  /** CTAの緑。 */
+  cta: string;
+
+  header: { brand: string; brandSub: string; ctaText: string };
+
+  fv: {
+    badge: string;
+    heading: string[];
+    sub: string;
+    highlight: string;
+    ctaText: string;
+    trust: string[];
+    hero: Slot;
+  };
+
+  /** 「なぜ先に件数が出せるのか」。参照元の point 画像に相当する訴求ブロック。 */
+  reasons: {
+    heading: string;
+    items: { title: string; body: string }[];
+  };
+
+  /** 予約までの流れ。3行に収める。 */
+  steps: {
+    heading: string;
+    items: { num: string; title: string; body: string }[];
+  };
+
+  form: {
+    heading: string;
+    lead: string;
+    /** カードを包む帯の煽り。 */
+    bandLabel?: string;
+    fields: LPFormField[];
+    submitLabel: string;
+    disclaimer: string;
+    errorMessage: string;
+  };
+
+  /** 離脱の核心だけに絞る。数を増やすとLPが伸びる。 */
+  faq: { heading: string; items: { q: string; a: string }[] };
+
+  sticky: { offerText: string; buttonText: string; anchor: string; showAfter?: number };
+}
+
+const config: PilatesConfig = {
   slug: "pilates",
   status: "draft",
   meta: {
@@ -25,28 +87,20 @@ const config: PatternBConfig = {
       "あなたのスタジオなら毎月何件の新規集客が期待できる？店舗情報を入力するだけで、ピラティス専門の集客支援「コミットアド for ピラティス」による集客予測を無料でシミュレーションできます。カンタン30秒。",
     ogpImage: undefined,
   },
-  accent: "#4A2F47",
   cta: "#39BA36",
-  accent2: "#C88DC2",
 
   header: {
     brand: "コミットアド for ピラティス",
     brandSub: "ピラティス専門の集客支援",
-    navLinks: [
-      { label: "支援内容", href: "#benefits" },
-      { label: "選ばれる理由", href: "#advantage" },
-      { label: "ご利用の流れ", href: "#flow" },
-      { label: "よくある質問", href: "#faq" },
-    ],
     ctaText: "無料で試算する",
   },
 
   fv: {
     badge: "ピラティススタジオ専門",
     heading: ["あなたのスタジオなら", "毎月何件の新規集客が", "期待できる？"],
+    sub: "店舗情報を入力するだけで、\n集客予測を無料シミュレーション。",
     highlight: "カンタン30秒・完全無料",
-    sub: "店舗情報を入力するだけで、集客予測を無料シミュレーション。\nエリア・レッスン形態・無料体験の有無から、獲得できる新規体験予約の目安をその場で算出します。",
-    ctaText: "まずは無料で集客数をシミュレーション",
+    ctaText: "まずは無料でシミュレーション",
     trust: ["入力30秒", "費用は一切かかりません", "しつこい営業なし"],
     hero: {
       placeholder: "ピラティススタジオでレッスン中の様子（横長・4:3）",
@@ -54,147 +108,37 @@ const config: PatternBConfig = {
     },
   },
 
-  problem: {
-    eyebrow: "PROBLEM",
-    heading: "スタジオは埋まらないのに、広告費だけが出ていく。",
-    lead: "ピラティス市場は伸びていますが、その分だけ競合も増えています。\n「とりあえず出してみた広告」で獲れる時代は終わりました。",
-    persona: {
-      placeholder: "スタジオオーナーが電卓と予約表を前に考え込んでいる様子（正方形）",
-      src: null,
-    },
-    tasks: [
-      "体験予約が月数件で止まっている",
-      "広告費に対して見合っていない",
-      "何を直せばいいか分からない",
-      "運用まで手が回らない",
-    ],
-  },
-
-  solution: {
-    eyebrow: "SOLUTION",
-    heading: "ピラティスだけを\n見てきた運用体制。",
-    lead: "他業種のノウハウを転用するのではなく、ピラティススタジオの集客だけを積み上げてきました。\nだからこそ、エリアと形態から「獲れる件数」を先にお見せできます。",
-    diagram: {
-      placeholder: "支援フローの図（訴求設計→LP→広告運用→予約獲得）",
-      src: null,
-    },
-    steps: ["訴求設計", "LP制作", "広告運用", "予約獲得"],
-  },
-
-  benefits: {
-    heading: "コミットアドの支援内容",
-    lead: "集客に必要な工程を、まとめてお任せいただけます。",
+  reasons: {
+    heading: "なぜ、先に件数が分かるのか",
     items: [
       {
-        num: "01",
-        tag: "ターゲット設計",
-        title: "「誰に何を言うか」から\n一緒に決めます",
-        body: "同じスタジオでも、産後の体型戻しを訴えるのか、姿勢改善を訴えるのかで反応は変わります。商圏の人口構成と競合の訴求を調べ、勝てる立ち位置を設計します。",
-        image: { placeholder: "ターゲット設計の打ち合わせ資料（横長）", src: null },
+        title: "ピラティス専門",
+        body: "業種を絞って運用してきたため、どの訴求が刺さるかの見当が最初からついています。",
       },
       {
-        num: "02",
-        tag: "LP制作",
-        title: "スマホで完結する\n予約フォームまで用意",
-        body: "広告の受け皿となるLPを制作します。スマホからの流入が中心になるため、入力項目を絞り、離脱しにくい導線に組み替えます。制作費は運用の中に含まれます。",
-        image: { placeholder: "スマホでLPを表示している様子（横長）", src: null },
+        title: "エリアごとの実績",
+        body: "商圏の人口構成とレッスン形態から、同条件での獲得実績を引き当てて試算します。",
       },
       {
-        num: "03",
-        tag: "広告運用",
-        title: "配信後も毎週\n数字を見て動かします",
-        body: "Meta広告を中心に配信し、体験予約の単価と本数を見ながらクリエイティブと訴求を入れ替えます。出して終わりにはしません。",
-        image: { placeholder: "広告のレポート画面（横長）", src: null },
+        title: "制作から運用まで一社",
+        body: "LPと広告を分けないため、数字が動かないときの原因を切り分けられます。",
       },
     ],
   },
 
-  advantage: {
-    heading: "選ばれる3つの理由",
+  steps: {
+    heading: "ご予約までの流れ",
     items: [
-      {
-        title: "ピラティス専門だから、初速が違う",
-        body: "業種を絞っているため、どの訴求が刺さるかの見当が最初からついています。ゼロから検証する時間を省けます。",
-        stat: "支援実績はピラティス・フィットネス業種に集中",
-      },
-      {
-        title: "先に「見込み件数」をお見せします",
-        body: "契約してから成果を確かめるのではなく、エリアと形態から獲得見込みを試算した上でご判断いただけます。",
-        stat: "このページのシミュレーションがその試算です",
-      },
-      {
-        title: "制作から運用まで一社完結",
-        body: "LP制作会社と広告代理店を別々に挟むと、数字が悪いときに原因の切り分けができません。まとめてお任せいただけます。",
-      },
+      { num: "1", title: "店舗情報を入力", body: "30秒で完了します。" },
+      { num: "2", title: "無料相談の日程を予約", body: "オンラインで60分。カレンダーから選ぶだけ。" },
+      { num: "3", title: "集客予測を確認", body: "ご予約完了と同時に画面に表示されます。" },
     ],
-  },
-
-  flow: {
-    heading: "ご利用の流れ",
-    lead: "まずは集客予測の確認から。\nその場でご契約をお願いすることはありません。",
-    steps: [
-      {
-        num: "1",
-        title: "店舗情報を入力（30秒）",
-        body: "レッスン形態・エリア・無料体験の有無をお選びいただき、ご連絡先をご入力ください。",
-      },
-      {
-        num: "2",
-        title: "無料相談の日程をご予約",
-        body: "ご都合の良い日時をカレンダーからお選びください。オンライン（Google Meet）で60分お時間をいただきます。",
-      },
-      {
-        num: "3",
-        title: "集客予測をその場で確認",
-        body: "ご予約が完了すると、画面上で集客予測が表示されます。",
-      },
-      {
-        num: "4",
-        title: "無料相談で具体的なご提案",
-        body: "当日はシミュレーション結果をもとに、店舗の状況に合わせた集客方法をご提案します。",
-      },
-    ],
-  },
-
-  faq: {
-    heading: "よくあるご質問",
-    items: [
-      {
-        q: "シミュレーションだけの利用でも大丈夫ですか？",
-        a: "はい、問題ありません。集客予測の確認だけで終えていただいても費用は一切かかりませんし、その後しつこくご連絡することもありません。",
-      },
-      {
-        q: "なぜ結果を見る前に日程予約が必要なのですか？",
-        a: "エリアや形態によって前提が大きく変わるため、数字だけをお渡ししても誤解を招きかねません。無料相談の中で根拠と前提をあわせてご説明したいと考えており、ご予約を先にお願いしています。",
-      },
-      {
-        q: "表示される件数はどの程度あてになりますか？",
-        a: "同規模・同商圏での運用実績をもとにした参考値です。実際の獲得件数は競合状況や予算によって変動するため、成果を保証するものではありません。無料相談の際に、より詳しい前提をご説明します。",
-      },
-      {
-        q: "オンラインでの相談は可能ですか？",
-        a: "はい。無料相談はGoogle Meetを使ったオンラインで実施しております。全国どちらのスタジオからでもご参加いただけます。",
-      },
-      {
-        q: "契約期間の縛りはありますか？",
-        a: "初回のご相談時に、ご希望の期間と予算に合わせてご提案いたします。詳細は無料相談の際にご確認ください。",
-      },
-    ],
-  },
-
-  closing: {
-    heading: "まずは、自店舗の\n見込み件数を知ることから。",
-    body: "入力は30秒。費用はかかりません。数字を見てから、進めるかどうかをご判断ください。",
-    ctaText: "無料で集客数をシミュレーション",
-    photo: {
-      placeholder: "明るいピラティススタジオの内観（縦長・背景として使用）",
-      src: null,
-    },
   },
 
   form: {
     heading: "ピラティス集客シミュレーション",
     lead: "貴社の店舗についてご入力ください。\n日程予約が完了すると、集客予測が表示されます。",
+    bandLabel: "カンタン30秒!!",
     fields: [
       {
         type: "toggle",
@@ -259,14 +203,27 @@ const config: PatternBConfig = {
     disclaimer:
       "ご入力内容は無料相談のご案内にのみ使用します。\n算出される件数は運用実績をもとにした参考値であり、成果を保証するものではありません。",
     errorMessage: "必須項目をご入力ください。",
-    bandLabel: "カンタン30秒!!",
+  },
+
+  faq: {
+    heading: "よくあるご質問",
+    items: [
+      {
+        q: "なぜ結果を見る前に日程予約が必要なのですか？",
+        a: "エリアや形態によって前提が大きく変わるため、数字だけをお渡ししても誤解を招きかねません。無料相談の中で根拠と前提をあわせてご説明したいと考えており、ご予約を先にお願いしています。",
+      },
+      {
+        q: "シミュレーションだけの利用でも大丈夫ですか？",
+        a: "はい、問題ありません。集客予測の確認だけで終えていただいても費用は一切かかりませんし、その後しつこくご連絡することもありません。",
+      },
+    ],
   },
 
   sticky: {
     offerText: "カンタン30秒・無料",
     buttonText: "無料でシミュレーション",
     anchor: "#form",
-    showAfter: 600,
+    showAfter: 400,
   },
 };
 

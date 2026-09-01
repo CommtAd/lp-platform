@@ -101,11 +101,6 @@ export interface PatternBConfig {
     submitLabel: string;
     disclaimer: string;
     errorMessage: string;
-    /**
-     * フォームカードを包む帯に出す短い煽り（例「カンタン30秒!!」）。
-     * 帯を出さないLPは省略してよい。
-     */
-    bandLabel?: string;
   };
 
   sticky: {
