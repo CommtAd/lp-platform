@@ -40,8 +40,6 @@ export interface PilatesConfig {
   /** CTAの緑。 */
   cta: string;
 
-  header: { brand: string; brandSub: string; ctaText: string };
-
   /**
    * FV。**バッジ・見出し・リード・ロゴはすべて MV 画像に焼き込まれている**ため
    * config には持たない（HTMLで持つと二重表示になる）。文言を変えるには
@@ -59,12 +57,6 @@ export interface PilatesConfig {
   reasons: {
     heading: string;
     items: { title: string; body: string }[];
-  };
-
-  /** 予約までの流れ。3行に収める。 */
-  steps: {
-    heading: string;
-    items: { num: string; title: string; body: string }[];
   };
 
   form: {
@@ -98,12 +90,6 @@ const config: PilatesConfig = {
   },
   cta: "#39BA36",
 
-  header: {
-    brand: "コミットアド for ピラティス",
-    brandSub: "ピラティス専門の集客支援",
-    ctaText: "無料で試算する",
-  },
-
   fv: {
     highlight: "カンタン30秒・完全無料",
     ctaText: "まずは無料でシミュレーション",
@@ -133,15 +119,6 @@ const config: PilatesConfig = {
         title: "制作から運用まで一社",
         body: "LPと広告を分けないため、数字が動かないときの原因を切り分けられます。",
       },
-    ],
-  },
-
-  steps: {
-    heading: "ご予約までの流れ",
-    items: [
-      { num: "1", title: "店舗情報を入力", body: "30秒で完了します。" },
-      { num: "2", title: "無料相談の日程を予約", body: "オンラインで60分。カレンダーから選ぶだけ。" },
-      { num: "3", title: "集客予測を確認", body: "ご予約完了と同時に画面に表示されます。" },
     ],
   },
 
