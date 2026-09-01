@@ -632,8 +632,8 @@ export default function Page() {
 
             {/* photos */}
             <div style={{ display: "flex", gap: 10, marginTop: 24, alignItems: "flex-start" }}>
-              <ImageSlot src={c.offer.photos[0].src} placeholder={c.offer.photos[0].placeholder} radius={8} style={{ flex: 1, height: 180 }} />
-              <ImageSlot src={c.offer.photos[1].src} placeholder={c.offer.photos[1].placeholder} radius={8} style={{ flex: 1, height: 180, marginTop: 22 }} />
+              <ImageSlot src={c.offer.photos[0].src} placeholder={c.offer.photos[0].placeholder} radius={8} objectPosition={c.offer.photos[0].position ?? "center"} style={{ flex: 1, height: 180 }} />
+              <ImageSlot src={c.offer.photos[1].src} placeholder={c.offer.photos[1].placeholder} radius={8} objectPosition={c.offer.photos[1].position ?? "center"} style={{ flex: 1, height: 180, marginTop: 22 }} />
             </div>
 
             {/* さらに */}
@@ -706,7 +706,7 @@ export default function Page() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 30 }}>
               {c.worry.cards.map((card, i) => (
                 <div key={i} style={{ background: "#FCFBF7", borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 14px rgba(70,72,60,0.07)" }}>
-                  <ImageSlot src={card.img.src} placeholder={card.img.placeholder} style={{ width: "100%", height: 110 }} />
+                  <ImageSlot src={card.img.src} placeholder={card.img.placeholder} objectPosition={card.img.position ?? "center"} style={{ width: "100%", height: 110 }} />
                   <p style={{ fontSize: 12.5, lineHeight: 1.7, color: "#4E483C", margin: 0, padding: "16px 12px", textAlign: "center" }}>{nl(card.text)}</p>
                 </div>
               ))}
@@ -725,7 +725,7 @@ export default function Page() {
             {c.reasons.items.map((item, idx) => (
               <div key={idx} style={{ marginTop: idx === 0 ? 44 : 48 }}>
                 <div style={{ position: "relative" }}>
-                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} radius={16} style={{ width: "100%", height: 210 }} />
+                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} radius={16} objectPosition={item.img.position ?? "center"} style={{ width: "100%", height: 210 }} />
                   <div style={{ position: "absolute", top: -16, right: 16, width: 50, height: 50, transform: "rotate(45deg)", background: accent, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 6px 14px ${accentGlow}` }}>
                     <span style={{ transform: "rotate(-45deg)", fontFamily: fontGothic, fontWeight: 700, fontSize: 19, color: "#FFFFFF" }}>{item.num}</span>
                   </div>
@@ -820,7 +820,7 @@ export default function Page() {
             <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 32 }}>
               {c.scenes.items.map((s, i) => (
                 <div key={i} style={{ background: "#FCFBF7", borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 16px rgba(70,72,60,0.08)" }}>
-                  <ImageSlot src={s.img.src} placeholder={s.img.placeholder} style={{ width: "100%", height: 180 }} />
+                  <ImageSlot src={s.img.src} placeholder={s.img.placeholder} objectPosition={s.img.position ?? "center"} style={{ width: "100%", height: 180 }} />
                   <div style={{ padding: "18px 20px 20px" }}>
                     <p style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.03em", margin: 0, color: "#3B342C" }}>{s.title}</p>
                     <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#6E6455", margin: "7px 0 0" }}>{s.body}</p>

@@ -200,7 +200,8 @@ const config: Config = {
         body: "出産を経ての不調や歪み、体力の低下に。お体の状態に合わせて、無理のないペースで進めます。",
       },
       {
-        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-3.jpg` },
+        // position: 被写体が写真上寄りのため、頭が見切れないよう上げて表示。
+        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-3.jpg`, position: "center 15%" },
         title: "「理想のボディラインを目指したい方」",
         body: "30〜40代を中心に、幅広い年代の方が通われています。しなやかで引き締まった、一生モノの美しいシルエットへ。",
       },
