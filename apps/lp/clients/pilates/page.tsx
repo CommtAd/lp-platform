@@ -24,17 +24,6 @@ import config from "./config";
  *   4. CTAは緑 #39BA36
  */
 
-/** Render "\n"-separated text as line breaks. */
-function nl(text: string): ReactNode {
-  const parts = text.split("\n");
-  return parts.map((p, i) => (
-    <span key={i}>
-      {p}
-      {i < parts.length - 1 && <br />}
-    </span>
-  ));
-}
-
 const CREAM = "#F9F8F7";
 const PURPLE = "#C88DC2";
 const PURPLE_TINT = "#F6ECF4";
@@ -107,52 +96,39 @@ export default function Page() {
             </a>
           </header>
 
-          {/* ── 1. FV ── */}
-          <section className="px-5 pt-9 pb-11 text-center" style={{ background: CREAM }}>
-            <span
-              className="inline-block px-5 py-1.5 text-[13px] font-bold text-white"
-              style={{ background: PURPLE }}
-            >
-              {c.fv.badge}
-            </span>
-            <h1
-              className="mt-6 text-[27px] leading-[1.5] font-semibold"
-              style={{ fontFamily: MINCHO, color: PLUM }}
-            >
-              {c.fv.heading.map((line, i) => (
-                <span key={i} className="block">
-                  {line}
-                </span>
-              ))}
-            </h1>
-            <p className="mt-5 text-[13px] leading-[1.95]" style={{ color: BODY }}>
-              {nl(c.fv.sub)}
-            </p>
-            <div
-              className="mt-6 inline-block border-y px-6 py-1.5 text-[15px] font-bold tracking-[0.08em]"
-              style={{ borderColor: PURPLE, color: PLUM, fontFamily: MINCHO }}
-            >
-              {c.fv.highlight}
-            </div>
-            <div className="mt-6">
+          {/* ── 1. FV ──
+              MV画像に ロゴ・バッジ・見出し・リード が焼き込まれているので、
+              HTML側では一切重複させない（文言変更は画像の差し替えで行う）。
+              CTAは参照元と同じく画像の上に重ねる。画像が390px幅で747pxあり、
+              下に置くと初回表示に入らないため。 */}
+          <section style={{ background: CREAM }}>
+            <div className="relative">
               <ImageSlot
                 src={c.fv.hero.src}
                 placeholder={c.fv.hero.placeholder}
                 objectPosition={c.fv.hero.position ?? "center"}
-                radius={14}
-                style={{ width: "100%", aspectRatio: "4 / 3" }}
+                alt="コミットアド for ピラティス｜完全成果保証型 ピラティス集客シミュレーション"
+                style={{ width: "100%", aspectRatio: c.fv.hero.aspect }}
               />
+              <a
+                href="#form"
+                className="absolute bottom-[13%] left-1/2 flex h-14 w-[86%] -translate-x-1/2 items-center justify-center gap-2 rounded-full text-[15px] font-bold text-white"
+                style={greenStyle}
+              >
+                {c.fv.ctaText} <span>→</span>
+              </a>
             </div>
-            <a
-              href="#form"
-              className="mt-6 flex h-14 items-center justify-center gap-2 rounded-full text-[15px] font-bold text-white"
-              style={greenStyle}
-            >
-              {c.fv.ctaText} <span>→</span>
-            </a>
-            <p className="mt-3 text-[10.5px]" style={{ color: "#9A9398" }}>
-              {c.fv.trust.join("　｜　")}
-            </p>
+            <div className="px-5 pt-6 pb-9 text-center">
+              <div
+                className="inline-block border-y px-6 py-1.5 text-[15px] font-bold tracking-[0.08em]"
+                style={{ borderColor: PURPLE, color: PLUM, fontFamily: MINCHO }}
+              >
+                {c.fv.highlight}
+              </div>
+              <p className="mt-3 text-[10.5px]" style={{ color: "#9A9398" }}>
+                {c.fv.trust.join("　｜　")}
+              </p>
+            </div>
           </section>
 
           {/* ── 2. なぜ件数が分かるのか ── */}

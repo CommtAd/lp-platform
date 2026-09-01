@@ -27,6 +27,9 @@ interface Slot {
   placeholder: string;
   src?: string | null;
   position?: string;
+  /** 画像本来の縦横比（例 "640 / 1225"）。ImageSlot は cover なので、
+      ここを実寸に合わせておけばトリミングされない。 */
+  aspect?: string;
 }
 
 export interface PilatesConfig {
@@ -39,10 +42,13 @@ export interface PilatesConfig {
 
   header: { brand: string; brandSub: string; ctaText: string };
 
+  /**
+   * FV。**バッジ・見出し・リード・ロゴはすべて MV 画像に焼き込まれている**ため
+   * config には持たない（HTMLで持つと二重表示になる）。文言を変えるには
+   * 画像を差し替える必要がある。
+   */
   fv: {
-    badge: string;
-    heading: string[];
-    sub: string;
+    /** MV画像に無い煽り。画像の下に帯で置く。 */
     highlight: string;
     ctaText: string;
     trust: string[];
@@ -85,7 +91,7 @@ const config: PilatesConfig = {
     title: "ピラティス集客シミュレーション｜コミットアド for ピラティス",
     description:
       "あなたのスタジオなら毎月何件の新規集客が期待できる？店舗情報を入力するだけで、ピラティス専門の集客支援「コミットアド for ピラティス」による集客予測を無料でシミュレーションできます。カンタン30秒。",
-    ogpImage: undefined,
+    ogpImage: "/clients/pilates/mv.jpg",
   },
   cta: "#39BA36",
 
@@ -96,15 +102,16 @@ const config: PilatesConfig = {
   },
 
   fv: {
-    badge: "ピラティススタジオ専門",
-    heading: ["あなたのスタジオなら", "毎月何件の新規集客が", "期待できる？"],
-    sub: "店舗情報を入力するだけで、\n集客予測を無料シミュレーション。",
     highlight: "カンタン30秒・完全無料",
     ctaText: "まずは無料でシミュレーション",
     trust: ["入力30秒", "費用は一切かかりません", "しつこい営業なし"],
     hero: {
-      placeholder: "ピラティススタジオでレッスン中の様子（横長・4:3）",
-      src: null,
+      placeholder: "MV（ロゴ・見出し込み）",
+      /* 顧客支給のMV。PC版 mv.jpg は 1920x1000 で、390pxキャンバスに置くと
+         高さ203px＝焼き込まれた見出しが約7pxになり読めないため、同じデザインの
+         縦版 mv-sp.jpg（640x1225）を使う。PC版はOGPに回している。 */
+      src: "/clients/pilates/mv-sp.jpg",
+      aspect: "640 / 1225",
     },
   },
 
