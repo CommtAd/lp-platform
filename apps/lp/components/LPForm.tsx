@@ -80,8 +80,16 @@ export interface LPFormProps {
   microcopy?: ReactNode;
   disclaimer?: ReactNode;
   errorMessage?: string;
-  /** Optional custom thank-you content (defaults to a simple card). Ignored when `thanksHref` is set. */
-  thanks?: ReactNode;
+  /**
+   * Optional custom thank-you content (defaults to a simple card). Ignored when
+   * `thanksHref` is set.
+   *
+   * Pass a function to receive the submitted values — needed when the thank-you
+   * step has to react to what was entered (e.g. `pilates` computes its
+   * simulation result from the answers and only reveals it after the visitor
+   * books a slot). A plain ReactNode keeps working unchanged.
+   */
+  thanks?: ReactNode | ((values: Record<string, string>) => ReactNode);
   /** Pre-fill field values on mount (e.g. a store toggle pre-selected by a CTA button). */
   initialValues?: Record<string, string>;
   /** When set, navigates here on successful submit instead of showing an inline thank-you card. */
@@ -306,7 +314,7 @@ export default function LPForm({
   };
 
   if (submitted) {
-    if (thanks) return <>{thanks}</>;
+    if (thanks) return <>{typeof thanks === "function" ? thanks(values) : thanks}</>;
     return (
       <div
         style={{

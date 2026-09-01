@@ -29,6 +29,7 @@ export const clientRegistry: Record<
   "estudio": () => import("./estudio/page"),
   "training-studio-arcs": () => import("./training-studio-arcs/page"),
   "bloom-pilates": () => import("./bloom-pilates/page"),
+  "pilates": () => import("./pilates/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -82,4 +83,5 @@ export const clientMetaRegistry: Record<
   "estudio": () => import("./estudio/config"),
   "training-studio-arcs": () => import("./training-studio-arcs/config"),
   "bloom-pilates": () => import("./bloom-pilates/config"),
+  "pilates": () => import("./pilates/config"),
 };
