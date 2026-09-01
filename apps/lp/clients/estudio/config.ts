@@ -121,10 +121,14 @@ const config: Config = {
   worry: {
     heading: "こんなお悩み、ありませんか？",
     cards: [
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg` }, text: "猫背・巻き肩が\n気になる" },
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg` }, text: "反り腰・腰痛が\nつらい" },
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg` }, text: "体重は変わらないのに\nたるんできた" },
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg` }, text: "産前産後の不調・\n歪みが気になる" },
+      // position: PC幅(列480px)だとインストラクターの顔が見切れるため上げて表示。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg`, position: "center 20%" }, text: "猫背・巻き肩が\n気になる" },
+      // position: インストラクターの顔が見切れないよう上げて表示。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg`, position: "center 20%" }, text: "反り腰・腰痛が\nつらい" },
+      // position: PC幅(列480px)だとインストラクターの頭が見切れるため上げて表示。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg`, position: "center 35%" }, text: "体重は変わらないのに\nたるんできた" },
+      // position: PC幅(列480px)だとインストラクターの顔が見切れるため上げて表示。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg`, position: "center 10%" }, text: "産前産後の不調・\n歪みが気になる" },
     ],
     closingPre: "その一つひとつに、",
     closingHighlight: "ここで応えます。",
@@ -152,7 +156,8 @@ const config: Config = {
       },
       {
         num: "03",
-        img: { placeholder: "女性インストラクター／マシンの写真", src: `${ASSET}/reason-3.jpg` },
+        // position: インストラクターの顔（目から上）が見切れないよう上げて表示。
+        img: { placeholder: "女性インストラクター／マシンの写真", src: `${ASSET}/reason-3.jpg`, position: "center 25%" },
         title: "女性専用・女性インストラクター\n安心して通える環境",
         body: "女性のお客様に安心してお過ごしいただける空間づくりを大切にしています。指導はすべて女性インストラクターによるマンツーマン。4種類以上のマシンを完備し、1000種類以上のエクササイズに対応します。",
       },
@@ -195,12 +200,14 @@ const config: Config = {
         body: "猫背・反り腰・O脚など、日々の不調やクセが気になる方。姿勢評価をもとに、体の使い方から見直していきます。",
       },
       {
-        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-2.jpg` },
+        // position: PC幅(列480px)だとインストラクターの顔が見切れるため上げて表示。
+        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-2.jpg`, position: "center 25%" },
         title: "「産前産後の体の変化が気になる方」",
         body: "出産を経ての不調や歪み、体力の低下に。お体の状態に合わせて、無理のないペースで進めます。",
       },
       {
-        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-3.jpg` },
+        // position: 被写体が写真上寄りのため、頭が見切れないよう上げて表示。
+        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-3.jpg`, position: "center 15%" },
         title: "「理想のボディラインを目指したい方」",
         body: "30〜40代を中心に、幅広い年代の方が通われています。しなやかで引き締まった、一生モノの美しいシルエットへ。",
       },
