@@ -91,7 +91,10 @@ const config: PilatesConfig = {
     title: "ピラティス集客シミュレーション｜コミットアド for ピラティス",
     description:
       "あなたのスタジオなら毎月何件の新規集客が期待できる？店舗情報を入力するだけで、ピラティス専門の集客支援「コミットアド for ピラティス」による集客予測を無料でシミュレーションできます。カンタン30秒。",
-    ogpImage: "/clients/pilates/mv.jpg",
+    /* 絶対URLで指定する。`metadataBase` が未設定のため、相対パスだと Next.js が
+       Vercel の先頭ドメイン（bridal-lp.commitad.com）で解決してしまい、
+       フィットネスのLPにブライダルのドメインが出る（本番で実測）。 */
+    ogpImage: "https://fitness-lp.commitad.com/clients/pilates/mv.jpg",
   },
   cta: "#39BA36",
 
