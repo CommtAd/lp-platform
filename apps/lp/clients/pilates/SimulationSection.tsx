@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import LPForm, { type LPFormField } from "@/components/LPForm";
 
 /**
@@ -15,10 +15,20 @@ import LPForm, { type LPFormField } from "@/components/LPForm";
  *     これは中間指標であって最終CVではない。
  *   - 予約完了 → ここで `Schedule` を発火。**これが最終CV。**
  *   広告側の最適化イベントは `Schedule` に向けること。
+ *
+ * 見た目は顧客の既存LPに合わせ、パープルの帯で白カードを包む形にしている。
  */
 
 const TIMEREX_URL = "https://timerex.net/s/ru-sk/74f10a86";
 const TIMEREX_EMBED_SRC = "https://asset.timerex.net/js/embed.js";
+
+const CREAM = "#F9F8F7";
+const PURPLE = "#C88DC2";
+const PLUM = "#4A2F47";
+const GREEN = "#39BA36";
+const LINE = "#E5E7EB";
+const BODY = "#5C545A";
+const MINCHO = "'Shippori Mincho', 'Hiragino Mincho ProN', serif";
 
 /* ── 集客予測ロジック ───────────────────────────────────────────
    実績が出たら BASE_LO / BASE_HI で全体の水準を、係数テーブルで条件差を動かす。
@@ -63,36 +73,42 @@ function forecast(values: Record<string, string>): { lo: number; hi: number } {
 
 const STEP_LABELS = ["店舗情報", "日程予約", "結果表示"];
 
-function StepBar({ step, accent }: { step: number; accent: string }) {
+/**
+ * 既存LPの STEP ドットを踏襲。現在のステップだけ白抜き、
+ * 済みと未着手はパープル塗り（`#dot1〜3` と同じ考え方）。
+ */
+function StepBar({ step }: { step: number }) {
   return (
-    <div className="mt-7 flex items-center justify-center gap-1.5">
+    <div
+      className="flex items-center justify-center gap-1.5 py-3"
+      style={{ background: CREAM, borderBottom: `1px solid ${LINE}` }}
+    >
+      <span className="mr-1 text-[13px] tracking-[0.08em]" style={{ color: PLUM }}>
+        STEP
+      </span>
       {STEP_LABELS.map((label, i) => {
         const n = i + 1;
-        const active = n === step;
-        const done = n < step;
+        const current = n === step;
         return (
           <span key={label} className="flex items-center gap-1.5">
-            <span className="flex flex-col items-center gap-1">
+            <span className="flex flex-col items-center gap-0.5">
               <span
-                className="flex h-7 w-7 items-center justify-center rounded-full text-[11.5px] font-bold tabular-nums"
+                className="flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-bold tabular-nums"
                 style={{
-                  background: active || done ? accent : "#FFFFFF",
-                  border: `1.5px solid ${accent}`,
-                  color: active || done ? "#FFFFFF" : accent,
+                  background: current ? "#FFFFFF" : PURPLE,
+                  border: `1px solid ${PURPLE}`,
+                  color: current ? PLUM : "#FFFFFF",
                 }}
               >
-                {done ? "✓" : n}
+                {n}
               </span>
               <span
-                className="text-[9.5px] font-bold whitespace-nowrap"
-                style={{ color: active ? accent : "#A9A2A7" }}
+                className="text-[9px] font-bold whitespace-nowrap"
+                style={{ color: current ? PLUM : "#B7AEB5" }}
               >
                 {label}
               </span>
             </span>
-            {n < STEP_LABELS.length && (
-              <span className="mb-4 h-0.5 w-5 rounded-full" style={{ background: done ? accent : "#E4DCE3" }} />
-            )}
           </span>
         );
       })}
@@ -104,12 +120,10 @@ function StepBar({ step, accent }: { step: number; accent: string }) {
 
 interface BookingGateProps {
   values: Record<string, string>;
-  accent: string;
-  cta: string;
   onStep: (step: number) => void;
 }
 
-function BookingGate({ values, accent, cta, onStep }: BookingGateProps) {
+function BookingGate({ values, onStep }: BookingGateProps) {
   const [booked, setBooked] = useState(false);
   const hostRef = useRef<HTMLDivElement>(null);
   const bootedRef = useRef(false);
@@ -183,26 +197,29 @@ function BookingGate({ values, accent, cta, onStep }: BookingGateProps) {
 
   if (booked) {
     const { lo, hi } = forecast(values);
-    return <Result lo={lo} hi={hi} values={values} accent={accent} />;
+    return <Result lo={lo} hi={hi} values={values} />;
   }
 
   return (
-    <div ref={hostRef} className="mt-8 flex flex-col gap-5">
+    <div ref={hostRef} className="flex flex-col gap-5 py-6">
       <span
         className="mx-auto flex h-14 w-14 items-center justify-center rounded-full text-[26px] text-white"
-        style={{ background: cta }}
+        style={{ background: GREEN }}
       >
         ✓
       </span>
-      <p className="text-center text-[18px] font-bold" style={{ color: cta }}>
+      <p className="text-center text-[17px] font-bold" style={{ color: GREEN }}>
         シミュレーション完了！
       </p>
-      <h3 className="text-center text-[20px] font-bold leading-[1.5]" style={{ color: accent }}>
+      <h3
+        className="text-center text-[19px] leading-[1.55] font-semibold"
+        style={{ fontFamily: MINCHO, color: PLUM }}
+      >
         あなたの店舗の
         <br />
         「集客予測」が算出されました。
       </h3>
-      <p className="text-center text-[13px] leading-[1.85] text-slate-500">
+      <p className="text-center text-[13px] leading-[1.95]" style={{ color: BODY }}>
         結果をご確認いただくため、
         <br />
         無料相談の日程をご予約ください。
@@ -210,24 +227,24 @@ function BookingGate({ values, accent, cta, onStep }: BookingGateProps) {
 
       <span
         className="mx-auto rounded-full px-5 py-2 text-[13px] font-bold text-white"
-        style={{ background: accent }}
+        style={{ background: PLUM }}
       >
         あと1STEP
       </span>
 
       <div
-        className="rounded-2xl border border-dashed px-4 py-3.5 text-center"
-        style={{ borderColor: accent, background: "#FAF4F9" }}
+        className="rounded-xl border border-dashed px-4 py-3.5 text-center"
+        style={{ borderColor: PURPLE, background: "#FAF4F9" }}
       >
-        <p className="text-[13px] font-bold" style={{ color: accent }}>
+        <p className="text-[13px] font-bold" style={{ color: PLUM }}>
           🔒 集客予測は日程予約後に公開されます
         </p>
-        <p className="mt-1 text-[11.5px] text-slate-500">
+        <p className="mt-1 text-[11.5px]" style={{ color: BODY }}>
           ご予約が完了すると、この画面で結果を表示します。
         </p>
       </div>
 
-      <p className="text-center text-[14px] font-bold" style={{ color: accent }}>
+      <p className="text-center text-[14px] font-bold" style={{ color: PLUM }}>
         ▼ ご希望の日程を選択してください
       </p>
 
@@ -244,12 +261,10 @@ function Result({
   lo,
   hi,
   values,
-  accent,
 }: {
   lo: number;
   hi: number;
   values: Record<string, string>;
-  accent: string;
 }) {
   const recap: [string, string][] = [
     ["ピラティスのタイプ", values.style ?? "—"],
@@ -257,44 +272,55 @@ function Result({
     ["無料体験", values.taiken ?? "—"],
   ];
 
-  /* 金額・件数と同じ考え方で、数字は白プレート＋濃色で置く。
-     ブランドパープル #C88DC2 は白地で 2.6:1 しか出ないため、
-     一番見せたい桁が一番弱い要素になってしまう。 */
-  const plateStyle: CSSProperties = { background: "#FFFFFF", color: accent };
-
   return (
-    <div className="mt-8">
+    <div className="py-6">
+      {/* 数字は白プレート＋深いプラムで置く。ブランドパープル #C88DC2 は
+          白地で 2.6:1 しか出ないため、一番見せたい桁が一番弱い要素になってしまう。 */}
       <div
-        className="rounded-3xl px-4 py-6 text-center"
-        style={{ background: `linear-gradient(160deg, ${accent} 0%, #3A2338 100%)` }}
+        className="rounded-2xl px-4 py-6 text-center"
+        style={{ background: `linear-gradient(160deg, ${PLUM} 0%, #33203180 100%), ${PLUM}` }}
       >
-        <p className="text-[11px] font-bold tracking-[0.18em] text-white/75">SIMULATION RESULT</p>
-        <div className="mt-3.5 rounded-2xl px-3.5 py-5" style={plateStyle}>
-          <p className="text-[12.5px] text-slate-500">貴社店舗の場合</p>
-          <p className="mt-1.5 text-[26px] font-bold leading-[1.25] tabular-nums">
+        <p className="text-[10.5px] font-bold tracking-[0.22em] text-white/75">SIMULATION RESULT</p>
+        <div className="mt-3.5 rounded-xl bg-white px-3.5 py-5">
+          <p className="text-[12.5px]" style={{ color: BODY }}>
+            貴社店舗の場合
+          </p>
+          <p
+            className="mt-1.5 text-[24px] leading-[1.25] font-semibold tabular-nums"
+            style={{ fontFamily: MINCHO, color: PLUM }}
+          >
             毎月 約<span className="text-[46px]">{lo}</span>〜
             <span className="text-[46px]">{hi}</span>
             <span className="text-[20px]">件</span>
           </p>
-          <p className="mt-1 text-[14.5px] font-bold text-slate-700">新規体験予約の獲得が見込めます</p>
+          <p className="mt-1 text-[14px] font-bold" style={{ color: PLUM }}>
+            新規体験予約の獲得が見込めます
+          </p>
         </div>
         <p className="mt-3.5 text-[10px] leading-[1.7] text-white/70">
           ※過去の運用実績等をもとにした参考値であり、成果を保証するものではありません。
         </p>
       </div>
 
-      <div className="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-5">
-        <p className="text-[15px] font-bold" style={{ color: accent }}>
+      <div className="mt-4 rounded-2xl bg-white px-4 py-5" style={{ border: `1px solid ${LINE}` }}>
+        <p
+          className="text-[16px] leading-[1.5] font-semibold"
+          style={{ fontFamily: MINCHO, color: PLUM }}
+        >
           無料相談のご予約ありがとうございます！
         </p>
-        <p className="mt-2.5 text-[13px] leading-[1.85] text-slate-500">
+        <p className="mt-2.5 text-[13px] leading-[1.95]" style={{ color: BODY }}>
           当日はシミュレーション結果をもとに、店舗の状況に合わせた具体的な集客方法をご提案いたします。
         </p>
-        <dl className="mt-4 flex flex-col gap-2 border-t border-slate-100 pt-3.5">
+        <dl className="mt-4 flex flex-col gap-2 pt-3.5" style={{ borderTop: `1px solid ${LINE}` }}>
           {recap.map(([k, v]) => (
             <div key={k} className="flex justify-between gap-3 text-[12.5px]">
-              <dt className="shrink-0 text-slate-400">{k}</dt>
-              <dd className="text-right font-bold">{v}</dd>
+              <dt className="shrink-0" style={{ color: "#9A9398" }}>
+                {k}
+              </dt>
+              <dd className="text-right font-bold" style={{ color: PLUM }}>
+                {v}
+              </dd>
             </div>
           ))}
         </dl>
@@ -307,57 +333,88 @@ function Result({
 
 export interface SimulationSectionProps {
   clientSlug: string;
-  accent: string;
-  cta: string;
-  ctaGradient: string;
   heading: string;
   lead: string;
   fields: LPFormField[];
   submitLabel: string;
   disclaimer: string;
   errorMessage: string;
+  /** カードを包む帯の煽り（例「カンタン30秒!!」）。 */
+  bandLabel?: string;
+}
+
+function nl(text: string): ReactNode {
+  const parts = text.split("\n");
+  return parts.map((p, i) => (
+    <span key={i}>
+      {p}
+      {i < parts.length - 1 && <br />}
+    </span>
+  ));
 }
 
 export default function SimulationSection({
   clientSlug,
-  accent,
-  cta,
-  ctaGradient,
   heading,
   lead,
   fields,
   submitLabel,
   disclaimer,
   errorMessage,
+  bandLabel,
 }: SimulationSectionProps) {
   const [step, setStep] = useState(1);
 
   return (
     <>
-      <h2 className="text-center text-[20px] font-bold">{heading}</h2>
-      <p className="mt-3 text-center text-[12.5px] leading-[1.85] text-slate-500">
-        {lead.split("\n").map((line, i, all) => (
-          <span key={i}>
-            {line}
-            {i < all.length - 1 && <br />}
-          </span>
-        ))}
+      <h2
+        className="relative pb-5 text-center text-[21px] leading-[1.55] font-semibold"
+        style={{ fontFamily: MINCHO, color: PLUM }}
+      >
+        {heading}
+        <span
+          className="absolute bottom-0 left-1/2 block h-px w-24 -translate-x-1/2"
+          style={{ background: PURPLE }}
+          aria-hidden
+        />
+      </h2>
+      <p className="mt-6 text-center text-[13px] leading-[1.95]" style={{ color: BODY }}>
+        {nl(lead)}
       </p>
 
-      <StepBar step={step} accent={accent} />
-
-      <LPForm
-        clientSlug={clientSlug}
-        accent={cta}
-        fields={fields}
-        submitLabel={submitLabel}
-        errorMessage={errorMessage}
-        disclaimer={disclaimer}
-        submitStyle={{ background: ctaGradient, boxShadow: `0 10px 26px ${cta}66` }}
-        thanks={(values) => (
-          <BookingGate values={values} accent={accent} cta={cta} onStep={setStep} />
+      {/* パープルの帯で白カードを包む（既存LPの `bg-secondary` + 白カード） */}
+      <div className="mt-8 overflow-hidden rounded-xl px-2 pb-2" style={{ background: PURPLE }}>
+        {bandLabel && (
+          <div className="py-3 text-center text-[16px] tracking-[0.14em] text-white">
+            {bandLabel}
+          </div>
         )}
-      />
+        <div className="overflow-hidden rounded-xl bg-white">
+          <StepBar step={step} />
+
+          {/* LPForm の既定の見た目はパターンA（砂色系）なので、この帯の中に
+              収まるよう外側から上書きしている。共通コンポーネントには手を入れない。
+
+              LPForm は1インスタンスだけ置くこと。step で分岐して別要素にすると
+              React が再マウントし、送信済み状態が失われてフォームに戻ってしまう。 */}
+          <div className="px-5 pt-1 pb-7 [&_input]:!rounded-xl [&_input]:!border-[#E5E7EB] [&_select]:!rounded-xl [&_select]:!border-[#E5E7EB] [&_label]:text-center [&_button]:!rounded-xl [&_.lpform-required-tag]:!text-[#ED647D]">
+            <LPForm
+              clientSlug={clientSlug}
+              accent={PURPLE}
+              fields={fields}
+              submitLabel={submitLabel}
+              errorMessage={errorMessage}
+              disclaimer={nl(disclaimer)}
+              submitStyle={{
+                background: GREEN,
+                boxShadow: `0 8px 20px ${GREEN}59`,
+                letterSpacing: "0.04em",
+              }}
+              thanks={(values) => <BookingGate values={values} onStep={setStep} />}
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 }

@@ -259,6 +259,7 @@ const config: PatternBConfig = {
     disclaimer:
       "ご入力内容は無料相談のご案内にのみ使用します。\n算出される件数は運用実績をもとにした参考値であり、成果を保証するものではありません。",
     errorMessage: "必須項目をご入力ください。",
+    bandLabel: "カンタン30秒!!",
   },
 
   sticky: {
