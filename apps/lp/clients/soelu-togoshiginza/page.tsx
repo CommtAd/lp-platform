@@ -192,7 +192,7 @@ function CtaUrgency() {
           letterSpacing: "0.02em",
         }}
       >
-        ＼ 1周年キャンペーンは8月31日まで ／
+        ＼ 1周年キャンペーンは9月30日まで ／
       </span>
     </div>
   );
@@ -770,7 +770,7 @@ export default function Page() {
           <section id="reserve" style={{ padding: "44px 22px 50px", background: "#FFFFFF" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 18px", borderRadius: 999, background: `${gold}14`, border: `1px solid ${gold}55`, color: gold, fontSize: 12, fontWeight: 700, letterSpacing: "0.02em" }}>
-                ＼ 1周年キャンペーンは8月31日まで ／
+                ＼ 1周年キャンペーンは9月30日まで ／
               </span>
             </div>
             <Eyebrow text="RESERVATION" />
