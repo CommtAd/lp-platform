@@ -127,7 +127,8 @@ const config: Config = {
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg`, position: "center 20%" }, text: "反り腰・腰痛が\nつらい" },
       // position: PC幅(列480px)だとインストラクターの頭が見切れるため上げて表示。
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg`, position: "center 35%" }, text: "体重は変わらないのに\nたるんできた" },
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg` }, text: "産前産後の不調・\n歪みが気になる" },
+      // position: PC幅(列480px)だとインストラクターの顔が見切れるため上げて表示。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg`, position: "center 10%" }, text: "産前産後の不調・\n歪みが気になる" },
     ],
     closingPre: "その一つひとつに、",
     closingHighlight: "ここで応えます。",
