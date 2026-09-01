@@ -122,7 +122,8 @@ const config: Config = {
     heading: "こんなお悩み、ありませんか？",
     cards: [
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg` }, text: "猫背・巻き肩が\n気になる" },
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg` }, text: "反り腰・腰痛が\nつらい" },
+      // position: インストラクターの顔が見切れないよう上げて表示。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg`, position: "center 20%" }, text: "反り腰・腰痛が\nつらい" },
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg` }, text: "体重は変わらないのに\nたるんできた" },
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg` }, text: "産前産後の不調・\n歪みが気になる" },
     ],
@@ -152,7 +153,8 @@ const config: Config = {
       },
       {
         num: "03",
-        img: { placeholder: "女性インストラクター／マシンの写真", src: `${ASSET}/reason-3.jpg` },
+        // position: インストラクターの顔（目から上）が見切れないよう上げて表示。
+        img: { placeholder: "女性インストラクター／マシンの写真", src: `${ASSET}/reason-3.jpg`, position: "center 25%" },
         title: "女性専用・女性インストラクター\n安心して通える環境",
         body: "女性のお客様に安心してお過ごしいただける空間づくりを大切にしています。指導はすべて女性インストラクターによるマンツーマン。4種類以上のマシンを完備し、1000種類以上のエクササイズに対応します。",
       },
