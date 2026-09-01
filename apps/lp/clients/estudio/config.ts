@@ -111,7 +111,8 @@ const config: Config = {
 
   about: {
     heading: "Pilates E-studio\nについて",
-    photo: { placeholder: "スタジオ内観／スタッフの写真", src: `${ASSET}/about.jpg` },
+    // position: 被写体が写真下寄りにいるため、天井の器具だけが写らないよう下げて表示。
+    photo: { placeholder: "スタジオ内観／スタッフの写真", src: `${ASSET}/about.jpg`, position: "center 62%" },
     caption: "Natural × Pilates",
     lead: "ピラティスを通して体を改善し、\n心まで整えていく。",
     body: "女性ならではのお悩みに寄りそう、参宮橋の女性専用パーソナルピラティススタジオ。姿勢評価をもとに骨格を本来の位置へ整え、インナーマッスルを活性化させます。単に体重を落とすだけでなく、基礎代謝を上げながら、しなやかに引き締まった「一生モノの美しいシルエット」を形づくります。",
