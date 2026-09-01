@@ -14,8 +14,12 @@ import config from "./config";
  * 画像に焼き込まれている。Meta広告からの流入をフォームまで最短で運ぶための
  * 作りなので、このLPも同じ短さに合わせている。
  *
- * ブロックは5つだけ。**ここに節を足さないこと。**
- *   FV → なぜ件数が分かるのか → 予約までの流れ → シミュレーション → FAQ2問
+ * ヘッダーは置かない。ロゴはMV画像に焼き込まれており、CTAもMV上に重ねてある。
+ * 追従CTAは StickyFooterCTA（400pxで出現）が担うので、上部に固定バーを足すと
+ * 緑のCTAが2つ縦に並ぶだけになる。参照元のLPにもヘッダーは無い。
+ *
+ * ブロックは4つだけ。**ここに節を足さないこと。**
+ *   FV → なぜ件数が分かるのか → シミュレーション → FAQ2問
  *
  * 見た目の作法（参照元から継承）:
  *   1. 地は生成り #F9F8F7、カードは白
@@ -66,36 +70,6 @@ export default function Page() {
     <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
       <div style={{ ...vars, background: "#EFE9EE", minHeight: "100vh" }}>
         <LPCanvas style={{ background: CREAM }} boxShadow="0 0 60px rgba(74,47,71,0.16)">
-          {/* ── header ── */}
-          <header
-            className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b bg-white/95 px-5 py-3.5 backdrop-blur"
-            style={{ borderColor: LINE }}
-          >
-            <div className="flex items-center gap-2.5">
-              <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white"
-                style={{ background: PURPLE }}
-              >
-                {c.header.brand.slice(0, 1)}
-              </span>
-              <div className="leading-tight">
-                <div className="text-[12.5px] font-bold" style={{ color: PLUM }}>
-                  {c.header.brand}
-                </div>
-                <div className="text-[9.5px]" style={{ color: "#9A9398" }}>
-                  {c.header.brandSub}
-                </div>
-              </div>
-            </div>
-            <a
-              href="#form"
-              className="shrink-0 rounded-full px-4 py-2.5 text-[12px] font-bold text-white"
-              style={greenStyle}
-            >
-              {c.header.ctaText}
-            </a>
-          </header>
-
           {/* ── 1. FV ──
               MV画像に ロゴ・バッジ・見出し・リード が焼き込まれているので、
               HTML側では一切重複させない（文言変更は画像の差し替えで行う）。
@@ -163,36 +137,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 3. 予約までの流れ ── */}
-          <section className="px-5 py-11" style={{ background: CREAM }}>
-            <Heading>{c.steps.heading}</Heading>
-            <div className="mt-7 flex flex-col gap-2.5">
-              {c.steps.items.map((s) => (
-                <div
-                  key={s.num}
-                  className="flex items-center gap-3.5 rounded-xl bg-white px-4 py-3.5"
-                  style={{ border: `1px solid ${LINE}` }}
-                >
-                  <span
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white"
-                    style={{ background: PURPLE }}
-                  >
-                    {s.num}
-                  </span>
-                  <div>
-                    <h3 className="text-[13.5px] font-bold" style={{ color: PLUM }}>
-                      {s.title}
-                    </h3>
-                    <p className="text-[11.5px] leading-[1.8]" style={{ color: BODY }}>
-                      {s.body}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* ── 4. シミュレーション ── */}
+          {/* ── 3. シミュレーション ── */}
           <section id="form" className="bg-white px-5 py-11">
             <SimulationSection
               clientSlug={c.slug}
@@ -206,7 +151,7 @@ export default function Page() {
             />
           </section>
 
-          {/* ── 5. FAQ（2問だけ・アコーディオンにしない） ──
+          {/* ── 4. FAQ（2問だけ・アコーディオンにしない） ──
               アコーディオンは1問あたりの余白が大きく、2問で542pxを使っていた。
               このLPは短さが要件なので、開閉なしのQ&Aを直に並べる。 */}
           <section id="faq" className="px-5 py-11" style={{ background: CREAM }}>
