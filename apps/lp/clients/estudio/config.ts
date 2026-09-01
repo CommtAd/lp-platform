@@ -121,10 +121,12 @@ const config: Config = {
   worry: {
     heading: "こんなお悩み、ありませんか？",
     cards: [
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg` }, text: "猫背・巻き肩が\n気になる" },
+      // position: PC幅(列480px)だとインストラクターの顔が見切れるため上げて表示。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg`, position: "center 20%" }, text: "猫背・巻き肩が\n気になる" },
       // position: インストラクターの顔が見切れないよう上げて表示。
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg`, position: "center 20%" }, text: "反り腰・腰痛が\nつらい" },
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg` }, text: "体重は変わらないのに\nたるんできた" },
+      // position: PC幅(列480px)だとインストラクターの頭が見切れるため上げて表示。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg`, position: "center 35%" }, text: "体重は変わらないのに\nたるんできた" },
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg` }, text: "産前産後の不調・\n歪みが気になる" },
     ],
     closingPre: "その一つひとつに、",
@@ -197,7 +199,8 @@ const config: Config = {
         body: "猫背・反り腰・O脚など、日々の不調やクセが気になる方。姿勢評価をもとに、体の使い方から見直していきます。",
       },
       {
-        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-2.jpg` },
+        // position: PC幅(列480px)だとインストラクターの顔が見切れるため上げて表示。
+        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-2.jpg`, position: "center 25%" },
         title: "「産前産後の体の変化が気になる方」",
         body: "出産を経ての不調や歪み、体力の低下に。お体の状態に合わせて、無理のないペースで進めます。",
       },
