@@ -1,10 +1,13 @@
 /**
  * CI rule check (implementation-brief-01.md §7).
  *
- * Every `apps/lp/clients/<slug>/page.tsx` must import LPShell and LPForm.
- * These are the two mandatory building blocks: LPShell injects tags / noindex /
- * UTM capture, LPForm fixes the submission target. An LP that bypasses either
- * silently loses platform functionality, so we fail the build here.
+ * Every `apps/lp/clients/<slug>/` must use LPShell and LPForm — the two
+ * mandatory building blocks: LPShell injects tags / noindex / UTM capture,
+ * LPForm fixes the submission target. An LP that bypasses either silently
+ * loses platform functionality, so we fail the build here.
+ *
+ * LPShell must be imported by `page.tsx` itself; LPForm may live in any `.tsx`
+ * of the LP folder (see the note on REQUIRED_IN_FOLDER below).
  *
  * Exception: an LP whose conversions are handled by an external booking system
  * (the CTA links out instead of posting to LPForm) can be added to
@@ -18,7 +21,19 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const clientsDir = join(root, "apps/lp/clients");
 
-const REQUIRED = ["LPShell", "LPForm"] as const;
+/**
+ * LPShell は page.tsx が直接 import すること（ページ全体を包む役目なので、
+ * 位置がずれると noindex / タグ注入が効かなくなる）。
+ *
+ * LPForm は **LPフォルダ内のどのファイルでもよい**。フォーム前後の状態を持つLPは
+ * page.tsx が server component のままでは書けず、同フォルダの client component に
+ * LPForm を置く必要がある（`pilates` の集客シミュレーションが実例。入力 → 日程予約 →
+ * 結果公開でフォーム後の画面が切り替わる）。
+ * 「LPが独自フォームを手作りして送信先を差し替える」ことを防ぐ目的は、
+ * フォルダ内のどこかに LPForm があることを求めれば同じく達成できる。
+ */
+const REQUIRED_IN_PAGE = ["LPShell"] as const;
+const REQUIRED_IN_FOLDER = ["LPForm"] as const;
 
 /**
  * Slugs intentionally shipped without an on-page LPForm because conversions are
@@ -50,22 +65,38 @@ function clientSlugs(): string[] {
 
 const failures: string[] = [];
 
+/** LPフォルダ直下の .tsx をすべて連結して返す（LPForm の所在探索用）。 */
+function folderSource(slug: string): string {
+  const dir = join(clientsDir, slug);
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".tsx"))
+    .map((f) => readFileSync(join(dir, f), "utf8"))
+    .join("\n");
+}
+
 for (const slug of clientSlugs()) {
-  const pagePath = join(clientsDir, slug, "page.tsx");
-  const src = readFileSync(pagePath, "utf8");
-  const required = FORM_EXEMPT.has(slug)
-    ? REQUIRED.filter((name) => name !== "LPForm")
-    : REQUIRED;
-  const missing = required.filter(
-    (name) => !new RegExp(`import\\s+${name}\\b`).test(src),
-  );
-  if (missing.length > 0) {
-    failures.push(`  ${slug}/page.tsx is missing import(s): ${missing.join(", ")}`);
+  const pageSrc = readFileSync(join(clientsDir, slug, "page.tsx"), "utf8");
+  const imports = (name: string, src: string) =>
+    new RegExp(`import\\s+${name}\\b`).test(src);
+
+  const missingInPage = REQUIRED_IN_PAGE.filter((name) => !imports(name, pageSrc));
+  if (missingInPage.length > 0) {
+    failures.push(`  ${slug}/page.tsx is missing import(s): ${missingInPage.join(", ")}`);
+  }
+
+  if (!FORM_EXEMPT.has(slug)) {
+    const src = folderSource(slug);
+    const missing = REQUIRED_IN_FOLDER.filter((name) => !imports(name, src));
+    if (missing.length > 0) {
+      failures.push(`  ${slug}/ is missing import(s): ${missing.join(", ")}`);
+    }
   }
 }
 
 if (failures.length > 0) {
-  console.error("check-rules FAILED — every clients/*/page.tsx must import LPShell and LPForm:");
+  console.error(
+    "check-rules FAILED — page.tsx must import LPShell, and the LP folder must import LPForm:",
+  );
   console.error(failures.join("\n"));
   process.exit(1);
 }
