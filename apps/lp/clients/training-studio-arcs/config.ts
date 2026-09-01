@@ -7,7 +7,18 @@ const ASSET = "/clients/training-studio-arcs";
  * 予約導線はhacomono店舗別ウィジェットへ直接遷移し、LPFormは使用しない
  * （check-rules.ts の FORM_EXEMPT に登録済み。LPShellは維持）。
  */
-type Config = Omit<PatternAConfig, "form"> & {
+type Config = Omit<PatternAConfig, "form" | "offer"> & {
+  offer: Omit<PatternAConfig["offer"], "items"> & {
+    /**
+     * 120分の内訳（4ステップ）。CVR改善のため「120分＝ずっと運動するわけではない」
+     * ことが一目で分かるよう、丸アイコン6個ではなく所要時間つき4ブロックで見せる。
+     */
+    items: { time: string; label: string }[];
+    /** トライアル価格の下に添える小さな時間補足（120分をメイン訴求から外すための小見出し）。 */
+    timeNote: string[];
+    /** 内訳グリッド直下の一言。「120分間ずっと運動するわけではない」ことを明示する。 */
+    breakdownNote: string;
+  };
   reserve: {
     heading: string;
     lead: string;
@@ -15,6 +26,15 @@ type Config = Omit<PatternAConfig, "form"> & {
     url: string | null;
     ctaText: string;
     note: string;
+  };
+  /**
+   * 口コミ・お客様の声。未取得のため show: false のまま据え置く
+   * （取得でき次第 show: true にして items を追加する。FV直下〜悩み訴求の間に表示される）。
+   */
+  testimonials?: {
+    show: boolean;
+    heading: string;
+    items: { name: string; body: string }[];
   };
 };
 
@@ -40,7 +60,7 @@ const config: Config = {
   meta: {
     title: "パーソナルジムARCS みらい平｜美容整体×マシンピラティス体験1,980円",
     description:
-      "厚生労働大臣認定の病院併設施設で10年の経験を持つトレーナーが在籍。整えてから鍛えるマシンピラティスで、姿勢改善からダイエットまで対応します。みらい平店では120分フルセット体験を1,980円・入会金0円でご案内中。無料駐車場・キッズスペース完備。",
+      "厚生労働大臣認定の病院併設施設で10年の経験を持つトレーナーが在籍。整えてから鍛えるマシンピラティスで、姿勢改善からダイエットまで対応します。みらい平店では初回体験を1,980円・入会金0円でご案内中。無料駐車場・キッズスペース完備。",
     ogpImage: undefined,
   },
   /*
@@ -59,7 +79,11 @@ const config: Config = {
     badgeLines: ["毎月", "5名限定"],
     text: "体験1,980円・入会金0円",
   },
-  achievement: { pre: "茨城県内", num: "5", post: "店舗展開のパーソナルジムが運営" },
+  /*
+   * 「パーソナルジムが運営」だと「結局筋トレのジムでは」という誤解を招くため、
+   * マシンピラティス（整えてから鍛える身体づくり）との連続性が伝わる表現にする。
+   */
+  achievement: { pre: "茨城県内", num: "5", post: "店舗でサポートしてきたARCSが提供" },
 
   fv: {
     catchLines: ["整えてから鍛える、", "ダイエットピラティス"],
@@ -70,18 +94,25 @@ const config: Config = {
 
   offer: {
     eyebrow: "毎月5名様限定キャンペーン",
-    heading: "120分のフルセット体験",
+    // 「120分」をメイン訴求から外す。美容整体×マシンピラティスはFVのカードで既に伝わっているため、
+    // ここは簡潔に「初回体験」とし、不自然な折り返しを避ける。
+    heading: "初回体験",
     trialBadge: "当日ご入会予約で体験料金\n全額キャッシュバック",
     trialRegular: "5,500",
     trialNow: "1,980",
-    items: [
-      "カウン\nセリング",
-      "姿勢確認・\n体組成測定",
-      "美容整体\n体験",
-      "マシン\nピラティス",
-      "体験後\nフィードバック",
-      "オリジナル\nメニュー提案",
+    timeNote: [
+      "初回所要時間：約120分",
+      "※カウンセリング・ご案内を含みます",
+      "※美容整体＋マシンピラティスの体験時間は約50分",
     ],
+    // 6つの丸アイコンではなく「所要時間つき4ブロック」にして、120分の内訳を一目で見せる。
+    items: [
+      { time: "約30分", label: "カウンセリング\n姿勢確認" },
+      { time: "約50分", label: "美容整体+\nマシンピラティス" },
+      { time: "約20分", label: "体験後\nフィードバック" },
+      { time: "約20分", label: "希望者のみ\nご入会案内" },
+    ],
+    breakdownNote: "120分間ずっと施術・運動を行うわけではありません。美容整体＋マシンピラティスの体験は約50分です。",
     photos: [
       { placeholder: "マシンピラティスのレッスン風景", src: `${ASSET}/lesson-1.jpg` },
       { placeholder: "スタジオ内観 / マシン設備", src: `${ASSET}/studio-1.jpg` },
@@ -89,7 +120,13 @@ const config: Config = {
     joinLabel: "入会金",
     joinRegular: "22,000",
     regular: { prefix: "1回 ", amount: "7,700", suffix: "から通える" },
-    ctaText: "120分体験を予約する",
+    ctaText: "1,980円の体験を予約する",
+  },
+
+  testimonials: {
+    show: false,
+    heading: "お客様の声",
+    items: [],
   },
 
   about: {
@@ -100,16 +137,20 @@ const config: Config = {
     body: "ARCSは「All Round Care Service」を掲げるパーソナルジムです。代表は女性専用ジムを経て、厚生労働大臣認定の健康増進施設で10年間現場責任者を務めた経験をもとに、痛くなってからではなく痛くならない身体づくりをご提案します。なかでも美容整体は、骨格の歪みを整え、姿勢の崩れや肩こり・冷えにアプローチするARCSならではのメニューです。",
   },
 
+  /*
+   * ダイエット・ボディメイク／姿勢改善／運動初心者の3軸に絞る
+   * （肩こり・冷え・むくみなど訴求範囲が広すぎたため今回整理）。
+   */
   worry: {
     heading: "こんなお悩み、ありませんか？",
     cards: [
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg` }, text: "肩こり・腰痛が\nなかなか取れない" },
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg` }, text: "姿勢の崩れ・猫背が\n気になってきた" },
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg` }, text: "冷え・むくみ・\n便秘が続いている" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg` }, text: "体重だけでなく\n見た目を変えたい" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg` }, text: "猫背や反り腰が\n気になる" },
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg` }, text: "下腹や脚のライン\nが気になる" },
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg` }, text: "運動が苦手で\n続けられるか不安" },
     ],
-    closingPre: "その不調、",
-    closingHighlight: "ARCSなら整います。",
+    closingPre: "その理想の身体、",
+    closingHighlight: "ARCSなら叶います。",
   },
 
   reasons: {
@@ -139,8 +180,8 @@ const config: Config = {
         body: "決まったメニューを当てはめるのではなく、その日のコンディションを確認して毎回オリジナルのメニューを作成。管理栄養士をはじめ多数の資格保有者が対応します。キッズスペースと無料駐車場を完備し、お子様連れでもお車でも通えます。",
       },
     ],
-    ctaText: "120分体験を予約する",
-    ctaSub: "120分フルセット体験1,980円｜入会金0円",
+    ctaText: "1,980円の体験を予約する",
+    ctaSub: "初回体験1,980円｜入会金0円",
   },
 
   trainers: {
@@ -200,17 +241,17 @@ const config: Config = {
   },
 
   flow: {
-    heading: "120分フルセット体験の流れ",
+    heading: "体験の流れ",
     steps: [
       {
         num: "1",
-        title: "カウンセリング・姿勢確認（30分）",
+        title: "カウンセリング・姿勢確認",
         time: "約30分",
         body: "お悩みや理想のカラダについてお伺いし、姿勢を確認します。必要に応じてInBodyで体組成を測定し、今のカラダの状態を可視化します。",
       },
       {
         num: "2",
-        title: "美容整体＆マシンピラティス体験（50分）",
+        title: "美容整体＆マシンピラティス体験",
         time: "約50分",
         body: "カウンセリングの内容をもとに組み立てたオリジナルメニューで、美容整体とマシンピラティスを体験。整えてから鍛える流れを実際に感じていただきます。",
         trio: [
@@ -221,13 +262,13 @@ const config: Config = {
       },
       {
         num: "3",
-        title: "体験フィードバック・プラン提案（20分）",
+        title: "体験フィードバック・プラン提案",
         time: "約20分",
         body: "体験の感想や気づきをうかがいながら結果をフィードバック。目標やライフスタイルに合わせた、無理のない継続プランをご提案します。",
       },
       {
         num: "4",
-        title: "ご希望の方には手続きご案内（20分）",
+        title: "ご希望の方には手続きご案内",
         time: "約20分",
         body: "ご継続を希望される方には、その場でご入会のお手続きをご案内します。しつこい勧誘はいたしませんので、じっくりご検討いただいて構いません。",
       },
@@ -270,19 +311,19 @@ const config: Config = {
   },
 
   reserve: {
-    heading: "120分フルセット体験のご予約",
+    heading: "体験のご予約",
     lead: "下記のボタンからご希望の日時をお選びいただき、そのままご予約ください。",
     url: "https://arcs.hacomono.jp/widgets/8?isFilterableByCategory=false&isShowStudioInfo=true&studioIds=3",
-    ctaText: "120分体験を予約する",
-    note: "120分体験1,980円｜入会金0円｜しつこい勧誘はいたしません。",
+    ctaText: "1,980円の体験を予約する",
+    note: "初回体験1,980円｜入会金0円｜しつこい勧誘はいたしません。",
   },
 
   sticky: {
     offers: [
-      { label: "120分体験", value: "¥1,980" },
+      { label: "体験", value: "¥1,980" },
       { label: "入会金", value: "¥0" },
     ],
-    buttonText: "120分体験を予約する",
+    buttonText: "1,980円の体験を予約する",
     anchor: "#reserve",
   },
 };
