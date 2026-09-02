@@ -169,6 +169,8 @@ interface BookingGateProps {
 function BookingGate({ values, onStep }: BookingGateProps) {
   const [booked, setBooked] = useState(false);
   const hostRef = useRef<HTMLDivElement>(null);
+  /** 予測直下のCTAからスクロールで送る先。 */
+  const bookingRef = useRef<HTMLParagraphElement>(null);
   const bootedRef = useRef(false);
 
   /* 送信ボタンはフォーム下端にあるため、差し替え直後は肝心の数字が画面外に
@@ -271,6 +273,26 @@ function BookingGate({ values, onStep }: BookingGateProps) {
 
       <ForecastCard lo={lo} hi={hi} />
 
+      {/* 件数を見た直後に動ける人向けの近道。下の訴求ブロックを読まなくても
+          カレンダーへ飛べるようにしている。このLPに遷移先の別ページは無いので
+          リンクではなくスクロールで送る（ボタンは1画面に2つ出るが、上は近道、
+          下はカレンダー本体という役割分担）。 */}
+      <button
+        type="button"
+        onClick={() =>
+          bookingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
+        className="flex h-14 w-full items-center justify-center gap-1.5 rounded-xl text-[16px] font-bold text-white"
+        style={{
+          background: GREEN,
+          boxShadow: `0 8px 20px ${GREEN}59`,
+          letterSpacing: "0.04em",
+        }}
+      >
+        勝ちパターンを聞く
+        <span aria-hidden>↓</span>
+      </button>
+
       {/* 数字を見せたうえで予約に進ませるブロック。予約の動機は「ロック解除」ではなく
           「この件数をどう取るかの具体策」。文言は営業判断で確定（2026-09-02）。
 
@@ -333,7 +355,13 @@ function BookingGate({ values, onStep }: BookingGateProps) {
         </p>
       </div>
 
-      <p className="text-center text-[14px] font-bold" style={{ color: PLUM }}>
+      {/* scroll-mt-6: CTAからのスクロール時に上端へ張り付かないよう余白を持たせる
+          （下書きプレビューの帯にも隠れない）。 */}
+      <p
+        ref={bookingRef}
+        className="scroll-mt-6 text-center text-[14px] font-bold"
+        style={{ color: PLUM }}
+      >
         ▼ ご希望の日程を選択してください
       </p>
 
