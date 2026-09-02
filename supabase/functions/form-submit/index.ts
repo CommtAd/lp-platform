@@ -301,6 +301,23 @@ interface ConfirmationMeta {
   /** Override for the admin notification's subject line. Supports the {{name}} placeholder. */
   adminSubject?: string;
   /**
+   * Override for the **submitter** confirmation email's subject line.
+   * Supports the {{name}} placeholder. Takes priority over the 予約完了 formats,
+   * so only set it on clients whose form is not a 予約 (e.g. pilates'
+   * simulation). Defaults to 「【{clientName}】お申し込みを受け付けました」.
+   */
+  confirmationSubject?: string;
+  /**
+   * Prose lines for the **submitter** confirmation email, replacing the default
+   * 「〜へのお申し込み・お問い合わせを受け付けました／担当より追ってご連絡いたします」
+   * paragraph. One entry per line (joined with <br>). Supports {{name}} and
+   * {{clientName}}.
+   *
+   * Only applies to the generic fallback format — the `letter` and
+   * 店舗/日時 formats have their own wording and ignore this.
+   */
+  confirmationLines?: string[];
+  /**
    * The LP form's own fields, in display order — mirrors `config.ts`'s
    * `form.fields`. Drives the 「お問い合わせ内容」 block of BOTH notification
    * emails:
@@ -361,6 +378,16 @@ const DEFAULT_LETTER_INTRO_LINES = [
   "この度は、体験レッスンへのお申し込みをいただき誠にありがとうございます。",
   "{{name}}のご予約を確定させていただきましたのでご案内いたします。",
   "こちらの内容で確定とさせていただきます。",
+];
+
+/**
+ * Default `confirmationLines` — the original wording, shared by every client
+ * until overridden. Written for the 予約/問い合わせ shape, where the visitor
+ * submits and then waits for a callback.
+ */
+const DEFAULT_CONFIRMATION_LINES = [
+  "{{clientName}} へのお申し込み・お問い合わせを受け付けました。",
+  "担当より追ってご連絡いたしますので、今しばらくお待ちください。",
 ];
 
 /** Default `adminGreeting` — the original wording, shared by every client until overridden. */
@@ -505,11 +532,21 @@ function buildConfirmationHtml(params: {
         )}</div>`
       : "";
 
+  const proseHtml = (params.meta.confirmationLines ?? DEFAULT_CONFIRMATION_LINES)
+    .map((line) =>
+      escapeHtml(
+        renderLetterLine(line, {
+          name: params.submitterName ?? "",
+          clientName: params.clientName,
+        }),
+      ),
+    )
+    .join("<br>\n      ");
+
   return `
     <div style="font-family: sans-serif; font-size: 14px; color: #222;">
       <p>${greeting}</p>
-      <p>${escapeHtml(params.clientName)} へのお申し込み・お問い合わせを受け付けました。<br>
-      担当より追ってご連絡いたしますので、今しばらくお待ちください。</p>
+      <p>${proseHtml}</p>
       ${echoHtml}
       <p style="color:#999; font-size:12px; margin-top:24px;">
         ※このメールは送信専用です。返信いただいてもご対応できません。
@@ -524,6 +561,13 @@ function buildConfirmationSubject(params: {
   formData: Record<string, string>;
   meta: ConfirmationMeta;
 }): string {
+  if (params.meta.confirmationSubject) {
+    return renderLetterLine(params.meta.confirmationSubject, {
+      name: typeof params.formData.name === "string" ? params.formData.name : "",
+      clientName: params.clientName,
+    });
+  }
+
   const dt1 = params.formData.date1
     ? formatJaDateTime(params.formData.date1, params.formData.time1)
     : undefined;
