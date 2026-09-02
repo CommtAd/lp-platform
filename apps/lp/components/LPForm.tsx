@@ -40,6 +40,26 @@ export type CheckboxGroupField = FieldBase & {
   options: { value: string; label: string }[];
   columns?: number;
 };
+/**
+ * 入力欄ではなく、フィールドの合間に差し込む説明ブロック。
+ * 「ここから先も入力する価値がある」を伝えるための見出し＋補足で、
+ * 値を持たないので送信データには一切入らない。
+ *
+ * 見出しは `label`、補足は `body`、箇条書きは `items`、締めの一文は `outro`。
+ * すべて省略可なので、見出しだけの一行バナーから箇条書き付きの訴求ブロックまで
+ * 同じ型で作れる。地色と枠は `accent` から作るためLPごとの配色に自動で追従する。
+ * 個別に上書きしたいときは `.lpform-note` / `.lpform-note-title` /
+ * `.lpform-note-body` / `.lpform-note-items` / `.lpform-note-outro` を使う。
+ */
+export type NoteField = FieldBase & {
+  type: "note";
+  /** 見出しの下に置く補足文。 */
+  body?: string;
+  /** 箇条書き。白プレートに載せてチェックマーク付きで並べる。 */
+  items?: string[];
+  /** 箇条書きの後に置く締めの一文（「まで、詳しくチェックできます。」など）。 */
+  outro?: string;
+};
 export type SelectField = FieldBase & {
   type: "select";
   /** Flat option list. Use `groups` instead for a grouped <optgroup> layout. */
@@ -66,7 +86,13 @@ export type SelectField = FieldBase & {
   };
   placeholder?: string;
 };
-export type LPFormField = ToggleField | InputField | TextareaField | SelectField | CheckboxGroupField;
+export type LPFormField =
+  | ToggleField
+  | InputField
+  | TextareaField
+  | SelectField
+  | CheckboxGroupField
+  | NoteField;
 
 export interface LPFormProps {
   /** Slug of the owning client — sent with every submission. */
@@ -280,7 +306,7 @@ export default function LPForm({
     // which the backend can't dedup → duplicate notification emails).
     if (submittingRef.current) return;
     const missing = fields.some(
-      (f) => f.required && !(values[f.name] ?? "").trim(),
+      (f) => f.type !== "note" && f.required && !(values[f.name] ?? "").trim(),
     );
     // Defense in depth: browsers that fall back to a plain text input for
     // type="date" would otherwise let someone type today's date manually,
@@ -379,6 +405,99 @@ export default function LPForm({
       }}
     >
       {fields.map((f) => {
+        if (f.type === "note") {
+          return (
+            <div
+              key={f.name}
+              className="lpform-note"
+              style={{
+                ...fieldWrapperStyle,
+                background: `${accent}1F`,
+                border: `1px solid ${accent}`,
+                borderRadius: 12,
+                padding: "14px 16px",
+                textAlign: "center",
+              }}
+            >
+              <p
+                className="lpform-note-title"
+                style={{
+                  fontSize: 13.5,
+                  fontWeight: 700,
+                  lineHeight: 1.65,
+                  color: "#33352E",
+                  margin: 0,
+                }}
+              >
+                {f.label}
+              </p>
+              {f.body && (
+                <p
+                  className="lpform-note-body"
+                  style={{
+                    fontSize: 11.5,
+                    lineHeight: 1.8,
+                    color: "#62655B",
+                    margin: "6px 0 0",
+                  }}
+                >
+                  {f.body}
+                </p>
+              )}
+              {f.items && f.items.length > 0 && (
+                /* 白プレートに載せる。淡いアクセント地の上に直接置くとコントラストが
+                   足らず、一番読ませたい箇条書きが一番弱い要素になる。 */
+                <ul
+                  className="lpform-note-items"
+                  style={{
+                    listStyle: "none",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 7,
+                    margin: "10px 0 0",
+                    padding: "12px 14px",
+                    background: "#FFFFFF",
+                    borderRadius: 10,
+                    textAlign: "left",
+                  }}
+                >
+                  {f.items.map((item) => (
+                    <li
+                      key={item}
+                      style={{
+                        display: "flex",
+                        gap: 7,
+                        fontSize: 12,
+                        lineHeight: 1.6,
+                        fontWeight: 700,
+                        color: "#33352E",
+                      }}
+                    >
+                      <span aria-hidden style={{ color: accent, flexShrink: 0 }}>
+                        ✓
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {f.outro && (
+                <p
+                  className="lpform-note-outro"
+                  style={{
+                    fontSize: 11.5,
+                    lineHeight: 1.8,
+                    color: "#62655B",
+                    margin: "8px 0 0",
+                  }}
+                >
+                  {f.outro}
+                </p>
+              )}
+            </div>
+          );
+        }
+
         if (f.type === "toggle") {
           return (
             <div key={f.name} style={fieldWrapperStyle}>

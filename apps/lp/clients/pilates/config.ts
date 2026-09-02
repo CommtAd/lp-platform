@@ -5,7 +5,7 @@ import type { LPFormField } from "@/components/LPForm";
  * コミットアドforピラティス — 集客シミュレーションLP。
  *
  * 対象: ピラティススタジオのオーナー（BtoB）。Meta広告からのスマホ流入が中心。
- * 導線: 店舗情報入力 → TimeRexで日程予約 → 予約完了 → 集客予測を公開。
+ * 導線: 店舗情報入力 → 集客予測を表示 → 同じ画面の下でTimeRex日程予約 → 予約完了。
  *
  * **最終CVは「TimeRex予約完了」（`Schedule`）で、フォーム送信ではない。**
  * フォーム送信では LPForm が `clients.meta_cv_event`（fitness既定 = Lead）を
@@ -124,7 +124,7 @@ const config: PilatesConfig = {
 
   form: {
     heading: "ピラティス集客シミュレーション",
-    lead: "貴社の店舗についてご入力ください。\n日程予約が完了すると、集客予測が表示されます。",
+    lead: "貴社の店舗についてご入力ください。\n送信するとその場で集客予測が表示されます。",
     bandLabel: "カンタン30秒!!",
     fields: [
       {
@@ -175,18 +175,51 @@ const config: PilatesConfig = {
           { value: "なし", label: "なし" },
         ],
       },
+      /* 連絡先4項目の前に、入力する意味を伝える説明ブロックを置く。
+         文言は営業判断で確定（2026-09-02）。
+
+         **重要: ここで挙げた4項目はLP上の数値では出ない。**
+         `forecast()` が見るのは taiken と prefecture だけで、連絡先も市区町村も
+         件数を一切動かさない（同じ体験有無・同じ都道府県なら必ず同じ件数が出る）。
+         とくに「想定CPA・獲得件数」はLPに一切実装がなく、画面に出るのは
+         `forecast()` のレンジだけ。したがってこの4項目は**無料相談で人が提示する
+         約束**であり、LPの表示で満たされるものではない。
+         この文言のままLPだけを触る場合、実装の追加は不要（表示は変わらない）。
+         逆に「入力すると画面の予測が変わる」ように見せたくなったら、先に条件表
+         （顧客指定・2026-09-01）の改訂が必要。 */
+      {
+        type: "note",
+        name: "contactNote",
+        label: "店舗情報をご入力いただくと、より詳しい集客予測がわかります！",
+        body: "入力内容をもとに、あなたの店舗に合わせて",
+        items: [
+          "店舗に合った集客方法",
+          "狙うべきユーザー層",
+          "体験予約を増やす改善ポイント",
+          "想定CPA・獲得件数",
+        ],
+        outro: "まで、詳しくチェックできます。",
+      },
+      /* 連絡先4項目は任意（2026-09-02・顧客指定）。集客予測の算出に必要な入力
+         （style / prefecture / taiken）は上でぜんぶ必須にしてあるので、予測は
+         連絡先が空でも出せる。氏名とメールは後段の TimeRex 予約フォームが改めて
+         必須で取るため、ここで必須にすると二重入力になり、予測を見る前の離脱要因
+         になる。入力があれば TimeRex へ自動転記される
+         （`SimulationSection.tsx` の guest_* / url_params）。
+         **予約まで進まなかった訪問者は連絡先が残らない**点に注意。
+         フォーム送信のLeadは件数の指標としてのみ使い、リストとしては使えない。 */
       {
         type: "text",
         name: "company",
         label: "企業名・店舗名",
-        required: true,
+        optionalTag: "任意",
         placeholder: "例：株式会社コミットアド",
       },
-      { type: "text", name: "name", label: "ご担当者名", required: true, placeholder: "例：山田 太郎" },
-      { type: "email", name: "email", label: "メールアドレス", required: true, placeholder: "例：info@example.com" },
-      { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "例：0312345678" },
+      { type: "text", name: "name", label: "ご担当者名", optionalTag: "任意", placeholder: "例：山田 太郎" },
+      { type: "email", name: "email", label: "メールアドレス", optionalTag: "任意", placeholder: "例：info@example.com" },
+      { type: "tel", name: "tel", label: "電話番号", optionalTag: "任意", placeholder: "例：0312345678" },
     ],
-    submitLabel: "集客予測を算出する",
+    submitLabel: "結果を見る",
     disclaimer:
       "ご入力内容は無料相談のご案内にのみ使用します。\n算出される件数は運用実績をもとにした参考値であり、成果を保証するものではありません。",
     errorMessage: "必須項目をご入力ください。",
@@ -196,8 +229,8 @@ const config: PilatesConfig = {
     heading: "よくあるご質問",
     items: [
       {
-        q: "なぜ結果を見る前に日程予約が必要なのですか？",
-        a: "エリアや形態によって前提が大きく変わるため、数字だけをお渡ししても誤解を招きかねません。無料相談の中で根拠と前提をあわせてご説明したいと考えており、ご予約を先にお願いしています。",
+        q: "集客予測はすぐに見られますか？",
+        a: "はい。フォームを送信いただくと、その場で集客予測が表示されます。ただしエリアや形態によって前提が大きく変わるため、数字だけでは誤解を招きかねません。続けて無料相談をご予約いただければ、その数字の根拠と前提をあわせてご説明します。",
       },
       {
         q: "シミュレーションだけの利用でも大丈夫ですか？",

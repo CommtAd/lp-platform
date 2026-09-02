@@ -6,9 +6,11 @@ import LPForm, { type LPFormField } from "@/components/LPForm";
 /**
  * 集客シミュレーション導線。
  *
- * 入力 → TimeRexで日程予約 → 予約完了後に結果公開、の3ステップ。
- * 「結果を見たい」という動機で予約まで進んでもらうのが狙いなので、
- * **結果は予約完了まで絶対に出さない**。
+ * 入力 → 集客予測を表示（同じ画面の下にTimeRex）→ 予約完了、の3ステップ。
+ *
+ * 2026-09-02に「結果は予約完了まで出さない」ゲート方式から変更した（顧客指定）。
+ * 先に数字を見せて信頼を作り、その根拠を聞くために予約してもらう組み立て。
+ * ゲートに戻す場合は `BookingGate` の未予約分岐から `<ForecastCard>` を外すだけでよい。
  *
  * CV設計:
  *   - フォーム送信 → LPForm が `clients.meta_cv_event`（fitness既定 = Lead）を発火。
@@ -74,7 +76,7 @@ function forecast(values: Record<string, string>): { lo: number; hi: number } {
 
 /* ── ステップインジケーター ─────────────────────────────────── */
 
-const STEP_LABELS = ["店舗情報", "日程予約", "結果表示"];
+const STEP_LABELS = ["店舗情報", "結果・予約", "予約完了"];
 
 /**
  * 既存LPの STEP ドットを踏襲。現在のステップだけ白抜き、
@@ -119,7 +121,45 @@ function StepBar({ step }: { step: number }) {
   );
 }
 
-/* ── 予約ステップ → 結果 ───────────────────────────────────── */
+/* ── 集客予測カード ─────────────────────────────────────────── */
+
+/**
+ * 予測件数の表示。フォーム送信直後（STEP2）と予約完了後（STEP3）の両方で
+ * 出すため、同一の見た目になるよう切り出している。
+ */
+function ForecastCard({ lo, hi }: { lo: number; hi: number }) {
+  return (
+    <div
+      className="rounded-2xl px-4 py-6 text-center"
+      style={{ background: `linear-gradient(160deg, ${PLUM} 0%, #33203180 100%), ${PLUM}` }}
+    >
+      <p className="text-[10.5px] font-bold tracking-[0.22em] text-white/75">SIMULATION RESULT</p>
+      {/* 数字は白プレート＋深いプラムで置く。ブランドパープル #C88DC2 は
+          白地で 2.6:1 しか出ないため、一番見せたい桁が一番弱い要素になってしまう。 */}
+      <div className="mt-3.5 rounded-xl bg-white px-3.5 py-5">
+        <p className="text-[12.5px]" style={{ color: BODY }}>
+          貴社店舗の場合
+        </p>
+        <p
+          className="mt-1.5 text-[24px] leading-[1.25] font-semibold tabular-nums"
+          style={{ fontFamily: MINCHO, color: PLUM }}
+        >
+          毎月 約<span className="text-[46px]">{lo}</span>〜
+          <span className="text-[46px]">{hi}</span>
+          <span className="text-[20px]">件</span>
+        </p>
+        <p className="mt-1 text-[14px] font-bold" style={{ color: PLUM }}>
+          新規体験予約の獲得が見込めます
+        </p>
+      </div>
+      <p className="mt-3.5 text-[10px] leading-[1.7] text-white/70">
+        ※過去の運用実績等をもとにした参考値であり、成果を保証するものではありません。
+      </p>
+    </div>
+  );
+}
+
+/* ── 予約ステップ（結果表示 + TimeRex） ─────────────────────── */
 
 interface BookingGateProps {
   values: Record<string, string>;
@@ -131,8 +171,11 @@ function BookingGate({ values, onStep }: BookingGateProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const bootedRef = useRef(false);
 
+  /* 送信ボタンはフォーム下端にあるため、差し替え直後は肝心の数字が画面外に
+     なりうる。予測まで自動で送る。 */
   useEffect(() => {
     onStep(2);
+    hostRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [onStep]);
 
   /* 予約完了 = 最終CV。ここでしか Schedule を発火させない。 */
@@ -159,6 +202,10 @@ function BookingGate({ values, onStep }: BookingGateProps) {
     type WithTimerex = { TimerexCalendar?: (o: TimerexOptions) => void };
 
     const call = () => {
+      /* call() は下の load リスナーとしても登録される。StrictMode の二重実行で
+         リスナーが2本張られるため、ここで弾かないと TimerexCalendar() が2回走り
+         カレンダーが2つ描画される（開発時に実測）。 */
+      if (bootedRef.current) return true;
       const fn = (window as unknown as WithTimerex).TimerexCalendar;
       if (typeof fn !== "function") return false;
       bootedRef.current = true;
@@ -198,10 +245,9 @@ function BookingGate({ values, onStep }: BookingGateProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booked]);
 
-  if (booked) {
-    const { lo, hi } = forecast(values);
-    return <Result lo={lo} hi={hi} values={values} />;
-  }
+  const { lo, hi } = forecast(values);
+
+  if (booked) return <Result lo={lo} hi={hi} values={values} />;
 
   return (
     <div ref={hostRef} className="flex flex-col gap-5 py-6">
@@ -222,28 +268,68 @@ function BookingGate({ values, onStep }: BookingGateProps) {
         <br />
         「集客予測」が算出されました。
       </h3>
-      <p className="text-center text-[13px] leading-[1.95]" style={{ color: BODY }}>
-        結果をご確認いただくため、
-        <br />
-        無料相談の日程をご予約ください。
-      </p>
 
-      <span
-        className="mx-auto rounded-full px-5 py-2 text-[13px] font-bold text-white"
-        style={{ background: PLUM }}
-      >
-        あと1STEP
-      </span>
+      <ForecastCard lo={lo} hi={hi} />
 
+      {/* 数字を見せたうえで予約に進ませるブロック。予約の動機は「ロック解除」ではなく
+          「この件数をどう取るかの具体策」。文言は営業判断で確定（2026-09-02）。
+
+          ✓リストの見た目は STEP1 の `.lpform-note-items`（LPForm の note）と
+          意図的に揃えている。片方だけ直すと同じLP内で作りが割れるので、
+          見た目を変えるときは両方あわせて直すこと。
+
+          ここで挙げた4項目も `forecast()` の出力とは無関係で、無料相談で人が
+          共有する約束。LP側に実装は無い（config.ts の contactNote と同じ扱い）。 */}
       <div
-        className="rounded-xl border border-dashed px-4 py-3.5 text-center"
-        style={{ borderColor: PURPLE, background: "#FAF4F9" }}
+        className="rounded-2xl px-4 py-5 text-center"
+        style={{ border: `1px solid ${PURPLE}`, background: "#FAF4F9" }}
       >
-        <p className="text-[13px] font-bold" style={{ color: PLUM }}>
-          🔒 集客予測は日程予約後に公開されます
+        <p
+          className="text-[16px] leading-[1.5] font-semibold"
+          style={{ fontFamily: MINCHO, color: PLUM }}
+        >
+          この件数、あなたの店舗では
+          <br />
+          どうやって獲得する？
         </p>
-        <p className="mt-1 text-[11.5px]" style={{ color: BODY }}>
-          ご予約が完了すると、この画面で結果を表示します。
+        <p className="mt-2.5 text-[11.5px] leading-[1.85]" style={{ color: BODY }}>
+          この数字を目指すためには、広告だけでなく、
+          <br />
+          クリエイティブ・予約導線・特典設計まで含めた集客設計が重要です！
+        </p>
+
+        <p className="mt-3.5 text-[12.5px] font-bold" style={{ color: PLUM }}>
+          【このページ限定】
+        </p>
+        <p className="mt-1 text-[11.5px] leading-[1.85]" style={{ color: BODY }}>
+          下記より日程をご予約いただいた方には、
+          <br />
+          シミュレーション結果をもとに、
+        </p>
+
+        {/* 淡いピンク地に直接置くとコントラストが足らないので白プレートに載せる。 */}
+        <ul className="mt-2.5 flex flex-col gap-1.5 rounded-xl bg-white px-2.5 py-3 text-left">
+          {[
+            "成果につながりやすい広告クリエイティブ",
+            "来店率を高める広告・予約導線",
+            "入会率を高めるキャンペーン・特典",
+            "あなたの店舗で優先すべき改善ポイント",
+          ].map((item) => (
+            <li
+              key={item}
+              className="flex gap-1 text-[11.5px] leading-[1.6] font-bold"
+              style={{ color: PLUM }}
+            >
+              <span aria-hidden className="shrink-0" style={{ color: PURPLE }}>
+                ✓
+              </span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-2.5 text-[12.5px] font-bold" style={{ color: PLUM }}>
+          まで具体的にご共有します！
         </p>
       </div>
 
@@ -252,6 +338,17 @@ function BookingGate({ values, onStep }: BookingGateProps) {
       </p>
 
       {/* Begin TimeRex Widget */}
+      {/* TimeRexはレイアウトを `window.innerWidth` で決める外部ウィジェットで、
+          キャンバスのzoomの外側＝ブラウザ幅を見る。そのためPC幅で検収すると
+          min-width:550px のPC版が出て、361pxの枠に対し190pxほどはみ出す
+          （実機幅では min-width が0に落ちてモバイル版になり、ほぼ収まる）。
+          **ラッパーを足して逃がす必要はない。** embed.js が `#timerex_calendar`
+          自体に `overflow-x: auto` をインラインで付けるので、横スクロールは
+          ウィジェット側で成立している（scrollWidth 550 / clientWidth 294 で
+          右端まで到達することを実測済み）。自前のスクロールコンテナで包むと
+          入れ子のスクロール領域ができてスワイプが曖昧になるだけ。
+          なおこのブロックはPC幅と実機幅で見た目が一致しない。外部ウィジェットの
+          都合なので、§20の改行一致の検収基準はここには適用できない。 */}
       <div id="timerex_calendar" data-url={TIMEREX_URL} style={{ minHeight: 60 }} />
       {/* End TimeRex Widget */}
     </div>
@@ -277,33 +374,7 @@ function Result({
 
   return (
     <div className="py-6">
-      {/* 数字は白プレート＋深いプラムで置く。ブランドパープル #C88DC2 は
-          白地で 2.6:1 しか出ないため、一番見せたい桁が一番弱い要素になってしまう。 */}
-      <div
-        className="rounded-2xl px-4 py-6 text-center"
-        style={{ background: `linear-gradient(160deg, ${PLUM} 0%, #33203180 100%), ${PLUM}` }}
-      >
-        <p className="text-[10.5px] font-bold tracking-[0.22em] text-white/75">SIMULATION RESULT</p>
-        <div className="mt-3.5 rounded-xl bg-white px-3.5 py-5">
-          <p className="text-[12.5px]" style={{ color: BODY }}>
-            貴社店舗の場合
-          </p>
-          <p
-            className="mt-1.5 text-[24px] leading-[1.25] font-semibold tabular-nums"
-            style={{ fontFamily: MINCHO, color: PLUM }}
-          >
-            毎月 約<span className="text-[46px]">{lo}</span>〜
-            <span className="text-[46px]">{hi}</span>
-            <span className="text-[20px]">件</span>
-          </p>
-          <p className="mt-1 text-[14px] font-bold" style={{ color: PLUM }}>
-            新規体験予約の獲得が見込めます
-          </p>
-        </div>
-        <p className="mt-3.5 text-[10px] leading-[1.7] text-white/70">
-          ※過去の運用実績等をもとにした参考値であり、成果を保証するものではありません。
-        </p>
-      </div>
+      <ForecastCard lo={lo} hi={hi} />
 
       <div className="mt-4 rounded-2xl bg-white px-4 py-5" style={{ border: `1px solid ${LINE}` }}>
         <p
@@ -400,7 +471,7 @@ export default function SimulationSection({
 
               LPForm は1インスタンスだけ置くこと。step で分岐して別要素にすると
               React が再マウントし、送信済み状態が失われてフォームに戻ってしまう。 */}
-          <div className="px-5 pt-1 pb-7 [&_input]:!rounded-xl [&_input]:!border-[#E5E7EB] [&_select]:!rounded-xl [&_select]:!border-[#E5E7EB] [&_label]:text-center [&_button]:!rounded-xl [&_.lpform-required-tag]:!text-[#ED647D]">
+          <div className="px-5 pt-1 pb-7 [&_input]:!rounded-xl [&_input]:!border-[#E5E7EB] [&_select]:!rounded-xl [&_select]:!border-[#E5E7EB] [&_label]:text-center [&_button]:!rounded-xl [&_.lpform-required-tag]:!text-[#ED647D] [&_.lpform-note-title]:!text-[#4A2F47]">
             <LPForm
               clientSlug={clientSlug}
               accent={PURPLE}
