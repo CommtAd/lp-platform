@@ -1,0 +1,840 @@
+import type { ClientStatus } from "@shared/index";
+import type { LPFormField } from "@/components/LPForm";
+
+/**
+ * パーソナルマシンピラティス SAKURA — ブランド全体の広告集客用LP（Meta広告流入）。
+ *
+ * 掲載内容はすべて公式サイト（sakura-pilates.jp）の記載に基づく。
+ * 事実確認できない数値・実績は載せない方針なので、追記するときは必ず
+ * 公式サイトの該当ページを確認してから足すこと。出典は各ブロックのコメントに残してある。
+ *
+ * 店舗単位のLPではない（住所・電話・インストラクターは店舗ごとに違うため載せない）。
+ * CVは「体験レッスンの予約フォーム送信」で、希望店舗はフォームの select で受ける。
+ */
+
+/** 画像スロット。`src` が空ならプレースホルダが出る。 */
+export interface Slot {
+  placeholder: string;
+  src?: string | null;
+  /** 切り抜き位置（object-position）。既定は "center"。 */
+  position?: string;
+}
+
+export interface SakuraConfig {
+  slug: string;
+  status?: ClientStatus;
+  meta: { title: string; description: string; ogpImage?: string };
+
+  /** オファーバー（ヘッダー直下の帯）。公式の店舗キャンペーンバナーと同内容。 */
+  offerBar: { note: string; text: string; badge: string };
+
+  header: { brand: string; brandSub: string; ctaText: string };
+
+  fv: {
+    /** 縦書きの明朝キャッチ（1要素＝1行）。採用理由は下の CATCH_CANDIDATES を参照。 */
+    catchLines: string[];
+    sub: string;
+    hero: Slot;
+    /** FV下部の信頼バッジ。 */
+    stats: { num: string; unit: string; label: string }[];
+    /** キャンペーンカード（二重価格）。 */
+    campaign: {
+      note: string;
+      rows: { label: string; was: string; now: string }[];
+      foot: string;
+    };
+    ctaText: string;
+    ctaSub: string;
+  };
+
+  worry: {
+    kicker: string;
+    heading: string;
+    chips: string[];
+    cards: { img: Slot; text: string }[];
+    closing: string;
+  };
+
+  bridge: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    photo: Slot;
+    items: { title: string; body: string }[];
+    ctaText: string;
+    ctaSub: string;
+  };
+
+  features: {
+    kicker: string;
+    heading: string;
+    items: { num: string; title: string; body: string; img?: Slot }[];
+  };
+
+  personal: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    photo: Slot;
+    items: { title: string; body: string }[];
+    versus: { label: string; group: string; sakura: string }[];
+  };
+
+  beginner: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    photos: [Slot, Slot];
+    items: { title: string; body: string }[];
+    ctaText: string;
+    ctaSub: string;
+  };
+
+  proof: {
+    kicker: string;
+    heading: string;
+    stats: { num: string; unit: string; label: string }[];
+    badges: string[];
+    note: string;
+  };
+
+  program: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    groups: { label: string; items: { en: string; ja: string }[] }[];
+    note: string;
+  };
+
+  voices: {
+    kicker: string;
+    heading: string;
+    items: { title: string; body: string; who: string }[];
+    note: string;
+  };
+
+  price: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    join: { label: string; was: string; now: string; note: string };
+    plans: {
+      name: string;
+      desc: string;
+      amount: string;
+      unit: string;
+      per: string;
+      badge?: string;
+    }[];
+    notes: string[];
+    ctaText: string;
+    ctaSub: string;
+  };
+
+  compare: {
+    kicker: string;
+    heading: string;
+    /** 評価軸ごとに1枚のカード。先頭が SAKURA。 */
+    axes: { label: string; rows: { name: string; text: string }[] }[];
+  };
+
+  flow: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    steps: { num: string; title: string; body: string }[];
+    ctaText: string;
+    ctaSub: string;
+  };
+
+  faq: { kicker: string; heading: string; items: { q: string; a: string }[] };
+
+  studios: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    photo: Slot;
+    areas: { pref: string; names: string[] }[];
+    upcoming: { label: string; names: string[] };
+    hours: string;
+    holiday: string;
+    note: string;
+  };
+
+  form: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    fields: LPFormField[];
+    submitLabel: string;
+    microcopy: string;
+    disclaimer: string;
+    errorMessage: string;
+  };
+
+  sticky: { buttonText: string; anchor: string; offers: [string, string] };
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * キャッチコピー案（FV）
+ *
+ * A. 姿勢が変わると、鏡を見るのが楽しみになる。      ← 採用
+ * B. ただ鍛えるだけじゃない。あなたらしい美しい身体へ。
+ * C. 鏡に映る自分を、もっと好きになる。
+ * D. 筋肉質にならず、しなやかに美しく。
+ * E. 姿勢から変える、私だけの60分。
+ *
+ * A を採用した理由:
+ *  1. 「姿勢（原因）→ 見た目の変化（ベネフィット）→ 感情（鏡を見るのが楽しみ）」が
+ *     1文で繋がる。B/D は状態の言い換えで止まり、行動理由まで届かない。
+ *  2. 公式サイトのFV「パーソナルピラティスで鏡を見るのが楽しくなる毎日へ」と
+ *     同じ世界観なので、広告→LP→公式サイトで訴求が一致する。
+ *  3. 「痩せる」を言わずに見た目の変化を約束できる。ダイエット訴求に寄せない
+ *     という今回の要件をコピー単体で満たす。
+ *  4. C は主語が「自分」で内省的すぎ、E は「60分」が先に立って情緒が弱い。
+ * ────────────────────────────────────────────────────────────── */
+
+const IMG = "/clients/sakura-pilates";
+
+/** 希望店舗セレクト。公式 /studios/ の掲載順・表記に合わせている（2026年9月時点）。 */
+const studioOptions = [
+  {
+    label: "東京都",
+    options: [
+      "麻布十番", "五反田", "恵比寿", "学芸大学", "旗の台", "大井町", "勝どき",
+      "代々木上原", "四谷三丁目", "茗荷谷", "池袋", "高田馬場・西早稲田",
+      "町屋", "練馬", "大泉学園", "成増", "経堂", "三鷹",
+    ].map((n) => ({ value: `${n}店`, label: `${n}店` })),
+  },
+  {
+    label: "神奈川県",
+    options: ["武蔵小杉", "綱島", "宮前平", "青葉台", "センター北", "関内", "相模大野"].map(
+      (n) => ({ value: `${n}店`, label: `${n}店` }),
+    ),
+  },
+  {
+    label: "埼玉県",
+    options: ["北浦和", "南浦和", "川口", "志木", "越谷"].map((n) => ({
+      value: `${n}店`,
+      label: `${n}店`,
+    })),
+  },
+  {
+    label: "千葉県",
+    options: ["松戸", "本八幡"].map((n) => ({ value: `${n}店`, label: `${n}店` })),
+  },
+  { label: "茨城県", options: [{ value: "つくば店", label: "つくば店" }] },
+  { label: "静岡県", options: [{ value: "浜松店", label: "浜松店" }] },
+  {
+    label: "オープン予定",
+    options: [
+      { value: "成増ANNEX店（9/15オープン）", label: "成増ANNEX店（9/15オープン）" },
+      { value: "鹿児島店（10/1オープン）", label: "鹿児島店（10/1オープン）" },
+      { value: "新宿三丁目店（10/15オープン）", label: "新宿三丁目店（10/15オープン）" },
+      { value: "亀戸店（10/15オープン）", label: "亀戸店（10/15オープン）" },
+      { value: "白金高輪店（11/1オープン）", label: "白金高輪店（11/1オープン）" },
+    ],
+  },
+  { label: "その他", options: [{ value: "まだ決めていない", label: "まだ決めていない／相談したい" }] },
+];
+
+const config: SakuraConfig = {
+  slug: "sakura-pilates",
+  status: "draft",
+  meta: {
+    title:
+      "女性専用パーソナルマシンピラティス SAKURA｜体験レッスン＆入会金0円",
+    description:
+      "姿勢が変わると、鏡を見るのが楽しみになる。女性専用・完全マンツーマンのマシンピラティスSAKURA。会員様の80%がピラティス未経験、継続率94%。今月末までのご予約限定で体験レッスン＆入会金が0円。",
+    // 相対パスだと metadataBase が別ドメインに解決されるため絶対URLで固定する。
+    ogpImage: "https://fitness-lp.commitad.com/clients/sakura-pilates/ogp.jpg",
+  },
+
+  /* 出典: 公式 /studios/<店舗>/ のキャンペーンバナー
+     「今月末までのご予約限定で 体験レッスン＆入会金 0円」 */
+  offerBar: {
+    note: "今月末までのご予約限定",
+    text: "体験レッスン＆入会金",
+    badge: "0円",
+  },
+
+  header: {
+    brand: "SAKURA",
+    brandSub: "女性専用パーソナルマシンピラティス",
+    ctaText: "無料体験を予約",
+  },
+
+  fv: {
+    catchLines: ["姿勢が変わると、", "鏡を見るのが", "楽しみになる。"],
+    sub: "女性専用・完全マンツーマンのマシンピラティス。\n運動が初めての方も、あなたの身体に合わせて。",
+    hero: {
+      placeholder: "マンツーマンレッスン風景",
+      src: `${IMG}/hero.jpg`,
+      // 縦書きキャッチが左半分を覆うので、被写体が右側に来るよう切り抜きを左へ寄せる。
+      position: "36% center",
+    },
+    /* 出典: 公式店舗LP（未経験80% / 継続率94% / スタッフ全員女性）、公式 /studios/（店舗数） */
+    stats: [
+      { num: "34", unit: "店舗", label: "全国に展開" },
+      { num: "80", unit: "%", label: "ピラティス未経験" },
+      { num: "94", unit: "%", label: "継続率" },
+      { num: "全員", unit: "女性", label: "スタッフ" },
+    ],
+    campaign: {
+      note: "今月末までのご予約限定",
+      rows: [
+        { label: "体験レッスン", was: "5,500円", now: "0円" },
+        { label: "入会金", was: "33,000円", now: "0円" },
+      ],
+      foot: "ウェア・靴下も無料レンタル。手ぶらでお越しいただけます。",
+    },
+    ctaText: "まずは無料体験を予約する",
+    ctaSub: "所要60分／入力は1分で完了",
+  },
+
+  worry: {
+    kicker: "TROUBLES",
+    heading: "こんなお悩み、\nありませんか？",
+    chips: [
+      "鏡に映る自分の姿勢が気になる",
+      "猫背・巻き肩で疲れて見える",
+      "筋肉質にはなりたくない",
+      "運動が苦手で続かない",
+      "グループだと自己流になりそう",
+      "何から始めればいいか分からない",
+    ],
+    /* 出典: 公式トップ「SAKURAなら、このようなお悩みをすべて解決」 */
+    cards: [
+      {
+        img: { placeholder: "姿勢", src: `${IMG}/worry-2-posture.jpg` },
+        text: "猫背や巻き肩を改善して\n姿勢をすらっとさせたい",
+      },
+      {
+        img: { placeholder: "ボディライン", src: `${IMG}/worry-1-body.jpg` },
+        text: "筋肉質な感じにさせず\nボディラインを綺麗にしたい",
+      },
+      {
+        img: { placeholder: "むくみ・冷え", src: `${IMG}/worry-3-cold.jpg` },
+        text: "むくみや冷え性を\n改善したい",
+      },
+      {
+        img: { placeholder: "産後ケア", src: `${IMG}/worry-4-postnatal.jpg` },
+        text: "産後の骨盤ケアを\nしていきたい",
+      },
+    ],
+    closing: "そのお悩み、SAKURAなら\nすべて解決できます。",
+  },
+
+  /* 出典: 公式トップ Concept / 公式店舗LP「マシンピラティスで得られる効果」Benefits 01-03 */
+  bridge: {
+    kicker: "WHY PILATES",
+    heading: "そのお悩みには、\nマシンピラティス × マンツーマン。",
+    lead: "体重を落とすだけのボディメイクではなく、習慣化している身体の使い方を修正して奥深いところから鍛えることで『しなやかで美しいボディライン』を手に入れることができます。",
+    photo: { placeholder: "リフォーマーでのレッスン", src: `${IMG}/reason-2.jpg` },
+    items: [
+      {
+        title: "運動が苦手でも、\nマシンが動きを支えてくれる",
+        body: "専用マシン「リフォーマー」が身体の動きをサポートしてくれるため、運動が苦手な方や筋力が少ない方でも、効率的に体幹・インナーマッスルを鍛えることができます。",
+      },
+      {
+        title: "気になる部分に\nピンポイントでアプローチ",
+        body: "気になるパーツや悩みのある部分だけに集中してアプローチすることができるので、より効率的に結果を出すことができます。",
+      },
+      {
+        title: "姿勢だけでなく、\nカラダの不調にも期待できる",
+        body: "柔軟性を向上させたり、骨の位置を改善することで痛みの悩みを改善。呼吸も大切にしているので、女性特有の不調にも効果が期待できます。",
+      },
+    ],
+    ctaText: "自分の身体を知ることから始める",
+    ctaSub: "体験レッスン0円／入会金0円",
+  },
+
+  /* 出典: 公式店舗LP「『SAKURA』のマシンピラティス 5つの特徴」 */
+  features: {
+    kicker: "FEATURE",
+    heading: "SAKURAが\n選ばれる5つの理由",
+    items: [
+      {
+        num: "01",
+        title: "結果を出すことに特化",
+        body: "お客様評価を最も大切にするスタジオなので、他スタジオで効果を感じなかったお客様からとても高い評価をいただいています。",
+        img: { placeholder: "レッスン風景", src: `${IMG}/offer-1.jpg` },
+      },
+      {
+        num: "02",
+        title: "理学療法士とパーソナルトレーナーが監修",
+        body: "ピラティスにボディメイクの視点を組み合わせた独自のメソッドを導入。マシンレッスンをメインに、女性特有のニーズにお応えします。",
+        img: { placeholder: "マシン指導", src: `${IMG}/scene-3-morning.jpg` },
+      },
+      {
+        num: "03",
+        title: "女性専用のスタジオ",
+        body: "インストラクターも全員女性なので、安心して通うことができます。女性特有なお悩みの相談もお気軽にできる環境です。",
+        img: { placeholder: "カウンセリング", src: `${IMG}/reason-1.jpg` },
+      },
+      {
+        num: "04",
+        title: "パーソナルなのにリーズナブル",
+        body: "コストカットにより他社よりも続けやすい費用を実現。月額制とチケット制を用意しているので、お客様に合わせたプランをお選びください。",
+        img: { placeholder: "スタジオ内観", src: `${IMG}/reason-3.jpg` },
+      },
+      {
+        num: "05",
+        title: "産後リカバリーを丁寧にサポート",
+        body: "産後のからだの変化に寄り添い、心身ともに快適な日常へとつながる姿勢づくりをサポートします。",
+        img: { placeholder: "産後ケア", src: `${IMG}/worry-4-postnatal.jpg` },
+      },
+    ],
+  },
+
+  personal: {
+    kicker: "PERSONAL",
+    heading: "パーソナルだから、\nできること。",
+    lead: "決められたメニューをみんなで動くのではなく、あなたの身体だけを見て、その日のコンディションに合わせて組み立てる60分です。",
+    photo: { placeholder: "マンツーマン指導", src: `${IMG}/offer-1.jpg` },
+    items: [
+      {
+        title: "あなたの身体だけを見る60分",
+        body: "その日の体調・可動域・お悩みを伺ったうえで、負荷とメニューを一つひとつ調整します。",
+      },
+      {
+        title: "自分では気づけないクセを直せる",
+        body: "猫背・巻き肩・反り腰。鏡だけでは分からない身体のクセを、専門インストラクターが見つけて整えていきます。",
+      },
+      {
+        title: "目的に合わせてメニューを選べる",
+        body: "姿勢改善・ボディメイク・産前産後・PMSまで、目的別のプログラムから組み合わせられます。",
+      },
+      {
+        title: "人目を気にせず、自分のペースで",
+        body: "完全マンツーマンなので、周りと比べる必要も、置いていかれる不安もありません。",
+      },
+    ],
+    versus: [
+      {
+        label: "メニュー",
+        group: "全員同じ内容",
+        sakura: "あなたの身体に合わせて毎回組み立て",
+      },
+      {
+        label: "フォーム",
+        group: "自己流になりやすい",
+        sakura: "その場で1つずつ修正",
+      },
+      {
+        label: "ペース",
+        group: "クラスの進行に合わせる",
+        sakura: "その日の体調に合わせる",
+      },
+      {
+        label: "はじめやすさ",
+        group: "経験者と一緒で気後れしやすい",
+        sakura: "未経験からのスタートが80%",
+      },
+    ],
+  },
+
+  /* 出典: 公式店舗LP「マシンピラティスが初めての方でも安心」／公式FAQ */
+  beginner: {
+    kicker: "FOR BEGINNERS",
+    heading: "はじめてでも、\n大丈夫です。",
+    lead: "SAKURAの会員様は80%がピラティス未経験。30代を中心に、幅広い年齢層の方が通われています。",
+    photos: [
+      { placeholder: "レンタルウェア", src: `${IMG}/offer-2.jpg` },
+      { placeholder: "カウンセリングスペース", src: `${IMG}/access.jpg` },
+    ],
+    items: [
+      {
+        title: "会員様の80%がピラティス未経験",
+        body: "「みんな経験者だったらどうしよう」はありません。ほとんどの方が、あなたと同じところからスタートしています。",
+      },
+      {
+        title: "運動経験がなくても大丈夫",
+        body: "プロのインストラクターがマンツーマンで丁寧なレッスンを行いますので、安心してご来店ください。",
+      },
+      {
+        title: "インストラクターも全員女性",
+        body: "女性専用スタジオなので、体型や産後のことも気兼ねなく相談できます。",
+      },
+      {
+        title: "ウェア・靴下は体験時無料",
+        body: "体験レッスンの際はウェアや靴下を無料で貸し出していますので、手ぶらでご来店いただけます。",
+      },
+    ],
+    ctaText: "運動が苦手でも、まず体験してみる",
+    ctaSub: "体験レッスン0円／手ぶらでOK",
+  },
+
+  proof: {
+    kicker: "TRUST",
+    heading: "数字で見るSAKURA",
+    stats: [
+      { num: "34", unit: "店舗", label: "全国に展開" },
+      { num: "80", unit: "%", label: "ピラティス未経験からスタート" },
+      { num: "94", unit: "%", label: "継続率" },
+      { num: "7,150", unit: "円〜", label: "レッスン1回あたり" },
+      { num: "8:00", unit: "-21:30", label: "営業時間" },
+      { num: "全員", unit: "女性", label: "スタッフ・インストラクター" },
+    ],
+    badges: [
+      "全米スポーツ医学協会の有資格者が監修したプログラム",
+      "理学療法士とパーソナルトレーナーが監修した独自メソッド",
+      "女性専用スタジオ／完全マンツーマン",
+    ],
+    note: "※数値は公式サイト掲載の実績値です。店舗数は2026年9月時点の営業中店舗数（オープン予定を含めると39店舗）。",
+  },
+
+  /* 出典: 公式 /program/ ＋ 公式店舗LP「幅広いレッスン内容」 */
+  program: {
+    kicker: "PROGRAM",
+    heading: "目的に合わせて選べる\nレッスン内容",
+    lead: "全米スポーツ医学協会の有資格者が監修したプログラム。カウンセリングで伺ったお悩みに合わせて、インストラクターが組み立てます。",
+    groups: [
+      {
+        label: "初めての方向け",
+        items: [
+          { en: "INTRO", ja: "ピラティスやリフォーマー初心者の方向けのプログラム" },
+          { en: "BEAUTIFUL POSTURE", ja: "綺麗な姿勢に戻し、維持するためのプログラム" },
+        ],
+      },
+      {
+        label: "ステップアップ",
+        items: [
+          { en: "ADVANCE", ja: "基礎を理解し、慣れてきた方向けのプログラム" },
+          { en: "SUPPLE BODY", ja: "可動域を広げ、しなやかなボディを作るためのプログラム" },
+        ],
+      },
+      {
+        label: "パーツボディメイク",
+        items: [
+          { en: "FULL BODY", ja: "余計な筋肉をつけることなく、全身をまんべんなく鍛える" },
+          { en: "WAIST", ja: "腹部とウェストラインを集中的に鍛える" },
+          { en: "HIP & LEG", ja: "股関節の柔軟性を高め、骨盤から美脚ラインへと導く" },
+          { en: "BACK & ARM", ja: "腕から背中をすらっと整え、凛とした上半身をつくる" },
+        ],
+      },
+      {
+        label: "ご希望に応じて",
+        items: [
+          { en: "MATERNITY", ja: "産前産後の骨盤矯正、骨盤周りの筋肉を鍛える" },
+          { en: "PMS", ja: "呼吸へ重点を置き、女性特有のお悩みの改善を目指す" },
+        ],
+      },
+    ],
+    note: "※MATERNITYは対応できるインストラクターについてお問い合わせください。",
+  },
+
+  /* 出典: 公式サイト掲載のお客様の声（原文ママ） */
+  voices: {
+    kicker: "VOICE",
+    heading: "お客様の声",
+    items: [
+      {
+        title: "1対1で丁寧なレッスンが魅力",
+        body: "初めてのピラティスで不安でしたが、SAKURAは1対1でレッスンが受けられるうえ、丁寧に教えてもらえるので安心して続けられています。",
+        who: "N様（32歳）",
+      },
+      {
+        title: "姿勢の悪さが改善しました！",
+        body: "姿勢の悪さが気になっていましたが、南浦和のスタジオに週2回通ったら明らかに改善されました！",
+        who: "M様（35歳）",
+      },
+      {
+        title: "運動が苦手な私でも無理なく続けられた",
+        body: "駅から近くて通いやすいので、運動が続かない私でも無理なく通えています。インストラクターの方も優しいので、ピラティス初心者にもおすすめのスタジオです。",
+        who: "I様（40歳）",
+      },
+      {
+        title: "無理せず産後の骨盤ケアができた",
+        body: "産後の骨盤ケアとして、川口でマシンピラティスを取り入れました。姿勢も良くなってきて、毎日が快適です！",
+        who: "Y様（48歳）",
+      },
+    ],
+    note: "※公式サイト掲載のお客様の声より。個人の感想であり、効果を保証するものではありません。",
+  },
+
+  /* 出典: 公式 /price/（税込） */
+  price: {
+    kicker: "PRICE",
+    heading: "続けやすい料金設定",
+    lead: "コストカットにより、他社よりも続けやすい費用を実現。月額制とチケット制を用意しているので、あなたに合わせたプランをお選びいただけます。",
+    join: {
+      label: "入会金",
+      was: "33,000円",
+      now: "0円",
+      note: "今月末までのご予約限定",
+    },
+    plans: [
+      {
+        name: "月4回コース",
+        desc: "毎月1日〜末日の間に、4回のレッスンが可能",
+        amount: "33,000",
+        unit: "円/月",
+        per: "1回あたり8,250円",
+        badge: "人気No.1",
+      },
+      {
+        name: "月8回コース",
+        desc: "毎月1日〜末日の間に、8回のレッスンが可能",
+        amount: "63,800",
+        unit: "円/月",
+        per: "1回あたり7,975円",
+      },
+      {
+        name: "回数券8枚コース",
+        desc: "有効期限内に8回のレッスンが可能",
+        amount: "70,400",
+        unit: "円",
+        per: "1回あたり8,800円",
+      },
+      {
+        name: "6ヶ月プラン",
+        desc: "最大月4回までご利用いただけます",
+        amount: "184,800",
+        unit: "円",
+        per: "1回あたり7,700円",
+      },
+      {
+        name: "12ヶ月プラン",
+        desc: "最大月4回までご利用いただけます",
+        amount: "343,200",
+        unit: "円",
+        per: "1回あたり7,150円",
+        badge: "最安",
+      },
+    ],
+    notes: [
+      "※料金はすべて税込表示です。",
+      "※月額制の場合、回数の制限なく繰り越すことができます。",
+      "※6ヶ月・12ヶ月プランは4レッスンまでまとめて予約可能です。",
+      "※クレジットカード決済か銀行振込がご利用いただけます。",
+    ],
+    ctaText: "料金を相談しながら体験する",
+    ctaSub: "体験レッスン0円／入会金0円",
+  },
+
+  /* 出典: 公式店舗LP「Comparison 他社比較」 */
+  compare: {
+    kicker: "COMPARISON",
+    heading: "他のサービスとの違い",
+    axes: [
+      {
+        label: "コスパ",
+        rows: [
+          { name: "SAKURA", text: "コストカットでパーソナルなのに通いやすい料金を実現" },
+          { name: "グループピラティス", text: "月謝は安いが効果に時間がかかる" },
+          { name: "他社パーソナル\nピラティス", text: "個別指導で費用はやや高め" },
+          { name: "パーソナルジム", text: "短期集中で総費用は高めになりやすい" },
+        ],
+      },
+      {
+        label: "指導力",
+        rows: [
+          { name: "SAKURA", text: "メディカル視点の独自メソッドで丁寧に指導" },
+          { name: "グループピラティス", text: "集団指導が主で個別調整は限定的" },
+          { name: "他社パーソナル\nピラティス", text: "研修体制が薄く指導に差が出る" },
+          { name: "パーソナルジム", text: "トレーナー主導で筋力重視の指導が中心" },
+        ],
+      },
+      {
+        label: "続けやすさ",
+        rows: [
+          { name: "SAKURA", text: "予約しやすくマンツーマンで無理なく続けられる" },
+          { name: "グループピラティス", text: "時間固定のクラスが多く予定に合わせにくい" },
+          { name: "他社パーソナル\nピラティス", text: "習慣化しやすいが人気次第で予約が埋まりやすい" },
+          { name: "パーソナルジム", text: "短期集中型で途中離脱しやすい" },
+        ],
+      },
+      {
+        label: "女性専用",
+        rows: [
+          { name: "SAKURA", text: "完全個室かつ女性インストラクターのみで安心感が高い" },
+          { name: "グループピラティス", text: "男女共用のスタジオが多い" },
+          { name: "他社パーソナル\nピラティス", text: "スタッフが男性の場合もある" },
+          { name: "パーソナルジム", text: "男性比率が高めで入りやすさに差あり" },
+        ],
+      },
+      {
+        label: "効果",
+        rows: [
+          { name: "SAKURA", text: "効果を出すことに特化したプログラムで変化を実感" },
+          { name: "グループピラティス", text: "継続で効果は出るが劇的な変化は出にくい" },
+          { name: "他社パーソナル\nピラティス", text: "個別とはいえ講師のスキル差で結果にばらつき" },
+          { name: "パーソナルジム", text: "筋力向上は早いが姿勢改善は個人差がある" },
+        ],
+      },
+    ],
+  },
+
+  /* 出典: 公式店舗LP「体験予約の流れ」／公式FAQ */
+  flow: {
+    kicker: "FLOW",
+    heading: "体験レッスンの流れ",
+    lead: "お着替えやプランのご説明も含めて、所要時間は60分。ウェア・靴下は無料レンタルなので手ぶらでお越しいただけます。",
+    steps: [
+      {
+        num: "01",
+        title: "体験レッスンを予約",
+        body: "このページのフォームからお申し込みください。ご希望の店舗と日程を伺い、担当より順次ご連絡いたします。",
+      },
+      {
+        num: "02",
+        title: "スタジオへご来店",
+        body: "前のお客様がいらっしゃる可能性がございますので、予約時間ちょうどにスタジオへお越しください。",
+      },
+      {
+        num: "03",
+        title: "お着替え",
+        body: "お着替えをしていただきます。無料レンタルウェアのご用意もございます。",
+      },
+      {
+        num: "04",
+        title: "カウンセリング",
+        body: "まずはお客様のご希望やお悩みをヒアリングし、メニューをご提案します。",
+      },
+      {
+        num: "05",
+        title: "レッスン",
+        body: "経験豊富なインストラクターがレッスンを行います。丁寧にサポートするので、初めてでもご安心ください。",
+      },
+      {
+        num: "06",
+        title: "入会のご案内",
+        body: "SAKURAのプランについてご説明を差し上げます。ご不明点があればなんでもご質問ください。",
+      },
+    ],
+    ctaText: "体験レッスンを予約する",
+    ctaSub: "所要60分／体験レッスン0円",
+  },
+
+  /* 出典: 公式 /faq/ */
+  faq: {
+    kicker: "FAQ",
+    heading: "よくあるご質問",
+    items: [
+      {
+        q: "運動経験のない初心者でも大丈夫ですか？",
+        a: "もちろん大丈夫です。プロのインストラクターがマンツーマンで丁寧なレッスンを行いますので、安心してご来店ください。会員様の80%がピラティス未経験からスタートされています。",
+      },
+      {
+        q: "体験レッスンの持ち物は何ですか？",
+        a: "体験レッスンの際はウェアや靴下を無料で貸し出しておりますので、手ぶらでご来店いただけます（入会後は有料となります）。ご入会をご希望の場合はクレジットカードもお持ちください。",
+      },
+      {
+        q: "体験レッスンはどのくらい時間がかかりますか？",
+        a: "お着替えやプランのご説明も含めて60分となります。先のお客様がいらっしゃることもありますので、お時間ちょうどにご来店ください。",
+      },
+      {
+        q: "男性も通えますか？",
+        a: "SAKURAは女性専用スタジオです。インストラクターも全員女性なので、人目を気にせず安心してお通いいただけます。",
+      },
+      {
+        q: "妊娠中でもレッスンを受けられますか？",
+        a: "医師への確認、同意の上であれば可能です。店舗によって異なりますので、一度ご連絡ください。",
+      },
+      {
+        q: "予約は取りやすいですか？",
+        a: "一気に予約が解放されるスタジオとは異なり、当店独自の仕組みにより可能な限り予約の取りやすい環境を作っています。常に3週間先のスケジュールが開放される形になっております。",
+      },
+      {
+        q: "支払い方法は何がありますか？",
+        a: "クレジットカード決済か銀行振込がご利用いただけます。クレジットカード決済の場合、月会費の引落は毎月20日となります。",
+      },
+      {
+        q: "予約のキャンセルはいつまで可能ですか？",
+        a: "前日の21時までとなっております。",
+      },
+      {
+        q: "体験レッスンは何回も受けられますか？",
+        a: "申し訳ございません。体験レッスンは1回限りとさせていただいております。",
+      },
+    ],
+  },
+
+  /* 出典: 公式 /studios/（2026年9月時点） */
+  studios: {
+    kicker: "STUDIOS",
+    heading: "全国34店舗",
+    lead: "駅チカ・完全個室のスタジオを、関東を中心に展開しています。ご希望の店舗はフォームからお選びください。",
+    photo: { placeholder: "スタジオ内観", src: `${IMG}/reason-3.jpg` },
+    areas: [
+      {
+        pref: "東京都",
+        names: [
+          "麻布十番", "五反田", "恵比寿", "学芸大学", "旗の台", "大井町", "勝どき",
+          "代々木上原", "四谷三丁目", "茗荷谷", "池袋", "高田馬場・西早稲田",
+          "町屋", "練馬", "大泉学園", "成増", "経堂", "三鷹",
+        ],
+      },
+      {
+        pref: "神奈川県",
+        names: ["武蔵小杉", "綱島", "宮前平", "青葉台", "センター北", "関内", "相模大野"],
+      },
+      { pref: "埼玉県", names: ["北浦和", "南浦和", "川口", "志木", "越谷"] },
+      { pref: "千葉県", names: ["松戸", "本八幡"] },
+      { pref: "茨城県", names: ["つくば"] },
+      { pref: "静岡県", names: ["浜松"] },
+    ],
+    upcoming: {
+      label: "オープン予定",
+      names: [
+        "成増ANNEX（9/15）",
+        "鹿児島（10/1）",
+        "新宿三丁目（10/15）",
+        "亀戸（10/15）",
+        "白金高輪（11/1）",
+      ],
+    },
+    hours: "8:00〜21:30",
+    holiday: "年末年始（12/29〜1/3）",
+    note: "※店舗数・営業時間は2026年9月時点の公式サイト掲載情報です。詳しい住所・アクセスは体験のご予約後にご案内します。",
+  },
+
+  form: {
+    kicker: "RESERVE",
+    heading: "無料体験レッスンのご予約",
+    lead: "入力は1分で完了します。\nご希望の店舗・日程を担当より確認のうえ、順次ご連絡いたします。",
+    fields: [
+      { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 花子" },
+      { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
+      {
+        type: "email",
+        name: "email",
+        label: "メールアドレス",
+        optionalTag: "任意",
+        placeholder: "example@mail.com",
+      },
+      {
+        type: "select",
+        name: "store",
+        label: "ご希望の店舗",
+        required: true,
+        placeholder: "店舗を選択してください",
+        groups: studioOptions,
+      },
+      { type: "date", name: "date1", label: "ご希望日（第1希望）" },
+      { type: "date", name: "date2", label: "ご希望日（第2希望）", optionalTag: "任意" },
+      {
+        type: "textarea",
+        name: "note",
+        label: "ご希望の時間帯・ご相談内容",
+        optionalTag: "任意",
+        placeholder: "例）平日の夜、土曜の午前など。猫背が気になる、運動が苦手、などもお気軽にどうぞ。",
+        rows: 4,
+      },
+    ],
+    submitLabel: "この内容で無料体験を予約する",
+    microcopy: "体験レッスン0円／入会金0円／手ぶらでOK",
+    disclaimer:
+      "ご入力いただいた内容は、体験レッスンのご予約対応にのみ利用します。\nしつこい勧誘はいたしません。",
+    errorMessage: "お名前・電話番号・ご希望の店舗は必須項目です。",
+  },
+
+  sticky: {
+    buttonText: "まずは無料体験を予約する",
+    anchor: "#form",
+    offers: ["体験レッスン ¥0", "入会金 ¥0"],
+  },
+};
+
+export default config;
