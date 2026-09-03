@@ -125,8 +125,9 @@ const config: Config = {
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-1.jpg`, position: "center 20%" }, text: "猫背・巻き肩が\n気になる" },
       // position: インストラクターの顔が見切れないよう上げて表示。
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-2.jpg`, position: "center 20%" }, text: "反り腰・腰痛が\nつらい" },
-      // position: PC幅(列480px)だとインストラクターの頭が見切れるため上げて表示。
-      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg`, position: "center 35%" }, text: "体重は変わらないのに\nたるんできた" },
+      // position: 2人の顔が縦に離れた構図。列480px幅で両方の顔が収まる上限がほぼ29%
+      // （これ以上下げるとインストラクターの顎、上げると立位モデルの頭が切れる）。
+      { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-3.jpg`, position: "center 29%" }, text: "体重は変わらないのに\nたるんできた" },
       // position: PC幅(列480px)だとインストラクターの顔が見切れるため上げて表示。
       { img: { placeholder: "イメージ画像", src: `${ASSET}/worry-4.jpg`, position: "center 10%" }, text: "産前産後の不調・\n歪みが気になる" },
     ],
@@ -200,14 +201,15 @@ const config: Config = {
         body: "猫背・反り腰・O脚など、日々の不調やクセが気になる方。姿勢評価をもとに、体の使い方から見直していきます。",
       },
       {
-        // position: PC幅(列480px)だとインストラクターの顔が見切れるため上げて表示。
-        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-2.jpg`, position: "center 25%" },
+        // position: 2人の顔が縦に離れた構図。列480px幅でも両方の顔が収まる値
+        // （33〜36%が下限・上限の境界。余裕を見て38%）。
+        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-2.jpg`, position: "center 38%" },
         title: "「産前産後の体の変化が気になる方」",
         body: "出産を経ての不調や歪み、体力の低下に。お体の状態に合わせて、無理のないペースで進めます。",
       },
       {
-        // position: 被写体が写真上寄りのため、頭が見切れないよう上げて表示。
-        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-3.jpg`, position: "center 15%" },
+        // position: 列480px幅でも2人の顔が両方収まる位置。
+        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/scene-3.jpg`, position: "center 30%" },
         title: "「理想のボディラインを目指したい方」",
         body: "30〜40代を中心に、幅広い年代の方が通われています。しなやかで引き締まった、一生モノの美しいシルエットへ。",
       },
