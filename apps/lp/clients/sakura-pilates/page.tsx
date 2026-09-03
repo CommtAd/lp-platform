@@ -15,13 +15,15 @@ import config from "./config";
  * 「不安を1つ潰す → その場で予約できる」の順に並べている。
  *
  * ブロック順（CVRを意図した並び。入れ替えると理由づけの流れが壊れる）:
- *   FV → お悩み → なぜマシンピラティス×マンツーマンか → 選ばれる5つの理由
+ *   FV → 特典 → お悩み → なぜマシンピラティス×マンツーマンか → 選ばれる5つの理由
  *   → パーソナルだからできること → 初心者でも安心 → 数字で見るSAKURA
- *   → レッスン内容 → お客様の声 → 料金 → 他社比較 → 体験の流れ → FAQ
- *   → 店舗一覧 → 予約フォーム
+ *   → レッスン内容 → お客様の声 → 体験の流れ → FAQ → 店舗一覧 → 予約フォーム
  *
- * CTAは FV / 理由の直後 / 初心者不安の解消直後 / 料金直後 / 流れの直後 の5箇所＋
- * 追従フッター。いずれも #form へ送る。
+ * 料金と他社比較は顧客判断により一旦非表示（SHOW_PRICE / SHOW_COMPARE）。
+ * データは config に残してあるので、フラグを true に戻せば元の位置に復帰する。
+ *
+ * CTAは 特典直後 / 理由の直後 / 初心者不安の解消直後 / お客様の声の直後 / 流れの直後 の
+ * 5箇所＋ヘッダー＋追従フッター。いずれも #form へ送る。
  *
  * 見た目の作法:
  *   1. 地は生成り #FDF9F7、カードは白。セクションの切り替えは地色でつける
@@ -76,6 +78,66 @@ function SakuraMark({ size = 14, color = PINK }: { size?: number; color?: string
         />
       ))}
       <circle cx="12" cy="12" r="1.7" fill="#FFFFFF" opacity="0.9" />
+    </svg>
+  );
+}
+
+/* 特典ブロックの円形アイコン。並び順は config.offer.items と一致させること。 */
+const offerIcons: ReactNode[] = [
+  /* 丁寧なカウンセリング — 吹き出し */
+  <>
+    <path d="M4 5.5h16a1 1 0 011 1v8a1 1 0 01-1 1h-9l-4 3v-3H4a1 1 0 01-1-1v-8a1 1 0 011-1z" />
+    <circle cx="8.5" cy="10.5" r="0.6" />
+    <circle cx="12" cy="10.5" r="0.6" />
+    <circle cx="15.5" cy="10.5" r="0.6" />
+  </>,
+  /* マシンピラティス体験 — リフォーマー */
+  <>
+    <rect x="3" y="12.5" width="18" height="2.6" rx="1" />
+    <path d="M5 15.1v2.4M19 15.1v2.4" />
+    <rect x="5.5" y="9.4" width="8" height="3.1" rx="1" />
+    <path d="M17 12.5V8M15.2 8h3.6" />
+  </>,
+  /* 専門的なフィードバック — チェック付きレポート */
+  <>
+    <rect x="5" y="3.5" width="14" height="17" rx="2" />
+    <path d="M9 3.5h6v2.5H9z" />
+    <path d="M8.7 12.3l2.3 2.2 4.3-4.6" />
+  </>,
+  /* あなたに合うプランのご案内 — カレンダー */
+  <>
+    <rect x="3.5" y="5" width="17" height="15.5" rx="2" />
+    <path d="M3.5 9.6h17M8 3.5v3M16 3.5v3" />
+    <circle cx="8.4" cy="13.6" r="0.9" />
+    <circle cx="12" cy="13.6" r="0.9" />
+  </>,
+  /* 完全マンツーマン・女性インストラクター — 2人 */
+  <>
+    <circle cx="8.4" cy="8" r="2.3" />
+    <path d="M5 18.5v-1.2a3.4 3.4 0 013.4-3.4 3.4 3.4 0 013.4 3.4v1.2" />
+    <circle cx="15.6" cy="8" r="2.3" />
+    <path d="M12.2 18.5v-1.2a3.4 3.4 0 013.4-3.4 3.4 3.4 0 013.4 3.4v1.2" />
+  </>,
+  /* ウェア・靴下 無料レンタル — Tシャツ */
+  <>
+    <path d="M8.8 4L4 6.7l1.9 3.1L8 8.5V20h8V8.5l2.1 1.3L20 6.7 15.2 4a3.3 3.3 0 01-6.4 0z" />
+  </>,
+];
+
+function OfferIcon({ children }: { children: ReactNode }) {
+  return (
+    <svg
+      width="30"
+      height="30"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={PINK_DEEP}
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      {children}
     </svg>
   );
 }
@@ -194,10 +256,25 @@ function Cta({ text, sub, top = 26 }: { text: string; sub?: string; top?: number
   );
 }
 
+/**
+ * 一旦非表示にしているブロック（顧客判断、2026-09-03）。
+ * config.price / config.compare のデータはそのまま残してあるので、
+ * ここを true に戻すだけで復帰する。boolean 型注釈は、リテラル false に
+ * 縮まって「到達しない分岐」と判定されるのを避けるため。
+ */
+const SHOW_PRICE: boolean = false;
+const SHOW_COMPARE: boolean = false;
+
 const section: CSSProperties = { padding: "44px 18px" };
 
 export default function Page() {
   const c = config;
+
+  /* フォーム直前でもう一度出すオファー。特典ブロックと同じ数字を使う。 */
+  const formOffers = [
+    { label: "体験レッスン", was: c.offer.trialWas, now: `${c.offer.trialNow}${c.offer.trialUnit}` },
+    { label: c.offer.perks[0].label, was: c.offer.perks[0].was, now: c.offer.perks[0].now },
+  ];
 
   return (
     <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
@@ -422,133 +499,334 @@ export default function Page() {
               ))}
             </div>
 
-            {/* 体験キャンペーン */}
-            <div style={{ padding: "18px 18px 26px" }}>
+          </section>
+
+          {/* ── 2. 特典（MV直下） ──
+              参考LPの cp ブロックと同じ積み方:
+              「体験で受けられる中身」→「さらに」→「入会時の特典」。
+              金額は公式LPのキャンペーンバナー原文どおり（通常5,500円→0円 / 入会金0円 / 専用ソックス）。 */}
+          <section
+            id="offer"
+            style={{
+              padding: "34px 18px 40px",
+              background: "linear-gradient(180deg, #FBEFF2 0%, #F7E1E7 100%)",
+            }}
+          >
+            <div
+              style={{
+                borderRadius: 18,
+                overflow: "hidden",
+                background: "#FFFFFF",
+                border: `1.5px solid ${PINK}`,
+                boxShadow: "0 10px 28px rgba(194,80,113,0.14)",
+              }}
+            >
+              {/* 見出し＋金額 */}
               <div
                 style={{
-                  border: `1.5px solid ${PINK}`,
-                  borderRadius: 14,
-                  background: "#FFFFFF",
-                  overflow: "hidden",
-                  boxShadow: "0 6px 18px rgba(194,80,113,0.10)",
+                  background: "linear-gradient(100deg, #F6BFCD 0%, #E7899F 55%, #D26C88 100%)",
+                  color: "#FFFFFF",
+                  textAlign: "center",
+                  padding: "9px 12px",
+                  fontSize: 11.5,
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
                 }}
               >
+                ＼ {c.offer.note} ／
+              </div>
+              <div style={{ padding: "18px 15px 4px", textAlign: "center" }}>
                 <div
                   style={{
-                    background: PALE2,
-                    padding: "7px 12px",
-                    textAlign: "center",
-                    fontSize: 11,
+                    fontSize: 12,
                     fontWeight: 700,
-                    letterSpacing: "0.08em",
+                    letterSpacing: "0.12em",
                     color: PINK_INK,
                   }}
                 >
-                  ＼ {c.fv.campaign.note} ／
+                  {c.offer.eyebrow}
                 </div>
-                <div style={{ padding: "12px 14px 13px" }}>
-                  {c.fv.campaign.rows.map((r, i) => (
+                <h2
+                  style={{
+                    margin: "7px 0 0",
+                    fontFamily: MINCHO,
+                    fontWeight: 600,
+                    fontSize: 18,
+                    lineHeight: 1.5,
+                    letterSpacing: "0.02em",
+                    color: INK,
+                  }}
+                >
+                  {c.offer.heading}
+                </h2>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    marginTop: 9,
+                    padding: "4px 12px",
+                    borderRadius: 999,
+                    background: PALE,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: PINK_INK,
+                  }}
+                >
+                  <SakuraMark size={11} />
+                  {c.offer.duration}・カウンセリング込み
+                </div>
+
+                <div
+                  style={{
+                    marginTop: 14,
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "center",
+                    gap: 10,
+                  }}
+                >
+                  <div style={{ textAlign: "right", paddingBottom: 8 }}>
+                    <div style={{ fontSize: 10.5, color: MUTED, lineHeight: 1.5 }}>通常</div>
                     <div
-                      key={r.label}
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: 8,
-                        padding: "7px 0",
-                        borderTop: i === 0 ? "none" : `1px dashed ${LINE}`,
+                        fontSize: 15,
+                        color: MUTED,
+                        textDecoration: "line-through",
+                        lineHeight: 1.3,
                       }}
                     >
-                      <span style={{ fontSize: 13, fontWeight: 700, color: INK }}>
-                        {r.label}
-                      </span>
-                      <span style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                        <span
-                          style={{
-                            fontSize: 12,
-                            color: MUTED,
-                            textDecoration: "line-through",
-                          }}
-                        >
-                          {r.was}
-                        </span>
-                        <span style={{ fontSize: 12, color: MUTED }}>→</span>
-                        <span
-                          style={{
-                            fontFamily: MINCHO,
-                            fontSize: 27,
-                            fontWeight: 700,
-                            lineHeight: 1,
-                            color: PINK_INK,
-                          }}
-                        >
-                          {r.now}
-                        </span>
-                      </span>
+                      {c.offer.trialWas}
+                    </div>
+                  </div>
+                  <span style={{ fontSize: 15, color: MUTED, paddingBottom: 12 }}>→</span>
+                  <div style={{ display: "flex", alignItems: "flex-end", gap: 2 }}>
+                    <span
+                      style={{
+                        fontFamily: MINCHO,
+                        fontSize: 74,
+                        fontWeight: 700,
+                        lineHeight: 0.86,
+                        color: PINK_INK,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      {c.offer.trialNow}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: MINCHO,
+                        fontSize: 26,
+                        fontWeight: 700,
+                        color: PINK_INK,
+                        paddingBottom: 5,
+                      }}
+                    >
+                      {c.offer.trialUnit}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 体験60分で受けられる中身 */}
+              <div style={{ padding: "16px 12px 4px" }}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: 10,
+                  }}
+                >
+                  {c.offer.items.map((item, i) => (
+                    <div key={item} style={{ textAlign: "center" }}>
+                      <div
+                        style={{
+                          width: 66,
+                          height: 66,
+                          margin: "0 auto",
+                          borderRadius: 999,
+                          border: `1px solid ${LINE}`,
+                          background: CREAM,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <OfferIcon>{offerIcons[i]}</OfferIcon>
+                      </div>
+                      <p
+                        style={{
+                          margin: "7px 0 0",
+                          fontSize: 10,
+                          lineHeight: 1.55,
+                          color: BODY,
+                          fontWeight: 500,
+                        }}
+                      >
+                        {nl(item)}
+                      </p>
                     </div>
                   ))}
+                </div>
+                <div style={{ display: "flex", gap: 8, margin: "16px 3px 0" }}>
+                  {c.offer.photos.map((ph) => (
+                    <ImageSlot
+                      key={ph.placeholder}
+                      src={ph.src}
+                      placeholder={ph.placeholder}
+                      alt={ph.placeholder}
+                      radius={10}
+                      style={{ flex: 1, aspectRatio: "4 / 3" }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* さらに → 入会特典 */}
+              <div style={{ position: "relative", marginTop: 22 }}>
+                <span
+                  style={{
+                    position: "absolute",
+                    top: -14,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    display: "flex",
+                    width: 62,
+                    height: 62,
+                    borderRadius: 999,
+                    background: "linear-gradient(160deg, #FDF0F3 0%, #F3C6D2 100%)",
+                    border: "1px solid rgba(255,255,255,0.9)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontFamily: MINCHO,
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: PINK_INK,
+                    zIndex: 1,
+                    boxShadow: "0 4px 12px rgba(194,80,113,0.18)",
+                  }}
+                >
+                  {c.offer.bridge}
+                </span>
+                {/* パディング上は「さらに」バッジ(高さ62px・top -14px)の下端を避ける値。
+                    詰めるとバッジがリード文に重なる。 */}
+                <div style={{ background: PALE, padding: "56px 14px 16px" }}>
                   <p
                     style={{
-                      margin: "9px 0 0",
+                      margin: 0,
+                      textAlign: "center",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: PINK_INK,
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    {c.offer.joinLead}
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 11 }}>
+                    {c.offer.perks.map((perk) => (
+                      <div
+                        key={perk.label}
+                        style={{
+                          background: "#FFFFFF",
+                          borderRadius: 12,
+                          padding: "11px 13px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          gap: 10,
+                        }}
+                      >
+                        <span>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: INK }}>
+                            {perk.label}
+                          </span>
+                          {perk.note && (
+                            <span
+                              style={{
+                                display: "block",
+                                marginTop: 3,
+                                fontSize: 9.5,
+                                color: MUTED,
+                              }}
+                            >
+                              {perk.note}
+                            </span>
+                          )}
+                        </span>
+                        <span
+                          style={{ display: "flex", alignItems: "baseline", gap: 7, flexShrink: 0 }}
+                        >
+                          {perk.was && (
+                            <span
+                              style={{
+                                fontSize: 11.5,
+                                color: MUTED,
+                                textDecoration: "line-through",
+                              }}
+                            >
+                              {perk.was}
+                            </span>
+                          )}
+                          <span
+                            style={{
+                              fontFamily: MINCHO,
+                              fontSize: perk.now.length > 3 ? 17 : 26,
+                              fontWeight: 700,
+                              lineHeight: 1,
+                              color: PINK_INK,
+                            }}
+                          >
+                            {perk.now}
+                          </span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <p
+                    style={{
+                      margin: "12px 0 0",
                       fontSize: 10.5,
-                      lineHeight: 1.7,
+                      lineHeight: 1.75,
                       color: BODY,
                       textAlign: "center",
                     }}
                   >
-                    {c.fv.campaign.foot}
+                    {c.offer.foot}
                   </p>
                 </div>
               </div>
-              <Cta text={c.fv.ctaText} sub={c.fv.ctaSub} top={16} />
             </div>
+            <Cta text={c.offer.ctaText} sub={c.offer.ctaSub} top={18} />
           </section>
 
-          {/* ── 2. こんなお悩みありませんか？ ── */}
+          {/* ── 3. こんなお悩みありませんか？ ──
+              2列グリッド＋悩みチップの併用は、写真も文字も小さくなって読みづらかった。
+              チップは1列リストと内容が重複していたので落とし、写真＋コピー＋補足の
+              横並び1列に組み替えている（文字サイズを上げても4件が収まる）。 */}
           <section style={{ ...section, background: "#FFFFFF" }}>
             <Kicker>{c.worry.kicker}</Kicker>
             <Heading text={c.worry.heading} />
-            <div
+            <p
               style={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: 6,
-                marginTop: 22,
+                margin: "16px 0 0",
+                fontSize: 13,
+                lineHeight: 1.95,
+                color: BODY,
+                textAlign: "center",
               }}
             >
-              {c.worry.chips.map((chip) => (
-                <span
-                  key={chip}
-                  style={{
-                    padding: "6px 11px",
-                    borderRadius: 999,
-                    background: PALE,
-                    border: `1px solid ${LINE}`,
-                    fontSize: 11,
-                    lineHeight: 1.4,
-                    color: PINK_INK,
-                    fontWeight: 500,
-                  }}
-                >
-                  {chip}
-                </span>
-              ))}
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 10,
-                marginTop: 20,
-              }}
-            >
-              {c.worry.cards.map((card) => (
+              {nl(c.worry.lead)}
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 }}>
+              {c.worry.cards.map((card, i) => (
                 <div
                   key={card.text}
                   style={{
-                    borderRadius: 12,
-                    overflow: "hidden",
+                    display: "flex",
+                    gap: 12,
+                    padding: 11,
+                    borderRadius: 14,
                     background: CREAM,
                     border: `1px solid ${LINE}`,
                   }}
@@ -557,30 +835,57 @@ export default function Page() {
                     src={card.img.src}
                     placeholder={card.img.placeholder}
                     alt={card.text.replace("\n", "")}
-                    style={{ width: "100%", aspectRatio: "1 / 1" }}
+                    radius={10}
+                    style={{ width: 96, height: 96, flexShrink: 0 }}
                   />
-                  <p
-                    style={{
-                      margin: 0,
-                      padding: "10px 9px 12px",
-                      fontSize: 11.5,
-                      lineHeight: 1.65,
-                      textAlign: "center",
-                      color: INK,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {nl(card.text)}
-                  </p>
+                  <div style={{ flex: 1, minWidth: 0, paddingTop: 2 }}>
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 4,
+                        padding: "2px 8px",
+                        borderRadius: 999,
+                        background: PALE2,
+                        fontSize: 9.5,
+                        fontWeight: 700,
+                        letterSpacing: "0.06em",
+                        color: PINK_INK,
+                      }}
+                    >
+                      CASE 0{i + 1}
+                    </div>
+                    <h3
+                      style={{
+                        margin: "7px 0 0",
+                        fontSize: 14,
+                        fontWeight: 700,
+                        lineHeight: 1.6,
+                        color: INK,
+                      }}
+                    >
+                      {nl(card.text)}
+                    </h3>
+                    <p
+                      style={{
+                        margin: "6px 0 0",
+                        fontSize: 11,
+                        lineHeight: 1.75,
+                        color: MUTED,
+                      }}
+                    >
+                      {card.note}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
             <div
               style={{
                 marginTop: 22,
-                padding: "16px 14px",
+                padding: "18px 16px",
                 borderRadius: 14,
-                background: PALE,
+                background: "linear-gradient(180deg, #FBEFF2 0%, #F7E1E7 100%)",
                 textAlign: "center",
               }}
             >
@@ -588,7 +893,7 @@ export default function Page() {
                 style={{
                   margin: 0,
                   fontFamily: MINCHO,
-                  fontSize: 17,
+                  fontSize: 18,
                   fontWeight: 600,
                   lineHeight: 1.7,
                   color: PINK_INK,
@@ -596,10 +901,20 @@ export default function Page() {
               >
                 {nl(c.worry.closing)}
               </p>
+              <p
+                style={{
+                  margin: "10px 0 0",
+                  fontSize: 11.5,
+                  lineHeight: 1.8,
+                  color: BODY,
+                }}
+              >
+                {c.worry.closingSub}
+              </p>
             </div>
           </section>
 
-          {/* ── 3. その悩みにSAKURAがおすすめな理由 ── */}
+          {/* ── 4. その悩みにSAKURAがおすすめな理由 ── */}
           <section style={{ ...section, background: CREAM }}>
             <Kicker>{c.bridge.kicker}</Kicker>
             <Heading text={c.bridge.heading} size={19} />
@@ -679,10 +994,23 @@ export default function Page() {
             <Cta text={c.bridge.ctaText} sub={c.bridge.ctaSub} />
           </section>
 
-          {/* ── 4. SAKURAの特徴・選ばれる理由（5つ） ── */}
+          {/* ── 5. SAKURAの特徴・選ばれる理由（5つ） ──
+              「会社の説明」ではなく「見込み客の不安への答え」として出す。
+              各カードは insight（本音）→ タイトル（答え）→ 本文（公式の事実）の順。 */}
           <section style={{ ...section, background: "#FFFFFF" }}>
             <Kicker>{c.features.kicker}</Kicker>
             <Heading text={c.features.heading} />
+            <p
+              style={{
+                margin: "16px 0 0",
+                fontSize: 12.5,
+                lineHeight: 2,
+                color: BODY,
+                textAlign: "center",
+              }}
+            >
+              {nl(c.features.lead)}
+            </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 22 }}>
               {c.features.items.map((f) => (
                 <div
@@ -699,7 +1027,7 @@ export default function Page() {
                       <ImageSlot
                         src={f.img.src}
                         placeholder={f.img.placeholder}
-                        alt={f.title}
+                        alt={f.title.replace("\n", "")}
                         style={{ width: "100%", aspectRatio: "16 / 9" }}
                       />
                     )}
@@ -725,21 +1053,41 @@ export default function Page() {
                     </span>
                   </div>
                   <div style={{ padding: "14px 14px 16px" }}>
+                    {/* 見込み客の本音。ここに自分を重ねてから答えを読んでもらう。 */}
+                    <p
+                      style={{
+                        margin: 0,
+                        display: "flex",
+                        gap: 6,
+                        fontSize: 11.5,
+                        lineHeight: 1.7,
+                        color: MUTED,
+                      }}
+                    >
+                      <span style={{ color: PINK, flexShrink: 0 }} aria-hidden>
+                        ❝
+                      </span>
+                      {f.insight}
+                    </p>
+                    <div
+                      style={{ height: 1, background: LINE, margin: "11px 0 12px" }}
+                      aria-hidden
+                    />
                     <h3
                       style={{
                         margin: 0,
                         fontFamily: MINCHO,
                         fontSize: 16,
                         fontWeight: 600,
-                        lineHeight: 1.55,
+                        lineHeight: 1.6,
                         color: INK,
                       }}
                     >
-                      {f.title}
+                      {nl(f.title)}
                     </h3>
                     <p
                       style={{
-                        margin: "9px 0 0",
+                        margin: "10px 0 0",
                         fontSize: 12,
                         lineHeight: 1.95,
                         color: BODY,
@@ -753,7 +1101,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 5. パーソナルだからできること ── */}
+          {/* ── 6. パーソナルだからできること ── */}
           <section style={{ ...section, background: PALE }}>
             <Kicker>{c.personal.kicker}</Kicker>
             <Heading text={c.personal.heading} />
@@ -873,7 +1221,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 6. 初心者でも安心できる理由 ── */}
+          {/* ── 7. 初心者でも安心できる理由 ── */}
           <section style={{ ...section, background: "#FFFFFF" }}>
             <Kicker>{c.beginner.kicker}</Kicker>
             <Heading text={c.beginner.heading} />
@@ -955,7 +1303,7 @@ export default function Page() {
             <Cta text={c.beginner.ctaText} sub={c.beginner.ctaSub} />
           </section>
 
-          {/* ── 7. 実績・数字・信頼要素 ── */}
+          {/* ── 8. 実績・数字・信頼要素 ── */}
           <section
             style={{
               ...section,
@@ -1045,7 +1393,7 @@ export default function Page() {
             </p>
           </section>
 
-          {/* ── 8. レッスン内容・身体へのアプローチ ── */}
+          {/* ── 9. レッスン内容・身体へのアプローチ ── */}
           <section style={{ ...section, background: "#FFFFFF" }}>
             <Kicker>{c.program.kicker}</Kicker>
             <Heading text={c.program.heading} />
@@ -1128,7 +1476,7 @@ export default function Page() {
             </p>
           </section>
 
-          {/* ── 9. お客様の声 ── */}
+          {/* ── 10. お客様の声 ── */}
           <section style={{ ...section, background: CREAM }}>
             <Kicker>{c.voices.kicker}</Kicker>
             <Heading text={c.voices.heading} />
@@ -1181,9 +1529,13 @@ export default function Page() {
             <p style={{ margin: "14px 0 0", fontSize: 9.5, lineHeight: 1.7, color: MUTED }}>
               {c.voices.note}
             </p>
+            <Cta text={c.voices.ctaText} sub={c.voices.ctaSub} />
           </section>
 
-          {/* ── 10. 料金 ── */}
+          {/* ── 料金（一旦非表示） ──
+              顧客判断により 2026-09-03 から非表示。データは config.price に残してあるので
+              SHOW_PRICE を true に戻せばそのまま復帰する。 */}
+          {SHOW_PRICE && (
           <section style={{ ...section, background: "#FFFFFF" }}>
             <Kicker>{c.price.kicker}</Kicker>
             <Heading text={c.price.heading} />
@@ -1341,10 +1693,14 @@ export default function Page() {
             </div>
             <Cta text={c.price.ctaText} sub={c.price.ctaSub} />
           </section>
+          )}
 
-          {/* ── 11. 他サービスとの違い ──
-              4社を横に並べる表は390px幅だと1列88pxになり読めない。
-              評価軸ごとにカードを立て、その中で4社を縦に並べている。 */}
+          {/* ── 他サービスとの違い（一旦非表示） ──
+              顧客判断により 2026-09-03 から非表示。データは config.compare に残してあるので
+              SHOW_COMPARE を true に戻せばそのまま復帰する。
+              4社を横に並べる表は390px幅だと1列88pxになり読めないため、
+              評価軸ごとにカードを立て、その中で4社を縦に並べる形にしてある。 */}
+          {SHOW_COMPARE && (
           <section style={{ ...section, background: CREAM }}>
             <Kicker>{c.compare.kicker}</Kicker>
             <Heading text={c.compare.heading} />
@@ -1412,8 +1768,9 @@ export default function Page() {
               ))}
             </div>
           </section>
+          )}
 
-          {/* ── 12. 体験レッスンの流れ ── */}
+          {/* ── 11. 体験レッスンの流れ ── */}
           <section style={{ ...section, background: "#FFFFFF" }}>
             <Kicker>{c.flow.kicker}</Kicker>
             <Heading text={c.flow.heading} />
@@ -1495,7 +1852,7 @@ export default function Page() {
             <Cta text={c.flow.ctaText} sub={c.flow.ctaSub} />
           </section>
 
-          {/* ── 13. よくある質問 ── */}
+          {/* ── 12. よくある質問 ── */}
           <section style={{ ...section, background: PALE }}>
             <Kicker>{c.faq.kicker}</Kicker>
             <Heading text={c.faq.heading} />
@@ -1510,7 +1867,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 14. 店舗情報 ── */}
+          {/* ── 13. 店舗情報 ── */}
           <section style={{ ...section, background: "#FFFFFF" }}>
             <Kicker>{c.studios.kicker}</Kicker>
             <Heading text={c.studios.heading} />
@@ -1631,7 +1988,7 @@ export default function Page() {
             </p>
           </section>
 
-          {/* ── 15. 最終CTA（予約フォーム） ── */}
+          {/* ── 14. 最終CTA（予約フォーム） ── */}
           <section
             id="form"
             style={{
@@ -1662,7 +2019,7 @@ export default function Page() {
                 gap: 8,
               }}
             >
-              {c.fv.campaign.rows.map((r) => (
+              {formOffers.map((r) => (
                 <div
                   key={r.label}
                   style={{
