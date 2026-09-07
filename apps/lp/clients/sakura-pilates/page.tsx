@@ -1867,7 +1867,9 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 13. 店舗情報 ── */}
+          {/* ── 13. 店舗情報 ──
+              東京都限定LPなので都県のグルーピングは持たず、駅名を2列で並べる。
+              「自分の最寄りがあるか」を1画面で確かめられることだけを狙った作り。 */}
           <section style={{ ...section, background: "#FFFFFF" }}>
             <Kicker>{c.studios.kicker}</Kicker>
             <Heading text={c.studios.heading} />
@@ -1880,7 +1882,7 @@ export default function Page() {
                 textAlign: "center",
               }}
             >
-              {c.studios.lead}
+              {nl(c.studios.lead)}
             </p>
             <ImageSlot
               src={c.studios.photo.src}
@@ -1889,13 +1891,7 @@ export default function Page() {
               radius={12}
               style={{ width: "100%", aspectRatio: "16 / 10", marginTop: 18 }}
             />
-            <div
-              style={{
-                marginTop: 16,
-                display: "flex",
-                gap: 8,
-              }}
-            >
+            <div style={{ marginTop: 16, display: "flex", gap: 8 }}>
               {[
                 { label: "営業時間", value: c.studios.hours },
                 { label: "定休日", value: c.studios.holiday },
@@ -1913,75 +1909,91 @@ export default function Page() {
                   <div style={{ fontSize: 9.5, color: MUTED, letterSpacing: "0.06em" }}>
                     {row.label}
                   </div>
-                  <div
-                    style={{
-                      marginTop: 4,
-                      fontSize: 12.5,
-                      fontWeight: 700,
-                      color: PINK_INK,
-                    }}
-                  >
+                  <div style={{ marginTop: 4, fontSize: 12.5, fontWeight: 700, color: PINK_INK }}>
                     {row.value}
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16 }}>
-              {c.studios.areas.map((area) => (
-                <div
-                  key={area.pref}
-                  style={{
-                    borderRadius: 12,
-                    border: `1px solid ${LINE}`,
-                    padding: "12px 13px",
-                    background: CREAM,
-                  }}
-                >
+
+            <div
+              style={{
+                marginTop: 16,
+                borderRadius: 12,
+                border: `1px solid ${LINE}`,
+                background: CREAM,
+                padding: "13px 13px 14px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 7,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: PINK_INK,
+                }}
+              >
+                <SakuraMark size={11} />
+                東京都
+                <span style={{ fontSize: 10, color: MUTED, fontWeight: 400 }}>
+                  {c.studios.names.length}店舗
+                </span>
+              </div>
+              <div
+                style={{
+                  marginTop: 10,
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "0 8px",
+                }}
+              >
+                {c.studios.names.map((name) => (
                   <div
+                    key={name}
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: 7,
-                      fontSize: 12,
-                      fontWeight: 700,
-                      color: PINK_INK,
-                    }}
-                  >
-                    <SakuraMark size={11} />
-                    {area.pref}
-                    <span style={{ fontSize: 10, color: MUTED, fontWeight: 400 }}>
-                      {area.names.length}店舗
-                    </span>
-                  </div>
-                  <p
-                    style={{
-                      margin: "8px 0 0",
+                      gap: 6,
+                      padding: "7px 2px",
+                      borderTop: `1px solid ${LINE}`,
                       fontSize: 11.5,
-                      lineHeight: 1.85,
-                      color: BODY,
+                      lineHeight: 1.4,
+                      color: INK,
                     }}
                   >
-                    {area.names.join("・")}
-                  </p>
-                </div>
-              ))}
-              <div
-                style={{
-                  borderRadius: 12,
-                  border: `1px dashed ${PINK}`,
-                  padding: "12px 13px",
-                  background: "#FFF7F9",
-                }}
-              >
-                <div style={{ fontSize: 12, fontWeight: 700, color: PINK_INK }}>
-                  {c.studios.upcoming.label}
-                </div>
-                <p
-                  style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.85, color: BODY }}
-                >
-                  {c.studios.upcoming.names.join("・")}
-                </p>
+                    <span
+                      style={{
+                        width: 4,
+                        height: 4,
+                        borderRadius: 999,
+                        background: PINK,
+                        flexShrink: 0,
+                      }}
+                      aria-hidden
+                    />
+                    {name}
+                  </div>
+                ))}
               </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: 10,
+                borderRadius: 12,
+                border: `1px dashed ${PINK}`,
+                padding: "12px 13px",
+                background: "#FFF7F9",
+              }}
+            >
+              <div style={{ fontSize: 12, fontWeight: 700, color: PINK_INK }}>
+                {c.studios.upcoming.label}
+              </div>
+              <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.85, color: BODY }}>
+                {c.studios.upcoming.names.join("・")}
+              </p>
             </div>
             <p style={{ margin: "14px 0 0", fontSize: 9.5, lineHeight: 1.7, color: MUTED }}>
               {c.studios.note}
