@@ -15,15 +15,17 @@ import config from "./config";
  * 「不安を1つ潰す → その場で予約できる」の順に並べている。
  *
  * ブロック順（CVRを意図した並び。入れ替えると理由づけの流れが壊れる）:
- *   FV → 特典 → お悩み → なぜマシンピラティス×マンツーマンか → 選ばれる5つの理由
+ *   FV → 特典 → お悩み → なぜマシンピラティス×マンツーマンか → 選ばれる6つの理由
  *   → パーソナルだからできること → 初心者でも安心 → 数字で見るSAKURA
- *   → レッスン内容 → お客様の声 → 体験の流れ → FAQ → 店舗一覧 → 予約フォーム
+ *   → レッスン内容 → お客様の声 → 体験の流れ → FAQ → 店舗一覧
  *
- * 料金と他社比較は顧客判断により一旦非表示（SHOW_PRICE / SHOW_COMPARE）。
- * データは config に残してあるので、フラグを true に戻せば元の位置に復帰する。
+ * 料金・他社比較・予約フォームは顧客判断により一旦非表示
+ * （SHOW_PRICE / SHOW_COMPARE / SHOW_FORM）。データは config に残してあるので、
+ * フラグを true に戻せば元の位置に復帰する。
  *
  * CTAは 特典直後 / 理由の直後 / 初心者不安の解消直後 / お客様の声の直後 / 流れの直後 の
- * 5箇所＋ヘッダー＋追従フッター。いずれも #form へ送る。
+ * 5箇所＋ヘッダー＋追従フッター。**いずれもSAKURA公式の予約サイト（hacomono）へ
+ * 外部遷移する**（config.reserve.url）。
  *
  * 見た目の作法:
  *   1. 地は生成り #FDF9F7、カードは白。セクションの切り替えは地色でつける
@@ -104,12 +106,12 @@ const offerIcons: ReactNode[] = [
     <path d="M9 3.5h6v2.5H9z" />
     <path d="M8.7 12.3l2.3 2.2 4.3-4.6" />
   </>,
-  /* あなたに合うプランのご案内 — カレンダー */
+  /* 姿勢分析 — 横向きの人体＋垂直の基準線と計測目盛り */
   <>
-    <rect x="3.5" y="5" width="17" height="15.5" rx="2" />
-    <path d="M3.5 9.6h17M8 3.5v3M16 3.5v3" />
-    <circle cx="8.4" cy="13.6" r="0.9" />
-    <circle cx="12" cy="13.6" r="0.9" />
+    <path d="M6 2.5v19" strokeDasharray="2 2.2" />
+    <circle cx="13.2" cy="5.6" r="2.1" />
+    <path d="M13.2 7.7v6.1M13.2 13.8l-2.4 6.4M13.2 13.8l2.6 6.4M10.4 10.2l5.6-.9" />
+    <path d="M4.6 7.3H6M4.6 12H6M4.6 16.7H6" />
   </>,
   /* 完全マンツーマン・女性インストラクター — 2人 */
   <>
@@ -123,6 +125,28 @@ const offerIcons: ReactNode[] = [
     <path d="M8.8 4L4 6.7l1.9 3.1L8 8.5V20h8V8.5l2.1 1.3L20 6.7 15.2 4a3.3 3.3 0 01-6.4 0z" />
   </>,
 ];
+
+/** SAKURA専用ソックス特典に添えるイラスト。 */
+function SocksIcon({ size = 34 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden>
+      <path
+        d="M11 4.5h7.4v10.2c0 1.7.7 2.6 2.1 3.7l2.6 2c2.2 1.7 2.4 4.7.6 6.6-1.8 1.9-4.8 1.9-6.7.1l-4.6-4.4c-1.5-1.4-2.4-3.1-2.4-5V4.5z"
+        fill="#FBEFF2"
+        stroke={PINK_DEEP}
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M11 8.6h7.4" stroke={PINK_DEEP} strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M13.6 20.4c1.5-1 3.6-.9 5 .3"
+        stroke={PINK}
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
 function OfferIcon({ children }: { children: ReactNode }) {
   return (
@@ -201,12 +225,14 @@ function Heading({
   );
 }
 
-/** ページ内の主要CTA。すべて #form へ送る。 */
+/** ページ内の主要CTA。すべて予約サイト（hacomono）へ送る。 */
 function Cta({ text, sub, top = 26 }: { text: string; sub?: string; top?: number }) {
   return (
     <div style={{ marginTop: top }}>
       <a
-        href="#form"
+        href={config.reserve.url}
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           display: "flex",
           alignItems: "center",
@@ -264,6 +290,16 @@ function Cta({ text, sub, top = 26 }: { text: string; sub?: string; top?: number
  */
 const SHOW_PRICE: boolean = false;
 const SHOW_COMPARE: boolean = false;
+/**
+ * 予約はSAKURA公式の予約サイト（hacomono）で受けるため、ページ内フォームは非表示
+ * （2026-09-07 の顧客判断）。CTAはすべて config.reserve.url へ外部遷移する。
+ *
+ * LPForm のコード自体は残してある（`check-rules` の LPForm 必須要件も満たしたまま）。
+ * 自社フォームに戻すときは、ここを true にして各CTAの href を "#form" へ戻せばよい。
+ * **注意: フォームを止めている間、基盤側のCV（form_submit）は発火しない。**
+ * Meta広告のコンバージョンは予約サイト側の計測に依存する。
+ */
+const SHOW_FORM: boolean = false;
 
 const section: CSSProperties = { padding: "44px 18px" };
 
@@ -325,7 +361,9 @@ export default function Page() {
               </div>
             </div>
             <a
-              href="#form"
+              href={c.reserve.url}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -737,7 +775,9 @@ export default function Page() {
                           gap: 10,
                         }}
                       >
-                        <span>
+                        <span style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                          {perk.icon === "socks" && <SocksIcon />}
+                          <span>
                           <span style={{ fontSize: 13, fontWeight: 700, color: INK }}>
                             {perk.label}
                           </span>
@@ -753,6 +793,7 @@ export default function Page() {
                               {perk.note}
                             </span>
                           )}
+                          </span>
                         </span>
                         <span
                           style={{ display: "flex", alignItems: "baseline", gap: 7, flexShrink: 0 }}
@@ -792,7 +833,7 @@ export default function Page() {
                       textAlign: "center",
                     }}
                   >
-                    {c.offer.foot}
+                    {nl(c.offer.foot)}
                   </p>
                 </div>
               </div>
@@ -909,7 +950,7 @@ export default function Page() {
                   color: BODY,
                 }}
               >
-                {c.worry.closingSub}
+                {nl(c.worry.closingSub)}
               </p>
             </div>
           </section>
@@ -994,7 +1035,7 @@ export default function Page() {
             <Cta text={c.bridge.ctaText} sub={c.bridge.ctaSub} />
           </section>
 
-          {/* ── 5. SAKURAの特徴・選ばれる理由（5つ） ──
+          {/* ── 5. SAKURAの特徴・選ばれる理由（6つ） ──
               「会社の説明」ではなく「見込み客の不安への答え」として出す。
               各カードは insight（本音）→ タイトル（答え）→ 本文（公式の事実）の順。 */}
           <section style={{ ...section, background: "#FFFFFF" }}>
@@ -1051,6 +1092,31 @@ export default function Page() {
                       <SakuraMark size={11} />
                       {f.num}
                     </span>
+                    {f.badge && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: 10,
+                          right: 10,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 4,
+                          padding: "5px 12px",
+                          borderRadius: 999,
+                          background: BTN,
+                          color: "#FFFFFF",
+                          fontSize: 11.5,
+                          fontWeight: 700,
+                          letterSpacing: "0.04em",
+                          boxShadow: "0 4px 12px rgba(194,80,113,0.34)",
+                        }}
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                          <path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 16.9 6.1 20l1.2-6.5L2.5 8.9 9.1 8z" />
+                        </svg>
+                        {f.badge}
+                      </span>
+                    )}
                   </div>
                   <div style={{ padding: "14px 14px 16px" }}>
                     {/* 見込み客の本音。ここに自分を重ねてから答えを読んでもらう。 */}
@@ -1995,12 +2061,13 @@ export default function Page() {
                 {c.studios.upcoming.names.join("・")}
               </p>
             </div>
-            <p style={{ margin: "14px 0 0", fontSize: 9.5, lineHeight: 1.7, color: MUTED }}>
-              {c.studios.note}
-            </p>
           </section>
 
-          {/* ── 14. 最終CTA（予約フォーム） ── */}
+          {/* ── 最終CTA・予約フォーム（一旦非表示） ──
+              予約はSAKURA公式の予約サイト（hacomono）で受ける方針のため非表示
+              （2026-09-07）。SHOW_FORM を true に戻せばそのまま復帰する。
+              その場合は各CTAの href を "#form" に戻すこと。 */}
+          {SHOW_FORM && (
           <section
             id="form"
             style={{
@@ -2089,6 +2156,7 @@ export default function Page() {
               />
             </div>
           </section>
+          )}
 
           <footer
             style={{
@@ -2130,7 +2198,7 @@ export default function Page() {
       </div>
 
       <StickyFooterCTA
-        anchor={c.sticky.anchor}
+        href={c.reserve.url}
         buttonText={c.sticky.buttonText}
         showAfter={520}
         buttonGradient={BTN}

@@ -66,7 +66,7 @@ export interface SakuraConfig {
     photos: [Slot, Slot];
     bridge: string;
     joinLead: string;
-    perks: { label: string; was?: string; now: string; note?: string }[];
+    perks: { label: string; was?: string; now: string; note?: string; icon?: "socks" }[];
     foot: string;
     ctaText: string;
     ctaSub: string;
@@ -97,7 +97,15 @@ export interface SakuraConfig {
     heading: string;
     lead: string;
     /** `insight` は見込み客の本音（不安）。強みを「会社の説明」でなく「不安への答え」として出す。 */
-    items: { num: string; insight: string; title: string; body: string; img?: Slot }[];
+    items: {
+      num: string;
+      insight: string;
+      title: string;
+      body: string;
+      img?: Slot;
+      /** 写真の上に重ねる訴求バッジ（例「業界最安級」）。 */
+      badge?: string;
+    }[];
   };
 
   personal: {
@@ -190,8 +198,13 @@ export interface SakuraConfig {
     upcoming: { label: string; names: string[] };
     hours: string;
     holiday: string;
-    note: string;
   };
+
+  /**
+   * 予約導線。CVは自社フォームではなく SAKURA の予約サイト（hacomono）で受ける
+   * ため、ページ内のCTAはすべてここへ外部遷移させる（2026-09-07 の顧客判断）。
+   */
+  reserve: { url: string; note: string };
 
   form: {
     kicker: string;
@@ -204,7 +217,7 @@ export interface SakuraConfig {
     errorMessage: string;
   };
 
-  sticky: { buttonText: string; anchor: string; offers: [string, string] };
+  sticky: { buttonText: string; offers: [string, string] };
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -301,7 +314,7 @@ const config: SakuraConfig = {
     },
     /* 出典: 公式店舗LP（未経験80% / 継続率94% / スタッフ全員女性）、公式 /studios/（店舗数） */
     stats: [
-      { num: "18", unit: "店舗", label: "東京都内に展開" },
+      { num: "18", unit: "店舗", label: "どの店舗も利用OK" },
       { num: "80", unit: "%", label: "ピラティス未経験" },
       { num: "94", unit: "%", label: "継続率" },
       { num: "全員", unit: "女性", label: "スタッフ" },
@@ -326,7 +339,7 @@ const config: SakuraConfig = {
       "丁寧な\nカウンセリング",
       "マシン\nピラティス体験",
       "専門的な\nフィードバック",
-      "あなたに合う\nプランのご案内",
+      "姿勢分析",
       "完全マンツーマン\n女性インストラクター",
       "ウェア・靴下\n無料レンタル",
     ],
@@ -338,11 +351,16 @@ const config: SakuraConfig = {
     joinLead: "体験レッスン後のご入会で",
     perks: [
       { label: "入会金", was: "33,000円", now: "0円" },
-      { label: "SAKURA専用ソックス", now: "プレゼント", note: "レッスン用のグリップソックス" },
+      {
+        label: "SAKURA専用ソックス",
+        now: "プレゼント",
+        note: "レッスン用のグリップソックス",
+        icon: "socks",
+      },
     ],
-    foot: "体験はウェア・靴下の無料レンタル付き。手ぶらでお越しいただけます。",
+    foot: "体験はウェア・靴下の無料レンタル付き。\n手ぶらでお越しいただけます。",
     ctaText: "まずは無料体験を予約する",
-    ctaSub: "所要60分／入力は1分で完了",
+    ctaSub: "所要60分／空き状況はその場で確認できます",
   },
 
   worry: {
@@ -373,7 +391,7 @@ const config: SakuraConfig = {
       },
     ],
     closing: "そのお悩み、SAKURAなら\nすべて解決できます。",
-    closingSub: "女性専用・完全マンツーマンだから、あなたの身体に合わせて進められます。",
+    closingSub: "女性専用・完全マンツーマンだから、\nあなたの身体に合わせて進められます。",
   },
 
   /* 出典: 公式トップ Concept / 公式店舗LP「マシンピラティスで得られる効果」Benefits 01-03 */
@@ -403,8 +421,8 @@ const config: SakuraConfig = {
   /* 出典: 公式店舗LP「『SAKURA』のマシンピラティス 5つの特徴」 */
   features: {
     kicker: "FEATURE",
-    heading: "SAKURAが\n選ばれる5つの理由",
-    lead: "ピラティスを始める前に、ほとんどの方が同じところでつまずきます。\nその5つに、SAKURAは全部答えを持っています。",
+    heading: "SAKURAが\n選ばれる6つの理由",
+    lead: "ピラティスを始める前に、ほとんどの方が同じところでつまずきます。\nその6つに、SAKURAは全部答えを持っています。",
     /* タイトルは見込み客の不安への「答え」に言い換えているが、本文の事実は
        公式店舗LP「『SAKURA』のマシンピラティス 5つの特徴」の記載どおり。 */
     items: [
@@ -425,13 +443,14 @@ const config: SakuraConfig = {
       {
         num: "03",
         insight: "スタジオで体型を見られるのが、どうしても恥ずかしい。",
-        title: "人の目が気になる人のための、\n女性専用スタジオ",
+        title: "人の目が気になる人のための、\n完全個室・女性専用スタジオ",
         body: "スタジオもインストラクターも全員女性。人目を気にせず、体型や産後のことなど女性特有のお悩みも、お気軽に相談できる環境です。",
         img: { placeholder: "カウンセリング", src: `${IMG}/reason-1.jpg` },
       },
       {
         num: "04",
         insight: "パーソナルは効きそうだけど、高くて続けられない。",
+        badge: "業界最安級",
         title: "「高いから続かない」をなくした、\nパーソナルなのにリーズナブル",
         body: "コストカットにより他社よりも続けやすい費用を実現。月額制とチケット制を用意しているので、通うペースに合わせてプランをお選びいただけます。",
         img: { placeholder: "スタジオ内観", src: `${IMG}/reason-3.jpg` },
@@ -442,6 +461,14 @@ const config: SakuraConfig = {
         title: "産後の身体は、戻すのではなく整える。\n産後リカバリーサポート",
         body: "産後のからだの変化に寄り添い、心身ともに快適な日常へとつながる姿勢づくりをサポートします。骨盤まわりに特化したMATERNITYプログラムもご用意しています。",
         img: { placeholder: "産後ケア", src: `${IMG}/worry-4-postnatal.jpg` },
+      },
+      {
+        /* 出典: 公式トップ「System 予約の取りやすい独自の仕組みづくり」 */
+        num: "06",
+        insight: "予約が取れないジムに、お金を払い続けたくない。",
+        title: "予約の取りやすい\n独自の仕組みづくり",
+        body: "一気に予約が解放されるスタジオとは異なり、当店独自の仕組みにより可能な限り予約の取りやすい環境を作っています。常に3週間先のスケジュールが開放されるので、予定に合わせて計画的に通えます。",
+        img: { placeholder: "カウンセリングスペース", src: `${IMG}/access.jpg` },
       },
     ],
   },
@@ -497,7 +524,7 @@ const config: SakuraConfig = {
   beginner: {
     kicker: "FOR BEGINNERS",
     heading: "はじめてでも、\n大丈夫です。",
-    lead: "SAKURAの会員様は80%がピラティス未経験。30代を中心に、幅広い年齢層の方が通われています。",
+    lead: "SAKURAの会員様は80%がピラティス未経験。幅広い年齢層の方が通われています。",
     photos: [
       { placeholder: "レンタルウェア", src: `${IMG}/offer-2.jpg` },
       { placeholder: "カウンセリングスペース", src: `${IMG}/access.jpg` },
@@ -528,7 +555,7 @@ const config: SakuraConfig = {
     kicker: "TRUST",
     heading: "数字で見るSAKURA",
     stats: [
-      { num: "18", unit: "店舗", label: "東京都内に展開" },
+      { num: "18", unit: "店舗", label: "相互利用OK" },
       { num: "80", unit: "%", label: "ピラティス未経験からスタート" },
       { num: "94", unit: "%", label: "継続率" },
       { num: "7,150", unit: "円〜", label: "レッスン1回あたり" },
@@ -546,7 +573,7 @@ const config: SakuraConfig = {
   /* 出典: 公式 /program/ ＋ 公式店舗LP「幅広いレッスン内容」 */
   program: {
     kicker: "PROGRAM",
-    heading: "目的に合わせて選べる\nレッスン内容",
+    heading: "目的・悩みに合わせて選べる\nレッスン内容",
     lead: "全米スポーツ医学協会の有資格者が監修したプログラム。カウンセリングで伺ったお悩みに合わせて、インストラクターが組み立てます。",
     groups: [
       {
@@ -736,7 +763,7 @@ const config: SakuraConfig = {
       {
         num: "01",
         title: "体験レッスンを予約",
-        body: "このページのフォームからお申し込みください。ご希望の店舗と日程を伺い、担当より順次ご連絡いたします。",
+        body: "公式の予約サイトから、ご希望の店舗と日時を選んでお申し込みください。空き状況はその場で確認できます。",
       },
       {
         num: "02",
@@ -816,7 +843,7 @@ const config: SakuraConfig = {
   studios: {
     kicker: "STUDIOS",
     heading: "東京都内18店舗",
-    lead: "駅チカ・完全個室のスタジオを、東京都内18店舗で展開しています。\nご希望の店舗はフォームからお選びください。",
+    lead: "駅チカ・完全個室のスタジオを、\n東京都内18店舗で展開しています。\nご希望の店舗は予約サイトからお選びください。",
     photo: { placeholder: "スタジオ内観", src: `${IMG}/reason-3.jpg` },
     names: TOKYO_STUDIOS,
     upcoming: {
@@ -825,7 +852,11 @@ const config: SakuraConfig = {
     },
     hours: "8:00〜21:30",
     holiday: "年末年始（12/29〜1/3）",
-    note: "※店舗数・営業時間は2026年9月時点の公式サイト掲載情報です。詳しい住所・アクセスは体験のご予約後にご案内します。",
+  },
+
+  reserve: {
+    url: "https://reserve.sakura-pilates.jp/reserve",
+    note: "SAKURA公式の予約サイトへ移動します",
   },
 
   form: {
@@ -870,7 +901,6 @@ const config: SakuraConfig = {
 
   sticky: {
     buttonText: "まずは無料体験を予約する",
-    anchor: "#form",
     offers: ["体験レッスン ¥0", "入会金 ¥0"],
   },
 };
