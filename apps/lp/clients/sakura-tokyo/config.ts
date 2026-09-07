@@ -239,7 +239,7 @@ export interface SakuraConfig {
  *  4. C は主語が「自分」で内省的すぎ、E は「60分」が先に立って情緒が弱い。
  * ────────────────────────────────────────────────────────────── */
 
-const IMG = "/clients/sakura-pilates";
+const IMG = "/clients/sakura-tokyo";
 
 /**
  * 希望店舗セレクト。公式 /studios/ の表記に合わせている（2026年9月時点）。
@@ -274,7 +274,7 @@ const studioOptions = [
 ];
 
 const config: SakuraConfig = {
-  slug: "sakura-pilates",
+  slug: "sakura-tokyo",
   status: "draft",
   meta: {
     title:
@@ -282,7 +282,7 @@ const config: SakuraConfig = {
     description:
       "姿勢が変わると、鏡を見るのが楽しみになる。東京都内18店舗、女性専用・完全マンツーマンのマシンピラティスSAKURA。会員様の80%がピラティス未経験、継続率94%。9月30日までのご予約限定で体験レッスン＆入会金が0円。",
     // 相対パスだと metadataBase が別ドメインに解決されるため絶対URLで固定する。
-    ogpImage: "https://fitness-lp.commitad.com/clients/sakura-pilates/ogp.jpg",
+    ogpImage: "https://fitness-lp.commitad.com/clients/sakura-tokyo/ogp.jpg",
   },
 
   /* 出典: 公式 /studios/<店舗>/ のキャンペーンバナー

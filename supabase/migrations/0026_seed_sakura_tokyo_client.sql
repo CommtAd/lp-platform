@@ -1,10 +1,15 @@
--- パーソナルマシンピラティス SAKURA（ブランド全体の広告集客LP, slug=sakura-pilates）の
+-- パーソナルマシンピラティス SAKURA（ブランド全体の広告集客LP, slug=sakura-tokyo）の
 -- clients 行を作成する。
 --
--- LPコードは apps/lp/clients/sakura-pilates/。ページ表示（/sakura-pilates ルーティング）
+-- LPコードは apps/lp/clients/sakura-tokyo/。ページ表示（/sakura-tokyo ルーティング）
 -- だけでなく、LPShell が同じ slug で clients 行を引いてタグ注入・noindex・CV転送を行うため、
 -- この行が無いとページは200で出るのにタグが一切入らない（days-pilates / bee-pilates-ebisu で
--- 実際に発生した不具合クラス）。フォルダ名 sakura-pilates と clients.slug を必ず一致させること。
+-- 実際に発生した不具合クラス）。フォルダ名 sakura-tokyo と clients.slug を必ず一致させること。
+--
+-- 2026-09-07 時点で、この行は既にダッシュボード側で作成済み。したがってこのファイルは
+-- 適用しても何も起きない（`do nothing`）。環境を作り直すときのフォールバックとして残している。
+-- なお現在ページ内フォームは非表示（予約はhacomonoへ外部遷移）なので、下の
+-- confirmation_meta が使われるのはフォームを復活させたときだけ。
 --
 -- 既にダッシュボードで枠を作ってある場合を考慮して `do nothing` にしている。
 -- ダッシュボード側の設定（Pixel ID・通知先など）を、このマイグレーションが後から
@@ -19,7 +24,7 @@
 
 insert into public.clients (slug, name, status, industry, cv_events, confirmation_meta, notify_emails)
 values (
-  'sakura-pilates',
+  'sakura-tokyo',
   'パーソナルマシンピラティス SAKURA',
   'draft',
   'fitness',
