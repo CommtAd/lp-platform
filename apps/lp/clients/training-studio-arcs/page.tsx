@@ -64,13 +64,8 @@ const trialNowSize = trialNow.length <= 1 ? 92 : trialNow.length <= 3 ? 72 : 48;
 const fontMincho = "'Shippori Mincho', serif";
 const fontGothic = "'Zen Kaku Gothic New', serif";
 
-/* Fixed decorative icons for the six offer items (order matches config). */
+/* Fixed decorative icons for the four offer breakdown items (order matches config). */
 const offerIcons: ReactNode[] = [
-  <>
-    <rect x="5" y="3.5" width="14" height="17" rx="2" />
-    <path d="M9 3.5h6v2.5H9z" />
-    <path d="M8.5 10h7M8.5 13.5h7M8.5 17h4" />
-  </>,
   <>
     <circle cx="12" cy="4.5" r="2" />
     <path d="M12 6.5v7" />
@@ -86,12 +81,6 @@ const offerIcons: ReactNode[] = [
     <circle cx="12" cy="8" r="1" />
   </>,
   <>
-    <circle cx="9" cy="4.5" r="2" />
-    <path d="M9 6.5l-1 5 4 1 2 6" />
-    <path d="M8 11.5l-3 1.5-1.5 4" />
-    <path d="M12 12.5l6-2.5" />
-  </>,
-  <>
     <path d="M4 5.5h16a1 1 0 011 1V15a1 1 0 01-1 1H9l-4 3.5V16H4a1 1 0 01-1-1V6.5a1 1 0 011-1z" />
     <path d="M8.5 11l2.2 2 4.3-4" />
   </>,
@@ -101,6 +90,32 @@ const offerIcons: ReactNode[] = [
     <path d="M15 8h1M8.5 8h3.5" />
   </>,
 ];
+
+/** 3コース比較カード。reasons/flow の両方で使う共通レイアウト。 */
+function TrioGrid({ trio }: { trio: { label: string; desc: string }[] }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+      {trio.map((t, i) => (
+        <div
+          key={i}
+          style={{
+            background: "#ECE8E0",
+            borderRadius: 12,
+            padding: "18px 8px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 8,
+            textAlign: "center",
+          }}
+        >
+          <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accentInk }}>{t.label}</span>
+          <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const Icon = ({ children }: { children: ReactNode }) => (
   <svg
@@ -538,7 +553,7 @@ export default function Page() {
                     padding: "0 4px",
                   }}
                 >
-                  {c.offer.heading}
+                  {nl(c.offer.heading)}
                 </h2>
                 <span style={{ display: "inline-block", width: 22, height: 1, background: "linear-gradient(90deg, #C79A47, transparent)", position: "relative" }}>
                   <span style={{ position: "absolute", left: -2, top: -2, width: 4, height: 4, borderRadius: "50%", background: "#C79A47" }} />
@@ -546,12 +561,21 @@ export default function Page() {
               </div>
             </div>
 
+            {/* 120分＝ずっと運動、という誤解を避けるための小さな時間補足 */}
+            <div style={{ textAlign: "center", marginTop: 14 }}>
+              {c.offer.timeNote.map((line, i) => (
+                <p key={i} style={{ fontSize: i === 0 ? 12 : 10.5, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#62655B" : "#9A9C90", letterSpacing: "0.03em", margin: i === 0 ? 0 : "3px 0 0" }}>
+                  {line}
+                </p>
+              ))}
+            </div>
+
             {/* 体験価格 hero */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginTop: 26 }}>
               <div style={{ minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
                 {/* ARCS's badge is longer than the template's, so it wraps instead of forcing the row wide. */}
-                <span style={{ display: "inline-flex", background: "#4A4E57", color: "#FFFFFF", fontSize: 10.5, fontWeight: 700, letterSpacing: "0.02em", lineHeight: 1.5, padding: "6px 10px", borderRadius: 4, maxWidth: 190 }}>
-                  {c.offer.trialBadge}
+                <span style={{ display: "inline-block", background: "#4A4E57", color: "#FFFFFF", fontSize: 10.5, fontWeight: 700, letterSpacing: "0.02em", lineHeight: 1.5, padding: "6px 10px", borderRadius: 4, maxWidth: 190 }}>
+                  {nl(c.offer.trialBadge)}
                 </span>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
                   <span style={{ fontSize: 11, color: "#62655B" }}>通常価格</span>
@@ -569,14 +593,13 @@ export default function Page() {
               </div>
             </div>
 
-            {/* six items */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px 8px", marginTop: 34 }}>
-              {c.offer.items.map((label, i) => (
+            {/* 120分の内訳を所要時間つき4ブロックで一目に見せる */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 8, marginTop: 34 }}>
+              {c.offer.items.map((item, i) => (
                 <div
                   key={i}
                   style={{
-                    aspectRatio: "1",
-                    borderRadius: "50%",
+                    borderRadius: 14,
                     background: "#FFFFFF",
                     border: "1px solid #E6E1D5",
                     boxShadow: "0 4px 12px rgba(70,72,60,0.06)",
@@ -584,16 +607,20 @@ export default function Page() {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: 7,
+                    gap: 6,
                     textAlign: "center",
-                    padding: 8,
+                    padding: "12px 4px",
                   }}
                 >
-                  <span style={{ fontSize: 12, lineHeight: 1.4, color: "#4C4E45" }}>{nl(label)}</span>
                   <Icon>{offerIcons[i]}</Icon>
+                  <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 13, color: accentInk }}>{item.time}</span>
+                  <span style={{ fontSize: 10, lineHeight: 1.35, color: "#4C4E45" }}>{nl(item.label)}</span>
                 </div>
               ))}
             </div>
+            <p style={{ fontSize: 11, lineHeight: 1.7, color: "#9A9C90", textAlign: "center", margin: "14px 0 0" }}>
+              {c.offer.breakdownNote}
+            </p>
 
             {/* photos */}
             <div style={{ display: "flex", gap: 10, marginTop: 24, alignItems: "flex-start" }}>
@@ -656,6 +683,21 @@ export default function Page() {
             </p>
           </section>
 
+          {/* ── ②.5 testimonials（口コミ・お客様の声。取得でき次第 config 側で show: true にする） ── */}
+          {c.testimonials?.show && c.testimonials.items.length > 0 && (
+            <section style={{ background: creamGrad, padding: "54px 26px" }}>
+              <SectionHeading text={c.testimonials.heading} fontSize={20} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 30 }}>
+                {c.testimonials.items.map((t, i) => (
+                  <div key={i} style={{ background: "#FCFBF7", borderRadius: 16, padding: "20px 18px", boxShadow: "0 4px 14px rgba(70,72,60,0.07)" }}>
+                    <p style={{ fontSize: 13, lineHeight: 1.9, color: "#4C4E45", margin: 0 }}>{t.body}</p>
+                    <p style={{ fontSize: 11.5, color: "#9A9C90", margin: "10px 0 0", textAlign: "right" }}>{t.name}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* ── ③ worry ── */}
           <section style={{ background: creamGrad, padding: "54px 26px" }}>
             <SectionHeading text={c.worry.heading} fontSize={20} />
@@ -691,16 +733,7 @@ export default function Page() {
                 </h3>
                 <div style={{ width: 40, height: 2, background: "#DAD5C9", margin: "12px auto 0" }} />
                 <p style={{ fontSize: 13, lineHeight: 2, color: "#62655B", margin: item.trio ? "16px 0 20px" : "16px 0 0" }}>{item.body}</p>
-                {item.trio && (
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                    {item.trio.map((t, i) => (
-                      <div key={i} style={{ background: "#ECE8E0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
-                        <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accentInk }}>{t.label}</span>
-                        <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {item.trio && <TrioGrid trio={item.trio} />}
               </div>
             ))}
             <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} url={c.reserve.url} />
@@ -775,16 +808,12 @@ export default function Page() {
                     <div style={{ paddingBottom: last ? 0 : 28 }}>
                       <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
                         <h3 style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.03em", margin: 0, color: "#33352E" }}>{step.title}</h3>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: accentInk, background: accentSoft, borderRadius: 999, padding: "2px 10px", whiteSpace: "nowrap" }}>{step.time}</span>
                       </div>
                       <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>{step.body}</p>
                       {step.trio && (
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 16 }}>
-                          {step.trio.map((t, ti) => (
-                            <div key={ti} style={{ background: "#ECE8E0", borderRadius: 12, padding: "18px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
-                              <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, color: accentInk }}>{t.label}</span>
-                              <span style={{ fontSize: 9.3, lineHeight: 1.7, color: "#62655B" }}>{nl(t.desc)}</span>
-                            </div>
-                          ))}
+                        <div style={{ marginTop: 16 }}>
+                          <TrioGrid trio={step.trio} />
                         </div>
                       )}
                     </div>
