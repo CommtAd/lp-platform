@@ -7,17 +7,24 @@ const ASSET = "/clients/training-studio-arcs";
  * 予約導線はhacomono店舗別ウィジェットへ直接遷移し、LPFormは使用しない
  * （check-rules.ts の FORM_EXEMPT に登録済み。LPShellは維持）。
  */
-type Config = Omit<PatternAConfig, "form" | "offer"> & {
+type Config = Omit<PatternAConfig, "form" | "offer" | "fv"> & {
+  /**
+   * FVのカードは「整える」「鍛える」の小見出しを出さず、
+   * 「美容整体」「マシンピラティス」だけを大きく見せる（顧客要望）。
+   * そのため pattern-a の `small` は持たない。
+   */
+  fv: Omit<PatternAConfig["fv"], "leftCard" | "rightCard"> & {
+    leftCard: { big: string };
+    rightCard: { big: string };
+  };
   offer: Omit<PatternAConfig["offer"], "items"> & {
     /**
-     * 120分の内訳（4ステップ）。CVR改善のため「120分＝ずっと運動するわけではない」
-     * ことが一目で分かるよう、丸アイコン6個ではなく所要時間つき4ブロックで見せる。
+     * 体験の内訳（4ステップ）。丸アイコン6個ではなく4ブロックで見せる。
+     * 所要時間は顧客要望で非表示にしたため持たない。
      */
-    items: { time: string; label: string }[];
+    items: { label: string }[];
     /** トライアル価格の下に添える小さな時間補足（120分をメイン訴求から外すための小見出し）。 */
     timeNote: string[];
-    /** 内訳グリッド直下の一言。「120分間ずっと運動するわけではない」ことを明示する。 */
-    breakdownNote: string;
   };
   reserve: {
     heading: string;
@@ -86,10 +93,10 @@ const config: Config = {
   achievement: { pre: "茨城県内", num: "5", post: "店舗でサポートしてきたARCSが提供" },
 
   fv: {
-    catchLines: ["整えてから鍛える、", "ダイエットピラティス"],
+    catchLines: ["楽して通える", "ダイエットピラティス"],
     hero: { placeholder: "メインビジュアルの写真（全面）", src: `${ASSET}/hero.jpg` },
-    leftCard: { small: "整える", big: "美容整体" },
-    rightCard: { small: "鍛える", big: "マシンピラティス" },
+    leftCard: { big: "美容整体" },
+    rightCard: { big: "マシン\nピラティス" },
   },
 
   offer: {
@@ -103,16 +110,14 @@ const config: Config = {
     timeNote: [
       "初回所要時間：約120分",
       "※カウンセリング・ご案内を含みます",
-      "※美容整体＋マシンピラティスの体験時間は約50分",
     ],
     // 6つの丸アイコンではなく「所要時間つき4ブロック」にして、120分の内訳を一目で見せる。
     items: [
-      { time: "約30分", label: "カウンセリング\n姿勢確認" },
-      { time: "約50分", label: "美容整体+\nマシンピラティス" },
-      { time: "約20分", label: "体験後\nフィードバック" },
-      { time: "約20分", label: "希望者のみ\nご入会案内" },
+      { label: "カウンセリング\n姿勢確認" },
+      { label: "美容整体+\nマシンピラティス" },
+      { label: "体験後\nフィードバック" },
+      { label: "希望者のみ\nご入会案内" },
     ],
-    breakdownNote: "120分間ずっと施術・運動を行うわけではありません。美容整体＋マシンピラティスの体験は約50分です。",
     photos: [
       { placeholder: "マシンピラティスのレッスン風景", src: `${ASSET}/lesson-1.jpg` },
       { placeholder: "スタジオ内観 / マシン設備", src: `${ASSET}/studio-1.jpg` },
