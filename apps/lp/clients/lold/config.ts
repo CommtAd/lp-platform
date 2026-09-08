@@ -47,15 +47,15 @@ const config: PatternCConfig = {
 
   fv: {
     brand: "ザ・フォレストオブロルド",
-    kicker: "GRAND OPEN BRIDAL FAIR",
-    catch: ["グランドオープン記念BIGフェア"],
+    kicker: "＼豪華10大特典／",
+    catch: ["プレミア試食つきBIG フェア"],
     // キッカー・キャッチ・訴求を1枚のプレートにまとめる。
     framed: true,
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
     },
-    highlight: "最大180万円相当 優待",
+    highlight: "最大100万円相当 プレゼント！",
     // リードとオファーチップは顧客要望で非表示。FVは訴求を highlight 1点に絞る。
     ctaText: "最短30秒で予約する",
     // 新郎新婦が写真中央にいるため、キャッチを上に逃がして顔にかぶらないようにする。
