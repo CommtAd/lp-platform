@@ -47,6 +47,8 @@ const config: PatternCConfig = {
     //（そのまま置くと生成りのヘッダーに白い矩形が出る）。
     logo: { src: `${ASSET}/logo.png`, height: 46 },
     ctaText: "予約する",
+    // ヘッダーは追従させない（顧客指定）。
+    sticky: false,
   },
 
   fv: {
