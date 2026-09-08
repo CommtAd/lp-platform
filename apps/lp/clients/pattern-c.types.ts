@@ -76,7 +76,8 @@ export interface PatternCConfig {
   header: {
     /** ロゴ未指定時のヘッダー表示。指定時も img の alt に使う。 */
     venue: string;
-    venueSub: string;
+    /** ロゴ未指定時に会場名の下へ出る補足。省略すると行ごと出ない。 */
+    venueSub?: string;
     /**
      * ロゴ画像。指定すると会場名テキスト2行の代わりに表示する。
      * 縦積みのロゴは `height` を上げないと下段の小さい文字が潰れる。
@@ -207,6 +208,7 @@ export interface PatternCConfig {
      * `image` を渡すと各列の頭に正方形のサムネイルが入る（全列に付けるか、全列なしか）。
      * 写真がある場合は列を分ける縦罫が消え、溝で離れる。
      */
+    /** `name` は `\n` で改行位置を指定できる。 */
     items: { amount: string; name: string; image?: Slot }[];
     /** 金額の右下に小さく置く注記（適用条件など）。 */
     disclaimer?: string;
@@ -222,13 +224,26 @@ export interface PatternCConfig {
   grandOffer?: {
     eyebrow: string;
     heading: string;
-    lead: string;
+    /** `heading` の文字サイズ(px)。既定 21。 */
+    headingSize?: number;
+    /** 見出し下のリード。省略すると行ごと出ない。 */
+    lead?: string;
     /** 対象条件のバッジ、例 "2027年5月までの挙式披露宴が対象"。 */
     badge?: string;
     /** 特典の名前、例 "豪華10大特典"。 */
     title: string;
-    /** 金額訴求、例 "最大180万円相当"。 */
+    /** 金額訴求、例 "最大180万円相当"。数字部分は自動で特大になる。 */
     amount: string;
+    /**
+     * `amount` を金額ではなく説明文として組む。数字の特大化をやめ、`\n` の行ごとに
+     * 積んで読ませる。金額をバッジ側に出して、プレートでは特典の中身を説明する
+     * ときに使う（"衣装2着…" のような文言だと 2 だけが巨大になってしまうため）。
+     */
+    amountProse?: boolean;
+    /** `amountProse` のとき、この語を含む行だけ深い金の大きめにする。 */
+    amountProseEmphasis?: string;
+    /** `amountProse` の基準文字サイズ(px)。既定 13（強調行はこれ +4）。 */
+    amountProseSize?: number;
     /**
      * 金額カードに重ねる四隅のフレーム装飾（中央が透明の横長PNG）。
      * カードの縦横比に合わせて伸縮するので、四隅の意匠が対称な素材を使うこと。
@@ -280,6 +295,8 @@ export interface PatternCConfig {
     items: CarouselItem[];
     /** カルーセル画像の比率。既定 "4 / 3"。 */
     aspect?: string;
+    /** 説明文の文字サイズ(px)。既定 12。 */
+    bodySize?: number;
   };
 
   /**
@@ -310,6 +327,7 @@ export interface PatternCConfig {
      * 持たせない。`title` は6文字程度まで、`amount` は「1万円分」等の短い表記に。
      * `image` を渡すと各列の頭に正方形のサムネイルが入る（全列に付けるか、全列なしか）。
      */
+    /** `title` は `\n` で改行位置を指定できる。 */
     items: { title: string; amount: string; image?: Slot }[];
     /** パネルに重ねる四隅のフレーム装飾（中央が透明のPNG）。`grandOffer.frame` と同じ扱い。 */
     frame?: string;
@@ -378,7 +396,8 @@ export interface PatternCConfig {
     address: string;
     /** 交通経路。1行1経路で、そのまま太字で並ぶ。空配列なら経路リストを出さない。 */
     routes: string[];
-    tel: string;
+    /** 電話番号。省略すると電話の枠ごと出ない（WEB導線だけで受ける案件向け）。 */
+    tel?: string;
     /**
      * 電話番号を `tel:` リンクにするか。既定 true。
      * false にするとプレーンテキストになり、`trackEvent('tel_tap')` も発火しない
