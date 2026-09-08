@@ -383,21 +383,27 @@ export default function Page() {
   );
   // framed のときはプレート自体が枠を持つので、訴求は罫線で区切った1行として置く。
   // 単独で置く場合は、角を落とした矩形のすりガラスプレートで受ける（角丸ピルは安っぽく見える）。
+  /**
+   * FV訴求の文字サイズ(px)。既定は framed なら22、単独プレートなら17。
+   * 文言を詰めたときに一段落としたい、といった微調整のために config から上書きできる。
+   */
+  const fvHighlightSize = c.fv.highlightSize ?? (framed ? 22 : 17);
   const fvHighlight = !c.fv.highlight ? null : framed ? (
     <>
       <span className="mt-2.5 block h-px" style={{ background: `${c.accent}66` }} />
       <p
-        className="mt-2.5 text-[22px] font-bold tracking-[0.06em]"
-        style={{ fontFamily: mincho, color: goldOnWhite }}
+        className="mt-2.5 font-bold tracking-[0.06em]"
+        style={{ fontFamily: mincho, color: goldOnWhite, fontSize: fvHighlightSize }}
       >
         {c.fv.highlight}
       </p>
     </>
   ) : (
     <p
-      className="mt-4 inline-block rounded-[2px] border px-6 py-2.5 text-[17px] font-bold tracking-[0.14em] backdrop-blur-[3px]"
+      className="mt-4 inline-block rounded-[2px] border px-6 py-2.5 font-bold tracking-[0.14em] backdrop-blur-[3px]"
       style={{
         fontFamily: mincho,
+        fontSize: fvHighlightSize,
         background: "rgba(255,255,255,0.86)",
         borderColor: c.accent,
         color: goldOnWhite,

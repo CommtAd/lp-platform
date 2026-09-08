@@ -135,6 +135,11 @@ export interface PatternCConfig {
     };
     /** 最も強い単一訴求（例 "最大180万円相当 優待"）。金額系はここに置く。 */
     highlight?: string;
+    /**
+     * `highlight` の文字サイズ(px)。既定は `framed` なら22、単独プレートなら17。
+     * 文言を詰めて余白が空いたときなどに一段落とす用途。
+     */
+    highlightSize?: number;
     /** 補足リード。`highlight` だけで足りるなら省略してFVを締める。 */
     lead?: string;
     /** Offer chips shown over the hero, e.g. ["来館特典 最大10万円分", "無料試食つき"]. 省略可。 */

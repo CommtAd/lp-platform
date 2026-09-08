@@ -57,7 +57,9 @@ const config: PatternCConfig = {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
     },
-    highlight: "最大100万円相当 プレゼント！",
+    highlight: "最大100万円相当 プレゼント",
+    // 既定22pxから一段下げる（顧客指定）。
+    highlightSize: 19,
     // リードとオファーチップは顧客要望で非表示。FVは訴求を highlight 1点に絞る。
     ctaText: "最短30秒で予約する",
     // 新郎新婦が写真中央にいるため、キャッチを上に逃がして顔にかぶらないようにする。
