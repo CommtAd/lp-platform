@@ -1,0 +1,390 @@
+import type { PatternCConfig } from "@/clients/pattern-c.types";
+
+const ASSET = "/clients/lold";
+
+/**
+ * ザ・フォレストオブロルド — ブライダルフェア（パターンC）。
+ *
+ * 制作開始時点（2026-09-08）では forest-terrace-hiroshima の config を丸ごと写し、
+ * 会場名と slug だけ差し替えてある。写真・原稿・金額はすべて広島のものが残っているので、
+ * 顧客支給の素材が届き次第、末尾のコメントの一覧に沿って差し替えること。
+ * 金額・適用条件・日付は顧客確認を取ってから記載する。
+ */
+const config: PatternCConfig = {
+  slug: "lold",
+  status: "draft",
+  meta: {
+    title: "ザ・フォレストオブロルド｜グランドオープン記念BIGフェア",
+    description:
+      "広島市中区のホテルウェディング「ザ・フォレストオブロルド」。グランドオープンを記念したBIGフェアを開催中。ご成約で最大180万円相当の優待、ご来館で最大10万円分の特典をご用意。チャペル見学・披露宴会場見学・豪華無料試食・お見積り相談を最短30秒でご予約いただけます。",
+    // OGP専用の1枚（1200x630）。FVの hero.jpg を共用すると、FVを差し替えても
+    // URLが変わらずSNS側のキャッシュが古い画像を出し続ける（実際に発生）。
+    // 差し替えるときは必ずファイル名も変えること。
+    ogpImage: `${ASSET}/ogp-2026-08.jpg`,
+  },
+  ink: "#3B3730",
+  accent: "#B99653",
+  paper: "#FBF8F3",
+
+  // 特典バンド（限定特典・来館特典）。地・文字とも顧客指定（#A49483 × 白）。
+  // 白 on #A49483 は 2.9:1 で WCAG AA（4.5:1／大文字3:1）には届かないが、
+  // 見た目の指定を優先するという判断。ここに載るのは見出しと補足のみで、
+  // 金額はすべて白プレート＋深い金（4.9:1）に逃がしてある。
+  band: {
+    bg: "#A49483",
+    text: "#FFFFFF",
+    accent: "#FFFFFF",
+    rule: "rgba(255,255,255,0.5)",
+  },
+
+  header: {
+    venue: "The Forest of Lold", // TODO(lold): 英字表記は未確認。正式名称に差し替える
+    venueSub: "オリエンタルホテル広島内",
+    // マーク＋ロゴタイプの縦積み。42px 以下だと下段の HIROSHIMA が潰れる。
+    logo: { src: `${ASSET}/logo.png`, height: 42 },
+    ctaText: "予約する",
+  },
+
+  fv: {
+    brand: "ザ・フォレストオブロルド",
+    kicker: "GRAND OPEN BRIDAL FAIR",
+    catch: ["グランドオープン記念BIGフェア"],
+    // キッカー・キャッチ・訴求を1枚のプレートにまとめる。
+    framed: true,
+    ornament: {
+      top: `${ASSET}/fv-ornament-top.png`,
+      bottom: `${ASSET}/fv-ornament-bottom.png`,
+    },
+    highlight: "最大180万円相当 優待",
+    // リードとオファーチップは顧客要望で非表示。FVは訴求を highlight 1点に絞る。
+    ctaText: "最短30秒で予約する",
+    // 新郎新婦が写真中央にいるため、キャッチを上に逃がして顔にかぶらないようにする。
+    catchPosition: "top",
+    // スライドは全て 1360x1700。DPR3の端末（枠500px x ズーム1.13倍 x 3 = 1695px）でも
+    // 等倍以上になる解像度で、これ以上は上げても見た目が変わらない。
+    // 幅は枠の 0.75 に対して 0.80 まで持たせてある（Ken Burns のズーム用の余白）。
+    //
+    // プレートがFVの上53%を覆うので、素材は顔が60%前後に来るよう切り出す。
+    // 縦長の枠では横しか切られず position では上下に動かせないため、
+    // 顔が隠れたら素材そのものの下側を落として相対位置を下げるしかない。
+    // 支給素材（1792x2392・顔が約49%）は下を21%落として当てている。
+    heroAspect: "3 / 4",
+    hero: {
+      placeholder: "チャペル退場・フラワーシャワー",
+      src: `${ASSET}/hero.jpg`,
+      position: "center",
+    },
+    // 退場 → 披露宴 → 乾杯。当日の流れをなぞる順に並べる。
+    heroSlides: [
+      { placeholder: "披露宴会場（長テーブル・新婦）", src: `${ASSET}/hero-2.jpg` },
+      { placeholder: "披露宴の乾杯", src: `${ASSET}/hero-3.jpg` },
+    ],
+  },
+
+  // 2026年6月オープンで会場名の認知がないため、特典より先に「何者か」を置く。
+  brand: {
+    heading: "2026年6月 GRAND OPEN",
+    lead: "オリエンタルホテル広島から\n新たに生まれたブライダルブランド\nザ・フォレストオブロルド",
+    // 支給指定は #BCC7B1 だが白地で 1.76:1 しか出ず読めないため、
+    // 同系色のまま濃さだけ落として 4.4:1 にしている（顧客確認済み）。
+    accent: "#6E7D62",
+    image: {
+      placeholder: "披露宴会場での新郎新婦",
+      src: `${ASSET}/brand.jpg`,
+      position: "center",
+    },
+    body: "オリエンタルホテル広島の信頼と伝統を受け継ぎ、\nザ・フォレストオブロルドが誕生\nホテル品質×1日1組貸切で、\n心に残る特別な一日を創り上げます",
+  },
+
+  // FVを離脱する前に金額だけ持ち帰ってもらうための要約。詳細は privilege 側。
+  fvSummary: {
+    headline: "最大10万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大10万円",
+    headlineOrnament: `${ASSET}/fv-summary-ornament.png`,
+    label: "来館特典",
+    // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
+    items: [
+      {
+        amount: "1万円分",
+        name: "JCBギフト券",
+        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
+      },
+      {
+        amount: "3万円相当",
+        name: "豪華無料試食",
+        image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
+      },
+      {
+        amount: "4万円相当",
+        name: "ご宿泊",
+        image: { placeholder: "客室（ツイン）", src: `${ASSET}/gift-stay.jpg` },
+      },
+    ],
+    disclaimer: "※特典のお渡しには適用条件がございます",
+  },
+
+  grandOffer: {
+    eyebrow: "GRAND OPEN",
+    heading: "グランドオープン限定特典",
+    lead: "＼グランドオープンを記念したスペシャルなフェアを開催！／",
+    badge: "2027年5月までの挙式披露宴が対象",
+    title: "豪華10大特典",
+    amount: "最大180万円相当",
+    frame: `${ASSET}/grand-offer-frame.png`,
+    feature: {
+      title: "エグゼクティブルームを\n1泊2日でプレゼント",
+      body: "人生で最も特別な1泊2日を。",
+      disclaimer: "※宿泊特典に関しては、ご希望に合わせ変更いたします。",
+      image: {
+        placeholder: "エグゼクティブルーム（リビング・市街地ビュー）",
+        src: `${ASSET}/executive-room.jpg`,
+        position: "center",
+      },
+    },
+  },
+
+  experience: {
+    heading: "このフェアで体験できること",
+    lead: "チャペルからお料理、お見積りまで。当日のすべてをご確認いただけます。",
+    items: [
+      {
+        tag: "01",
+        title: "チャペル見学",
+        body: "実際の挙式会場を見学しながら、当日の雰囲気をご体感いただけます。",
+        image: {
+          placeholder: "チャペル（バージンロード）",
+          src: `${ASSET}/chapel.jpg`,
+        },
+      },
+      {
+        tag: "02",
+        title: "披露宴会場見学",
+        body: "披露宴会場をご覧いただきながら、おふたりらしい結婚式をご提案いたします。",
+        image: { placeholder: "披露宴会場とドレス", src: `${ASSET}/dress.jpg` },
+      },
+      {
+        tag: "03",
+        title: "豪華無料試食",
+        body: "シェフ自慢の婚礼料理をご試食いただき、おもてなしのイメージをご確認いただけます。",
+        image: { placeholder: "婚礼料理", src: `${ASSET}/tasting.jpg` },
+      },
+      {
+        tag: "04",
+        title: "見積もり相談",
+        body: "ご予算やご希望の日程に合わせて、専属プランナーが丁寧にご案内いたします。",
+        image: {
+          placeholder: "プランナーとのお見積り相談カット",
+          src: `${ASSET}/planner.jpg`,
+        },
+      },
+    ],
+  },
+
+  recommend: {
+    heading: "このフェアがおすすめな方",
+    items: [
+      { label: "初めて式場見学をする", icon: `${ASSET}/rec-planner.png` },
+      { label: "何から始めればいいか分からない", icon: `${ASSET}/rec-question.png` },
+      { label: "費用が気になる", icon: `${ASSET}/rec-cost.png` },
+      { label: "少人数婚も相談したい", icon: `${ASSET}/rec-couple.png` },
+    ],
+  },
+
+  privilege: {
+    heading: "ご来館特典・ご成約特典",
+    lead: "フェアにご参加いただいた方にご用意しています。",
+    // 合計はここで言い切るので、パネル下部の TOTAL ブロックは出さない（total 未設定）。
+    headline: "最大10万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大10万円",
+    items: [
+      {
+        title: "JCBギフト券",
+        amount: "1万円分",
+        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
+      },
+      {
+        title: "豪華無料試食",
+        amount: "3万円相当",
+        image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
+      },
+      {
+        title: "ご宿泊",
+        amount: "4万円相当",
+        image: { placeholder: "客室（ツイン）", src: `${ASSET}/gift-stay.jpg` },
+      },
+    ],
+    frame: `${ASSET}/privilege-frame.png`,
+    disclaimer: "※特典のお渡しには適用条件がございます",
+    contract: { label: "さらに、ご成約で", amount: "最大180万円優待" },
+  },
+
+  // 会場名・キャッチ・収容人数は公式サイト（forestterrace-hs.jp/banquet/）に準拠。
+  // 写真も同ページのメインカットを使用。支給素材が来たら差し替える。
+  facility: {
+    heading: "会場のご紹介",
+    lead: "挙式のチャペルと、3つの披露宴会場をご用意しています。",
+    // 会場写真がパノラマ（2.08:1）なので、4:3だと左右が大きく切れる。
+    aspect: "16 / 9",
+    items: [
+      {
+        tag: "01",
+        title: "チャペル",
+        body: "自然光が差し込むあたたかな空間で、おふたりらしい挙式を叶えていただけます。",
+        image: { placeholder: "チャペル", src: `${ASSET}/facility-chapel.jpg` },
+      },
+      {
+        tag: "02",
+        title: "ムーングロー",
+        note: "10〜95名",
+        body: "景色と時間が祝宴を特別に変えていく天空バンケット。広島の街並みを一望できます。",
+        image: { placeholder: "ムーングロー", src: `${ASSET}/facility-moonglow.jpg` },
+      },
+      {
+        tag: "03",
+        title: "ボールルーム",
+        note: "30〜150名",
+        body: "華やかさと品格が調和する正統派ボールルーム。大人数の披露宴にも対応しています。",
+        image: { placeholder: "ボールルーム", src: `${ASSET}/facility-ballroom.jpg` },
+      },
+      {
+        tag: "04",
+        title: "レインボールーム",
+        note: "30〜120名",
+        body: "上質さ感じる木漏れ日空間。やわらかな光に包まれた落ち着きのある会場です。",
+        image: { placeholder: "レインボールーム", src: `${ASSET}/facility-rainbow.jpg` },
+      },
+    ],
+  },
+
+  flow: {
+    heading: "当日の流れ",
+    lead: "所要時間：2〜3時間",
+    steps: [
+      {
+        num: "1",
+        title: "受付",
+        icon: `${ASSET}/flow-01.png`,
+        body: "ご希望の結婚式のイメージやご要望をお伺いします。",
+      },
+      {
+        num: "2",
+        title: "見学・試食",
+        icon: `${ASSET}/flow-02.png`,
+        body: "チャペルや披露宴会場を実際にご見学いただきます。また、人気の婚礼メニューをご試食いただけます。",
+      },
+      {
+        num: "3",
+        title: "相談・見積り",
+        icon: `${ASSET}/flow-03.png`,
+        body: "ご予算や日程について詳しくご案内いたします。",
+      },
+    ],
+  },
+
+  access: {
+    heading: "アクセス",
+    venueName: "The Forest of Lold", // TODO(lold): 英字表記は未確認
+    address: "〒730-0026 広島県広島市中区田中町6-10 オリエンタルホテル広島内",
+    routes: ["広島電鉄本線 八丁堀駅より徒歩9分"],
+    tel: "082-240-5551",
+    // WEBからの問い合わせに寄せたいという顧客判断で tel: リンクを外している。
+    // これにより tel_tap は計測されない。
+    telLink: false,
+    // 施設名だけで渡す。住所を足すと検索結果が住所側に寄ってピンが中央から外れる。
+    mapEmbed: { query: "オリエンタルホテル広島" },
+    map: {
+      placeholder: "オリエンタルホテル広島 外観",
+      src: `${ASSET}/access.jpg`,
+      // 16:9 で受けると縦が切れる。下寄せにして新郎新婦の足元を残し、空側を落とす。
+      position: "center bottom",
+    },
+  },
+
+  overview: {
+    heading: "ご予約概要",
+    items: [{ label: "適用期間", value: "2027年5月までに結婚式を実施可能な方" }],
+    note: "※ 組数限定のため、上限に達しましたら終了とさせていただきます。",
+  },
+
+  form: {
+    heading: "ブライダルフェアのご予約",
+    lead: "下記フォームよりご希望の日程をお知らせください。\n担当プランナーよりご連絡いたします。",
+    tone: "light",
+    fields: [
+      { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 太郎" },
+      { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
+      {
+        type: "email",
+        name: "email",
+        label: "メールアドレス",
+        required: true,
+        placeholder: "example@mail.com",
+      },
+      { type: "date", name: "visit_date_1", label: "ご来館希望日（第一希望）", required: true },
+      { type: "date", name: "visit_date_2", label: "ご来館希望日（第二希望）", required: true },
+      {
+        // 挙式の招待人数ではなく、フェア当日に来館する人数。
+        // おふたりだけか、ご両親が同席するかで案内の準備が変わる。
+        type: "select",
+        name: "guests",
+        label: "ご来館人数",
+        required: true,
+        placeholder: "選択してください",
+        options: [
+          { value: "1", label: "1名" },
+          { value: "2", label: "2名" },
+          { value: "3", label: "3名" },
+          { value: "4over", label: "4名以上" },
+        ],
+      },
+      {
+        type: "toggle",
+        name: "tasting",
+        label: "ご試食の有無",
+        required: true,
+        columns: 2,
+        options: [
+          { value: "yes", label: "試食あり" },
+          { value: "no", label: "試食なし" },
+        ],
+      },
+      {
+        type: "textarea",
+        name: "note",
+        label: "ご質問・ご相談",
+        optionalTag: "任意",
+        placeholder: "ご希望の体験内容や、他の日程のご相談などをご自由にお書きください。",
+        rows: 4,
+      },
+    ],
+    submitLabel: "この内容で予約する",
+    disclaimer:
+      "ご入力いただいた内容はご予約対応のみに利用します。\nしつこいご案内はいたしません。",
+    errorMessage:
+      "お名前・電話番号・メールアドレス・ご来館希望日（第一/第二）・ご人数・ご試食の有無は必須項目です。",
+  },
+
+  sticky: {
+    offerText: "最大180万円相当優待",
+    buttonText: "最短30秒で予約",
+    anchor: "#form",
+  },
+};
+
+/*
+ * TODO(lold): forest-terrace-hiroshima から写したままの項目（顧客素材で差し替える）:
+ *  - 画像すべて（public/clients/lold/ は広島の素材のコピー。顧客確認前に必ず差し替える）
+ *  - header.venue / venueSub / logo（英字表記・所属ホテル・ロゴ）
+ *  - meta.title / description / ogpImage（地名「広島市中区」を含む）
+ *  - fv（キッカー・キャッチ・highlight・hero 3枚）
+ *  - brand（オープン時期・リード・本文は広島の原稿）
+ *  - fvSummary / privilege（来館特典の内容・金額）
+ *  - grandOffer（限定特典の名称・金額・適用期間・feature）
+ *  - experience / recommend / flow（原稿確認）
+ *  - facility（会場名・収容人数・本文は広島の公式サイト準拠）
+ *  - access（住所・経路・電話番号・mapEmbed.query・telLink の要否）
+ *  - overview（適用期間）
+ *  - form（人数・試食の選択肢は案件の原稿に従う）
+ *  - sticky（訴求文言）
+ */
+export default config;
