@@ -526,7 +526,12 @@ export default function Page() {
       <div style={{ ...vars, background: "#EFEAE2", minHeight: "100vh" }} className="text-[var(--ink)]">
         <LPCanvas className="bg-[var(--paper)]" boxShadow="0 0 60px rgba(59,55,48,0.14)">
           {/* ── header ── */}
-          <header className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-[var(--ink)]/10 bg-[var(--paper)]/95 px-5 py-3.5 backdrop-blur">
+          {/* 既定は追従（sticky）。`header.sticky: false` で先頭に置いたままにする。 */}
+          <header
+            className={`${
+              c.header.sticky === false ? "" : "sticky top-0 z-40 "
+            }flex items-center justify-between gap-3 border-b border-[var(--ink)]/10 bg-[var(--paper)]/95 px-5 py-3.5 backdrop-blur`}
+          >
             <div className="min-w-0 leading-tight">
               {c.header.logo ? (
                 // ロゴは cover ではなく実比率で置くので ImageSlot は使わない。

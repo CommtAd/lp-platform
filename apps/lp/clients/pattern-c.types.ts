@@ -84,6 +84,11 @@ export interface PatternCConfig {
      */
     logo?: { src: string; height?: number };
     ctaText: string;
+    /**
+     * ヘッダーをスクロールに追従させるか。既定 true。
+     * false にすると先頭に置いたままになり、スクロールすると流れて消える。
+     */
+    sticky?: boolean;
   };
 
   fv: {
