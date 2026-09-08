@@ -46,6 +46,35 @@ function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
   );
 }
 
+/**
+ * 金額プレートの文言を説明文として組む（`grandOffer.amountProse`）。
+ *
+ * `amount` は本来「最大180万円相当」のような金額で、`amountEmphasis` が数字を
+ * 自動で特大にする。金額をバッジ側に出してプレートでは特典の中身を説明したい、
+ * という組み方のときは数字の特大化が邪魔になる（"衣装2着…" の 2 だけが巨大になる）。
+ * その場合はこちらで組む。`\n` の行ごとに積み、`word` を含む行だけ深い金の
+ * 大きめにして、長文でも視線の落としどころを1行だけ作る。
+ */
+function prosePlate(text: string, word: string | undefined, size: number): ReactNode {
+  return text.split("\n").map((line, i) => {
+    const lead = Boolean(word && line.includes(word));
+    return (
+      <span
+        key={i}
+        className="block"
+        style={{
+          fontSize: lead ? size + 4 : size,
+          color: lead ? goldOnWhite : undefined,
+          lineHeight: 1.8,
+          marginTop: i === 0 ? 0 : 6,
+        }}
+      >
+        {line}
+      </span>
+    );
+  });
+}
+
 /** 文中の金額語だけを金の明朝に置き換える。語が見つからなければそのまま返す。 */
 function emphasize(
   text: string,
@@ -62,6 +91,28 @@ function emphasize(
         className="font-bold"
         style={{ fontFamily: mincho, color, fontSize: `${size}px` }}
       >
+        {word}
+      </span>
+      {rest.join(word)}
+    </>
+  );
+}
+
+/**
+ * キッカー内の指定文字列だけを明朝の立体に落とす。語が無ければそのまま返す。
+ *
+ * キッカーは英字前提の枠で、Playfair Display のイタリックが当たる。和文キッカーに
+ * 数字を混ぜると数字だけがイタリックの楕円になり、12px では "10" が "1o" に見える
+ * （lold の「＼豪華10大特典／」で実際に発生）。該当部分だけ明朝・非イタリックにする。
+ * 字間はキッカーのまま揃えたいので tracking は触らない。
+ */
+function kickerEmphasis(text: string, word?: string): ReactNode {
+  if (!word || !text.includes(word)) return text;
+  const [head, ...rest] = text.split(word);
+  return (
+    <>
+      {head}
+      <span className="not-italic" style={{ fontFamily: mincho }}>
         {word}
       </span>
       {rest.join(word)}
@@ -99,7 +150,16 @@ function CornerFrame({ src }: { src: string }) {
  * 横スクロールカルーセル。`experience`（体験できること）と `facility`（施設紹介）で
  * 同じ見せ方を共有する。写真の比率だけセクションごとに変えられる。
  */
-function Carousel({ items, aspect = "4 / 3" }: { items: CarouselItem[]; aspect?: string }) {
+function Carousel({
+  items,
+  aspect = "4 / 3",
+  bodySize = 12,
+}: {
+  items: CarouselItem[];
+  aspect?: string;
+  /** 説明文の文字サイズ(px)。既定 12。 */
+  bodySize?: number;
+}) {
   return (
     <>
       <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2">
@@ -131,7 +191,12 @@ function Carousel({ items, aspect = "4 / 3" }: { items: CarouselItem[]; aspect?:
                 {e.note}
               </p>
             )}
-            <p className="mt-2 text-[12px] leading-[1.9] opacity-70">{e.body}</p>
+            <p
+              className="mt-2 leading-[1.9] opacity-70"
+              style={{ fontSize: bodySize }}
+            >
+              {e.body}
+            </p>
           </div>
         ))}
       </div>
@@ -181,7 +246,8 @@ function AmountRow({
           >
             {item.amount}
           </p>
-          <p className="mt-2.5 text-[10.5px] leading-snug opacity-65">{item.label}</p>
+          {/* 特典名は `\n` で改行できる（長い名称を意図した位置で折るため）。 */}
+          <p className="mt-2.5 text-[10.5px] leading-snug opacity-65">{nl(item.label)}</p>
         </div>
       ))}
     </div>
@@ -282,9 +348,10 @@ export default function Page() {
    * 全角は約1.07em幅なので、これを文字数で割った値が上限になる。
    * 端末幅に追従させないと狭い画面で折り返す（幅任せだと小書き文字が行頭に来る）。
    */
-  const grandOfferLeadSize = c.grandOffer
+  const grandOfferLead = c.grandOffer?.lead;
+  const grandOfferLeadSize = grandOfferLead
     ? `min(12.5px, max(9px, calc((100vw - 42px) / ${(
-        c.grandOffer.lead.replace(/\n/g, "").length * 1.07
+        grandOfferLead.replace(/\n/g, "").length * 1.07
       ).toFixed(1)})))`
     : undefined;
   /**
@@ -341,7 +408,7 @@ export default function Page() {
         className="text-[12px] italic tracking-[0.28em]"
         style={{ fontFamily: playfair, color: framed ? goldOnWhite : undefined }}
       >
-        {c.fv.kicker}
+        {kickerEmphasis(c.fv.kicker, c.fv.kickerEmphasis)}
       </span>
     </>
   );
@@ -361,21 +428,27 @@ export default function Page() {
   );
   // framed のときはプレート自体が枠を持つので、訴求は罫線で区切った1行として置く。
   // 単独で置く場合は、角を落とした矩形のすりガラスプレートで受ける（角丸ピルは安っぽく見える）。
+  /**
+   * FV訴求の文字サイズ(px)。既定は framed なら22、単独プレートなら17。
+   * 文言を詰めたときに一段落としたい、といった微調整のために config から上書きできる。
+   */
+  const fvHighlightSize = c.fv.highlightSize ?? (framed ? 22 : 17);
   const fvHighlight = !c.fv.highlight ? null : framed ? (
     <>
       <span className="mt-2.5 block h-px" style={{ background: `${c.accent}66` }} />
       <p
-        className="mt-2.5 text-[22px] font-bold tracking-[0.06em]"
-        style={{ fontFamily: mincho, color: goldOnWhite }}
+        className="mt-2.5 font-bold tracking-[0.06em]"
+        style={{ fontFamily: mincho, color: goldOnWhite, fontSize: fvHighlightSize }}
       >
         {c.fv.highlight}
       </p>
     </>
   ) : (
     <p
-      className="mt-4 inline-block rounded-[2px] border px-6 py-2.5 text-[17px] font-bold tracking-[0.14em] backdrop-blur-[3px]"
+      className="mt-4 inline-block rounded-[2px] border px-6 py-2.5 font-bold tracking-[0.14em] backdrop-blur-[3px]"
       style={{
         fontFamily: mincho,
+        fontSize: fvHighlightSize,
         background: "rgba(255,255,255,0.86)",
         borderColor: c.accent,
         color: goldOnWhite,
@@ -469,7 +542,9 @@ export default function Page() {
                   >
                     {c.header.venue}
                   </div>
-                  <div className="truncate text-[9.5px] opacity-50">{c.header.venueSub}</div>
+                  {c.header.venueSub && (
+                    <div className="truncate text-[9.5px] opacity-50">{c.header.venueSub}</div>
+                  )}
                 </>
               )}
             </div>
@@ -683,17 +758,22 @@ export default function Page() {
                 >
                   {c.grandOffer.eyebrow}
                 </span>
-                <h2 className="mt-2 text-[21px] leading-snug" style={{ fontFamily: mincho }}>
+                <h2
+                  className="mt-2 leading-snug"
+                  style={{ fontFamily: mincho, fontSize: c.grandOffer.headingSize ?? 21 }}
+                >
                   {c.grandOffer.heading}
                 </h2>
                 {/* 1行に収まるサイズを端末幅から算出する。幅任せに折り返すと
                     小書き文字が行頭に来る（禁則違反）ことがあるため。 */}
-                <p
-                  className="mt-3 whitespace-nowrap leading-[1.9] opacity-75"
-                  style={{ fontSize: grandOfferLeadSize }}
-                >
-                  {nl(c.grandOffer.lead)}
-                </p>
+                {c.grandOffer.lead && (
+                  <p
+                    className="mt-3 whitespace-nowrap leading-[1.9] opacity-75"
+                    style={{ fontSize: grandOfferLeadSize }}
+                  >
+                    {nl(c.grandOffer.lead)}
+                  </p>
+                )}
               </div>
 
               {/*
@@ -728,14 +808,29 @@ export default function Page() {
                     <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
                     <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
                   </span>
-                  {/* text-[30px] は数字を含まない文字列（テンプレのダミー等）のフォールバック。
-                      数字があれば amountEmphasis 側の span がサイズを上書きする。 */}
-                  <p
-                    className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
-                    style={{ fontFamily: mincho, color: goldOnWhite }}
-                  >
-                    {amountEmphasis(c.grandOffer.amount)}
-                  </p>
+                  {/* 金額として組むか、説明文として組むか。説明文のときは数字を
+                      特大にしない（"衣装2着…" の 2 だけが巨大になるのを避ける）。 */}
+                  {c.grandOffer.amountProse ? (
+                    <p
+                      className="mt-5 font-bold tracking-[0.02em]"
+                      style={{ fontFamily: mincho, color: c.ink }}
+                    >
+                      {prosePlate(
+                        c.grandOffer.amount,
+                        c.grandOffer.amountProseEmphasis,
+                        c.grandOffer.amountProseSize ?? 13,
+                      )}
+                    </p>
+                  ) : (
+                    /* text-[30px] は数字を含まない文字列（テンプレのダミー等）の
+                       フォールバック。数字があれば amountEmphasis 側の span が上書きする。 */
+                    <p
+                      className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
+                      style={{ fontFamily: mincho, color: goldOnWhite }}
+                    >
+                      {amountEmphasis(c.grandOffer.amount)}
+                    </p>
+                  )}
                 </div>
                 {/* バッジはカード上端に跨がらせる。 */}
                 {c.grandOffer.badge && (
@@ -856,7 +951,11 @@ export default function Page() {
                   lead={c.facility.lead}
                 />
               </div>
-              <Carousel items={c.facility.items} aspect={c.facility.aspect} />
+              <Carousel
+                items={c.facility.items}
+                aspect={c.facility.aspect}
+                bodySize={c.facility.bodySize}
+              />
             </section>
           )}
 
@@ -1314,27 +1413,32 @@ export default function Page() {
                   </a>
                 </div>
               )}
-              {/* telLink: false は「電話ではなくWEBから問い合わせてほしい」案件向け。
-                  リンクを外すので trackEvent('tel_tap') も発火しない（規約4の例外）。 */}
-              {c.access.telLink === false ? (
-                <p
-                  className="mt-5 flex items-center justify-center gap-2 rounded-full border py-4 text-[15px] tracking-wider"
-                  style={{ borderColor: `${c.accent}80`, color: c.ink, fontFamily: mincho }}
-                >
-                  TEL {c.access.tel}
-                </p>
-              ) : (
-                <TelLink
-                  clientSlug={c.slug}
-                  tel={c.access.tel}
-                  className="mt-5 flex items-center justify-center gap-2 rounded-full border py-4 text-[15px] tracking-wider"
-                  style={{ borderColor: `${c.accent}80`, color: c.ink, fontFamily: mincho }}
-                >
-                  TEL {c.access.tel}
-                </TelLink>
-              )}
-              {c.access.telNote && (
-                <p className="mt-2 text-center text-[11px] opacity-55">{c.access.telNote}</p>
+              {/* `tel` 未設定なら電話の枠ごと出さない（WEB導線だけで受ける案件向け）。 */}
+              {c.access.tel && (
+                <>
+                  {/* telLink: false は「電話ではなくWEBから問い合わせてほしい」案件向け。
+                      リンクを外すので trackEvent('tel_tap') も発火しない（規約4の例外）。 */}
+                  {c.access.telLink === false ? (
+                    <p
+                      className="mt-5 flex items-center justify-center gap-2 rounded-full border py-4 text-[15px] tracking-wider"
+                      style={{ borderColor: `${c.accent}80`, color: c.ink, fontFamily: mincho }}
+                    >
+                      TEL {c.access.tel}
+                    </p>
+                  ) : (
+                    <TelLink
+                      clientSlug={c.slug}
+                      tel={c.access.tel}
+                      className="mt-5 flex items-center justify-center gap-2 rounded-full border py-4 text-[15px] tracking-wider"
+                      style={{ borderColor: `${c.accent}80`, color: c.ink, fontFamily: mincho }}
+                    >
+                      TEL {c.access.tel}
+                    </TelLink>
+                  )}
+                  {c.access.telNote && (
+                    <p className="mt-2 text-center text-[11px] opacity-55">{c.access.telNote}</p>
+                  )}
+                </>
               )}
             </div>
           </section>
