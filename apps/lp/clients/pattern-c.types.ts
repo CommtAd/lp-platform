@@ -93,6 +93,14 @@ export interface PatternCConfig {
     brand?: string;
     /** Small English kicker above the catch, e.g. "BRIDAL FAIR". */
     kicker: string;
+    /**
+     * `kicker` の中で明朝の立体に落とす部分文字列。含まれない場合は無視される。
+     *
+     * キッカーの枠は英字前提（Playfair Display のイタリック）なので、和文キッカーに
+     * 数字を混ぜると数字だけイタリックの楕円になり "10" が "1o" に見える。
+     * 数字を含む和文キッカーを使うときはここに数字部分を渡す。
+     */
+    kickerEmphasis?: string;
     /** Main catch, one line per array entry. */
     catch: string[];
     /** キャッチの文字サイズ(px)。既定 26。1行に長い文言を収めるときに下げる。 */

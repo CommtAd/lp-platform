@@ -48,7 +48,9 @@ const config: PatternCConfig = {
   fv: {
     brand: "ザ・フォレストオブロルド",
     kicker: "＼豪華10大特典／",
-    catch: ["プレミア試食つきBIG フェア"],
+    // 英字前提のキッカー枠なので、数字を明朝の立体に逃がさないと "1o" に見える。
+    kickerEmphasis: "10",
+    catch: ["プレミア試食つきBIGフェア"],
     // キッカー・キャッチ・訴求を1枚のプレートにまとめる。
     framed: true,
     ornament: {

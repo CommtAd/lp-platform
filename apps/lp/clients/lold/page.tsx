@@ -71,6 +71,28 @@ function emphasize(
 }
 
 /**
+ * キッカー内の指定文字列だけを明朝の立体に落とす。語が無ければそのまま返す。
+ *
+ * キッカーは英字前提の枠で、Playfair Display のイタリックが当たる。和文キッカーに
+ * 数字を混ぜると数字だけがイタリックの楕円になり、12px では "10" が "1o" に見える
+ * （lold の「＼豪華10大特典／」で実際に発生）。該当部分だけ明朝・非イタリックにする。
+ * 字間はキッカーのまま揃えたいので tracking は触らない。
+ */
+function kickerEmphasis(text: string, word?: string): ReactNode {
+  if (!word || !text.includes(word)) return text;
+  const [head, ...rest] = text.split(word);
+  return (
+    <>
+      {head}
+      <span className="not-italic" style={{ fontFamily: mincho }}>
+        {word}
+      </span>
+      {rest.join(word)}
+    </>
+  );
+}
+
+/**
  * パネルに重ねる四隅の装飾。中央が透明のPNGを、上半分＝上の角・下半分＝下の角として
  * 貼り分ける。`h-full w-full` で1枚に引き伸ばすとパネルの縦横比しだいで角が歪むため
  * （パネルの高さは中身で変わる）、横幅にだけ合わせて縦は自然比のまま置く。
@@ -351,7 +373,7 @@ export default function Page() {
         className="text-[12px] italic tracking-[0.28em]"
         style={{ fontFamily: playfair, color: framed ? goldOnWhite : undefined }}
       >
-        {c.fv.kicker}
+        {kickerEmphasis(c.fv.kicker, c.fv.kickerEmphasis)}
       </span>
     </>
   );
