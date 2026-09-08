@@ -473,34 +473,50 @@ export default function Page() {
               }}
             >
               <div style={{ marginTop: "auto" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 4 }}>
+                {/*
+                  FVの2カード。「整える」「鍛える」の小見出しは出さず、
+                  「美容整体」「マシンピラティス」だけを21pxの太字で見せる（顧客要望）。
+
+                  このLPは <LPCanvas> 未適用（横幅ずれ防止ルールの対象外）なので、
+                  カード幅は画面幅に比例して縮む。実機390pxではテキスト領域が147pxしかなく、
+                  「マシンピラティス」8文字は21pxでは1行に収まらない（実測で折り返す）。
+                  そのため config 側で「マシン\nピラティス」と明示改行し、
+                  自動折り返しの「マシンピラティ／ス」という不自然な分割を防いでいる。
+                  フォントサイズを上げるなら、必ず360px幅で折り返しを確認すること。
+                  カードは alignItems: "stretch" で左右の高さを揃えている。
+                */}
+                <div style={{ display: "flex", alignItems: "stretch", justifyContent: "center", marginBottom: 4 }}>
                   <div
                     style={{
                       flex: 1,
+                      // flexアイテムのmin-width:autoを解除しないと、カードが
+                      // テキストの1行幅まで広がって画面外にはみ出す。
+                      minWidth: 0,
                       background: accent,
                       border: "1px solid rgba(255,255,255,0.25)",
                       borderRadius: 6,
-                      padding: "20px 8px",
+                      padding: "14px 6px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       textAlign: "center",
                       color: "#FFFFFF",
                       boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
                     }}
                   >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#FFF1DC" }}>
-                      {c.fv.leftCard.small}
-                    </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
-                      {c.fv.leftCard.big}
+                    <div style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 21, letterSpacing: "0.01em", lineHeight: 1.25 }}>
+                      {nl(c.fv.leftCard.big)}
                     </div>
                   </div>
                   <div
                     style={{
                       position: "relative",
                       zIndex: 3,
-                      margin: "0 -18px",
+                      margin: "0 -16px",
+                      alignSelf: "center",
                       fontFamily: fontGothic,
                       fontWeight: 400,
-                      fontSize: 44,
+                      fontSize: 40,
                       color: "#FFFFFF",
                       textShadow: "0 1px 6px rgba(0,0,0,0.35)",
                     }}
@@ -510,20 +526,23 @@ export default function Page() {
                   <div
                     style={{
                       flex: 1,
+                      // flexアイテムのmin-width:autoを解除しないと、カードが
+                      // テキストの1行幅まで広がって画面外にはみ出す。
+                      minWidth: 0,
                       background: accent,
                       border: "1px solid rgba(255,255,255,0.25)",
                       borderRadius: 6,
-                      padding: "20px 8px",
+                      padding: "14px 6px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       textAlign: "center",
                       color: "#FFFFFF",
                       boxShadow: "0 6px 16px rgba(0,0,0,0.16)",
                     }}
                   >
-                    <div style={{ fontSize: 15, letterSpacing: "0.08em", color: "#FFF1DC" }}>
-                      {c.fv.rightCard.small}
-                    </div>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 500, fontSize: 16, letterSpacing: "0.02em", marginTop: 3 }}>
-                      {c.fv.rightCard.big}
+                    <div style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 21, letterSpacing: "0.01em", lineHeight: 1.25 }}>
+                      {nl(c.fv.rightCard.big)}
                     </div>
                   </div>
                 </div>
@@ -593,7 +612,7 @@ export default function Page() {
               </div>
             </div>
 
-            {/* 120分の内訳を所要時間つき4ブロックで一目に見せる */}
+            {/* 体験の内訳を4ブロックで一目に見せる（所要時間は顧客要望で非表示） */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 8, marginTop: 34 }}>
               {c.offer.items.map((item, i) => (
                 <div
@@ -613,14 +632,10 @@ export default function Page() {
                   }}
                 >
                   <Icon>{offerIcons[i]}</Icon>
-                  <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 13, color: accentInk }}>{item.time}</span>
                   <span style={{ fontSize: 10, lineHeight: 1.35, color: "#4C4E45" }}>{nl(item.label)}</span>
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: 11, lineHeight: 1.7, color: "#9A9C90", textAlign: "center", margin: "14px 0 0" }}>
-              {c.offer.breakdownNote}
-            </p>
 
             {/* photos */}
             <div style={{ display: "flex", gap: 10, marginTop: 24, alignItems: "flex-start" }}>
