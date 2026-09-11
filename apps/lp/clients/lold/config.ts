@@ -21,7 +21,7 @@ const config: PatternCConfig = {
     // ファイルは別に持つ。共用すると写真を差し替えてもURLが変わらず、
     // SNS側のキャッシュが古い画像を出し続ける（実際に発生）。
     // 差し替えるときは必ずファイル名も変えること。
-    ogpImage: `${ASSET}/ogp-2026-09.jpg`,
+    ogpImage: `${ASSET}/ogp-2026-09-11.jpg`,
   },
   ink: "#3B3730",
   accent: "#B99653",
@@ -222,7 +222,14 @@ const config: PatternCConfig = {
         tag: "03",
         title: "一軒家ウエディング",
         body: "1日1組貸切で、ふたりらしい演出も自由自在",
-        image: { placeholder: "一軒家ウエディング", src: `${ASSET}/facility-house.jpg` },
+        // アクセスと同一カット。同じ建物なので別カットにすると別物に見える。
+        // 3:2 の素材を 16:9 で受けるので、上寄せで建物の頭と館銘板を残し、
+        // 手前の舗装を落とす。
+        image: {
+          placeholder: "一軒家ウエディング（会場外観）",
+          src: `${ASSET}/venue-exterior.jpg`,
+          position: "center top",
+        },
       },
       {
         tag: "04",
@@ -275,10 +282,10 @@ const config: PatternCConfig = {
     mapEmbed: { query: "ザ・フォレストオブロルド" },
     map: {
       placeholder: "会場外観",
-      src: `${ASSET}/access.jpg`,
-      // 支給素材は3:2。16:9 で受けると縦が切れるので、建物の頭と新郎新婦の足元の
-      // どちらを残すかの調整。やや上寄せで屋根まで入れ、手前の舗装を落とす。
-      position: "center 38%",
+      src: `${ASSET}/venue-exterior.jpg`,
+      // 3:2 の素材を 16:9 で受けるので上下が切れる。上寄せで建物の頭と
+      // 館銘板（LOLD THE VENUE）を残し、手前の舗装を落とす。
+      position: "center top",
     },
   },
 
@@ -298,6 +305,7 @@ const config: PatternCConfig = {
       },
       { type: "date", name: "visit_date_1", label: "ご来館希望日（第一希望）", required: true },
       { type: "date", name: "visit_date_2", label: "ご来館希望日（第二希望）", required: true },
+      { type: "date", name: "visit_date_3", label: "ご来館希望日（第三希望）", required: true },
       {
         // 挙式の招待人数ではなく、フェア当日に来館する人数。
         // おふたりだけか、ご両親が同席するかで案内の準備が変わる。
@@ -337,7 +345,7 @@ const config: PatternCConfig = {
     disclaimer:
       "ご入力いただいた内容はご予約対応のみに利用します。\nしつこいご案内はいたしません。",
     errorMessage:
-      "お名前・電話番号・メールアドレス・ご来館希望日（第一/第二）・ご人数・ご試食の有無は必須項目です。",
+      "お名前・電話番号・メールアドレス・ご来館希望日（第一/第二/第三）・ご人数・ご試食の有無は必須項目です。",
   },
 
   sticky: {
