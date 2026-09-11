@@ -78,7 +78,7 @@ const config: PatternCConfig = {
     // 3枚とも顔が約62%で、プレートの下に収まっている。
     heroAspect: "3 / 4",
     hero: {
-      placeholder: "チャペル（バージンロードの新婦）",
+      placeholder: "チャペル（木組みの天井と新婦）",
       src: `${ASSET}/hero.jpg`,
       position: "center",
     },
