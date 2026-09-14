@@ -568,8 +568,9 @@ export default function Page() {
                 <div
                   key={chip.big}
                   style={{
-                    width: 66,
-                    height: 66,
+                    // AUN No.4「もう少し大きく表示」。66→84。
+                    width: 84,
+                    height: 84,
                     borderRadius: "50%",
                     background: accent,
                     border: "1.5px solid rgba(255,255,255,0.5)",
@@ -582,10 +583,10 @@ export default function Page() {
                     boxShadow: "0 4px 12px rgba(0,0,0,0.22)",
                   }}
                 >
-                  <span style={{ fontSize: 9.5, letterSpacing: "0.06em", color: cream }}>
+                  <span style={{ fontSize: 12, letterSpacing: "0.06em", color: cream }}>
                     {chip.small}
                   </span>
-                  <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 17 }}>
+                  <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 21 }}>
                     {chip.big}
                   </span>
                 </div>
