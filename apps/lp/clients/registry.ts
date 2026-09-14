@@ -32,6 +32,7 @@ export const clientRegistry: Record<
   "bloom-pilates": () => import("./bloom-pilates/page"),
   "pilates": () => import("./pilates/page"),
   "sakura-tokyo": () => import("./sakura-tokyo/page"),
+  "seren-pilates": () => import("./seren-pilates/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -88,4 +89,5 @@ export const clientMetaRegistry: Record<
   "bloom-pilates": () => import("./bloom-pilates/config"),
   "pilates": () => import("./pilates/config"),
   "sakura-tokyo": () => import("./sakura-tokyo/config"),
+  "seren-pilates": () => import("./seren-pilates/config"),
 };
