@@ -84,10 +84,12 @@ function SectionHeading({
           fontFamily: fontMincho,
           fontWeight: 600,
           fontSize,
-          letterSpacing: "0.08em",
+          // 0.08em だと 360px 幅で1文字だけ溢れる見出しが出るため少し詰めている
+          letterSpacing: "0.06em",
           color,
           lineHeight: 1.5,
           margin: 0,
+          textWrap: "balance",
           whiteSpace: nowrap ? "nowrap" : undefined,
         }}
       >
@@ -207,6 +209,7 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
           color: noteColor,
           letterSpacing: "0.04em",
           margin: "12px 0 0",
+          textWrap: "balance",
           textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
         }}
       >
@@ -669,7 +672,9 @@ export default function Page() {
                   }}
                 >
                   <CheckIcon />
-                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45", textWrap: "balance" }}>
+                    {nl(item)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -757,12 +762,21 @@ export default function Page() {
                           letterSpacing: "0.03em",
                           margin: 0,
                           color: "#33352E",
+                          textWrap: "balance",
                         }}
                       >
                         {item.title}
                       </h3>
                     </div>
-                    <p style={{ fontSize: 13, lineHeight: 1.8, color: "#62655B", margin: "10px 0 0" }}>
+                    <p
+                      style={{
+                        fontSize: 13,
+                        lineHeight: 1.8,
+                        color: "#62655B",
+                        margin: "10px 0 0",
+                        textWrap: "balance",
+                      }}
+                    >
                       {item.body}
                     </p>
                   </div>
@@ -837,6 +851,7 @@ export default function Page() {
                     margin: "22px 0 0",
                     color: "#33352E",
                     textAlign: "center",
+                    textWrap: "balance",
                   }}
                 >
                   {nl(item.title)}
@@ -987,6 +1002,7 @@ export default function Page() {
                                 fontSize: 10.5,
                                 color: "#62655B",
                                 marginTop: 2,
+                                whiteSpace: "nowrap",
                               }}
                             >
                               （{v.campaignNote}）
@@ -1034,7 +1050,7 @@ export default function Page() {
 
           {/* ── ⑤ 姿勢診断について ── */}
           <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.posture.heading} fontSize={19} nowrap />
+            <SectionHeading text={c.posture.heading} fontSize={19} />
             <ImageSlot
               src={c.posture.photo.src}
               placeholder={c.posture.photo.placeholder}
@@ -1061,7 +1077,9 @@ export default function Page() {
                 {c.posture.items.map((item) => (
                   <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
                     <CheckIcon color={accentMid} />
-                    <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                    <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45", textWrap: "balance" }}>
+                      {item}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -1114,13 +1132,22 @@ export default function Page() {
                             letterSpacing: "0.03em",
                             margin: 0,
                             color: "#33352E",
+                            textWrap: "balance",
                           }}
                         >
                           {step.title}
                         </h3>
                         {step.time && <span style={{ fontSize: 11, color: "#9A9C90" }}>{step.time}</span>}
                       </div>
-                      <p style={{ fontSize: 14, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>
+                      <p
+                        style={{
+                          fontSize: 14,
+                          lineHeight: 1.9,
+                          color: "#62655B",
+                          margin: "8px 0 0",
+                          textWrap: "balance",
+                        }}
+                      >
                         {step.body}
                       </p>
                     </div>
@@ -1134,7 +1161,7 @@ export default function Page() {
 
           {/* ── ⑦ 初心者でも参加しやすい理由 ── */}
           <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.beginner.heading} fontSize={20} nowrap />
+            <SectionHeading text={c.beginner.heading} fontSize={20} />
             <p style={{ fontSize: 14.5, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
               {c.beginner.body}
             </p>
@@ -1152,7 +1179,9 @@ export default function Page() {
                   }}
                 >
                   <CheckIcon />
-                  <span style={{ fontSize: 13, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                  <span style={{ fontSize: 13, lineHeight: 1.7, color: "#4C4E45", textWrap: "balance" }}>
+                    {item}
+                  </span>
                 </div>
               ))}
             </div>

@@ -41,7 +41,15 @@ export default function FaqList({ items, accent, accentSoft }: FaqListProps) {
                 textAlign: "left",
               }}
             >
-              <span style={{ fontSize: 13.5, fontWeight: 700, color: "#3B3D36", lineHeight: 1.5 }}>
+              <span
+                style={{
+                  fontSize: 13.5,
+                  fontWeight: 700,
+                  color: "#3B3D36",
+                  lineHeight: 1.5,
+                  textWrap: "balance",
+                }}
+              >
                 {item.q}
               </span>
               <span
