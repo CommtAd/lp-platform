@@ -132,18 +132,20 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
   const noteColor = variant === "dark" ? "rgba(255,255,255,0.7)" : "#9A9C90";
   return (
     <div style={{ marginTop: 28 }}>
-      <p
-        style={{
-          textAlign: "center",
-          fontSize: 12,
-          letterSpacing: "0.08em",
-          color: eyebrowColor,
-          margin: "0 0 12px",
-          textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
-        }}
-      >
-        {c.reserve.eyebrow}
-      </p>
+      {c.reserve.eyebrow && (
+        <p
+          style={{
+            textAlign: "center",
+            fontSize: 12,
+            letterSpacing: "0.08em",
+            color: eyebrowColor,
+            margin: "0 0 12px",
+            textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
+          }}
+        >
+          {c.reserve.eyebrow}
+        </p>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {c.reserve.stores.map((s) =>
           s.url ? (

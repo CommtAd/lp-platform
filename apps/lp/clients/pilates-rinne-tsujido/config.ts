@@ -248,8 +248,8 @@ export interface RinneConfig {
 
   /** 予約（§16: すべてhacomonoの店舗別ウィジェットへ） */
   reserve: {
-    /** CTAブロック上部の小見出し */
-    eyebrow: string;
+    /** CTAブロック上部の小見出し。未設定なら出さない。 */
+    eyebrow?: string;
     stores: ReserveTarget[];
     /** ボタン下の補足（キャンペーン条件など） */
     note: string;
@@ -638,7 +638,6 @@ const config: RinneConfig = {
   },
 
   reserve: {
-    eyebrow: "ご希望の日時をお選びください",
     stores: [
       {
         label: "無料体験を予約する",
