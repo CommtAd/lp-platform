@@ -47,7 +47,7 @@ const config: Config = {
   showMonitorBadge: true,
 
   // 緊急性・限定性（月ごとに更新する。定員が変わったら人数・月表記を差し替え）。
-  campaign: { limitText: "8月 先着10名様限定" },
+  campaign: { limitText: "9月 先着10名様限定" },
 
   // 予約導線（外部 STORES 予約）。全CTAがこの url（新規タブ）へ接続する。
   reserve: {
