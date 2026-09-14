@@ -190,7 +190,7 @@ export interface RinneConfig {
   };
 
   /**
-   * 体験キャンペーン（0円訴求）。pin 37 で「料金・キャンペーン」セクションを
+   * 体験キャンペーン（完全無料訴求）。pin 37 で「料金・キャンペーン」セクションを
    * 削除したため見出しは持たず、料金表直下と最終予約エリアの2箇所で使う。
    */
   pricing: {
@@ -199,7 +199,11 @@ export interface RinneConfig {
     campaignLead: string;
     /** 通常体験料金（未確定は "00,000"） */
     trialRegular: string;
-    /** キャンペーン適用後の体験料金表示 */
+    /**
+     * キャンペーン適用後の体験料金表示。
+     * 「0円」のような金額ではなく「完全無料」のような文言も入る（文字数に応じて
+     * 表示サイズは page.tsx 側で調整済み）。
+     */
     trialNow: string;
   };
 
@@ -539,7 +543,7 @@ const config: RinneConfig = {
     campaignLead:
       "マンツーマンのパーソナルレッスンを、\n姿勢診断とあわせてまずは体験してみませんか？",
     trialRegular: "8,800",
-    trialNow: "0",
+    trialNow: "完全無料",
   },
 
   stores: {
@@ -611,7 +615,7 @@ const config: RinneConfig = {
         url: "https://rinne-pilates.hacomono.jp/widgets/4?isShowProgramName=true&studioId=4",
       },
     ],
-    note: "初回体験0円｜入会金0円｜しつこい勧誘はいたしません。",
+    note: "初回体験 完全無料｜入会金0円｜しつこい勧誘はいたしません。",
   },
 
   sticky: {

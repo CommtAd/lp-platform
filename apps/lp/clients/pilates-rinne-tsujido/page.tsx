@@ -263,17 +263,22 @@ function TrialPriceBlock({ compact = false }: { compact?: boolean } = {}) {
       </div>
       )}
 
-      {/* 二重価格表記（通常 → キャンペーン） */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 14,
-          marginTop: compact ? 0 : 24,
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+      {/*
+        二重価格表記（通常 → キャンペーン）。
+        キャンペーン側は「0円」ではなく「完全無料」のような文言が入るため、
+        横並びだと 480px の枠に収まらない。通常価格を上段にまとめ、
+        訴求文言を下段に大きく置く縦積みにしている。
+      */}
+      <div style={{ marginTop: compact ? 0 : 24, textAlign: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: 10,
+          }}
+        >
           <span
             style={{
               display: "inline-flex",
@@ -307,16 +312,16 @@ function TrialPriceBlock({ compact = false }: { compact?: boolean } = {}) {
               />
             </span>
             <span style={{ fontSize: 11, color: "#9A9C90" }}>税込</span>
-            <span style={{ fontSize: 18, color: accentMid, marginLeft: 2 }}>→</span>
           </div>
         </div>
+        <div style={{ fontSize: 20, lineHeight: 1, color: accentMid, margin: "12px 0 4px" }}>↓</div>
         <div
           style={{
             fontFamily: fontMincho,
             fontWeight: 700,
-            fontSize: 100,
-            lineHeight: 0.9,
-            letterSpacing: "0.02em",
+            fontSize: 58,
+            lineHeight: 1.2,
+            letterSpacing: "0.04em",
             background: goldGrad,
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
@@ -324,7 +329,6 @@ function TrialPriceBlock({ compact = false }: { compact?: boolean } = {}) {
           }}
         >
           {c.pricing.trialNow}
-          <span style={{ fontSize: 52 }}>円</span>
         </div>
       </div>
     </>
@@ -646,7 +650,7 @@ export default function Page() {
           </div>
 
           {/* ── MV直下の体験料金表示（顧客修正指示） ── */}
-          {/* pin 27/28: CTAは料金ブロックの前から後ろへ移動（0円を見せてから予約導線） */}
+          {/* pin 27/28: CTAは料金ブロックの前から後ろへ移動（無料訴求を見せてから予約導線） */}
           <section style={{ background: "#FCFBF7", padding: "40px 26px 48px" }}>
             <TrialPriceBlock />
             {/* CTA 1/4: 体験料金の後 */}
@@ -1144,7 +1148,7 @@ export default function Page() {
                  config.instructors のデータは差し替え待ちのまま保持。 ── */}
 
           {/* ── ⑩ 料金・キャンペーン：pin 37 によりセクションごと削除。
-                 0円訴求は料金表の直後（pin 32）と最終予約エリア（pin 38）に置いている。 ── */}
+                 無料訴求は料金表の直後（pin 32）と最終予約エリア（pin 38）に置いている。 ── */}
 
           {/* ── ⑪ 店舗情報 ── */}
           <section id="stores" style={{ background: creamGrad, padding: "54px 26px" }}>
