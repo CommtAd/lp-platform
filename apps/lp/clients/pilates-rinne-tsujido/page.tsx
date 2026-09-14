@@ -55,9 +55,8 @@ const navyGrad = `linear-gradient(158deg, ${shade(accent, 0.14)} 0%, ${accent} 5
 const accentSoft = accent + "22";
 const accentGlow = accent + "55";
 const goldGrad = `linear-gradient(160deg, ${accentMid} 0%, ${accent} 100%)`;
-const goldBtn = `linear-gradient(135deg, ${creamSoft} 0%, ${cream} 100%)`;
 /* StickyFooterCTAの共通コンポーネントはボタン文字色が白固定のため、
-   クリーム地のgoldBtnではなく白文字が読める濃緑グラデーションを使う。 */
+   白文字が読める濃緑グラデーション。予約CTAのボタンと追従フッターで共用する。 */
 const stickyBtnGrad = `linear-gradient(135deg, ${shade(accent, 0.12)} 0%, ${shade(accent, -0.15)} 100%)`;
 const creamGrad = "linear-gradient(180deg, #F3E8D8 0%, #E9DAC4 100%)";
 const fontMincho = "'Shippori Mincho', serif";
@@ -133,18 +132,20 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
   const noteColor = variant === "dark" ? "rgba(255,255,255,0.7)" : "#9A9C90";
   return (
     <div style={{ marginTop: 28 }}>
-      <p
-        style={{
-          textAlign: "center",
-          fontSize: 12,
-          letterSpacing: "0.08em",
-          color: eyebrowColor,
-          margin: "0 0 12px",
-          textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
-        }}
-      >
-        {c.reserve.eyebrow}
-      </p>
+      {c.reserve.eyebrow && (
+        <p
+          style={{
+            textAlign: "center",
+            fontSize: 12,
+            letterSpacing: "0.08em",
+            color: eyebrowColor,
+            margin: "0 0 12px",
+            textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
+          }}
+        >
+          {c.reserve.eyebrow}
+        </p>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {c.reserve.stores.map((s) =>
           s.url ? (
@@ -159,8 +160,14 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
                 justifyContent: "center",
                 gap: 8,
                 height: 58,
-                background: goldBtn,
-                color: accent,
+                /*
+                  もとはクリームの goldBtn だったが、地色 creamGrad の
+                  「体験レッスンの流れ」セクションでボタンが背景に埋もれていた。
+                  追従フッターのボタンと同じ濃緑に統一して、どの地色でも
+                  ボタンだけが浮くようにしている。
+                */
+                background: stickyBtnGrad,
+                color: "#FFFFFF",
                 textDecoration: "none",
                 fontSize: 15.5,
                 fontWeight: 700,
@@ -347,6 +354,8 @@ export default function Page() {
       <div
         style={{
           fontFamily: "'Noto Sans JP', sans-serif",
+          // 日本語の禁則処理を厳密に。長音符や小書き仮名が行頭に来るのを防ぐ
+          lineBreak: "strict",
           background: "#E4DFD5",
           minHeight: "100vh",
           color: "#3B3D36",
@@ -672,9 +681,7 @@ export default function Page() {
                   }}
                 >
                   <CheckIcon />
-                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45", textWrap: "balance" }}>
-                    {nl(item)}
-                  </span>
+                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45" }}>{nl(item)}</span>
                 </div>
               ))}
             </div>
@@ -1077,9 +1084,7 @@ export default function Page() {
                 {c.posture.items.map((item) => (
                   <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
                     <CheckIcon color={accentMid} />
-                    <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45", textWrap: "balance" }}>
-                      {item}
-                    </span>
+                    <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -1139,15 +1144,7 @@ export default function Page() {
                         </h3>
                         {step.time && <span style={{ fontSize: 11, color: "#9A9C90" }}>{step.time}</span>}
                       </div>
-                      <p
-                        style={{
-                          fontSize: 14,
-                          lineHeight: 1.9,
-                          color: "#62655B",
-                          margin: "8px 0 0",
-                          textWrap: "balance",
-                        }}
-                      >
+                      <p style={{ fontSize: 14, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>
                         {step.body}
                       </p>
                     </div>
@@ -1179,9 +1176,7 @@ export default function Page() {
                   }}
                 >
                   <CheckIcon />
-                  <span style={{ fontSize: 13, lineHeight: 1.7, color: "#4C4E45", textWrap: "balance" }}>
-                    {item}
-                  </span>
+                  <span style={{ fontSize: 13, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
                 </div>
               ))}
             </div>
