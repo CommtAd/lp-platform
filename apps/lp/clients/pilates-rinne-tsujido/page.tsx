@@ -219,12 +219,12 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
 /**
  * キャンペーンバッジ・体験レッスンの二重価格表記。
  * 顧客修正指示によりMV直下・料金表直下（pin 32）に全体を、
- * 最終予約エリア（pin 38）には compact で金額部分だけを出す。
+ * 最終予約エリア（pin 38）には compact で期限バッジと金額だけを出す。
  */
 function TrialPriceBlock({ compact = false }: { compact?: boolean } = {}) {
   return (
     <>
-      {!compact && (
+      {/* 期限バッジは compact でも出す（最終CTAでも期限を見せるため） */}
       <div style={{ textAlign: "center" }}>
         <span
           style={{
@@ -240,6 +240,8 @@ function TrialPriceBlock({ compact = false }: { compact?: boolean } = {}) {
         >
           {c.pricing.campaignBadge}
         </span>
+        {!compact && (
+        <>
         <div>
           <h3
             style={{
@@ -260,8 +262,9 @@ function TrialPriceBlock({ compact = false }: { compact?: boolean } = {}) {
         <p style={{ fontSize: 14, lineHeight: 1.9, color: "#62655B", margin: "14px 0 0" }}>
           {nl(c.pricing.campaignLead)}
         </p>
+        </>
+        )}
       </div>
-      )}
 
       {/*
         二重価格表記（通常 → キャンペーン）。
@@ -269,7 +272,7 @@ function TrialPriceBlock({ compact = false }: { compact?: boolean } = {}) {
         横並びだと 480px の枠に収まらない。通常価格を上段にまとめ、
         訴求文言を下段に大きく置く縦積みにしている。
       */}
-      <div style={{ marginTop: compact ? 0 : 24, textAlign: "center" }}>
+      <div style={{ marginTop: compact ? 18 : 24, textAlign: "center" }}>
         <div
           style={{
             display: "flex",
