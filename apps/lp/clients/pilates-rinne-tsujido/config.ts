@@ -569,7 +569,8 @@ const config: RinneConfig = {
 
   pricing: {
     campaignBadge: "9月30日までに体験予約をした方限定",
-    campaignTitle: "体験レッスン無料",
+    // 直下の金額表記が「完全無料」なので、見出し側では「無料」を使わない（顧客指示）
+    campaignTitle: "お試し体験レッスン",
     campaignLead:
       "マンツーマンのパーソナルレッスンを、\n姿勢診断とあわせてまずは体験してみませんか？",
     trialRegular: "8,800",
