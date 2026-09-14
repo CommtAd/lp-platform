@@ -568,8 +568,9 @@ export default function Page() {
                 <div
                   key={chip.big}
                   style={{
-                    width: 66,
-                    height: 66,
+                    // AUN No.4「もう少し大きく表示」。66→84。
+                    width: 84,
+                    height: 84,
                     borderRadius: "50%",
                     background: accent,
                     border: "1.5px solid rgba(255,255,255,0.5)",
@@ -582,10 +583,10 @@ export default function Page() {
                     boxShadow: "0 4px 12px rgba(0,0,0,0.22)",
                   }}
                 >
-                  <span style={{ fontSize: 9.5, letterSpacing: "0.06em", color: cream }}>
+                  <span style={{ fontSize: 12, letterSpacing: "0.06em", color: cream }}>
                     {chip.small}
                   </span>
-                  <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 17 }}>
+                  <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 21 }}>
                     {chip.big}
                   </span>
                 </div>
@@ -699,6 +700,13 @@ export default function Page() {
                   style={{
                     display: "flex",
                     alignItems: "stretch",
+                    /*
+                      cover は枠の短辺基準で拡大率が決まる。高さ95pxのままだと
+                      横4:3の素材は幅基準で縮み、立ち姿の人物が30px程度にしかならない。
+                      高さを確保すると高さ基準の拡大に切り替わり、被写体が大きくなって
+                      左右の余った壁が切れる。
+                    */
+                    minHeight: 128,
                     background: "#F4F0E8",
                     borderRadius: 14,
                     overflow: "hidden",
