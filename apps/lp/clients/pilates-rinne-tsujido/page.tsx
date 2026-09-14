@@ -1174,7 +1174,7 @@ export default function Page() {
                       style={{
                         fontFamily: fontGothic,
                         fontWeight: 700,
-                        fontSize: 18,
+                        fontSize: 20,
                         letterSpacing: "0.05em",
                         margin: 0,
                         color: "#33352E",
@@ -1186,7 +1186,7 @@ export default function Page() {
                       style={{
                         fontFamily: fontMincho,
                         fontWeight: 600,
-                        fontSize: 14,
+                        fontSize: 16,
                         lineHeight: 1.8,
                         letterSpacing: "0.04em",
                         color: accent,
@@ -1196,7 +1196,7 @@ export default function Page() {
                       {nl(store.appeal)}
                     </p>
                     <div style={{ height: 1, background: "#EFEAE0", margin: "16px 0" }} />
-                    <p style={{ fontSize: 12, lineHeight: 1.9, color: "#62655B", margin: 0 }}>
+                    <p style={{ fontSize: 14, lineHeight: 1.9, color: "#62655B", margin: 0 }}>
                       {nl(store.address)}
                       <br />
                       <span style={{ color: accent, fontWeight: 700 }}>{store.hours}</span>
@@ -1207,7 +1207,7 @@ export default function Page() {
                       {store.access.map((a) => (
                         <div key={a} style={{ display: "flex", alignItems: "flex-start", gap: 7, marginTop: 6 }}>
                           <CheckIcon color={accentMid} />
-                          <span style={{ fontSize: 11.5, lineHeight: 1.7, color: "#62655B" }}>{a}</span>
+                          <span style={{ fontSize: 13, lineHeight: 1.7, color: "#62655B" }}>{a}</span>
                         </div>
                       ))}
                     </div>
