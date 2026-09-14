@@ -700,6 +700,13 @@ export default function Page() {
                   style={{
                     display: "flex",
                     alignItems: "stretch",
+                    /*
+                      cover は枠の短辺基準で拡大率が決まる。高さ95pxのままだと
+                      横4:3の素材は幅基準で縮み、立ち姿の人物が30px程度にしかならない。
+                      高さを確保すると高さ基準の拡大に切り替わり、被写体が大きくなって
+                      左右の余った壁が切れる。
+                    */
+                    minHeight: 128,
                     background: "#F4F0E8",
                     borderRadius: 14,
                     overflow: "hidden",
