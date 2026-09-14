@@ -403,7 +403,8 @@ export default function Page() {
               display: "flex",
               alignItems: "center",
               background: `linear-gradient(120deg, ${shade(accent, 0.16)} 0%, ${accent} 55%, ${shade(accent, -0.15)} 100%)`,
-              padding: "14px 18px",
+              // バッジを1行にして円を広げたぶん、帯も高くして上のロゴに被らせない
+              padding: "18px 18px",
               boxShadow: "0 3px 10px rgba(70,72,60,0.18)",
             }}
           >
@@ -413,8 +414,8 @@ export default function Page() {
                 left: 20,
                 top: "50%",
                 transform: "translateY(-50%)",
-                width: 76,
-                height: 76,
+                width: 88,
+                height: 88,
                 borderRadius: "50%",
                 background: `radial-gradient(circle at 38% 32%, ${creamSoft} 0%, ${cream} 100%)`,
                 boxShadow: "0 3px 8px rgba(50,40,25,0.28)",
@@ -424,11 +425,14 @@ export default function Page() {
                 color: accent,
               }}
             >
+              {/* 「9/15」「まで」を縦積みではなく1行に並べる（顧客指示） */}
               <div
                 style={{
                   display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
+                  flexDirection: "row",
+                  alignItems: "baseline",
+                  justifyContent: "center",
+                  whiteSpace: "nowrap",
                   lineHeight: 1.2,
                   transform: "rotate(-9deg)",
                 }}
@@ -448,7 +452,7 @@ export default function Page() {
                 ))}
               </div>
             </div>
-            <div style={{ flex: "none", width: 86 }} />
+            <div style={{ flex: "none", width: 96 }} />
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div
                 style={{
