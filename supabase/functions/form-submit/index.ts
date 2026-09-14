@@ -90,6 +90,25 @@ function escapeHtml(input: string): string {
     .replace(/'/g, "&#39;");
 }
 
+/**
+ * 行の配列をHTMLの改行に変換する（エスケープ込み）。
+ *
+ * `white-space: pre-wrap` + 生の改行では **Outlook（Windows版）で改行が消える**。
+ * Outlook は HTML を Word のレンダリングエンジンで描画するため pre-wrap を
+ * 解釈せず、改行が空白に潰れて全文が1行に繋がる（実際に発生）。
+ * Gmail は pre-wrap を解釈するので、この崩れはOutlookでだけ起きる。
+ * `<br>` は Word エンジンでも確実に効くので明示的に入れる。
+ *
+ * テキストエリアの入力値のように、1要素の中に改行を含む行もあるため、
+ * 要素側の改行も分解してから繋ぐ。
+ */
+function linesToHtml(lines: string[]): string {
+  return lines
+    .flatMap((line) => line.split("\n"))
+    .map(escapeHtml)
+    .join("<br>");
+}
+
 /** Brevo (旧Sendinblue) Transactional Email API 経由でメール送信。失敗時は throw。 */
 async function sendBrevoEmail(params: {
   toEmail: string;
@@ -186,8 +205,8 @@ function buildAdminNotificationHtml(params: {
       ...(undeclared.length ? ["", ...undeclared.map(([k, v]) => `${k}: ${v}`)] : []),
       ...footer,
     ];
-    return `<div style="font-family: sans-serif; font-size: 14px; color: #222; white-space: pre-wrap;">${escapeHtml(
-      lines.join("\n"),
+    return `<div style="font-family: sans-serif; font-size: 14px; color: #222;">${linesToHtml(
+      lines,
     )}</div>`;
   }
 
@@ -246,8 +265,8 @@ function buildAdminNotificationHtml(params: {
         `このメールは ${params.pageUrl ?? ""} から送信されました`,
       ];
 
-  return `<div style="font-family: sans-serif; font-size: 14px; color: #222; white-space: pre-wrap;">${escapeHtml(
-    lines.join("\n"),
+  return `<div style="font-family: sans-serif; font-size: 14px; color: #222;">${linesToHtml(
+    lines,
   )}</div>`;
 }
 
@@ -465,8 +484,8 @@ function buildConfirmationHtml(params: {
       "",
       ...closingLines,
     ];
-    return `<div style="font-family: sans-serif; font-size: 14px; color: #222; white-space: pre-wrap;">${escapeHtml(
-      lines.join("\n"),
+    return `<div style="font-family: sans-serif; font-size: 14px; color: #222;">${linesToHtml(
+      lines,
     )}</div>`;
   }
 
@@ -518,18 +537,16 @@ function buildConfirmationHtml(params: {
   const echoFields = params.meta.formFields;
   const echoHtml =
     echoFields && echoFields.length > 0
-      ? `<div style="white-space: pre-wrap; margin-top:24px;">${escapeHtml(
-          [
-            "===========",
-            "お問い合わせ内容",
-            ...renderFormFieldRows(echoFields, params.formData),
-            ...undeclaredFormEntries(echoFields, params.formData).map(
-              ([k, v]) => `${k}: ${v}`,
-            ),
-            "===========",
-            `このメールは ${params.pageUrl ?? ""} から送信されました`,
-          ].join("\n"),
-        )}</div>`
+      ? `<div style="margin-top:24px;">${linesToHtml([
+          "===========",
+          "お問い合わせ内容",
+          ...renderFormFieldRows(echoFields, params.formData),
+          ...undeclaredFormEntries(echoFields, params.formData).map(
+            ([k, v]) => `${k}: ${v}`,
+          ),
+          "===========",
+          `このメールは ${params.pageUrl ?? ""} から送信されました`,
+        ])}</div>`
       : "";
 
   const proseHtml = (params.meta.confirmationLines ?? DEFAULT_CONFIRMATION_LINES)
