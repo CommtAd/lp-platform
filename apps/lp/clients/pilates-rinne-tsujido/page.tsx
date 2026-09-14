@@ -1104,7 +1104,7 @@ export default function Page() {
 
           {/* ── ⑦ 初心者でも参加しやすい理由 ── */}
           <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.beginner.heading} fontSize={17} nowrap />
+            <SectionHeading text={c.beginner.heading} fontSize={20} nowrap />
             <p style={{ fontSize: 14.5, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
               {c.beginner.body}
             </p>
