@@ -86,7 +86,8 @@ export interface RinneConfig {
     note?: string;
   };
   offerBar: {
-    badgeLines: [string, string];
+    /** 期限バッジ。1行の帯なので分割せず1文字列で持つ。 */
+    badgeText: string;
     text: string;
   };
   /** 監修・実績帯。数値が未確定なら num を空文字にすると数字部分が出ない。 */
@@ -275,7 +276,7 @@ const config: RinneConfig = {
     note: undefined,
   },
   offerBar: {
-    badgeLines: ["9/15", "まで"],
+    badgeText: "9/30まで",
     text: "無料体験レッスン受付中",
   },
   // TBD: Google口コミ等の実績数値。確定まで数字を出さない。
@@ -538,7 +539,7 @@ const config: RinneConfig = {
   },
 
   pricing: {
-    campaignBadge: "9月15日までに体験予約をした方限定",
+    campaignBadge: "9月30日までに体験予約をした方限定",
     campaignTitle: "体験レッスン無料",
     campaignLead:
       "マンツーマンのパーソナルレッスンを、\n姿勢診断とあわせてまずは体験してみませんか？",

@@ -396,63 +396,43 @@ export default function Page() {
           </div>
 
           {/* ── offer bar ── */}
+          {/*
+            期限バッジは円形の“ステッカー”をはみ出させる作りだったが、
+            1行表示にすると横幅が要るうえ上下のはみ出しがロゴに被る。
+            帯の中に収まる角丸のピルに変え、絶対配置と余白合わせのスペーサーを廃した。
+          */}
           <div
             style={{
               position: "relative",
               zIndex: 5,
               display: "flex",
               alignItems: "center",
+              gap: 12,
               background: `linear-gradient(120deg, ${shade(accent, 0.16)} 0%, ${accent} 55%, ${shade(accent, -0.15)} 100%)`,
-              // バッジを1行にして円を広げたぶん、帯も高くして上のロゴに被らせない
-              padding: "18px 18px",
+              padding: "14px 18px",
               boxShadow: "0 3px 10px rgba(70,72,60,0.18)",
             }}
           >
-            <div
+            <span
               style={{
-                position: "absolute",
-                left: 20,
-                top: "50%",
-                transform: "translateY(-50%)",
-                width: 88,
-                height: 88,
-                borderRadius: "50%",
-                background: `radial-gradient(circle at 38% 32%, ${creamSoft} 0%, ${cream} 100%)`,
-                boxShadow: "0 3px 8px rgba(50,40,25,0.28)",
-                display: "flex",
+                flex: "none",
+                display: "inline-flex",
                 alignItems: "center",
-                justifyContent: "center",
+                fontFamily: fontGothic,
+                fontWeight: 700,
+                fontSize: 15,
+                letterSpacing: "0.02em",
+                lineHeight: 1.2,
+                whiteSpace: "nowrap",
                 color: accent,
+                background: `linear-gradient(135deg, ${creamSoft} 0%, ${cream} 100%)`,
+                borderRadius: 8,
+                padding: "7px 13px",
+                boxShadow: "0 2px 6px rgba(50,40,25,0.26)",
               }}
             >
-              {/* 「9/15」「まで」を縦積みではなく1行に並べる（顧客指示） */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "baseline",
-                  justifyContent: "center",
-                  whiteSpace: "nowrap",
-                  lineHeight: 1.2,
-                  transform: "rotate(-9deg)",
-                }}
-              >
-                {c.offerBar.badgeLines.map((l, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      fontFamily: fontGothic,
-                      fontWeight: 700,
-                      fontSize: 15,
-                      letterSpacing: "0.02em",
-                    }}
-                  >
-                    {l}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div style={{ flex: "none", width: 96 }} />
+              {c.offerBar.badgeText}
+            </span>
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div
                 style={{
