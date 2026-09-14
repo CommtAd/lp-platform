@@ -709,7 +709,7 @@ export default function Page() {
 
           {/* ── ②-2 目指せる未来（pin 25） ── */}
           <section style={{ background: "#FCFBF7", padding: "56px 26px 60px" }}>
-            <SectionHeading text={c.future.heading} fontSize={19} />
+            <SectionHeading text={c.future.heading} fontSize={22} />
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 32 }}>
               {c.future.items.map((item) => (
                 <div
@@ -774,7 +774,7 @@ export default function Page() {
                 textAlign: "center",
                 fontFamily: fontMincho,
                 fontWeight: 600,
-                fontSize: 17,
+                fontSize: 20,
                 lineHeight: 1.8,
                 letterSpacing: "0.04em",
                 color: "#33352E",
