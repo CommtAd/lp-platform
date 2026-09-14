@@ -41,9 +41,11 @@ const ASSET = "/clients/pilates-rinne-tsujido";
  * 高画質な写真（2025/12/27撮影、海老名店/辻堂店混在・店舗未分類）が多数あるため、
  * 顧客に各写真がどちらの店舗かを確認できれば、それらへの差し替えを推奨する。
  * 使用した元動画（フレーム切り出し元）:
- *   hero.jpg ← IMG_7776 / reason-1.jpg ← IMG_7763 / reason-2.jpg ← IMG_7777 /
- *   reason-3.jpg ← IMG_7767 / reason-4.jpg ← IMG_7773 / posture.jpg ← IMG_7769 /
- *   instructor-1.jpg ← IMG_7765
+ *   reason-1.jpg ← IMG_7763 / reason-2.jpg ← IMG_7777 /
+ *   reason-4.jpg ← IMG_7773 / posture.jpg ← IMG_7769 / instructor-1.jpg ← IMG_7765
+ * （2026-09-14: hero は動画 hero.mp4 に差し替え。reason-3.jpg は顧客支給の
+ *   高画質写真 TEP03156.jpg（姿勢診断をタブレットで見せている場面）へ差し替え。
+ *   どちらも動画フレーム切り出しではない）
  * （reason-3とreason-4は初版がどちらも同じ2人の近距離カウンセリング写真で似すぎていた
  *   ため、reason-4はスタジオ全体を映した別カットに差し替え済み。2026-08-05）
  * （2026-08-25: 「パーソナルスタジオ」訴求への変更に合わせ、MVの中身を差し替え。
@@ -355,8 +357,7 @@ const config: RinneConfig = {
         title: "鍼灸師・整体師\n身体を知るプロが監修",
         body:
           "身体に関する知識を持つ専門家が、姿勢や身体の使い方を考えたプログラムを監修しています。ただ身体を動かすだけでなく、姿勢や動きやすさを意識したレッスンを行います。",
-        // TBD: ピラティス実施中の写真へ差し替え（現素材はカウンセリング中のため素材受領待ち）
-        img: { placeholder: "ピラティスをしている様子（素材受領待ち）", src: null },
+        img: { placeholder: "姿勢診断をしている様子", src: `${ASSET}/reason-3.jpg` },
       },
       {
         num: "04",
