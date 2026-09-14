@@ -673,26 +673,43 @@ export default function Page() {
                 </div>
               ))}
             </div>
-            <p
+            {/*
+              悩みカードの受けになる一文。
+              白いプレートに載せると上の白カード5枚と同化して埋もれたため、
+              濃緑の地に白文字へ反転した。セクション内でここだけ明度が逆転するので
+              視線が確実に止まる。FAQ・料金プランと同じ navyGrad を使っており、
+              LP内で浮いた見た目にはならない。
+            */}
+            <div
               style={{
-                textAlign: "center",
-                fontFamily: fontMincho,
-                fontWeight: 600,
-                fontSize: 20,
-                lineHeight: 1.8,
-                letterSpacing: "0.04em",
-                margin: "34px 0 0",
-                color: "#33352E",
+                marginTop: 38,
+                background: navyGrad,
+                borderRadius: 16,
+                padding: "30px 20px",
+                boxShadow: `0 10px 24px ${accentGlow}`,
               }}
             >
-              {nl(c.worry.closing)}
-            </p>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontFamily: fontMincho,
+                  fontWeight: 600,
+                  fontSize: 23,
+                  lineHeight: 1.8,
+                  letterSpacing: "0.05em",
+                  margin: 0,
+                  color: "#FFFFFF",
+                }}
+              >
+                {nl(c.worry.closing)}
+              </p>
+            </div>
             {/* pin 29: ここのCTAは削除 */}
           </section>
 
           {/* ── ②-2 目指せる未来（pin 25） ── */}
           <section style={{ background: "#FCFBF7", padding: "56px 26px 60px" }}>
-            <SectionHeading text={c.future.heading} fontSize={19} />
+            <SectionHeading text={c.future.heading} fontSize={22} />
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 32 }}>
               {c.future.items.map((item) => (
                 <div
@@ -757,7 +774,7 @@ export default function Page() {
                 textAlign: "center",
                 fontFamily: fontMincho,
                 fontWeight: 600,
-                fontSize: 17,
+                fontSize: 20,
                 lineHeight: 1.8,
                 letterSpacing: "0.04em",
                 color: "#33352E",
