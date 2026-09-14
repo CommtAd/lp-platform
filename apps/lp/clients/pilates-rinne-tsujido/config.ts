@@ -62,10 +62,12 @@ export interface Slot {
   src?: string | null;
   /** 切り抜き位置（例 "38% center"）。既定は "center"。 */
   position?: string;
+  /**
+   * 明るさ・彩度の補正（CSS filter）。
+   * 素材が店内の暗い照明で撮られた動画フレームのため、枠によっては持ち上げが要る。
+   */
+  filter?: string;
 }
-
-/** 比較表のマーク。good=◎ / fair=○ / poor=△ */
-export type Mark = "good" | "fair" | "poor";
 
 /** 予約先。url が null の間は「予約URL設定待ち」として非リンク描画される。 */
 export interface ReserveTarget {
@@ -89,7 +91,8 @@ export interface RinneConfig {
     note?: string;
   };
   offerBar: {
-    badgeLines: [string, string];
+    /** 期限バッジ。1行の帯なので分割せず1文字列で持つ。 */
+    badgeText: string;
     text: string;
   };
   /** 監修・実績帯。数値が未確定なら num を空文字にすると数字部分が出ない。 */
@@ -119,14 +122,27 @@ export interface RinneConfig {
     items: { num: string; title: string; body: string; img: Slot }[];
   };
 
-  /** ④ 他のレッスン形式との違い */
-  comparison: {
+  /** ③-2 目指せる未来 */
+  future: {
+    heading: string;
+    items: { num: string; title: string; body: string; img: Slot }[];
+    closing: string;
+  };
+
+  /** ④ 料金プラン */
+  plans: {
     heading: string;
     lead: string;
-    columns: [string, string, string];
-    /** 強調する列のindex（RINNE = 2） */
-    highlight: number;
-    rows: { label: string; values: [string, string, string]; marks: [Mark, Mark, Mark] }[];
+    /** 列見出し（英字＋和文）。1列目は回数ラベル列なので含めない。 */
+    columns: { en: string; ja: string }[];
+    /** 行＝月あたりの回数。values は columns と同じ並び。 */
+    rows: {
+      label: string;
+      values: { price: string; campaign?: string; campaignNote?: string }[];
+    }[];
+    taxNote: string;
+    /** 表の下に置く補足（月2回プランの条件など） */
+    notes: string[];
   };
 
   /** ⑤ 姿勢診断について */
@@ -179,15 +195,21 @@ export interface RinneConfig {
     }[];
   };
 
-  /** ⑩ 料金・キャンペーン */
+  /**
+   * 体験キャンペーン（完全無料訴求）。pin 37 で「料金・キャンペーン」セクションを
+   * 削除したため見出しは持たず、料金表直下と最終予約エリアの2箇所で使う。
+   */
   pricing: {
-    heading: string;
     campaignBadge: string;
     campaignTitle: string;
     campaignLead: string;
     /** 通常体験料金（未確定は "00,000"） */
     trialRegular: string;
-    /** キャンペーン適用後の体験料金表示 */
+    /**
+     * キャンペーン適用後の体験料金表示。
+     * 「0円」のような金額ではなく「完全無料」のような文言も入る（文字数に応じて
+     * 表示サイズは page.tsx 側で調整済み）。
+     */
     trialNow: string;
   };
 
@@ -259,37 +281,36 @@ const config: RinneConfig = {
     note: undefined,
   },
   offerBar: {
-    badgeLines: ["9/15", "まで"],
+    badgeText: "9/30まで",
     text: "無料体験レッスン受付中",
   },
   // TBD: Google口コミ等の実績数値。確定まで数字を出さない。
   achievement: { pre: "鍼灸師・整体師監修", num: "", post: "のプログラム" },
 
   fv: {
-    catchLines: ["姿勢から整える、", "続けやすい形で。"],
+    catchLines: ["ただ痩せるより、", "キレイな身体へ。"],
     subLines: [
-      "マンツーマンで丁寧に",
-      "姿勢診断から始めるマシンピラティス",
+      "身体のお悩みに姿勢からアプローチ",
+      "パーソナルマシンピラティス RINNE",
     ],
     hero: {
-      placeholder: "マンツーマンレッスンの様子（メインビジュアル）",
-      src: `${ASSET}/hero.jpg`,
+      // TBD: ピラティス実施中の写真（または公式サイト同等の動画）へ差し替え。
+      // 現素材は「姿勢診断デモの立ち姿」でレッスン中ではないため、素材受領まで枠のみ。
+      placeholder: "ピラティスをしている様子（メインビジュアル・素材受領待ち）",
+      src: null,
     },
-    notes: ["初心者歓迎", "鍼灸師・整体師監修", "辻堂駅徒歩2分", "辻堂店で体験受付中"],
+    notes: ["猫背", "肩こり", "ぽっこりお腹", "反り腰"],
     chips: [{ small: "姿勢診断", big: "付き" }],
   },
 
   worry: {
     heading: "このようなお悩みはありませんか",
     items: [
-      "猫背や巻き肩が気になる",
-      "下腹や下半身のラインが気になる",
-      "運動不足を感じている",
-      "身体が硬く、運動に苦手意識がある",
+      "猫背や巻き肩で、姿勢が悪く見える",
+      "肩こりや身体の疲れが気になる",
+      "下腹や下半身がなかなかすっきりしない",
+      "運動したいけれど何をすればいいかわからない",
       "大人数のレッスンについていけるか不安",
-      "グループレッスンでは十分に見てもらえなかった",
-      "パーソナルレッスンは料金面で続けにくい",
-      "自分に合った運動が分からない",
     ],
     closing: "そのお悩み、身体の状態を\n確認することから始めませんか？",
   },
@@ -302,68 +323,134 @@ const config: RinneConfig = {
         title: "完全マンツーマンで一人ひとりに向き合う",
         body:
           "大人数のグループレッスンとは異なり、インストラクターがお客様一人に集中して動きを確認します。初心者の方や、正しく動けているか不安な方にも安心して参加いただけるレッスンです。",
-        img: { placeholder: "マンツーマンで受講している様子", src: `${ASSET}/reason-1.jpg` },
+        img: {
+          placeholder: "マンツーマンで受講している様子",
+          src: `${ASSET}/reason-1.jpg`,
+          /*
+            元は900x1600の縦写真で、枠は428x210の横長。cover で高さの約27%しか
+            映らないため、切り出す帯がずれると人物が丸ごと落ちる。
+            2人の顔と手元の資料が入る位置（原寸で上から約43〜71%）に合わせている。
+            横は cover 後の幅が枠とぴったり一致するため指定しても効かない。
+          */
+          position: "center 60%",
+          // 店内が暗く、黒い服の2人が背景に沈んで見えにくいので少し持ち上げる。
+          filter: "brightness(1.16) contrast(1.06) saturate(1.04)",
+        },
       },
       {
         num: "02",
-        title: "姿勢診断からスタート",
+        title: "自分の身体を知る「姿勢診断」",
         body:
           "レッスン前に姿勢や身体の癖を確認し、一人ひとりの状態に合わせて必要な動きをご提案します。全員が同じ動きをするのではなく、自分の身体に合ったレッスンを受けられます。",
         img: { placeholder: "姿勢診断の様子", src: `${ASSET}/reason-2.jpg` },
       },
       {
         num: "03",
-        title: "鍼灸師・整体師監修",
+        title: "鍼灸師・整体師\n身体を知るプロが監修",
         body:
           "身体に関する知識を持つ専門家が、姿勢や身体の使い方を考えたプログラムを監修しています。ただ身体を動かすだけでなく、姿勢や動きやすさを意識したレッスンを行います。",
-        img: { placeholder: "インストラクターの指導風景", src: `${ASSET}/reason-3.jpg` },
+        // TBD: ピラティス実施中の写真へ差し替え（現素材はカウンセリング中のため素材受領待ち）
+        img: { placeholder: "ピラティスをしている様子（素材受領待ち）", src: null },
       },
       {
         num: "04",
         title: "続けやすい料金",
         body:
-          "丁寧なマンツーマンレッスンでありながら、無理なく続けやすい料金でご案内しています。しっかり見てもらいたい方にも、通いやすい形でお選びいただけます。",
-        img: { placeholder: "スタジオ内観・マシンの写真", src: `${ASSET}/reason-4.jpg` },
+          "お客様の状況や課題に合わせて2つのプランをお選びいただけます。まずはパーソナルプランで基礎基本をマスター。慣れてきたらコスパ重視のセミパーソナルで長く継続がRINNEのおすすめです。",
+        img: {
+          placeholder: "スタジオ内観・マシンの写真",
+          src: `${ASSET}/reason-4.jpg`,
+          /*
+            既定の center だと上端に天井の暗い帯が入り、骸骨模型の頭も枠にかかる。
+            少しだけ下げて天井を外した。56%まで下げると人物はもっと入るが
+            RINNEのロゴ上端が切れて「04」バッジと重なるため、ロゴが収まる53%で止めている。
+          */
+          position: "center 53%",
+          // 白壁で元から明るめなので、①ほど強くは持ち上げない。
+          filter: "brightness(1.08) saturate(1.03)",
+        },
       },
     ],
   },
 
-  comparison: {
-    heading: "パーソナルの丁寧さを、\n続けやすい料金で。",
-    lead: "完全パーソナル・大人数のグループレッスンと、RINNEのピラティスを比べました。",
-    columns: ["完全\nパーソナル", "大人数の\nグループ", "RINNE"],
-    highlight: 2,
+  // pin 25: お悩み訴求のあとに「目指せる未来」を追加。
+  // 添付は他社LPのイメージ共有のみのため、レイアウトはRINNEの配色・書体に合わせて起こす。
+  future: {
+    heading: "姿勢から整えて、\nもっと好きになれる身体へ。",
+    items: [
+      {
+        num: "01",
+        title: "すっと伸びた美しい姿勢",
+        body: "自然と自信を持てる、きれいな立ち姿へ。",
+        // TBD: 各項目の写真は素材受領待ち
+        img: { placeholder: "美しい姿勢のイメージ", src: null },
+      },
+      {
+        num: "02",
+        title: "すっきりしたお腹まわり",
+        body: "姿勢を整えて、身体のラインを美しく。",
+        img: { placeholder: "お腹まわりのイメージ", src: null },
+      },
+      {
+        num: "03",
+        title: "女性らしいヒップライン",
+        body: "お尻や脚を正しく使える身体を目指します。",
+        img: { placeholder: "ヒップラインのイメージ", src: null },
+      },
+      {
+        num: "04",
+        title: "軽やかに動ける身体",
+        body: "毎日の動きまでラクになる身体づくりへ。",
+        img: { placeholder: "軽やかに動く身体のイメージ", src: null },
+      },
+    ],
+    closing: "RINNEなら、\n一人ひとりの身体に合わせて整えます。",
+  },
+
+  // pin 21〜24: 「比較」カテゴリを「料金表」カテゴリに差し替え。
+  // 金額・注記は顧客支給の料金表（AUN添付 2026-09-10）をそのまま転記している。
+  plans: {
+    heading: "料金プラン",
+    lead: "2つのプランを使い分けできるから\nマシンピラティスを長く続けられる",
+    columns: [
+      { en: "PERSONAL", ja: "パーソナル" },
+      { en: "SEMI PERSONAL", ja: "セミパーソナル" },
+    ],
     rows: [
       {
-        label: "レッスン人数",
-        values: ["1名", "多人数", "1名"],
-        marks: ["good", "poor", "good"],
+        label: "月4回",
+        values: [
+          { price: "34,800円", campaign: "29,800円", campaignNote: "最初の3ヶ月" },
+          { price: "19,800円" },
+        ],
       },
       {
-        label: "指導の細かさ",
-        values: ["丁寧に見てもらえる", "一人ひとりを細かく見ることが難しい", "一人ひとりの動きを確認"],
-        marks: ["good", "poor", "good"],
+        label: "月6回",
+        values: [
+          { price: "49,800円", campaign: "44,800円", campaignNote: "最初の3ヶ月" },
+          { price: "27,800円" },
+        ],
       },
       {
-        label: "身体に合わせた対応",
-        values: ["一人ひとりに合わせやすい", "全員が同じ動きになりやすい", "姿勢診断をもとに提案"],
-        marks: ["good", "poor", "good"],
+        label: "月8回",
+        values: [
+          // 顧客支給の表では月6回と同額（44,800円）。誤記の可能性があるため要確認。
+          { price: "59,800円", campaign: "44,800円", campaignNote: "最初の3ヶ月" },
+          { price: "34,800円" },
+        ],
       },
       {
-        label: "通いやすさ",
-        values: ["予約枠が限られやすい", "通いやすい", "続けやすい"],
-        marks: ["poor", "good", "good"],
+        label: "月12回",
+        values: [
+          { price: "85,800円", campaign: "80,800円", campaignNote: "最初の3ヶ月" },
+          { price: "49,800円" },
+        ],
       },
-      {
-        label: "料金の負担",
-        values: ["高くなりやすい", "抑えやすい", "完全パーソナルより続けやすい"],
-        marks: ["poor", "good", "fair"],
-      },
-      {
-        label: "初心者の参加しやすさ",
-        values: ["安心して始めやすい", "周囲についていけるか不安になりやすい", "マンツーマンだから質問しやすい"],
-        marks: ["good", "poor", "good"],
-      },
+    ],
+    taxNote: "表示価格は税込です",
+    notes: [
+      "6ヶ月以上所属の方は、7ヶ月目から月2回プランもお選びいただけます。",
+      "※パーソナル月2回 17,800円、セミパーソナル月2回 11,800円",
     ],
   },
 
@@ -475,13 +562,12 @@ const config: RinneConfig = {
   },
 
   pricing: {
-    heading: "料金・キャンペーン",
-    campaignBadge: "9月15日までに体験予約をした方限定",
+    campaignBadge: "9月30日までに体験予約をした方限定",
     campaignTitle: "体験レッスン無料",
     campaignLead:
       "マンツーマンのパーソナルレッスンを、\n姿勢診断とあわせてまずは体験してみませんか？",
     trialRegular: "8,800",
-    trialNow: "0",
+    trialNow: "完全無料",
   },
 
   stores: {
@@ -553,7 +639,7 @@ const config: RinneConfig = {
         url: "https://rinne-pilates.hacomono.jp/widgets/4?isShowProgramName=true&studioId=4",
       },
     ],
-    note: "初回体験0円｜入会金0円｜しつこい勧誘はいたしません。",
+    note: "初回体験 完全無料｜入会金0円｜しつこい勧誘はいたしません。",
   },
 
   sticky: {
