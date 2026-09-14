@@ -766,7 +766,7 @@ export default function Page() {
                     placeholder={item.img.placeholder}
                     objectPosition={item.img.position ?? "center"}
                     radius={16}
-                    style={{ width: "100%", height: 210 }}
+                    style={{ width: "100%", height: 210, filter: item.img.filter }}
                   />
                   <div
                     style={{

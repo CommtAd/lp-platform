@@ -62,6 +62,11 @@ export interface Slot {
   src?: string | null;
   /** 切り抜き位置（例 "38% center"）。既定は "center"。 */
   position?: string;
+  /**
+   * 明るさ・彩度の補正（CSS filter）。
+   * 素材が店内の暗い照明で撮られた動画フレームのため、枠によっては持ち上げが要る。
+   */
+  filter?: string;
 }
 
 /** 予約先。url が null の間は「予約URL設定待ち」として非リンク描画される。 */
@@ -321,8 +326,15 @@ const config: RinneConfig = {
         img: {
           placeholder: "マンツーマンで受講している様子",
           src: `${ASSET}/reason-1.jpg`,
-          // 既定の center だと2人が枠の右に寄って見切れるため、やや左・上寄せで収める。
-          position: "42% 38%",
+          /*
+            元は900x1600の縦写真で、枠は428x210の横長。cover で高さの約27%しか
+            映らないため、切り出す帯がずれると人物が丸ごと落ちる。
+            2人の顔と手元の資料が入る位置（原寸で上から約43〜71%）に合わせている。
+            横は cover 後の幅が枠とぴったり一致するため指定しても効かない。
+          */
+          position: "center 60%",
+          // 店内が暗く、黒い服の2人が背景に沈んで見えにくいので少し持ち上げる。
+          filter: "brightness(1.16) contrast(1.06) saturate(1.04)",
         },
       },
       {
