@@ -514,10 +514,11 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 6, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+            {/* 3件目以降は1行に収まらないので、右寄せのまま折り返させる。
+                折り返すと区切りの「/」が行頭に落ちて不格好なので、区切りは余白で取る。 */}
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-end", alignItems: "flex-end", columnGap: 12, rowGap: 3, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
               {c.hero.access.map((a, i) => (
                 <span key={i} style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
-                  {i > 0 && <span style={{ color: textDim2, marginRight: 4 }}>/</span>}
                   {a.station}
                   <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
                     {a.walk.split(/(\d+)/).map((part, j) =>

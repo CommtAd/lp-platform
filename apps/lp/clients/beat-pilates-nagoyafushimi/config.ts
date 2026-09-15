@@ -332,6 +332,7 @@ const config: BeatPilatesConfig = {
     access: [
       { station: "伏見駅", walk: "徒歩8分" },
       { station: "大須観音駅", walk: "徒歩10分" },
+      { station: "MEGAドンキ納屋橋店", walk: "徒歩3分" },
     ],
     ctaText: "体験レッスンを予約する",
   },
@@ -589,7 +590,7 @@ const config: BeatPilatesConfig = {
         name: "BEAT PILATES 名古屋伏見店",
         address: "〒460-0008 名古屋市中区栄1-18-1 ハイツサンライズ2F号室",
         hours: "営業時間 9:00〜21:00",
-        route: "地下鉄東山線・鶴舞線 伏見駅 徒歩8分／地下鉄鶴舞線 大須観音駅 徒歩10分",
+        route: "地下鉄東山線・鶴舞線 伏見駅 徒歩8分／地下鉄鶴舞線 大須観音駅 徒歩10分／MEGAドンキ納屋橋店 徒歩3分",
       },
     ],
   },
