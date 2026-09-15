@@ -567,9 +567,9 @@ export default function Page() {
                 style={{
                   fontFamily: fontMincho,
                   fontWeight: 700,
-                  fontSize: 33,
-                  lineHeight: 1.35,
-                  letterSpacing: "0.01em",
+                  fontSize: 22,
+                  lineHeight: 1.45,
+                  letterSpacing: "0",
                   margin: 0,
                   color: "#FFFFFF",
                   textShadow: "0 2px 18px rgba(0,0,0,0.6)",
@@ -580,7 +580,7 @@ export default function Page() {
                 <span
                   style={{
                     display: "inline-block",
-                    fontSize: 44,
+                    fontSize: 24,
                     color: "#FFFFFF",
                     textShadow: `0 0 10px ${pink}, 0 0 20px ${pink}CC, 0 0 4px ${pink}`,
                   }}

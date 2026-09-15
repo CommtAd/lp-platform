@@ -179,10 +179,10 @@ const config: BeatPilatesConfig = {
   },
 
   hero: {
-    catchLines: ["運動が苦手でも、", "楽しく続く。"],
+    catchLines: ["暗闇だから、周りを気にせず、", "音楽があるから、楽しく続く。"],
     subCatch: "暗闇×音楽×マシンピラティス",
-    body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
-    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-toyota/fv-hero.jpg", position: "3% 30%" },
+    body: "人目を気にせず、自分に集中\n音楽に合わせて楽しむ45分",
+    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-toyota/fv-hero.jpg", position: "25% 50%" },
     trialBadge: { label: "初回体験", price: "1,000", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
     tags: ["女性専用", "初心者歓迎"],
