@@ -530,7 +530,7 @@ export default function Page() {
           </div>
 
           {/* ── FV / hero ── */}
-          <section style={{ position: "relative", minHeight: "clamp(430px, 124vw, 600px)", overflow: "hidden", background: "#12121A" }}>
+          <section style={{ position: "relative", minHeight: "clamp(400px, 115vw, 560px)", overflow: "hidden", background: "#12121A" }}>
             <ImageSlot
               src={c.hero.hero.src}
               placeholder={c.hero.hero.placeholder}
@@ -545,14 +545,14 @@ export default function Page() {
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(100deg, rgba(8,8,13,0.92) 0%, rgba(8,8,13,0.78) 32%, rgba(8,8,13,0.4) 55%, rgba(8,8,13,0.08) 75%, rgba(8,8,13,0) 90%)",
+                  "linear-gradient(180deg, rgba(8,8,13,0.9) 0%, rgba(8,8,13,0.74) 30%, rgba(8,8,13,0.3) 52%, rgba(8,8,13,0) 72%)",
               }}
             />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(180deg, rgba(8,8,13,0) 45%, rgba(8,8,13,0.92) 100%)",
+                background: "linear-gradient(180deg, rgba(8,8,13,0) 62%, rgba(8,8,13,0.9) 100%)",
               }}
             />
             <div style={{ position: "relative", zIndex: 2, padding: "48px 22px 24px" }}>
@@ -560,8 +560,9 @@ export default function Page() {
                 style={{
                   fontFamily: fontMincho,
                   fontWeight: 700,
-                  fontSize: 33,
-                  lineHeight: 1.35,
+                  // 1行14文字。360px幅で収まる上限から逆算している
+                  fontSize: "clamp(19px, 5.5vw, 26px)",
+                  lineHeight: 1.45,
                   letterSpacing: "0.01em",
                   margin: 0,
                   color: "#FFFFFF",
@@ -573,8 +574,8 @@ export default function Page() {
                 <span
                   style={{
                     display: "inline-block",
-                    // 9文字を固定44pxにすると360px幅で溢れるため、狭い画面だけ縮める
-                    fontSize: "clamp(30px, 9.4vw, 44px)",
+                    // 同じく14文字。1行目よりわずかに大きくして主従を残す
+                    fontSize: "clamp(21px, 6.0vw, 29px)",
                     color: "#FFFFFF",
                     textShadow: `0 0 10px ${pink}, 0 0 20px ${pink}CC, 0 0 4px ${pink}`,
                   }}
@@ -599,8 +600,11 @@ export default function Page() {
               >
                 {nl(c.hero.subCatch)}
               </p>
-              <p style={{ fontSize: 11, lineHeight: 1.85, color: "rgba(255,255,255,0.8)", margin: "16px 0 0", textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>{nl(c.hero.body)}</p>
+              {c.hero.body && (
+                <p style={{ fontSize: 11, lineHeight: 1.85, color: "rgba(255,255,255,0.8)", margin: "16px 0 0", textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>{nl(c.hero.body)}</p>
+              )}
 
+              {c.hero.showOffer !== false && (
               <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "stretch", gap: 22, marginTop: 28 }}>
               <div
                 style={{
@@ -678,6 +682,7 @@ export default function Page() {
                 ))}
               </div>
               </div>
+              )}
             </div>
           </section>
 

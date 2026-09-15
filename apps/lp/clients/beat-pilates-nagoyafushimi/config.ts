@@ -165,6 +165,8 @@ export interface BeatPilatesConfig {
     trialBadge: { label: string; price: string; unit: string };
     joinBadge: { label: string; value: string };
     tags: string[];
+    /** false でFV内の「初回体験0円」バッジとタグを丸ごと隠す（オファーはFV下に出る）。 */
+    showOffer?: boolean;
     access: { station: string; walk: string }[];
     ctaText: string;
   };
@@ -314,16 +316,16 @@ const config: BeatPilatesConfig = {
   },
 
   hero: {
-    catchLines: ["周りを気にせず、", "自分に集中できる。"],
-    subCatch: "グループなのに、\n人目が気にならない。",
-    body:
-      "暗闇×音楽の空間だから、\n周囲を意識しすぎず、自分の動きに集中しながら\n楽しんで身体を動かせる45分。",
+    catchLines: ["暗闇だから、周りを気にせず。", "音楽があるから、楽しく続く。"],
+    subCatch: "人目を気にせず、自分に集中。\n音楽に合わせて楽しむ45分。",
+    body: "",
     hero: {
       placeholder: "マシンピラティスレッスンの動画（全面）",
       src: "/clients/beat-pilates-nagoyafushimi/fv-hero.mp4",
       poster: "/clients/beat-pilates-nagoyafushimi/fv-hero-poster.jpg",
       position: "center 40%",
     },
+    showOffer: false,
     trialBadge: { label: "初回体験", price: "0", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
     tags: ["女性専用", "初心者歓迎"],
