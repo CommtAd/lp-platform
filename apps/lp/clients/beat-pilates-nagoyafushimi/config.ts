@@ -317,7 +317,7 @@ const config: BeatPilatesConfig = {
 
   hero: {
     catchLines: ["暗闇だから、周りを気にせず。", "音楽があるから、楽しく続く。"],
-    subCatch: "人目を気にせず、自分に集中。\n音楽に合わせて楽しむ45分。",
+    subCatch: "人目を気にせず、自分に集中\n音楽に合わせて楽しむ45分",
     body: "",
     hero: {
       placeholder: "マシンピラティスレッスンの動画（全面）",
