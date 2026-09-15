@@ -141,6 +141,8 @@ export interface Slot {
   placeholder: string;
   src?: string | null;
   position?: string;
+  /** Still shown until a video slot starts playing (video slots only). */
+  poster?: string;
 }
 
 export interface BeatPilatesConfig {
@@ -163,6 +165,8 @@ export interface BeatPilatesConfig {
     trialBadge: { label: string; price: string; unit: string };
     joinBadge: { label: string; value: string };
     tags: string[];
+    /** false でFV内の「初回体験0円」バッジとタグを丸ごと隠す（オファーはFV下に出る）。 */
+    showOffer?: boolean;
     access: { station: string; walk: string }[];
     ctaText: string;
   };
@@ -312,16 +316,23 @@ const config: BeatPilatesConfig = {
   },
 
   hero: {
-    catchLines: ["運動が苦手でも、", "楽しく続く。"],
-    subCatch: "暗闇×音楽×マシンピラティス",
-    body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
-    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-nagoyafushimi/fv-hero.jpg", position: "3% 30%" },
+    catchLines: ["暗闇だから、周りを気にせず。", "音楽があるから、楽しく続く。"],
+    subCatch: "人目を気にせず、自分に集中\n音楽に合わせて楽しむ45分",
+    body: "",
+    hero: {
+      placeholder: "マシンピラティスレッスンの動画（全面）",
+      src: "/clients/beat-pilates-nagoyafushimi/fv-hero.mp4",
+      poster: "/clients/beat-pilates-nagoyafushimi/fv-hero-poster.jpg",
+      position: "center 40%",
+    },
+    showOffer: false,
     trialBadge: { label: "初回体験", price: "0", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
     tags: ["女性専用", "初心者歓迎"],
     access: [
       { station: "伏見駅", walk: "徒歩8分" },
       { station: "大須観音駅", walk: "徒歩10分" },
+      { station: "MEGAドンキ納屋橋店", walk: "徒歩3分" },
     ],
     ctaText: "体験レッスンを予約する",
   },
@@ -579,7 +590,7 @@ const config: BeatPilatesConfig = {
         name: "BEAT PILATES 名古屋伏見店",
         address: "〒460-0008 名古屋市中区栄1-18-1 ハイツサンライズ2F号室",
         hours: "営業時間 9:00〜21:00",
-        route: "地下鉄東山線・鶴舞線 伏見駅 徒歩8分／地下鉄鶴舞線 大須観音駅 徒歩10分",
+        route: "地下鉄東山線・鶴舞線 伏見駅 徒歩8分／地下鉄鶴舞線 大須観音駅 徒歩10分／MEGAドンキ納屋橋店 徒歩3分",
       },
     ],
   },

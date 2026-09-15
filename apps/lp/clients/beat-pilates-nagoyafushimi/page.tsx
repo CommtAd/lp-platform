@@ -514,10 +514,11 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 6, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+            {/* 3件目以降は1行に収まらないので、右寄せのまま折り返させる。
+                折り返すと区切りの「/」が行頭に落ちて不格好なので、区切りは余白で取る。 */}
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-end", alignItems: "flex-end", columnGap: 12, rowGap: 3, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
               {c.hero.access.map((a, i) => (
                 <span key={i} style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
-                  {i > 0 && <span style={{ color: textDim2, marginRight: 4 }}>/</span>}
                   {a.station}
                   <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
                     {a.walk.split(/(\d+)/).map((part, j) =>
@@ -530,26 +531,29 @@ export default function Page() {
           </div>
 
           {/* ── FV / hero ── */}
-          <section style={{ position: "relative", minHeight: "clamp(400px, 116.7vw, 560px)", overflow: "hidden", background: "#12121A" }}>
+          <section style={{ position: "relative", minHeight: "clamp(400px, 115vw, 560px)", overflow: "hidden", background: "#12121A" }}>
             <ImageSlot
               src={c.hero.hero.src}
               placeholder={c.hero.hero.placeholder}
+              poster={c.hero.hero.poster}
               objectPosition={c.hero.hero.position ?? "center"}
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#161620" }}
             />
+            {/* 動画は静止画より明るく動きもあるため、全面に薄いベールを敷いて文字を保護する */}
+            <div style={{ position: "absolute", inset: 0, background: "rgba(8,8,13,0.22)" }} />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(100deg, rgba(8,8,13,0.96) 0%, rgba(8,8,13,0.88) 32%, rgba(8,8,13,0.5) 55%, rgba(8,8,13,0.1) 75%, rgba(8,8,13,0) 90%)",
+                  "linear-gradient(180deg, rgba(8,8,13,0.9) 0%, rgba(8,8,13,0.74) 30%, rgba(8,8,13,0.3) 52%, rgba(8,8,13,0) 72%)",
               }}
             />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(180deg, rgba(8,8,13,0) 55%, rgba(8,8,13,0.85) 100%)",
+                background: "linear-gradient(180deg, rgba(8,8,13,0) 62%, rgba(8,8,13,0.9) 100%)",
               }}
             />
             <div style={{ position: "relative", zIndex: 2, padding: "48px 22px 24px" }}>
@@ -557,8 +561,9 @@ export default function Page() {
                 style={{
                   fontFamily: fontMincho,
                   fontWeight: 700,
-                  fontSize: 33,
-                  lineHeight: 1.35,
+                  // 1行14文字。360px幅で収まる上限から逆算している
+                  fontSize: "clamp(19px, 5.5vw, 26px)",
+                  lineHeight: 1.45,
                   letterSpacing: "0.01em",
                   margin: 0,
                   color: "#FFFFFF",
@@ -570,7 +575,8 @@ export default function Page() {
                 <span
                   style={{
                     display: "inline-block",
-                    fontSize: 44,
+                    // 同じく14文字。1行目よりわずかに大きくして主従を残す
+                    fontSize: "clamp(21px, 6.0vw, 29px)",
                     color: "#FFFFFF",
                     textShadow: `0 0 10px ${pink}, 0 0 20px ${pink}CC, 0 0 4px ${pink}`,
                   }}
@@ -583,6 +589,7 @@ export default function Page() {
                   fontFamily: fontGothic,
                   fontWeight: 700,
                   fontSize: 16,
+                  lineHeight: 1.6,
                   letterSpacing: "0.03em",
                   margin: "12px 0 0",
                   background: `linear-gradient(90deg, ${pink} 0%, #FF8FC4 60%, ${blue} 100%)`,
@@ -592,10 +599,13 @@ export default function Page() {
                   filter: `drop-shadow(0 0 10px ${pink}88)`,
                 }}
               >
-                {c.hero.subCatch}
+                {nl(c.hero.subCatch)}
               </p>
-              <p style={{ fontSize: 11, lineHeight: 1.85, color: "rgba(255,255,255,0.8)", margin: "16px 0 0", textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>{nl(c.hero.body)}</p>
+              {c.hero.body && (
+                <p style={{ fontSize: 11, lineHeight: 1.85, color: "rgba(255,255,255,0.8)", margin: "16px 0 0", textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>{nl(c.hero.body)}</p>
+              )}
 
+              {c.hero.showOffer !== false && (
               <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "stretch", gap: 22, marginTop: 28 }}>
               <div
                 style={{
@@ -673,6 +683,7 @@ export default function Page() {
                 ))}
               </div>
               </div>
+              )}
             </div>
           </section>
 
