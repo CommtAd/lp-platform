@@ -530,26 +530,29 @@ export default function Page() {
           </div>
 
           {/* ── FV / hero ── */}
-          <section style={{ position: "relative", minHeight: "clamp(400px, 116.7vw, 560px)", overflow: "hidden", background: "#12121A" }}>
+          <section style={{ position: "relative", minHeight: "clamp(430px, 124vw, 600px)", overflow: "hidden", background: "#12121A" }}>
             <ImageSlot
               src={c.hero.hero.src}
               placeholder={c.hero.hero.placeholder}
+              poster={c.hero.hero.poster}
               objectPosition={c.hero.hero.position ?? "center"}
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#161620" }}
             />
+            {/* 動画は静止画より明るく動きもあるため、全面に薄いベールを敷いて文字を保護する */}
+            <div style={{ position: "absolute", inset: 0, background: "rgba(8,8,13,0.22)" }} />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(100deg, rgba(8,8,13,0.96) 0%, rgba(8,8,13,0.88) 32%, rgba(8,8,13,0.5) 55%, rgba(8,8,13,0.1) 75%, rgba(8,8,13,0) 90%)",
+                  "linear-gradient(100deg, rgba(8,8,13,0.92) 0%, rgba(8,8,13,0.78) 32%, rgba(8,8,13,0.4) 55%, rgba(8,8,13,0.08) 75%, rgba(8,8,13,0) 90%)",
               }}
             />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(180deg, rgba(8,8,13,0) 55%, rgba(8,8,13,0.85) 100%)",
+                background: "linear-gradient(180deg, rgba(8,8,13,0) 45%, rgba(8,8,13,0.92) 100%)",
               }}
             />
             <div style={{ position: "relative", zIndex: 2, padding: "48px 22px 24px" }}>

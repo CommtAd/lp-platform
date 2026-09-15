@@ -141,6 +141,8 @@ export interface Slot {
   placeholder: string;
   src?: string | null;
   position?: string;
+  /** Still shown until a video slot starts playing (video slots only). */
+  poster?: string;
 }
 
 export interface BeatPilatesConfig {
@@ -315,7 +317,12 @@ const config: BeatPilatesConfig = {
     catchLines: ["運動が苦手でも、", "楽しく続く。"],
     subCatch: "暗闇×音楽×マシンピラティス",
     body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
-    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-nagoyafushimi/fv-hero.jpg", position: "70% top" },
+    hero: {
+      placeholder: "マシンピラティスレッスンの動画（全面）",
+      src: "/clients/beat-pilates-nagoyafushimi/fv-hero.mp4",
+      poster: "/clients/beat-pilates-nagoyafushimi/fv-hero-poster.jpg",
+      position: "center 40%",
+    },
     trialBadge: { label: "初回体験", price: "0", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
     tags: ["女性専用", "初心者歓迎"],

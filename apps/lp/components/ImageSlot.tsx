@@ -11,6 +11,8 @@ export interface ImageSlotProps {
   style?: CSSProperties;
   /** CSS object-position for the cropped image. Default "center". */
   objectPosition?: string;
+  /** Still shown until a video slot starts playing. Ignored for image slots. */
+  poster?: string;
 }
 
 /**
@@ -25,6 +27,7 @@ export default function ImageSlot({
   radius = 0,
   style,
   objectPosition = "center",
+  poster,
 }: ImageSlotProps) {
   return (
     <div
@@ -41,6 +44,7 @@ export default function ImageSlot({
       {src && /\.(mp4|webm|mov)$/i.test(src) ? (
         <video
           src={src}
+          poster={poster}
           autoPlay
           muted
           loop
