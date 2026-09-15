@@ -28,6 +28,7 @@ export interface BeatPilatesConfig {
     joinBadge: { label: string; value: string };
     tags: string[];
     access: { station: string; walk: string }[];
+    parking?: string;
     ctaText: string;
   };
 
@@ -136,6 +137,7 @@ export interface BeatPilatesConfig {
       address: string;
       hours: string;
       route: string;
+      parking?: string;
     }[];
   };
 
@@ -189,6 +191,7 @@ const config: BeatPilatesConfig = {
     access: [
       { station: "豊田市駅", walk: "徒歩3分" },
     ],
+    parking: "駐車場あり（3時間無料）",
     ctaText: "体験レッスンを予約する",
   },
 
@@ -464,6 +467,7 @@ const config: BeatPilatesConfig = {
         address: "〒471-0025 愛知県豊田市西町5-5 VITS豊田タウン2階",
         hours: "営業時間 平日 9:00〜21:00／土日祝 9:00〜18:00",
         route: "名鉄豊田市駅 西口より徒歩3分",
+        parking: "駐車場あり（3時間無料）",
       },
     ],
   },

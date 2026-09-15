@@ -524,18 +524,33 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 6, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
-              {c.hero.access.map((a, i) => (
-                <span key={i} style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
-                  {i > 0 && <span style={{ color: textDim2, marginRight: 4 }}>/</span>}
-                  {a.station}
-                  <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
-                    {a.walk.split(/(\d+)/).map((part, j) =>
-                      /^\d+$/.test(part) ? <b key={j} style={{ fontWeight: 700 }}>{part}</b> : part
-                    )}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 3 }}>
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 6, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                {c.hero.access.map((a, i) => (
+                  <span key={i} style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
+                    {i > 0 && <span style={{ color: textDim2, marginRight: 4 }}>/</span>}
+                    {a.station}
+                    <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
+                      {a.walk.split(/(\d+)/).map((part, j) =>
+                        /^\d+$/.test(part) ? <b key={j} style={{ fontWeight: 700 }}>{part}</b> : part
+                      )}
+                    </span>
                   </span>
-                </span>
-              ))}
+                ))}
+              </div>
+              {c.hero.parking && (
+                <div style={{ display: "flex", alignItems: "flex-end", gap: 2, fontSize: 10, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                  {c.hero.parking.split(/(（.*?）)/).map((part, j) =>
+                    part.startsWith("（") ? (
+                      <span key={j} style={{ color: "#FFFFFF", fontSize: 11, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
+                        {part.split(/(\d+)/).map((t, k) => (/^\d+$/.test(t) ? <b key={k} style={{ fontWeight: 700 }}>{t}</b> : t))}
+                      </span>
+                    ) : (
+                      <span key={j}>{part}</span>
+                    )
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -1181,6 +1196,12 @@ export default function Page() {
                       <span style={{ color: blue, fontWeight: 700 }}>{store.hours}</span>
                       <br />
                       {nl(store.route)}
+                      {store.parking && (
+                        <>
+                          <br />
+                          <span style={{ color: blue, fontWeight: 700 }}>{store.parking}</span>
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
