@@ -314,9 +314,10 @@ const config: BeatPilatesConfig = {
   },
 
   hero: {
-    catchLines: ["運動が苦手でも、", "楽しく続く。"],
-    subCatch: "暗闇×音楽×マシンピラティス",
-    body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
+    catchLines: ["周りを気にせず、", "自分に集中できる。"],
+    subCatch: "グループなのに、\n人目が気にならない。",
+    body:
+      "暗闇×音楽の空間だから、\n周囲を意識しすぎず、自分の動きに集中しながら\n楽しんで身体を動かせる45分。",
     hero: {
       placeholder: "マシンピラティスレッスンの動画（全面）",
       src: "/clients/beat-pilates-nagoyafushimi/fv-hero.mp4",

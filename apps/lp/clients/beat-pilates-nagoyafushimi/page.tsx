@@ -573,7 +573,8 @@ export default function Page() {
                 <span
                   style={{
                     display: "inline-block",
-                    fontSize: 44,
+                    // 9文字を固定44pxにすると360px幅で溢れるため、狭い画面だけ縮める
+                    fontSize: "clamp(30px, 9.4vw, 44px)",
                     color: "#FFFFFF",
                     textShadow: `0 0 10px ${pink}, 0 0 20px ${pink}CC, 0 0 4px ${pink}`,
                   }}
@@ -586,6 +587,7 @@ export default function Page() {
                   fontFamily: fontGothic,
                   fontWeight: 700,
                   fontSize: 16,
+                  lineHeight: 1.6,
                   letterSpacing: "0.03em",
                   margin: "12px 0 0",
                   background: `linear-gradient(90deg, ${pink} 0%, #FF8FC4 60%, ${blue} 100%)`,
@@ -595,7 +597,7 @@ export default function Page() {
                   filter: `drop-shadow(0 0 10px ${pink}88)`,
                 }}
               >
-                {c.hero.subCatch}
+                {nl(c.hero.subCatch)}
               </p>
               <p style={{ fontSize: 11, lineHeight: 1.85, color: "rgba(255,255,255,0.8)", margin: "16px 0 0", textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>{nl(c.hero.body)}</p>
 
