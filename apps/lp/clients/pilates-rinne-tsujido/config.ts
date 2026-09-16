@@ -131,15 +131,37 @@ export interface RinneConfig {
     closing: string;
   };
 
+  /**
+   * ③-3 アクティブライフ（pin: 9/16依頼）。
+   * 「目指せる未来」の締めと「選ばれる理由」の間に挟む、生活シーンの訴求ブロック。
+   */
+  activeLife: {
+    /** ブロックの見出し（\n で改行）。 */
+    heading: string;
+    /** シーンカード。2列グリッドに流し込むので偶数で持つ。 */
+    cards: {
+      en: string;
+      ja: string;
+      /** カード下のコピー。\n で改行。 */
+      copy: string;
+      img: Slot;
+    }[];
+  };
+
   /** ④ 料金プラン */
   plans: {
     heading: string;
     lead: string;
     /** 列見出し（英字＋和文）。1列目は回数ラベル列なので含めない。 */
     columns: { en: string; ja: string }[];
-    /** 行＝月あたりの回数。values は columns と同じ並び。 */
+    /**
+     * 行＝月あたりの回数。values は columns と同じ並び。
+     * 金額は「1回あたり」で持つ（月額 ÷ 回数・10円未満切り捨て）。
+     * 月額そのものは表に出さない（pin: 9/16依頼）。
+     */
     rows: {
       label: string;
+      /** price / campaign は "8,700円/回" の形。数字と単位は表示側で出し分ける。 */
       values: { price: string; campaign?: string; campaignNote?: string }[];
     }[];
     taxNote: string;
@@ -413,6 +435,47 @@ const config: RinneConfig = {
     closing: "RINNEなら、一人ひとりの\n身体に合わせて整えます。",
   },
 
+  /*
+   * pin（9/16依頼）: 「目指せる未来」の締めと「選ばれる理由」の間に、
+   * ピラティスで整えた身体で日常を楽しむイメージのブロックを挟む。
+   * 辻堂＝湘南の海沿いという立地に合わせ、4シーンはサーフィン／ウォーキング／
+   * ランニング／サイクリングで構成する。
+   *
+   * 写真4枚は顧客支給素材（2026-09-16受領）。長辺900px・JPEG品質80で配置。
+   * 4:3の素材を横長の枠に cover で入れると頭が切れるため、枠の高さを138pxまで
+   * 上げて縦の切り取り量を減らし、objectPosition も上寄せにしている
+   * （360px幅では縦が切れずに全部入る）。
+   */
+  activeLife: {
+    heading: "整えた身体で、\n好きなことをもっと楽しむ",
+    cards: [
+      {
+        en: "SURFING",
+        ja: "サーフィン",
+        copy: "好きなことを、\n長く楽しめる身体へ。",
+        img: { placeholder: "サーフィンを楽しむ女性", src: `${ASSET}/scene-surfing.jpg`, position: "center 22%" },
+      },
+      {
+        en: "WALKING",
+        ja: "ウォーキング",
+        copy: "歩く時間を、\nもっと軽やかに。",
+        img: { placeholder: "海沿いを歩く女性", src: `${ASSET}/scene-walking.jpg`, position: "center 22%" },
+      },
+      {
+        en: "RUNNING",
+        ja: "ランニング",
+        copy: "走るための身体を、\n整える。",
+        img: { placeholder: "ランニングする女性", src: `${ASSET}/scene-running.jpg`, position: "center 22%" },
+      },
+      {
+        en: "CYCLING",
+        ja: "サイクリング",
+        copy: "もっと遠くへ\n行きたくなる身体へ。",
+        img: { placeholder: "自転車で走る女性", src: `${ASSET}/scene-cycling.jpg`, position: "center 22%" },
+      },
+    ],
+  },
+
   // pin 21〜24: 「比較」カテゴリを「料金表」カテゴリに差し替え。
   // 金額・注記は顧客支給の料金表（AUN添付 2026-09-10）をそのまま転記している。
   plans: {
@@ -422,41 +485,51 @@ const config: RinneConfig = {
       { en: "PERSONAL", ja: "パーソナル" },
       { en: "SEMI PERSONAL", ja: "セミパーソナル" },
     ],
+    // 金額は顧客支給の月額（AUN添付 2026-09-10）を回数で割った「1回あたり」。
+    // 10円未満は切り捨て。各行のコメントに元の月額を残す（計算の根拠）。
     rows: [
       {
         label: "月4回",
         values: [
-          { price: "34,800円", campaign: "29,800円", campaignNote: "最初の3ヶ月" },
-          { price: "19,800円" },
+          // 34,800円 → 8,700円 / 29,800円 → 7,450円
+          { price: "8,700円/回", campaign: "7,450円/回", campaignNote: "最初の3ヶ月" },
+          // 19,800円 → 4,950円
+          { price: "4,950円/回" },
         ],
       },
       {
         label: "月6回",
         values: [
-          { price: "49,800円", campaign: "44,800円", campaignNote: "最初の3ヶ月" },
-          { price: "27,800円" },
+          // 49,800円 → 8,300円 / 44,800円 → 7,466.6円 → 7,460円
+          { price: "8,300円/回", campaign: "7,460円/回", campaignNote: "最初の3ヶ月" },
+          // 27,800円 → 4,633.3円 → 4,630円
+          { price: "4,630円/回" },
         ],
       },
       {
         label: "月8回",
         values: [
-          // 顧客支給の表では月6回と同額（44,800円）。誤記の可能性があるため要確認。
-          { price: "59,800円", campaign: "44,800円", campaignNote: "最初の3ヶ月" },
-          { price: "34,800円" },
+          // 顧客支給の表ではキャンペーン額が月6回と同額（44,800円）。誤記の可能性があるため要確認。
+          // 59,800円 → 7,475円 → 7,470円 / 44,800円 → 5,600円
+          { price: "7,470円/回", campaign: "5,600円/回", campaignNote: "最初の3ヶ月" },
+          // 34,800円 → 4,350円
+          { price: "4,350円/回" },
         ],
       },
       {
         label: "月12回",
         values: [
-          { price: "85,800円", campaign: "80,800円", campaignNote: "最初の3ヶ月" },
-          { price: "49,800円" },
+          // 85,800円 → 7,150円 / 80,800円 → 6,733.3円 → 6,730円
+          { price: "7,150円/回", campaign: "6,730円/回", campaignNote: "最初の3ヶ月" },
+          // 49,800円 → 4,150円
+          { price: "4,150円/回" },
         ],
       },
     ],
     taxNote: "表示価格は税込です",
     notes: [
       "6ヶ月以上所属の方は、7ヶ月目から月2回プランもお選びいただけます。",
-      "※パーソナル月2回 17,800円、セミパーソナル月2回 11,800円",
+      "※パーソナル月2回 8,900円/回、セミパーソナル月2回 5,900円/回",
     ],
   },
 
