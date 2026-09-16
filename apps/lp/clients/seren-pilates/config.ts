@@ -163,7 +163,7 @@ const config: SerenConfig = {
 
   campaign: {
     badge: "9月30日まで",
-    title: "今だけ、体験は無料。",
+    title: "50分のお試し体験",
     lead:
       "9月30日までに体験レッスンを\nご予約いただいた方限定。\nAI姿勢分析付きのマンツーマン50分を、\n無料でお受けいただけます。",
     trialRegular: "11,550",
