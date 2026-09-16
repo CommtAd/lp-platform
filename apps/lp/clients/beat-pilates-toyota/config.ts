@@ -22,11 +22,7 @@ export interface BeatPilatesConfig {
   hero: {
     catchLines: [string, string];
     subCatch: string;
-    body: string;
     hero: Slot;
-    trialBadge: { label: string; price: string; unit: string };
-    joinBadge: { label: string; value: string };
-    tags: string[];
     access: { station: string; walk: string }[];
     parking?: string;
     ctaText: string;
@@ -183,11 +179,7 @@ const config: BeatPilatesConfig = {
   hero: {
     catchLines: ["暗闇だから、周りを気にせず、", "音楽があるから、楽しく続く。"],
     subCatch: "暗闇×音楽×マシンピラティス",
-    body: "人目を気にせず、自分に集中\n音楽に合わせて楽しむ45分",
-    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-toyota/fv-hero.jpg", position: "25% 50%" },
-    trialBadge: { label: "初回体験", price: "1,000", unit: "円" },
-    joinBadge: { label: "今なら入会金", value: "0円" },
-    tags: ["女性専用", "初心者歓迎"],
+    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-toyota/fv-hero.jpg", position: "12% 50%" },
     access: [
       { station: "豊田市駅", walk: "徒歩3分" },
     ],
