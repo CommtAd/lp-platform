@@ -869,8 +869,8 @@ export default function Page() {
                 </p>
               </div>
             ))}
-            {/* CTA 2/4: 選ばれる理由の後 */}
-            <ReserveCta />
+            {/* pin 1（9/15依頼）: 選ばれる理由の後のCTAは削除。
+                料金プランを見る前に予約導線を挟まない。 */}
           </section>
 
           {/* ── ④ 料金プラン（pin 21〜24: 比較表から差し替え） ── */}
@@ -1053,6 +1053,8 @@ export default function Page() {
           {/* ── ④-2 体験キャンペーン（pin 32: 料金表の直後に追加） ── */}
           <section style={{ background: "#FCFBF7", padding: "50px 26px 54px" }}>
             <TrialPriceBlock />
+            {/* CTA 2/4: 料金表の直後の体験キャンペーン（pin 2（9/15依頼）で追加） */}
+            <ReserveCta />
           </section>
 
           {/* ── ⑤ 姿勢診断について ── */}
