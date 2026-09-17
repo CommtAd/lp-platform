@@ -22,12 +22,9 @@ export interface BeatPilatesConfig {
   hero: {
     catchLines: [string, string];
     subCatch: string;
-    body: string;
     hero: Slot;
-    trialBadge: { label: string; price: string; unit: string };
-    joinBadge: { label: string; value: string };
-    tags: string[];
     access: { station: string; walk: string }[];
+    parking?: string;
     ctaText: string;
   };
 
@@ -136,6 +133,7 @@ export interface BeatPilatesConfig {
       address: string;
       hours: string;
       route: string;
+      parking?: string;
     }[];
   };
 
@@ -179,16 +177,13 @@ const config: BeatPilatesConfig = {
   },
 
   hero: {
-    catchLines: ["運動が苦手でも、", "楽しく続く。"],
+    catchLines: ["暗闇だから、周りを気にせず、", "音楽があるから、楽しく続く。"],
     subCatch: "暗闇×音楽×マシンピラティス",
-    body: "女性専用の暗闇空間で、周りの目を気にせず、\n自分のペースでボディメイク。",
-    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-toyota/fv-hero.jpg", position: "3% 30%" },
-    trialBadge: { label: "初回体験", price: "1,000", unit: "円" },
-    joinBadge: { label: "今なら入会金", value: "0円" },
-    tags: ["女性専用", "初心者歓迎"],
+    hero: { placeholder: "マシンピラティスレッスンの写真（全面）", src: "/clients/beat-pilates-toyota/fv-hero.jpg", position: "12% 50%" },
     access: [
       { station: "豊田市駅", walk: "徒歩3分" },
     ],
+    parking: "駐車場あり（3時間無料）",
     ctaText: "体験レッスンを予約する",
   },
 
@@ -464,6 +459,7 @@ const config: BeatPilatesConfig = {
         address: "〒471-0025 愛知県豊田市西町5-5 VITS豊田タウン2階",
         hours: "営業時間 平日 9:00〜21:00／土日祝 9:00〜18:00",
         route: "名鉄豊田市駅 西口より徒歩3分",
+        parking: "駐車場あり（3時間無料）",
       },
     ],
   },

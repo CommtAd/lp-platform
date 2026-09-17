@@ -44,6 +44,42 @@ function nl(text: string): ReactNode {
   ));
 }
 
+/**
+ * 料金表の「8,700円/回」を、数字を大きく・単位（円/回）を小さく描き分ける。
+ * 表のマスは幅が狭いので、単位まで同じサイズで置くと桁が読みにくくなる。
+ */
+function PerSessionPrice({
+  text,
+  size,
+  color,
+  prefix,
+}: {
+  text: string;
+  size: number;
+  color: string;
+  prefix?: string;
+}): ReactNode {
+  const m = text.match(/^(.*?)(円\/回)$/);
+  const amount = m ? m[1] : text;
+  const unit = m ? m[2] : "";
+  return (
+    <span
+      style={{
+        fontFamily: fontGothic,
+        fontWeight: 700,
+        letterSpacing: "0.01em",
+        color,
+        lineHeight: 1.25,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {prefix}
+      <span style={{ fontSize: size }}>{amount}</span>
+      {unit && <span style={{ fontSize: size * 0.72, marginLeft: 1 }}>{unit}</span>}
+    </span>
+  );
+}
+
 const c = config;
 const accent = c.accent;
 /* 実サイト（rinne-pilates.com）の実測値。深緑×クリーム×白の3色構成で、
@@ -806,6 +842,86 @@ export default function Page() {
             </p>
           </section>
 
+          {/* ── ③-3 アクティブライフ（pin: 9/16依頼） ── */}
+          <section
+            style={{
+              /* 前後が同じ生成りで続くので、淡い緑のにじみを敷いて区切りを作る。 */
+              background:
+                "radial-gradient(130% 55% at -8% 0%, #E7F0E9 0%, rgba(231,240,233,0) 58%), linear-gradient(180deg, #F7F9F5 0%, #FCFBF7 74%)",
+              padding: "58px 16px 60px",
+            }}
+          >
+            <SectionHeading text={c.activeLife.heading} fontSize={22} />
+            {/* 4シーンを2列で。1列にすると直前の「目指せる未来」と見た目が重なる。 */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+                marginTop: 30,
+              }}
+            >
+              {c.activeLife.cards.map((card) => (
+                <div
+                  key={card.en}
+                  style={{
+                    background: "#FFFFFF",
+                    borderRadius: 14,
+                    padding: 10,
+                    boxShadow: "0 3px 14px rgba(51,53,46,0.07)",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: fontGothic,
+                      fontWeight: 700,
+                      fontSize: 17,
+                      letterSpacing: "0.07em",
+                      color: accent,
+                    }}
+                  >
+                    {card.en}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: 14,
+                      letterSpacing: "0.04em",
+                      color: "#7C8177",
+                      marginTop: 4,
+                    }}
+                  >
+                    {card.ja}
+                  </span>
+                  <ImageSlot
+                    src={card.img.src}
+                    placeholder={card.img.placeholder}
+                    objectPosition={card.img.position ?? "center"}
+                    radius={10}
+                    /* 104pxだと4:3の素材が上下で切られて頭が欠ける。138pxまで
+                       上げると縦の切り取りが9px程度で収まり、顔が全部入る。 */
+                    style={{ width: "100%", height: 138, marginTop: 9 }}
+                  />
+                  <p
+                    style={{
+                      fontFamily: fontMincho,
+                      fontWeight: 600,
+                      /* 2列のまま出せる上限。360px幅で「長く楽しめる身体へ。」の
+                         10文字がちょうど1行に収まる（letterSpacingを足すと溢れる）。 */
+                      fontSize: 13.5,
+                      lineHeight: 1.75,
+                      color: "#33352E",
+                      margin: "13px 0 0",
+                    }}
+                  >
+                    {nl(card.copy)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* ── ③ RINNEが選ばれる理由 ── */}
           <section style={{ background: "#FCFBF7", padding: "58px 26px 66px" }}>
             <SectionHeading text={c.reasons.heading} fontSize={24} />
@@ -977,31 +1093,17 @@ export default function Page() {
                         gap: 4,
                       }}
                     >
-                      <div
-                        style={{
-                          fontFamily: fontGothic,
-                          fontWeight: 700,
-                          fontSize: 16,
-                          letterSpacing: "0.02em",
-                          color: accent,
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        {v.price}
+                      <div style={{ lineHeight: 1.25 }}>
+                        <PerSessionPrice text={v.price} size={17} color={accent} />
                       </div>
                       {v.campaign && (
                         <div style={{ lineHeight: 1.3 }}>
-                          <span
-                            style={{
-                              fontFamily: fontGothic,
-                              fontWeight: 700,
-                              fontSize: 15,
-                              letterSpacing: "0.02em",
-                              color: accent,
-                            }}
-                          >
-                            →{v.campaign}
-                          </span>
+                          <PerSessionPrice
+                            text={v.campaign}
+                            size={16}
+                            color={accent}
+                            prefix="→"
+                          />
                           {v.campaignNote && (
                             <span
                               style={{

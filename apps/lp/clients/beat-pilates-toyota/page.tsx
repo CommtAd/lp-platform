@@ -26,6 +26,9 @@ const fontSans = "'Noto Sans JP', sans-serif";
 const fontDisplay = "'Playfair Display', serif";
 const fontMincho = "'Shippori Mincho', serif";
 
+/** FVの高さ（設計幅390px基準）。写真の人物とコピーが重ならない高さで固定する。 */
+const fvMinHeight = Math.round(DESIGN_WIDTH * 1.3);
+
 /** Render "\n"-separated text as line breaks. */
 function nl(text: string): ReactNode {
   return text.split("\n").map((p, i, arr) => (
@@ -524,55 +527,73 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 6, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
-              {c.hero.access.map((a, i) => (
-                <span key={i} style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
-                  {i > 0 && <span style={{ color: textDim2, marginRight: 4 }}>/</span>}
-                  {a.station}
-                  <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
-                    {a.walk.split(/(\d+)/).map((part, j) =>
-                      /^\d+$/.test(part) ? <b key={j} style={{ fontWeight: 700 }}>{part}</b> : part
-                    )}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 3 }}>
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 6, fontSize: 10.5, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                {c.hero.access.map((a, i) => (
+                  <span key={i} style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
+                    {i > 0 && <span style={{ color: textDim2, marginRight: 4 }}>/</span>}
+                    {a.station}
+                    <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
+                      {a.walk.split(/(\d+)/).map((part, j) =>
+                        /^\d+$/.test(part) ? <b key={j} style={{ fontWeight: 700 }}>{part}</b> : part
+                      )}
+                    </span>
                   </span>
-                </span>
-              ))}
+                ))}
+              </div>
+              {c.hero.parking && (
+                <div style={{ display: "flex", alignItems: "flex-end", gap: 2, fontSize: 10, fontWeight: 400, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                  {c.hero.parking.split(/(（.*?）)/).map((part, j) =>
+                    part.startsWith("（") ? (
+                      <span key={j} style={{ color: "#FFFFFF", fontSize: 11, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
+                        {part.split(/(\d+)/).map((t, k) => (/^\d+$/.test(t) ? <b key={k} style={{ fontWeight: 700 }}>{t}</b> : t))}
+                      </span>
+                    ) : (
+                      <span key={j}>{part}</span>
+                    )
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
           {/* ── FV / hero ── */}
-          <section style={{ position: "relative", minHeight: Math.round(DESIGN_WIDTH * 1.167), overflow: "hidden", background: "#12121A" }}>
+          <section style={{ position: "relative", minHeight: fvMinHeight, overflow: "hidden", background: "#12121A" }}>
             <ImageSlot
               src={c.hero.hero.src}
               placeholder={c.hero.hero.placeholder}
               objectPosition={c.hero.hero.position ?? "center"}
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#161620" }}
             />
+            {/* 見出しの可読性は上からのフェードだけで担保する（左からのフェードは無し） */}
             <div
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(100deg, rgba(8,8,13,0.96) 0%, rgba(8,8,13,0.88) 32%, rgba(8,8,13,0.5) 55%, rgba(8,8,13,0.1) 75%, rgba(8,8,13,0) 90%)",
+                  "linear-gradient(180deg, rgba(8,8,13,0.7) 0%, rgba(8,8,13,0.32) 26%, rgba(8,8,13,0.06) 46%, rgba(8,8,13,0) 60%)",
               }}
             />
+            {/* 下の初回体験オファーへ繋ぐためのフェード */}
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(180deg, rgba(8,8,13,0) 55%, rgba(8,8,13,0.85) 100%)",
+                background: "linear-gradient(180deg, rgba(8,8,13,0) 62%, rgba(8,8,13,0.5) 84%, rgba(8,8,13,0.92) 100%)",
               }}
             />
+            {/* 文字は上のみ。写真の人物には重ねない */}
             <div style={{ position: "relative", zIndex: 2, padding: "48px 22px 24px" }}>
               <h1
                 style={{
                   fontFamily: fontMincho,
                   fontWeight: 700,
-                  fontSize: 33,
-                  lineHeight: 1.35,
-                  letterSpacing: "0.01em",
+                  fontSize: 22,
+                  lineHeight: 1.45,
+                  letterSpacing: "0",
                   margin: 0,
                   color: "#FFFFFF",
-                  textShadow: "0 2px 18px rgba(0,0,0,0.6)",
+                  textShadow: "0 2px 14px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,0.7)",
                 }}
               >
                 {c.hero.catchLines[0]}
@@ -580,7 +601,7 @@ export default function Page() {
                 <span
                   style={{
                     display: "inline-block",
-                    fontSize: 44,
+                    fontSize: 24,
                     color: "#FFFFFF",
                     textShadow: `0 0 10px ${pink}, 0 0 20px ${pink}CC, 0 0 4px ${pink}`,
                   }}
@@ -604,85 +625,6 @@ export default function Page() {
               >
                 {c.hero.subCatch}
               </p>
-              <p style={{ fontSize: 11, lineHeight: 1.85, color: "rgba(255,255,255,0.8)", margin: "16px 0 0", textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>{nl(c.hero.body)}</p>
-
-              <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "stretch", gap: 22, marginTop: 28 }}>
-              <div
-                style={{
-                  position: "relative",
-                  padding: "8px 24px 16px",
-                  background:
-                    "radial-gradient(120% 130% at 50% 25%, rgba(190,40,130,0.82) 0%, rgba(110,25,90,0.9) 48%, rgba(45,12,45,0.95) 100%)",
-                  border: `2px solid ${pink}`,
-                  boxShadow: `0 0 34px ${pink}AA, 0 0 10px ${pink}, inset 0 0 22px rgba(255,61,147,0.28)`,
-                  clipPath:
-                    "polygon(20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0% calc(100% - 20px), 0% 20px)",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 10 }}>
-                  <span
-                    style={{
-                      flexShrink: 0,
-                      fontFamily: fontGothic,
-                      fontSize: 17,
-                      fontWeight: 800,
-                      letterSpacing: "0.04em",
-                      color: "#FFFFFF",
-                      textShadow: `0 0 8px ${pink}66`,
-                    }}
-                  >
-                    {c.hero.trialBadge.label}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: fontDisplay,
-                      fontStyle: "italic",
-                      fontWeight: 700,
-                      fontSize: 56,
-                      lineHeight: 1,
-                      color: "#FFFFFF",
-                      textShadow: "0 0 22px rgba(255,180,220,0.75), 0 0 6px rgba(255,255,255,0.6)",
-                    }}
-                  >
-                    {c.hero.trialBadge.price}
-                    <span style={{ fontFamily: fontMincho, fontStyle: "normal", fontSize: 22 }}>
-                      {c.hero.trialBadge.unit}
-                    </span>
-                  </span>
-                </div>
-
-                <div
-                  style={{
-                    marginTop: 15,
-                    padding: "8px 14px",
-                    borderRadius: 999,
-                    border: `1.5px solid ${pink}`,
-                    background: "rgba(20,6,22,0.4)",
-                    textAlign: "center",
-                    fontFamily: fontGothic,
-                    fontSize: 15.5,
-                    fontWeight: 800,
-                    letterSpacing: "0.02em",
-                    color: "#FFFFFF",
-                    boxShadow: `0 0 12px ${pink}55, inset 0 0 8px ${pink}22`,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  今なら
-                  <span style={{ color: "#FFE94D", textShadow: "0 0 12px rgba(255,220,60,0.7)" }}>
-                    入会金
-                    <span style={{ fontSize: 21, marginLeft: 3 }}>{c.hero.joinBadge.value.replace("円", "")}</span>
-                    円
-                  </span>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", gap: 8 }}>
-                {c.hero.tags.map((t, i) => (
-                  <PillTag key={i} accent={i === 1 ? blue : pink} fill>{t}</PillTag>
-                ))}
-              </div>
-              </div>
             </div>
           </section>
 
@@ -1181,6 +1123,12 @@ export default function Page() {
                       <span style={{ color: blue, fontWeight: 700 }}>{store.hours}</span>
                       <br />
                       {nl(store.route)}
+                      {store.parking && (
+                        <>
+                          <br />
+                          <span style={{ color: blue, fontWeight: 700 }}>{store.parking}</span>
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>

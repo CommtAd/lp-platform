@@ -56,6 +56,9 @@ const FORM_EXEMPT = new Set<string>([
   "estudio",
   // 予約導線を外部 Hacomono 予約に接続（顧客要望、2026-08）。名古屋伏見店とは別オーナー・別LP。
   "beat-pilates-toyota",
+  // 予約導線を公式サイトと同じ hacomono（sanare-pilates.hacomono.jp）へ接続。
+  // 店舗と日時は遷移先で選ぶため、LP側にフォームを持たない（2026-09-15）。
+  "seren-pilates",
 ]);
 
 function clientSlugs(): string[] {
