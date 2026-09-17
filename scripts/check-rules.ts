@@ -41,6 +41,8 @@ const REQUIRED_IN_FOLDER = ["LPForm"] as const;
  */
 const FORM_EXEMPT = new Set<string>([
   "soelu-togoshiginza",
+  // 予約導線をSOELU公式の予約システム（mypage.soelu.com）に接続。戸越銀座店と同一導線。
+  "soelu-test",
   "days-pilates",
   "bee-pilates-ebisu",
   "bee-pilates-okusawa",
