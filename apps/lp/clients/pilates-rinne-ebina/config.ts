@@ -7,7 +7,7 @@ const ASSET = "/clients/pilates-rinne-ebina";
  *
  * ■ 店舗別LP運用について
  * 店舗ごとに個別のLPを作る方針のため、このLPは海老名店専用（slug: pilates-rinne-ebina）。
- * 辻堂店はこのフォルダを複製して作る予定（想定slug: pilates-rinne-tsujido）。
+ * 辻堂店は pilates-rinne-tsujido。
  * そのため店舗選択UIは持たず、予約導線・店舗情報・FAQ等はすべて海老名店1店舗の内容のみ。
  * ダッシュボード側で slug "pilates-rinne-ebina" を登録すること（規約12）。
  *
@@ -18,20 +18,30 @@ const ASSET = "/clients/pilates-rinne-ebina";
  * LPForm を使わない。bee-pilates-ebisu と同じ方針（専用 page.tsx + 専用config型 +
  * check-rules の FORM_EXEMPT 登録）で構成している。LPShell は必須なので維持。
  *
- * ■ 配色
- * 実サイト（https://rinne-pilates.com/studio）から採取した実測値を採用。
- * 深緑 #003E2F（メイン・見出し・背景）× クリーム #E6D2BE（ボタン・背景）× 白。
- * パターンAのゴールド系装飾（オファー帯・CTAボタン・価格の強調グラデーション等）は
- * すべてこの深緑・クリームの配色に置き換えている（page.tsx 側で対応）。
+ * ■ デザインを辻堂店に合わせた（2026-09-18）
+ * 辻堂店（pilates-rinne-tsujido）で重ねた修正をこのLPにも反映し、
+ * page.tsx / FaqList.tsx は辻堂店と同一コピーに戻した。差分は config.ts のみ。
+ * 以降、どちらかの page.tsx を直したらもう一方にも必ずコピーすること。
+ * 取り込んだ主な変更:
+ *   - 比較表（④他レッスン形式との違い）を廃止し、料金プラン表（plans）へ差し替え
+ *   - 「目指せる未来」セクション（future）を追加
+ *   - 「料金・キャンペーン」セクションを廃止し、体験キャンペーン（pricing）を
+ *     MV直下・料金表直下・最終予約エリアの3箇所に配置
+ *   - CTAを7本から4本へ整理、オファー帯の丸バッジを1行のピルへ変更
+ *   - 全体の文字サイズ引き上げ・お悩みの1列化・予約ボタンを濃緑に統一
+ * 取り込まなかったもの:
+ *   - アクティブライフ（activeLife）: 湘南・海沿いの立地に寄せたブロックのため、
+ *     内陸の海老名店では未設定にして丸ごと非表示にしている（page.tsx が自動でスキップ）。
+ *   - MVの動画（hero.mp4）: 辻堂店の撮影素材。海老名店は従来の hero.jpg のまま。
  *
  * ■ 未確定（ブリーフ §18 優先確認事項）— すべて `null` / 〇〇 / 00 表記
  * もっともらしい仮の値は入れていない。実データと区別できなくなり、
  * そのまま公開される事故につながるため。
  *   1. reserve.stores[].url — hacomono海老名店予約URL（★これが無いとCTAが機能しない）
  *   2. stores[].tel — 海老名店の電話番号（住所・営業時間・定休日・アクセスは確定済み）
- *   3. 月額料金・入会金・事務手数料・キャンペーン適用条件・対象期間の明記
- *      （★顧客修正指示で月額等の一覧ブロックごと削除。景表法上、公開前に
- *      適用条件・対象期間・対象店舗・別途費用のいずれかの形での明記が必要）
+ *   3. plans — 金額は辻堂店と同一の全店共通料金として転記（2026-09-18 指示）。
+ *      海老名店固有の料金表が出てきた場合は要差し替え。入会金・事務手数料・
+ *      キャンペーン適用条件は景表法上、公開前に明記が必要。
  *   4. flow.steps[].time — 各ステップの所要時間
  *   5. instructors[].name / nameEn / tags / body — 氏名・資格・指導歴（写真はGoogle Driveの実素材を仮配置済み）
  *   6. testimonials[] — お客様の声（★広告掲載許可の取得が前提）
@@ -40,6 +50,7 @@ const ASSET = "/clients/pilates-rinne-ebina";
  *   9. FAQは顧客修正指示により確定回答のある4問（初心者・身体の硬さ・駐車場・勧誘の有無）に絞り済み。
  *      年齢制限・男性利用・服装・持ち物・更衣室・所要時間・予約変更・妊娠中/産後は削除した
  *      （復活させる場合は要確認の回答を用意してから追加する）
+ *  10. reserve.note — 辻堂店の「入会金0円」は海老名店で未確認のため転記していない。
  *
  * ■ 写真素材について（2026-07-31 反映）
  * Google Drive「ピラティス素材(RINNE様)」フォルダより、海老名店と確認済みの写真を
@@ -48,6 +59,8 @@ const ASSET = "/clients/pilates-rinne-ebina";
  * TEP09332/TEP09374は辻堂店の写真と確認したため、このLPには使用していない。
  * インストラクターの写真は現状「複数人が写る指導風景」から流用しており、本来の
  * 個人ポートレートではない。ソロ写真が用意され次第、差し替えが必要。
+ * future-01〜04.jpg のみ、店舗を特定しないイメージカット（スタジオ内の立ち姿等）のため
+ * 辻堂店と共通の素材を使っている。店舗の写真は流用していない。
  */
 
 /** レイアウト上の画像枠。`src` が null ならプレースホルダ表示。 */
@@ -56,10 +69,12 @@ export interface Slot {
   src?: string | null;
   /** 切り抜き位置（例 "38% center"）。既定は "center"。 */
   position?: string;
+  /**
+   * 明るさ・彩度の補正（CSS filter）。
+   * 素材が店内の暗い照明で撮られた場合、枠によっては持ち上げが要る。
+   */
+  filter?: string;
 }
-
-/** 比較表のマーク。good=◎ / fair=○ / poor=△ */
-export type Mark = "good" | "fair" | "poor";
 
 /** 予約先。url が null の間は「予約URL設定待ち」として非リンク描画される。 */
 export interface ReserveTarget {
@@ -83,7 +98,8 @@ export interface RinneConfig {
     note?: string;
   };
   offerBar: {
-    badgeLines: [string, string];
+    /** 期限バッジ。1行の帯なので分割せず1文字列で持つ。 */
+    badgeText: string;
     text: string;
   };
   /** 監修・実績帯。数値が未確定なら num を空文字にすると数字部分が出ない。 */
@@ -96,7 +112,7 @@ export interface RinneConfig {
     hero: Slot;
     /** 補足要素（初心者歓迎・監修・体験受付中など） */
     notes: string[];
-    /** 特徴チップ（最大3名 / 姿勢診断付き / 監修） */
+    /** 特徴チップ（姿勢診断付き / 監修） */
     chips: { small: string; big: string }[];
   };
 
@@ -113,14 +129,50 @@ export interface RinneConfig {
     items: { num: string; title: string; body: string; img: Slot }[];
   };
 
-  /** ④ 他のレッスン形式との違い */
-  comparison: {
+  /** ③-2 目指せる未来 */
+  future: {
+    heading: string;
+    items: { num: string; title: string; body: string; img: Slot }[];
+    closing: string;
+  };
+
+  /**
+   * ③-3 アクティブライフ。
+   * 「目指せる未来」の締めと「選ばれる理由」の間に挟む、生活シーンの訴求ブロック。
+   * 立地に紐づく内容なので、合わない店舗では未設定にしてよい（page.tsx が自動で省く）。
+   */
+  activeLife?: {
+    /** ブロックの見出し（\n で改行）。 */
+    heading: string;
+    /** シーンカード。2列グリッドに流し込むので偶数で持つ。 */
+    cards: {
+      en: string;
+      ja: string;
+      /** カード下のコピー。\n で改行。 */
+      copy: string;
+      img: Slot;
+    }[];
+  };
+
+  /** ④ 料金プラン */
+  plans: {
     heading: string;
     lead: string;
-    columns: [string, string, string];
-    /** 強調する列のindex（RINNE = 2） */
-    highlight: number;
-    rows: { label: string; values: [string, string, string]; marks: [Mark, Mark, Mark] }[];
+    /** 列見出し（英字＋和文）。1列目は回数ラベル列なので含めない。 */
+    columns: { en: string; ja: string }[];
+    /**
+     * 行＝月あたりの回数。values は columns と同じ並び。
+     * 金額は「1回あたり」で持つ（月額 ÷ 回数・10円未満切り捨て）。
+     * 月額そのものは表に出さない。
+     */
+    rows: {
+      label: string;
+      /** price / campaign は "8,700円/回" の形。数字と単位は表示側で出し分ける。 */
+      values: { price: string; campaign?: string; campaignNote?: string }[];
+    }[];
+    taxNote: string;
+    /** 表の下に置く補足（月2回プランの条件など） */
+    notes: string[];
   };
 
   /** ⑤ 姿勢診断について */
@@ -173,15 +225,21 @@ export interface RinneConfig {
     }[];
   };
 
-  /** ⑩ 料金・キャンペーン */
+  /**
+   * 体験キャンペーン（完全無料訴求）。「料金・キャンペーン」セクションは
+   * 廃止したため見出しは持たず、MV直下・料金表直下・最終予約エリアの3箇所で使う。
+   */
   pricing: {
-    heading: string;
     campaignBadge: string;
     campaignTitle: string;
     campaignLead: string;
     /** 通常体験料金（未確定は "00,000"） */
     trialRegular: string;
-    /** キャンペーン適用後の体験料金表示 */
+    /**
+     * キャンペーン適用後の体験料金表示。
+     * 「0円」のような金額ではなく「完全無料」のような文言も入る（文字数に応じて
+     * 表示サイズは page.tsx 側で調整済み）。
+     */
     trialNow: string;
   };
 
@@ -218,8 +276,8 @@ export interface RinneConfig {
 
   /** 予約（§16: すべてhacomonoの店舗別ウィジェットへ） */
   reserve: {
-    /** CTAブロック上部の小見出し */
-    eyebrow: string;
+    /** CTAブロック上部の小見出し。未設定なら出さない。 */
+    eyebrow?: string;
     stores: ReserveTarget[];
     /** ボタン下の補足（キャンペーン条件など） */
     note: string;
@@ -252,7 +310,7 @@ const config: RinneConfig = {
     note: "駐車場・駐輪場完備",
   },
   offerBar: {
-    badgeLines: ["期間", "限定"],
+    badgeText: "9/30まで",
     text: "無料体験レッスン受付中",
   },
   // TBD(§18): Google口コミ等の実績数値。確定まで数字を出さない。
@@ -275,18 +333,18 @@ const config: RinneConfig = {
   },
 
   worry: {
-    heading: "このようなお悩みはありませんか",
+    heading: "このようなお悩みは\nありませんか",
     items: [
       "猫背や巻き肩が気になる",
       "下腹や下半身のラインが気になる",
       "運動不足を感じている",
       "身体が硬く、運動に苦手意識がある",
       "大人数のレッスンについていけるか不安",
-      "グループレッスンでは十分に見てもらえなかった",
-      "パーソナルレッスンは料金面で続けにくい",
+      "グループレッスンでは\n十分に見てもらえなかった",
+      "パーソナルレッスンは\n料金面で続けにくい",
       "自分に合った運動が分からない",
     ],
-    closing: "そのお悩み、身体の状態を\n確認することから始めませんか？",
+    closing: "そのお悩み、\n身体の状態を確認する\nことから始めませんか？",
   },
 
   reasons: {
@@ -294,7 +352,7 @@ const config: RinneConfig = {
     items: [
       {
         num: "01",
-        title: "マンツーマンも最大3名のセミパーソナルも選べる",
+        title: "マンツーマンも最大3名の\nセミパーソナルも選べる",
         body:
           "大人数のグループレッスンとは異なり、インストラクターが一人ひとりの動きを確認します。初心者の方や、正しく動けているか不安な方にも参加しやすいレッスンです。",
         img: { placeholder: "最大3名で受講している様子", src: `${ASSET}/reason-1.jpg` },
@@ -323,47 +381,103 @@ const config: RinneConfig = {
     ],
   },
 
-  comparison: {
-    heading: "パーソナルとグループの、\n良いところを両立。",
-    lead: "完全パーソナル・大人数のグループレッスンと、RINNEのピラティスを比べました。",
-    columns: ["完全\nパーソナル", "大人数の\nグループ", "RINNE"],
-    highlight: 2,
+  // お悩み訴求のあとに置く「目指せる未来」。辻堂店と共通の内容・共通のイメージカット。
+  // 店舗を特定しない素材のため、両店で同じ写真を使っている。
+  future: {
+    heading: "姿勢から整えて、\nもっと好きになれる身体へ。",
+    items: [
+      {
+        num: "01",
+        title: "すっと伸びた美しい姿勢",
+        body: "自然と自信を持てる、きれいな立ち姿へ。",
+        img: { placeholder: "美しい姿勢のイメージ", src: `${ASSET}/future-01.jpg` },
+      },
+      {
+        num: "02",
+        title: "すっきりしたお腹まわり",
+        body: "姿勢を整えて、身体のラインを美しく。",
+        img: { placeholder: "お腹まわりのイメージ", src: `${ASSET}/future-02.jpg` },
+      },
+      {
+        num: "03",
+        title: "女性らしいヒップライン",
+        body: "お尻や脚を正しく使える身体を目指します。",
+        img: { placeholder: "ヒップラインのイメージ", src: `${ASSET}/future-03.jpg` },
+      },
+      {
+        num: "04",
+        title: "軽やかに動ける身体",
+        body: "毎日の動きまでラクになる身体づくりへ。",
+        img: { placeholder: "軽やかに動く身体のイメージ", src: `${ASSET}/future-04.jpg` },
+      },
+    ],
+    closing: "RINNEなら、一人ひとりの\n身体に合わせて整えます。",
+  },
+
+  /*
+   * activeLife は未設定（＝非表示）。
+   * 辻堂店のこのブロックはサーフィン等、湘南・海沿いの立地に寄せた4シーンで、
+   * 内陸の海老名店には合わないため丸ごと省いている（2026-09-18 指示）。
+   * 海老名向けのシーンと写真が用意できたら、ここに activeLife を足せば表示される。
+   */
+
+  // 金額は辻堂店の料金表をそのまま転記（全店共通料金という前提・2026-09-18 指示）。
+  // 元の月額を回数で割った「1回あたり」で持ち、10円未満は切り捨て。
+  plans: {
+    heading: "料金プラン",
+    lead: "2つのプランを使い分けできるから\nマシンピラティスを長く続けられる",
+    columns: [
+      { en: "PERSONAL", ja: "パーソナル" },
+      { en: "SEMI PERSONAL", ja: "セミパーソナル" },
+    ],
     rows: [
       {
-        label: "レッスン人数",
-        values: ["1名", "多人数", "最大3名"],
-        marks: ["good", "poor", "good"],
+        label: "月4回",
+        values: [
+          // 34,800円 → 8,700円 / 29,800円 → 7,450円
+          { price: "8,700円/回", campaign: "7,450円/回", campaignNote: "最初の3ヶ月" },
+          // 19,800円 → 4,950円
+          { price: "4,950円/回" },
+        ],
       },
       {
-        label: "指導の細かさ",
-        values: ["丁寧に見てもらえる", "一人ひとりを細かく見ることが難しい", "一人ひとりの動きを確認"],
-        marks: ["good", "poor", "good"],
+        label: "月6回",
+        values: [
+          // 49,800円 → 8,300円 / 44,800円 → 7,466.6円 → 7,460円
+          { price: "8,300円/回", campaign: "7,460円/回", campaignNote: "最初の3ヶ月" },
+          // 27,800円 → 4,633.3円 → 4,630円
+          { price: "4,630円/回" },
+        ],
       },
       {
-        label: "身体に合わせた対応",
-        values: ["一人ひとりに合わせやすい", "全員が同じ動きになりやすい", "姿勢診断をもとに提案"],
-        marks: ["good", "poor", "good"],
+        label: "月8回",
+        values: [
+          // 顧客支給の表ではキャンペーン額が月6回と同額（44,800円）。誤記の可能性があるため要確認。
+          // 59,800円 → 7,475円 → 7,470円 / 44,800円 → 5,600円
+          { price: "7,470円/回", campaign: "5,600円/回", campaignNote: "最初の3ヶ月" },
+          // 34,800円 → 4,350円
+          { price: "4,350円/回" },
+        ],
       },
       {
-        label: "通いやすさ",
-        values: ["予約枠が限られやすい", "通いやすい", "続けやすい"],
-        marks: ["poor", "good", "good"],
+        label: "月12回",
+        values: [
+          // 85,800円 → 7,150円 / 80,800円 → 6,733.3円 → 6,730円
+          { price: "7,150円/回", campaign: "6,730円/回", campaignNote: "最初の3ヶ月" },
+          // 49,800円 → 4,150円
+          { price: "4,150円/回" },
+        ],
       },
-      {
-        label: "料金の負担",
-        values: ["高くなりやすい", "抑えやすい", "完全パーソナルより続けやすい"],
-        marks: ["poor", "good", "fair"],
-      },
-      {
-        label: "初心者の参加しやすさ",
-        values: ["安心して始めやすい", "周囲についていけるか不安になりやすい", "少人数だから質問しやすい"],
-        marks: ["good", "poor", "good"],
-      },
+    ],
+    taxNote: "表示価格は税込です",
+    notes: [
+      "6ヶ月以上所属の方は、7ヶ月目から月2回プランもお選びいただけます。",
+      "※パーソナル月2回 8,900円/回、セミパーソナル月2回 5,900円/回",
     ],
   },
 
   posture: {
-    heading: "自分に必要な運動を知ることから。",
+    heading: "自分に必要な運動を\n知ることから。",
     body:
       "身体の状態や悩みは、一人ひとり異なります。RINNEでは、レッスン前に姿勢や身体の癖を確認し、その方に必要な動きをご提案します。何から始めればよいか分からない方にも、安心してご参加いただけます。",
     items: [
@@ -420,7 +534,7 @@ const config: RinneConfig = {
   },
 
   beginner: {
-    heading: "ピラティスが初めてでも、大丈夫です。",
+    heading: "ピラティスが初めてでも、\n大丈夫です。",
     body:
       "RINNEに通う方の中には、運動が久しぶりの方や、ピラティスが初めての方もいらっしゃいます。セミパーソナルは最大3名のため、周囲についていくことを優先せず、ご自身のペースでレッスンを受けられます。",
     items: [
@@ -470,13 +584,13 @@ const config: RinneConfig = {
   },
 
   pricing: {
-    heading: "料金・キャンペーン",
-    campaignBadge: "期間限定",
-    campaignTitle: "体験レッスン無料",
+    campaignBadge: "9月30日までに体験予約をした方限定",
+    // 直下の金額表記が「完全無料」なので、見出し側では「無料」を使わない
+    campaignTitle: "お試し体験レッスン",
     campaignLead:
       "マンツーマンも最大3名のセミパーソナルも、\n姿勢診断とあわせてまずは体験してみませんか？",
     trialRegular: "8,800",
-    trialNow: "0",
+    trialNow: "完全無料",
   },
 
   stores: {
@@ -527,7 +641,7 @@ const config: RinneConfig = {
   },
 
   closing: {
-    heading: "大人数ではなく、\nあなたの身体に目が届くピラティスを。",
+    heading: "大人数ではなく、\nあなたの身体に目が届く\nピラティスを。",
     lead: "マンツーマンも最大3名のセミパーソナルも、\nまずは体験してみませんか？",
     chips: [
       "パーソナルマシンピラティス",
@@ -540,7 +654,7 @@ const config: RinneConfig = {
   },
 
   reserve: {
-    eyebrow: "ご希望の日時をお選びください",
+    // 辻堂店に合わせて eyebrow は出さない（ボタンだけを置く）。
     // ★TBD(§18): hacomono 海老名店の予約URL。null の間は非リンク描画になる。
     stores: [{ label: "無料体験を予約する", url: null }],
     note: "空き状況の確認のみでもご利用いただけます。",

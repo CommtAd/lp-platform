@@ -4,7 +4,7 @@ import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqList from "./FaqList";
 import TelLink from "./TelLink";
-import config, { type Mark } from "./config";
+import config from "./config";
 
 /**
  * ピラティスRINNE — 構成案 §15 の13セクション構成。
@@ -44,6 +44,42 @@ function nl(text: string): ReactNode {
   ));
 }
 
+/**
+ * 料金表の「8,700円/回」を、数字を大きく・単位（円/回）を小さく描き分ける。
+ * 表のマスは幅が狭いので、単位まで同じサイズで置くと桁が読みにくくなる。
+ */
+function PerSessionPrice({
+  text,
+  size,
+  color,
+  prefix,
+}: {
+  text: string;
+  size: number;
+  color: string;
+  prefix?: string;
+}): ReactNode {
+  const m = text.match(/^(.*?)(円\/回)$/);
+  const amount = m ? m[1] : text;
+  const unit = m ? m[2] : "";
+  return (
+    <span
+      style={{
+        fontFamily: fontGothic,
+        fontWeight: 700,
+        letterSpacing: "0.01em",
+        color,
+        lineHeight: 1.25,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {prefix}
+      <span style={{ fontSize: size }}>{amount}</span>
+      {unit && <span style={{ fontSize: size * 0.72, marginLeft: 1 }}>{unit}</span>}
+    </span>
+  );
+}
+
 const c = config;
 const accent = c.accent;
 /* 実サイト（rinne-pilates.com）の実測値。深緑×クリーム×白の3色構成で、
@@ -55,9 +91,8 @@ const navyGrad = `linear-gradient(158deg, ${shade(accent, 0.14)} 0%, ${accent} 5
 const accentSoft = accent + "22";
 const accentGlow = accent + "55";
 const goldGrad = `linear-gradient(160deg, ${accentMid} 0%, ${accent} 100%)`;
-const goldBtn = `linear-gradient(135deg, ${creamSoft} 0%, ${cream} 100%)`;
 /* StickyFooterCTAの共通コンポーネントはボタン文字色が白固定のため、
-   クリーム地のgoldBtnではなく白文字が読める濃緑グラデーションを使う。 */
+   白文字が読める濃緑グラデーション。予約CTAのボタンと追従フッターで共用する。 */
 const stickyBtnGrad = `linear-gradient(135deg, ${shade(accent, 0.12)} 0%, ${shade(accent, -0.15)} 100%)`;
 const creamGrad = "linear-gradient(180deg, #F3E8D8 0%, #E9DAC4 100%)";
 const fontMincho = "'Shippori Mincho', serif";
@@ -68,10 +103,12 @@ function SectionHeading({
   text,
   variant = "accent",
   fontSize = 22,
+  nowrap = false,
 }: {
   text: string;
   variant?: "accent" | "white";
   fontSize?: number;
+  nowrap?: boolean;
 }) {
   const color = variant === "white" ? "#FFFFFF" : accent;
   const rule = variant === "white" ? "rgba(255,255,255,0.55)" : accent;
@@ -82,10 +119,13 @@ function SectionHeading({
           fontFamily: fontMincho,
           fontWeight: 600,
           fontSize,
-          letterSpacing: "0.08em",
+          // 0.08em だと 360px 幅で1文字だけ溢れる見出しが出るため少し詰めている
+          letterSpacing: "0.06em",
           color,
           lineHeight: 1.5,
           margin: 0,
+          textWrap: "balance",
+          whiteSpace: nowrap ? "nowrap" : undefined,
         }}
       >
         {nl(text)}
@@ -128,18 +168,20 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
   const noteColor = variant === "dark" ? "rgba(255,255,255,0.7)" : "#9A9C90";
   return (
     <div style={{ marginTop: 28 }}>
-      <p
-        style={{
-          textAlign: "center",
-          fontSize: 12,
-          letterSpacing: "0.08em",
-          color: eyebrowColor,
-          margin: "0 0 12px",
-          textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
-        }}
-      >
-        {c.reserve.eyebrow}
-      </p>
+      {c.reserve.eyebrow && (
+        <p
+          style={{
+            textAlign: "center",
+            fontSize: 12,
+            letterSpacing: "0.08em",
+            color: eyebrowColor,
+            margin: "0 0 12px",
+            textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
+          }}
+        >
+          {c.reserve.eyebrow}
+        </p>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {c.reserve.stores.map((s) =>
           s.url ? (
@@ -154,8 +196,14 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
                 justifyContent: "center",
                 gap: 8,
                 height: 58,
-                background: goldBtn,
-                color: accent,
+                /*
+                  もとはクリームの goldBtn だったが、地色 creamGrad の
+                  「体験レッスンの流れ」セクションでボタンが背景に埋もれていた。
+                  追従フッターのボタンと同じ濃緑に統一して、どの地色でも
+                  ボタンだけが浮くようにしている。
+                */
+                background: stickyBtnGrad,
+                color: "#FFFFFF",
                 textDecoration: "none",
                 fontSize: 15.5,
                 fontWeight: 700,
@@ -204,6 +252,7 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
           color: noteColor,
           letterSpacing: "0.04em",
           margin: "12px 0 0",
+          textWrap: "balance",
           textShadow: variant === "dark" ? "0 1px 6px rgba(0,0,0,0.45)" : undefined,
         }}
       >
@@ -213,31 +262,38 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
   );
 }
 
-/** キャンペーンバッジ・体験レッスンの二重価格表記。顧客修正指示によりMV直下にも表示する。 */
-function TrialPriceBlock() {
+/**
+ * キャンペーンバッジ・体験レッスンの二重価格表記。
+ * 顧客修正指示によりMV直下・料金表直下（pin 32）に全体を、
+ * 最終予約エリア（pin 38）には compact で期限バッジと金額だけを出す。
+ */
+function TrialPriceBlock({ compact = false }: { compact?: boolean } = {}) {
   return (
     <>
+      {/* 期限バッジは compact でも出す（最終CTAでも期限を見せるため） */}
       <div style={{ textAlign: "center" }}>
         <span
           style={{
             display: "inline-block",
             background: "#4A4E57",
             color: "#FFFFFF",
-            fontSize: 11,
+            fontSize: 12.5,
             fontWeight: 700,
             letterSpacing: "0.1em",
-            padding: "6px 14px",
+            padding: "7px 15px",
             borderRadius: 4,
           }}
         >
           {c.pricing.campaignBadge}
         </span>
+        {!compact && (
+        <>
         <div>
           <h3
             style={{
               fontFamily: fontMincho,
               fontWeight: 600,
-              fontSize: 27,
+              fontSize: 30,
               letterSpacing: "0.05em",
               color: "#33352E",
               margin: "14px 0 0",
@@ -249,31 +305,38 @@ function TrialPriceBlock() {
             {c.pricing.campaignTitle}
           </h3>
         </div>
-        <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "14px 0 0" }}>
+        <p style={{ fontSize: 14, lineHeight: 1.9, color: "#62655B", margin: "14px 0 0" }}>
           {nl(c.pricing.campaignLead)}
         </p>
+        </>
+        )}
       </div>
 
-      {/* 二重価格表記（通常 → キャンペーン） */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 14,
-          marginTop: 24,
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+      {/*
+        二重価格表記（通常 → キャンペーン）。
+        キャンペーン側は「0円」ではなく「完全無料」のような文言が入るため、
+        横並びだと 480px の枠に収まらない。通常価格を上段にまとめ、
+        訴求文言を下段に大きく置く縦積みにしている。
+      */}
+      <div style={{ marginTop: compact ? 18 : 24, textAlign: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: 10,
+          }}
+        >
           <span
             style={{
               display: "inline-flex",
               background: "#4A4E57",
               color: "#FFFFFF",
-              fontSize: 12,
+              fontSize: 13,
               fontWeight: 700,
               letterSpacing: "0.06em",
-              padding: "6px 12px",
+              padding: "6px 13px",
               borderRadius: 4,
               whiteSpace: "nowrap",
             }}
@@ -281,10 +344,10 @@ function TrialPriceBlock() {
             体験レッスン
           </span>
           <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-            <span style={{ fontSize: 11, color: "#62655B" }}>通常価格</span>
-            <span style={{ position: "relative", fontFamily: fontMincho, fontSize: 19, color: "#4A4E57" }}>
+            <span style={{ fontSize: 12, color: "#62655B" }}>通常価格</span>
+            <span style={{ position: "relative", fontFamily: fontMincho, fontSize: 21, color: "#4A4E57" }}>
               {c.pricing.trialRegular}
-              <span style={{ fontSize: 11 }}>円</span>
+              <span style={{ fontSize: 12 }}>円</span>
               <span
                 style={{
                   position: "absolute",
@@ -297,17 +360,17 @@ function TrialPriceBlock() {
                 }}
               />
             </span>
-            <span style={{ fontSize: 10, color: "#9A9C90" }}>税込</span>
-            <span style={{ fontSize: 17, color: accentMid, marginLeft: 2 }}>→</span>
+            <span style={{ fontSize: 11, color: "#9A9C90" }}>税込</span>
           </div>
         </div>
+        <div style={{ fontSize: 20, lineHeight: 1, color: accentMid, margin: "12px 0 4px" }}>↓</div>
         <div
           style={{
             fontFamily: fontMincho,
             fontWeight: 700,
-            fontSize: 92,
-            lineHeight: 0.9,
-            letterSpacing: "0.02em",
+            fontSize: 58,
+            lineHeight: 1.2,
+            letterSpacing: "0.04em",
             background: goldGrad,
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
@@ -315,19 +378,11 @@ function TrialPriceBlock() {
           }}
         >
           {c.pricing.trialNow}
-          <span style={{ fontSize: 48 }}>円</span>
         </div>
       </div>
     </>
   );
 }
-
-const markGlyph: Record<Mark, string> = { good: "◎", fair: "○", poor: "△" };
-const markColor: Record<Mark, string> = {
-  good: accentMid,
-  fair: "#7C8069",
-  poor: "#B98A80",
-};
 
 export default function Page() {
   return (
@@ -335,6 +390,8 @@ export default function Page() {
       <div
         style={{
           fontFamily: "'Noto Sans JP', sans-serif",
+          // 日本語の禁則処理を厳密に。長音符や小書き仮名が行頭に来るのを防ぐ
+          lineBreak: "strict",
           background: "#E4DFD5",
           minHeight: "100vh",
           color: "#3B3D36",
@@ -390,59 +447,43 @@ export default function Page() {
           </div>
 
           {/* ── offer bar ── */}
+          {/*
+            期限バッジは円形の“ステッカー”をはみ出させる作りだったが、
+            1行表示にすると横幅が要るうえ上下のはみ出しがロゴに被る。
+            帯の中に収まる角丸のピルに変え、絶対配置と余白合わせのスペーサーを廃した。
+          */}
           <div
             style={{
               position: "relative",
               zIndex: 5,
               display: "flex",
               alignItems: "center",
+              gap: 12,
               background: `linear-gradient(120deg, ${shade(accent, 0.16)} 0%, ${accent} 55%, ${shade(accent, -0.15)} 100%)`,
               padding: "14px 18px",
               boxShadow: "0 3px 10px rgba(70,72,60,0.18)",
             }}
           >
-            <div
+            <span
               style={{
-                position: "absolute",
-                left: 20,
-                top: "50%",
-                transform: "translateY(-50%)",
-                width: 68,
-                height: 68,
-                borderRadius: "50%",
-                background: `radial-gradient(circle at 38% 32%, ${creamSoft} 0%, ${cream} 100%)`,
-                boxShadow: "0 3px 8px rgba(50,40,25,0.28)",
-                display: "flex",
+                flex: "none",
+                display: "inline-flex",
                 alignItems: "center",
-                justifyContent: "center",
+                fontFamily: fontGothic,
+                fontWeight: 700,
+                fontSize: 15,
+                letterSpacing: "0.02em",
+                lineHeight: 1.2,
+                whiteSpace: "nowrap",
                 color: accent,
+                background: `linear-gradient(135deg, ${creamSoft} 0%, ${cream} 100%)`,
+                borderRadius: 8,
+                padding: "7px 13px",
+                boxShadow: "0 2px 6px rgba(50,40,25,0.26)",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  lineHeight: 1.2,
-                  transform: "rotate(-9deg)",
-                }}
-              >
-                {c.offerBar.badgeLines.map((l, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      fontFamily: fontGothic,
-                      fontWeight: 700,
-                      fontSize: 13,
-                      letterSpacing: "0.02em",
-                    }}
-                  >
-                    {l}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div style={{ flex: "none", width: 78 }} />
+              {c.offerBar.badgeText}
+            </span>
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div
                 style={{
@@ -467,7 +508,7 @@ export default function Page() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 6,
+              gap: c.achievement.num ? 6 : 0,
               background: "#FFFFFF",
               color: "#3B3D36",
               padding: "7px 18px",
@@ -498,7 +539,19 @@ export default function Page() {
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
               objectPosition={c.fv.hero.position ?? "center"}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                /*
+                  静止画時代の 1.18 は「暗い店内で撮った動画フレーム」向けの補正値。
+                  顧客支給の動画は露出が適正で、1.18 だと画面の約1%が白飛びしたため
+                  （実測: 平均輝度 117.6 → 140.1 / 白飛び 0% → 1.06%）、
+                  質感がやや締まる程度の弱い持ち上げに変更している。
+                */
+                filter: "brightness(1.06) saturate(1.03)",
+              }}
             />
             <div
               style={{
@@ -563,8 +616,9 @@ export default function Page() {
                 <div
                   key={chip.big}
                   style={{
-                    width: 66,
-                    height: 66,
+                    // AUN No.4「もう少し大きく表示」。66→84。
+                    width: 84,
+                    height: 84,
                     borderRadius: "50%",
                     background: accent,
                     border: "1.5px solid rgba(255,255,255,0.5)",
@@ -577,10 +631,10 @@ export default function Page() {
                     boxShadow: "0 4px 12px rgba(0,0,0,0.22)",
                   }}
                 >
-                  <span style={{ fontSize: 9.5, letterSpacing: "0.06em", color: cream }}>
+                  <span style={{ fontSize: 12, letterSpacing: "0.06em", color: cream }}>
                     {chip.small}
                   </span>
-                  <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 17 }}>
+                  <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 21 }}>
                     {chip.big}
                   </span>
                 </div>
@@ -597,7 +651,7 @@ export default function Page() {
                   style={{
                     fontFamily: fontGothic,
                     fontWeight: 500,
-                    fontSize: 15,
+                    fontSize: 17,
                     letterSpacing: "0.06em",
                     lineHeight: 1.8,
                     color: "#FFFFFF",
@@ -620,13 +674,13 @@ export default function Page() {
                   <span
                     key={n}
                     style={{
-                      fontSize: 10.5,
+                      fontSize: 12.5,
                       letterSpacing: "0.02em",
                       color: "#FFFFFF",
                       background: "rgba(255,255,255,0.14)",
                       border: "1px solid rgba(255,255,255,0.35)",
                       borderRadius: 999,
-                      padding: "4px 10px",
+                      padding: "5px 12px",
                     }}
                   >
                     {n}
@@ -634,19 +688,21 @@ export default function Page() {
                 ))}
               </div>
             </div>
-            {/* §16 CTA 1/7: ファーストビュー */}
-            <ReserveCta variant="dark" />
           </div>
 
           {/* ── MV直下の体験料金表示（顧客修正指示） ── */}
+          {/* pin 27/28: CTAは料金ブロックの前から後ろへ移動（無料訴求を見せてから予約導線） */}
           <section style={{ background: "#FCFBF7", padding: "40px 26px 48px" }}>
             <TrialPriceBlock />
+            {/* CTA 1/4: 体験料金の後 */}
+            <ReserveCta />
           </section>
 
           {/* ── ② このようなお悩みはありませんか ── */}
           <section style={{ background: creamGrad, padding: "54px 26px" }}>
-            <SectionHeading text={c.worry.heading} fontSize={20} />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 30 }}>
+            <SectionHeading text={c.worry.heading} fontSize={22} />
+            {/* pin 26 で5項目（奇数）になったため、2列だと最終行が片側だけ空く。1列に変更。 */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 30 }}>
               {c.worry.items.map((item) => (
                 <div
                   key={item}
@@ -661,7 +717,112 @@ export default function Page() {
                   }}
                 >
                   <CheckIcon />
-                  <span style={{ fontSize: 12, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45" }}>{nl(item)}</span>
+                </div>
+              ))}
+            </div>
+            {/*
+              悩みカードの受けになる一文。
+              白いプレートに載せると上の白カード5枚と同化して埋もれたため、
+              濃緑の地に白文字へ反転した。セクション内でここだけ明度が逆転するので
+              視線が確実に止まる。FAQ・料金プランと同じ navyGrad を使っており、
+              LP内で浮いた見た目にはならない。
+            */}
+            <div
+              style={{
+                marginTop: 38,
+                background: navyGrad,
+                borderRadius: 16,
+                padding: "30px 20px",
+                boxShadow: `0 10px 24px ${accentGlow}`,
+              }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  fontFamily: fontMincho,
+                  fontWeight: 600,
+                  fontSize: 23,
+                  lineHeight: 1.8,
+                  letterSpacing: "0.05em",
+                  margin: 0,
+                  color: "#FFFFFF",
+                }}
+              >
+                {nl(c.worry.closing)}
+              </p>
+            </div>
+            {/* pin 29: ここのCTAは削除 */}
+          </section>
+
+          {/* ── ②-2 目指せる未来（pin 25） ── */}
+          <section style={{ background: "#FCFBF7", padding: "56px 26px 60px" }}>
+            <SectionHeading text={c.future.heading} fontSize={22} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 32 }}>
+              {c.future.items.map((item) => (
+                <div
+                  key={item.num}
+                  style={{
+                    display: "flex",
+                    alignItems: "stretch",
+                    /*
+                      cover は枠の短辺基準で拡大率が決まる。高さ95pxのままだと
+                      横4:3の素材は幅基準で縮み、立ち姿の人物が30px程度にしかならない。
+                      高さを確保すると高さ基準の拡大に切り替わり、被写体が大きくなって
+                      左右の余った壁が切れる。
+                    */
+                    minHeight: 128,
+                    background: "#F4F0E8",
+                    borderRadius: 14,
+                    overflow: "hidden",
+                  }}
+                >
+                  <ImageSlot
+                    src={item.img.src}
+                    placeholder={item.img.placeholder}
+                    style={{ width: 132, flex: "none", alignSelf: "stretch" }}
+                  />
+                  <div style={{ flex: 1, padding: "16px 16px 16px 15px" }}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                      <span
+                        style={{
+                          fontFamily: fontGothic,
+                          fontWeight: 700,
+                          fontSize: 13,
+                          letterSpacing: "0.06em",
+                          color: accentMid,
+                        }}
+                      >
+                        {item.num}
+                      </span>
+                      <span style={{ width: 1, height: 12, background: "#CFC8B8" }} />
+                      <h3
+                        style={{
+                          fontFamily: fontGothic,
+                          fontWeight: 700,
+                          fontSize: 15,
+                          lineHeight: 1.5,
+                          letterSpacing: "0.03em",
+                          margin: 0,
+                          color: "#33352E",
+                          textWrap: "balance",
+                        }}
+                      >
+                        {item.title}
+                      </h3>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: 13,
+                        lineHeight: 1.8,
+                        color: "#62655B",
+                        margin: "10px 0 0",
+                        textWrap: "balance",
+                      }}
+                    >
+                      {item.body}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -670,18 +831,100 @@ export default function Page() {
                 textAlign: "center",
                 fontFamily: fontMincho,
                 fontWeight: 600,
-                fontSize: 18,
+                fontSize: 20,
                 lineHeight: 1.8,
                 letterSpacing: "0.04em",
-                margin: "34px 0 0",
                 color: "#33352E",
+                margin: "32px 0 0",
               }}
             >
-              {nl(c.worry.closing)}
+              {nl(c.future.closing)}
             </p>
-            {/* §16 CTA 2/7: 悩み訴求の後 */}
-            <ReserveCta />
           </section>
+
+          {/* ── ③-3 アクティブライフ（pin: 9/16依頼） ──
+                 立地に紐づくブロックなので、店舗によっては丸ごと省く
+                 （海老名店は内陸のため未設定＝非表示）。 */}
+          {c.activeLife && (
+          <section
+            style={{
+              /* 前後が同じ生成りで続くので、淡い緑のにじみを敷いて区切りを作る。 */
+              background:
+                "radial-gradient(130% 55% at -8% 0%, #E7F0E9 0%, rgba(231,240,233,0) 58%), linear-gradient(180deg, #F7F9F5 0%, #FCFBF7 74%)",
+              padding: "58px 16px 60px",
+            }}
+          >
+            <SectionHeading text={c.activeLife.heading} fontSize={22} />
+            {/* 4シーンを2列で。1列にすると直前の「目指せる未来」と見た目が重なる。 */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+                marginTop: 30,
+              }}
+            >
+              {c.activeLife.cards.map((card) => (
+                <div
+                  key={card.en}
+                  style={{
+                    background: "#FFFFFF",
+                    borderRadius: 14,
+                    padding: 10,
+                    boxShadow: "0 3px 14px rgba(51,53,46,0.07)",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: fontGothic,
+                      fontWeight: 700,
+                      fontSize: 17,
+                      letterSpacing: "0.07em",
+                      color: accent,
+                    }}
+                  >
+                    {card.en}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: 14,
+                      letterSpacing: "0.04em",
+                      color: "#7C8177",
+                      marginTop: 4,
+                    }}
+                  >
+                    {card.ja}
+                  </span>
+                  <ImageSlot
+                    src={card.img.src}
+                    placeholder={card.img.placeholder}
+                    objectPosition={card.img.position ?? "center"}
+                    radius={10}
+                    /* 104pxだと4:3の素材が上下で切られて頭が欠ける。138pxまで
+                       上げると縦の切り取りが9px程度で収まり、顔が全部入る。 */
+                    style={{ width: "100%", height: 138, marginTop: 9 }}
+                  />
+                  <p
+                    style={{
+                      fontFamily: fontMincho,
+                      fontWeight: 600,
+                      /* 2列のまま出せる上限。360px幅で「長く楽しめる身体へ。」の
+                         10文字がちょうど1行に収まる（letterSpacingを足すと溢れる）。 */
+                      fontSize: 13.5,
+                      lineHeight: 1.75,
+                      color: "#33352E",
+                      margin: "13px 0 0",
+                    }}
+                  >
+                    {nl(card.copy)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+          )}
 
           {/* ── ③ RINNEが選ばれる理由 ── */}
           <section style={{ background: "#FCFBF7", padding: "58px 26px 66px" }}>
@@ -692,8 +935,9 @@ export default function Page() {
                   <ImageSlot
                     src={item.img.src}
                     placeholder={item.img.placeholder}
+                    objectPosition={item.img.position ?? "center"}
                     radius={16}
-                    style={{ width: "100%", height: 210 }}
+                    style={{ width: "100%", height: 210, filter: item.img.filter }}
                   />
                   <div
                     style={{
@@ -728,102 +972,112 @@ export default function Page() {
                   style={{
                     fontFamily: fontGothic,
                     fontWeight: 700,
-                    fontSize: 18,
+                    fontSize: 20,
                     lineHeight: 1.6,
                     letterSpacing: "0.04em",
                     margin: "22px 0 0",
                     color: "#33352E",
                     textAlign: "center",
+                    textWrap: "balance",
                   }}
                 >
                   {nl(item.title)}
                 </h3>
                 <div style={{ width: 40, height: 2, background: "#DAD5C9", margin: "12px auto 0" }} />
-                <p style={{ fontSize: 13, lineHeight: 2, color: "#62655B", margin: "16px 0 0" }}>
+                <p style={{ fontSize: 14.5, lineHeight: 2, color: "#62655B", margin: "16px 0 0" }}>
                   {item.body}
                 </p>
               </div>
             ))}
-            {/* §16 CTA 3/7: 選ばれる理由の後 */}
-            <ReserveCta />
+            {/* pin 1（9/15依頼）: 選ばれる理由の後のCTAは削除。
+                料金プランを見る前に予約導線を挟まない。 */}
           </section>
 
-          {/* ── ④ RINNEと他のレッスン形式の違い ── */}
+          {/* ── ④ 料金プラン（pin 21〜24: 比較表から差し替え） ── */}
           <section style={{ background: navyGrad, padding: "54px 20px" }}>
-            <SectionHeading text={c.comparison.heading} variant="white" fontSize={21} />
+            <SectionHeading text={c.plans.heading} variant="white" fontSize={24} />
             <p
               style={{
                 textAlign: "center",
-                fontSize: 12.5,
+                fontSize: 14,
                 lineHeight: 1.9,
-                color: "rgba(255,255,255,0.78)",
+                color: "rgba(255,255,255,0.82)",
                 margin: "18px 0 0",
               }}
             >
-              {c.comparison.lead}
+              {nl(c.plans.lead)}
             </p>
-            <div
-              style={{
-                marginTop: 26,
-                background: "#FCFBF7",
-                borderRadius: 14,
-                overflow: "hidden",
-                boxShadow: "0 8px 20px rgba(0,0,0,0.18)",
-              }}
-            >
+            <div style={{ marginTop: 26 }}>
               {/* 列見出し */}
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1.05fr 1fr 1fr 1.15fr",
-                  background: "#EFEAE0",
+                  gridTemplateColumns: "0.62fr 1fr 1fr",
+                  gap: 6,
+                  alignItems: "stretch",
                 }}
               >
                 <div />
-                {c.comparison.columns.map((col, i) => {
-                  const isHighlight = i === c.comparison.highlight;
-                  return (
+                {c.plans.columns.map((col) => (
+                  <div
+                    key={col.en}
+                    style={{
+                      background: shade(accent, -0.22),
+                      borderRadius: "10px 10px 0 0",
+                      padding: "12px 6px",
+                      textAlign: "center",
+                    }}
+                  >
                     <div
-                      key={col}
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "10px 4px",
-                        textAlign: "center",
                         fontFamily: fontGothic,
-                        fontWeight: isHighlight ? 800 : 700,
-                        fontSize: isHighlight ? 15 : 10.5,
-                        letterSpacing: isHighlight ? "0.06em" : "0.02em",
-                        color: isHighlight ? "#FFFFFF" : "#62655B",
-                        background: isHighlight ? accent : "transparent",
+                        fontWeight: 700,
+                        fontSize: 14,
+                        letterSpacing: "0.04em",
+                        color: cream,
+                        lineHeight: 1.3,
                       }}
                     >
-                      {nl(col)}
+                      {col.en}
                     </div>
-                  );
-                })}
+                    <div
+                      style={{
+                        fontSize: 11.5,
+                        letterSpacing: "0.03em",
+                        color: "rgba(255,255,255,0.8)",
+                        marginTop: 3,
+                      }}
+                    >
+                      {col.ja}
+                    </div>
+                  </div>
+                ))}
               </div>
               {/* 行 */}
-              {c.comparison.rows.map((row) => (
+              {c.plans.rows.map((row) => (
                 <div
                   key={row.label}
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "1.05fr 1fr 1fr 1.15fr",
-                    borderTop: "1px solid #E6E1D5",
+                    gridTemplateColumns: "0.62fr 1fr 1fr",
+                    gap: 6,
+                    marginTop: 6,
+                    alignItems: "stretch",
                   }}
                 >
                   <div
                     style={{
-                      padding: "12px 8px",
-                      fontSize: 10.5,
-                      lineHeight: 1.5,
-                      fontWeight: 700,
-                      color: "#4C4E45",
-                      background: "#F7F3EB",
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "center",
+                      background: creamSoft,
+                      borderRadius: 8,
+                      padding: "12px 4px",
+                      fontFamily: fontGothic,
+                      fontWeight: 700,
+                      fontSize: 14,
+                      letterSpacing: "0.04em",
+                      color: "#4C4E45",
                     }}
                   >
                     {row.label}
@@ -832,49 +1086,93 @@ export default function Page() {
                     <div
                       key={vi}
                       style={{
-                        padding: "12px 5px",
+                        background: "#FFFFFF",
+                        borderRadius: 8,
+                        padding: "14px 6px",
                         textAlign: "center",
-                        background: vi === c.comparison.highlight ? accentSoft : "transparent",
-                        borderLeft: "1px solid #EFEAE0",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 4,
                       }}
                     >
-                      <div
-                        style={{
-                          fontSize: 16,
-                          lineHeight: 1,
-                          color: markColor[row.marks[vi]],
-                          fontWeight: 700,
-                        }}
-                      >
-                        {markGlyph[row.marks[vi]]}
+                      <div style={{ lineHeight: 1.25 }}>
+                        <PerSessionPrice text={v.price} size={17} color={accent} />
                       </div>
-                      <div
-                        style={{
-                          fontSize: 9.5,
-                          lineHeight: 1.5,
-                          color: vi === c.comparison.highlight ? "#33352E" : "#62655B",
-                          marginTop: 5,
-                        }}
-                      >
-                        {v}
-                      </div>
+                      {v.campaign && (
+                        <div style={{ lineHeight: 1.3 }}>
+                          <PerSessionPrice
+                            text={v.campaign}
+                            size={16}
+                            color={accent}
+                            prefix="→"
+                          />
+                          {v.campaignNote && (
+                            <span
+                              style={{
+                                display: "block",
+                                fontSize: 10.5,
+                                color: "#62655B",
+                                marginTop: 2,
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              （{v.campaignNote}）
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               ))}
             </div>
+            <p
+              style={{
+                textAlign: "right",
+                fontSize: 11,
+                letterSpacing: "0.02em",
+                color: "rgba(255,255,255,0.75)",
+                margin: "12px 0 0",
+              }}
+            >
+              {c.plans.taxNote}
+            </p>
+            <div style={{ marginTop: 14 }}>
+              {c.plans.notes.map((note) => (
+                <p
+                  key={note}
+                  style={{
+                    fontSize: 12.5,
+                    lineHeight: 1.8,
+                    color: "rgba(255,255,255,0.85)",
+                    margin: 0,
+                  }}
+                >
+                  {note}
+                </p>
+              ))}
+            </div>
+          </section>
+
+          {/* ── ④-2 体験キャンペーン（pin 32: 料金表の直後に追加） ── */}
+          <section style={{ background: "#FCFBF7", padding: "50px 26px 54px" }}>
+            <TrialPriceBlock />
+            {/* CTA 2/4: 料金表の直後の体験キャンペーン（pin 2（9/15依頼）で追加） */}
+            <ReserveCta />
           </section>
 
           {/* ── ⑤ 姿勢診断について ── */}
           <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.posture.heading} fontSize={21} />
+            <SectionHeading text={c.posture.heading} fontSize={19} />
             <ImageSlot
               src={c.posture.photo.src}
               placeholder={c.posture.photo.placeholder}
               radius={16}
               style={{ width: "100%", height: 220, marginTop: 32 }}
             />
-            <p style={{ fontSize: 13, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
+            <p style={{ fontSize: 14.5, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
               {c.posture.body}
             </p>
             <div style={{ background: "#F4F0E8", borderRadius: 14, padding: "22px 20px", marginTop: 24 }}>
@@ -882,7 +1180,7 @@ export default function Page() {
                 style={{
                   fontFamily: fontGothic,
                   fontWeight: 700,
-                  fontSize: 13,
+                  fontSize: 14.5,
                   letterSpacing: "0.06em",
                   color: accent,
                   margin: "0 0 14px",
@@ -894,7 +1192,7 @@ export default function Page() {
                 {c.posture.items.map((item) => (
                   <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
                     <CheckIcon color={accentMid} />
-                    <span style={{ fontSize: 12.5, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                    <span style={{ fontSize: 14, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -943,17 +1241,18 @@ export default function Page() {
                           style={{
                             fontFamily: fontGothic,
                             fontWeight: 700,
-                            fontSize: 16,
+                            fontSize: 17.5,
                             letterSpacing: "0.03em",
                             margin: 0,
                             color: "#33352E",
+                            textWrap: "balance",
                           }}
                         >
                           {step.title}
                         </h3>
                         {step.time && <span style={{ fontSize: 11, color: "#9A9C90" }}>{step.time}</span>}
                       </div>
-                      <p style={{ fontSize: 12.5, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>
+                      <p style={{ fontSize: 14, lineHeight: 1.9, color: "#62655B", margin: "8px 0 0" }}>
                         {step.body}
                       </p>
                     </div>
@@ -961,14 +1260,14 @@ export default function Page() {
                 );
               })}
             </div>
-            {/* §16 CTA 4/7: 体験レッスンの流れの後 */}
+            {/* CTA 3/4: 体験レッスンの流れの後 */}
             <ReserveCta />
           </section>
 
           {/* ── ⑦ 初心者でも参加しやすい理由 ── */}
           <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.beginner.heading} fontSize={21} />
-            <p style={{ fontSize: 13, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
+            <SectionHeading text={c.beginner.heading} fontSize={20} />
+            <p style={{ fontSize: 14.5, lineHeight: 2.05, color: "#62655B", margin: "24px 0 0" }}>
               {c.beginner.body}
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 26 }}>
@@ -985,7 +1284,7 @@ export default function Page() {
                   }}
                 >
                   <CheckIcon />
-                  <span style={{ fontSize: 11.5, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
+                  <span style={{ fontSize: 13, lineHeight: 1.7, color: "#4C4E45" }}>{item}</span>
                 </div>
               ))}
             </div>
@@ -997,16 +1296,8 @@ export default function Page() {
           {/* ── ⑨ インストラクター紹介：顧客修正指示により非表示。
                  config.instructors のデータは差し替え待ちのまま保持。 ── */}
 
-          {/* ── ⑩ 料金・キャンペーン ── */}
-          <section style={{ background: "#FCFBF7", padding: "54px 26px" }}>
-            <SectionHeading text={c.pricing.heading} fontSize={24} />
-            <div style={{ marginTop: 30 }}>
-              <TrialPriceBlock />
-            </div>
-
-            {/* §16 CTA 5/7: 料金・キャンペーンの後 */}
-            <ReserveCta />
-          </section>
+          {/* ── ⑩ 料金・キャンペーン：pin 37 によりセクションごと削除。
+                 無料訴求は料金表の直後（pin 32）と最終予約エリア（pin 38）に置いている。 ── */}
 
           {/* ── ⑪ 店舗情報 ── */}
           <section id="stores" style={{ background: creamGrad, padding: "54px 26px" }}>
@@ -1032,7 +1323,7 @@ export default function Page() {
                       style={{
                         fontFamily: fontGothic,
                         fontWeight: 700,
-                        fontSize: 18,
+                        fontSize: 20,
                         letterSpacing: "0.05em",
                         margin: 0,
                         color: "#33352E",
@@ -1044,7 +1335,7 @@ export default function Page() {
                       style={{
                         fontFamily: fontMincho,
                         fontWeight: 600,
-                        fontSize: 14,
+                        fontSize: 16,
                         lineHeight: 1.8,
                         letterSpacing: "0.04em",
                         color: accent,
@@ -1054,7 +1345,7 @@ export default function Page() {
                       {nl(store.appeal)}
                     </p>
                     <div style={{ height: 1, background: "#EFEAE0", margin: "16px 0" }} />
-                    <p style={{ fontSize: 12, lineHeight: 1.9, color: "#62655B", margin: 0 }}>
+                    <p style={{ fontSize: 14, lineHeight: 1.9, color: "#62655B", margin: 0 }}>
                       {nl(store.address)}
                       <br />
                       <span style={{ color: accent, fontWeight: 700 }}>{store.hours}</span>
@@ -1065,7 +1356,7 @@ export default function Page() {
                       {store.access.map((a) => (
                         <div key={a} style={{ display: "flex", alignItems: "flex-start", gap: 7, marginTop: 6 }}>
                           <CheckIcon color={accentMid} />
-                          <span style={{ fontSize: 11.5, lineHeight: 1.7, color: "#62655B" }}>{a}</span>
+                          <span style={{ fontSize: 13, lineHeight: 1.7, color: "#62655B" }}>{a}</span>
                         </div>
                       ))}
                     </div>
@@ -1097,8 +1388,7 @@ export default function Page() {
                 </div>
               ))}
             </div>
-            {/* §16 CTA 6/7: 店舗情報の後 */}
-            <ReserveCta />
+            {/* pin 36: ここのCTAは削除 */}
           </section>
 
           {/* ── ⑫ よくある質問 ── */}
@@ -1150,7 +1440,11 @@ export default function Page() {
                 </span>
               ))}
             </div>
-            {/* §16 CTA 7/7: LP最下部 */}
+            {/* pin 38: 予約直前にキャンペーン価格を再掲 */}
+            <div style={{ marginTop: 28 }}>
+              <TrialPriceBlock compact />
+            </div>
+            {/* CTA 4/4: LP最下部 */}
             <ReserveCta />
           </section>
         </div>
