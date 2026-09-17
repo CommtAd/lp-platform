@@ -1136,7 +1136,7 @@ export default function Page() {
                 >
                   円{c.plans.highlight.post.replace("円", "")}
                 </span>
-                <sup style={{ fontFamily: SANS, fontSize: 9, color: DIM }}>※3</sup>
+                <sup style={{ fontFamily: SANS, fontSize: 9, color: DIM }}>※1</sup>
               </p>
               <p
                 style={{
@@ -1730,10 +1730,16 @@ export default function Page() {
                 gap: 9,
               }}
             >
-              {c.beginner.checks.map((item) => (
+              {c.beginner.checks.map((item, i) => (
                 <div
                   key={item}
                   style={{
+                    // 項目数が奇数のとき、最後の1枚が片側に取り残されて見えるので
+                    // 2列ぶん使わせる（AUN3 #2 で1項目削除して5個になったため）。
+                    gridColumn:
+                      c.beginner.checks.length % 2 === 1 && i === c.beginner.checks.length - 1
+                        ? "1 / -1"
+                        : undefined,
                     display: "flex",
                     alignItems: "center",
                     gap: 7,
