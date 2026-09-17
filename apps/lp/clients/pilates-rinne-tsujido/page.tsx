@@ -842,7 +842,10 @@ export default function Page() {
             </p>
           </section>
 
-          {/* ── ③-3 アクティブライフ（pin: 9/16依頼） ── */}
+          {/* ── ③-3 アクティブライフ（pin: 9/16依頼） ──
+                 立地に紐づくブロックなので、店舗によっては丸ごと省く
+                 （海老名店は内陸のため未設定＝非表示）。 */}
+          {c.activeLife && (
           <section
             style={{
               /* 前後が同じ生成りで続くので、淡い緑のにじみを敷いて区切りを作る。 */
@@ -921,6 +924,7 @@ export default function Page() {
               ))}
             </div>
           </section>
+          )}
 
           {/* ── ③ RINNEが選ばれる理由 ── */}
           <section style={{ background: "#FCFBF7", padding: "58px 26px 66px" }}>
