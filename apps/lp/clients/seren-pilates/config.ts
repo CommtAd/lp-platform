@@ -38,7 +38,7 @@ export interface SerenConfig {
   /** ②メインカラーの帯。左に角丸の期限バッジ、中央にオファー文。 */
   offerBar: { badgeText: string; text: string };
   /** ③白地の細い監修バー。`num` だけ太字・アクセント色で立てる。 */
-  supervision: { pre: string; num?: string; post: string };
+  supervision?: { pre: string; num?: string; post: string };
 
   fv: {
     hero: Slot;
@@ -146,26 +146,20 @@ const config: SerenConfig = {
     text: "無料体験レッスン受付中",
   },
 
-  supervision: {
-    pre: "国家資格",
-    num: "理学療法士",
-    post: "所属・監修のプログラム",
-  },
-
   fv: {
     hero: { placeholder: "FVメイン写真", src: `${ASSET}/hero.jpg`, position: "center" },
     /* 公式サイトのメインコピー。先頭が右の札。 */
     catchLines: ["私の身体を、", "私らしくデザインする。"],
     chips: [{ small: "AI姿勢分析", big: "付き" }],
-    subLines: ["AI姿勢分析で、今の身体を知る。", "90分マンツーマンで、整えていく。"],
+    subLines: ["AI姿勢分析で、今の身体を知る。", "60分マンツーマンで、整えていく。"],
     notes: ["猫背", "肩こり", "ぽっこりお腹", "反り腰"],
   },
 
   campaign: {
     badge: "10月15日まで",
-    title: "90分のお試し体験",
+    title: "60分のお試し体験",
     lead:
-      "10月15日までに体験レッスンを\nご予約いただいた方限定。\nAI姿勢分析付きのマンツーマン90分を、\n無料でお受けいただけます。",
+      "10月15日までに体験レッスンを\nご予約いただいた方限定。\nAI姿勢分析付きのマンツーマン60分を、\n無料でお受けいただけます。",
     trialRegular: "11,550",
     trialNow: "完全無料",
   },
@@ -236,7 +230,7 @@ const config: SerenConfig = {
       },
       {
         num: "04",
-        title: "国家資格「理学療法士」が\n所属・監修",
+        title: "国家資格「理学療法士」が\n研修",
         body: "身体の専門知識を持つ理学療法士が所属し、インストラクターの研修にも携わっています。一人の指導者の経験だけに頼らない、共有されたメソッドでお迎えします。",
         img: { placeholder: "インストラクター", src: `${ASSET}/reason-04.jpg` },
       },
@@ -368,7 +362,7 @@ const config: SerenConfig = {
   closing: {
     heading: "今の身体を知ることから、\n始めてみませんか。",
     lead: "10月15日までのご予約で、\n通常11,550円の体験レッスンが無料に。",
-    chips: ["初めての方限定", "AI姿勢分析付き", "マンツーマン90分", "入会金0円"],
+    chips: ["初めての方限定", "AI姿勢分析付き", "マンツーマン60分", "入会金0円"],
   },
 
   reserve: {

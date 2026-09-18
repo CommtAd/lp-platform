@@ -414,35 +414,37 @@ export default function Page() {
             </div>
           </div>
 
-          {/* ── ③ 監修バー ── */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: c.supervision.num ? 6 : 0,
-              background: "#FFFFFF",
-              color: ink,
-              padding: "8px 18px",
-              boxShadow: "0 2px 6px rgba(60,70,60,0.08)",
-            }}
-          >
-            <span style={{ fontSize: 13, letterSpacing: "0.02em" }}>{c.supervision.pre}</span>
-            {c.supervision.num && (
-              <span
-                style={{
-                  fontFamily: fontGothic,
-                  fontWeight: 700,
-                  fontSize: 15,
-                  lineHeight: 1,
-                  color: accent,
-                }}
-              >
-                {c.supervision.num}
-              </span>
-            )}
-            <span style={{ fontSize: 13, letterSpacing: "0.02em" }}>{c.supervision.post}</span>
-          </div>
+          {/* ── ③ 監修バー（config に supervision が無ければ省略）── */}
+          {c.supervision && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: c.supervision.num ? 6 : 0,
+                background: "#FFFFFF",
+                color: ink,
+                padding: "8px 18px",
+                boxShadow: "0 2px 6px rgba(60,70,60,0.08)",
+              }}
+            >
+              <span style={{ fontSize: 13, letterSpacing: "0.02em" }}>{c.supervision.pre}</span>
+              {c.supervision.num && (
+                <span
+                  style={{
+                    fontFamily: fontGothic,
+                    fontWeight: 700,
+                    fontSize: 15,
+                    lineHeight: 1,
+                    color: accent,
+                  }}
+                >
+                  {c.supervision.num}
+                </span>
+              )}
+              <span style={{ fontSize: 13, letterSpacing: "0.02em" }}>{c.supervision.post}</span>
+            </div>
+          )}
 
           {/* ── ④ FV：写真全面＋縦書きキャッチ（白い札2枚）＋円形バッジ ── */}
           {/*
