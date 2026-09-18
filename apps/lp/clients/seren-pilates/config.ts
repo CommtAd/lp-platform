@@ -147,9 +147,9 @@ const config: SerenConfig = {
   },
 
   fv: {
-    hero: { placeholder: "FVメイン写真", src: `${ASSET}/hero.jpg`, position: "center" },
+    hero: { placeholder: "FVメイン写真", src: `${ASSET}/hero.jpg`, position: "left" },
     /* 公式サイトのメインコピー。先頭が右の札。 */
-    catchLines: ["私の身体を、", "私らしくデザインする。"],
+    catchLines: ["キレイになるだけじゃない、", "身体がラクになるピラティス"],
     chips: [{ small: "AI姿勢分析", big: "付き" }],
     subLines: ["AI姿勢分析で、今の身体を知る。", "60分マンツーマンで、整えていく。"],
     notes: ["猫背", "肩こり", "ぽっこりお腹", "反り腰"],

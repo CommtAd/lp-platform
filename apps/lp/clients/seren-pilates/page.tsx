@@ -457,14 +457,21 @@ export default function Page() {
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
               objectPosition={c.fv.hero.position ?? "center"}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                /* スタジオ写真がやや沈むので明度だけ持ち上げる。白飛びしない範囲。 */
+                filter: "brightness(1.08) contrast(0.98)",
+              }}
             />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(to bottom, rgba(20,30,24,0.06) 0%, rgba(20,30,24,0) 34%, rgba(20,30,24,0.42) 100%)",
+                  "linear-gradient(to bottom, rgba(20,30,24,0.04) 0%, rgba(20,30,24,0) 34%, rgba(20,30,24,0.24) 100%)",
                 pointerEvents: "none",
               }}
             />
@@ -473,12 +480,12 @@ export default function Page() {
               style={{
                 position: "absolute",
                 top: 34,
-                left: 24,
+                left: 14,
                 zIndex: 2,
                 display: "flex",
                 flexDirection: "row-reverse",
                 alignItems: "flex-start",
-                gap: 6,
+                gap: 5,
                 pointerEvents: "none",
               }}
             >
@@ -489,12 +496,12 @@ export default function Page() {
                     writingMode: "vertical-rl",
                     fontFamily: fontMincho,
                     fontWeight: 600,
-                    fontSize: 21,
-                    letterSpacing: "0.12em",
-                    lineHeight: 1.7,
+                    fontSize: 18,
+                    letterSpacing: "0.10em",
+                    lineHeight: 1.65,
                     color: ink,
                     background: "#FFFFFF",
-                    padding: "12px 6px",
+                    padding: "10px 5px",
                     borderRadius: 4,
                     boxShadow: "0 4px 14px rgba(0,0,0,0.18)",
                   }}
