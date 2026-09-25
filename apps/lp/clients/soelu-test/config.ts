@@ -44,8 +44,8 @@ export interface SoeluTestConfig {
       tone: "blue" | "green" | "sky" | "indigo";
       badge?: { main: string; sub: string };
     }[];
-    /** 特徴カードの下に置く注釈（AUN e5kw59 #1）。 */
-    featuresNote?: string;
+    /** 特徴カードの下に置く注釈（AUN e5kw59 #1）。1行につき1要素。 */
+    featuresNotes?: string[];
   };
 
   /** 6. 体験キャンペーン（AUN #7） */
@@ -202,10 +202,12 @@ const config: SoeluTestConfig = {
         badge: { main: "24時間", sub: "いつでも、\n自分のペースで" },
       },
     ],
-    // AUN e5kw59 #1: 受け放題の対象がマット・ヨガであることを明示する。
+    // AUN e5kw59 #1: 受け放題の条件を明示する。
     // 料金セクションの「全プラン共通で受け放題」と食い違って読めるため。
-    featuresNote:
-      "※スタジオレッスン受け放題の対象はマット・ヨガレッスンです。マシンピラティスはプランごとの回数に準じます。",
+    featuresNotes: [
+      "※プランによって受け放題の範囲や予約の上限数は異なります。",
+      "※スタジオで開催されるレッスンプログラムは日毎・店舗毎で異なります。",
+    ],
   },
 
   reservation: {
@@ -262,13 +264,13 @@ const config: SoeluTestConfig = {
       {
         num: "03",
         title: "肩と首へのアプローチ",
-        body: "凝り固まった部分をゆるめ、\n動かしやすい体を取り戻します。",
+        body: "凝り固まった部分をゆるめ、\n動かしやすい体を目指しましょう。",
         img: { placeholder: "デスクワーク中に肩をほぐす女性の写真", src: `${ASSET}/future-03.jpg` },
       },
       {
         num: "04",
         title: "心身共にリラックス",
-        body: "呼吸に集中する時間が、\n一日の緊張をほどいていきます。",
+        body: "呼吸に集中する時間で、\n一日の緊張を\nほどいていきましょう。",
         img: { placeholder: "深呼吸してリラックスする女性の写真", src: `${ASSET}/future-04.jpg` },
       },
     ],
