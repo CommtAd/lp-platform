@@ -1477,6 +1477,7 @@ export default function Page() {
 
       <StickyFooterCTA
         anchor={c.sticky.anchor}
+        href={c.sticky.href}
         buttonText={c.sticky.buttonText}
         showAfter={c.sticky.showAfter}
         buttonGradient={stickyBtnGrad}
