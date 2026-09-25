@@ -283,7 +283,10 @@ export interface RinneConfig {
 
   sticky: {
     buttonText: string;
+    /** 表示の出し分け用（このセクションが見えたら追従を隠す） */
     anchor: string;
+    /** ボタンの遷移先（hacomono予約ウィジェット） */
+    href: string;
     showAfter?: number;
   };
 }
@@ -728,6 +731,7 @@ const config: RinneConfig = {
   sticky: {
     buttonText: "無料体験を予約する",
     anchor: "#reserve",
+    href: "https://rinne-pilates.hacomono.jp/widgets/4?isShowProgramName=true&studioId=4",
     showAfter: 620,
   },
 };
