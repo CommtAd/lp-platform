@@ -153,10 +153,13 @@ function Heading({
 }
 
 /**
- * 予約CTA（ゴールド）。ボタンの上に小見出しは置かず、下に注記を1行だけ置く。
+ * 予約CTA（ゴールド）。ボタンの上に小見出しは置かず、下に注記を置く。
  * ページ内で4回のみ使用する。
+ *
+ * `trialNote` は無料体験の適用条件。予約セクションのCTA①は同じ注記が
+ * すぐ上にあるため付けず、それ以外のCTA②〜④に付ける（AUN e5kw59 #2〜#4）。
  */
-function Cta() {
+function Cta({ trialNote = false }: { trialNote?: boolean }) {
   return (
     <div style={{ marginTop: 22 }}>
       <a
@@ -208,6 +211,20 @@ function Cta() {
       >
         {c.cta.note}
       </p>
+      {trialNote && (
+        <p
+          style={{
+            margin: "6px 0 0",
+            fontFamily: SANS,
+            fontSize: 11,
+            lineHeight: 1.7,
+            color: DIM,
+            textAlign: "center",
+          }}
+        >
+          {c.cta.trialNote}
+        </p>
+      )}
     </div>
   );
 }
@@ -574,6 +591,19 @@ export default function Page() {
                 );
               })}
             </div>
+            {c.fvBand.featuresNote && (
+              <p
+                style={{
+                  margin: "10px 0 0",
+                  fontFamily: SANS,
+                  fontSize: 9.5,
+                  lineHeight: 1.6,
+                  color: "rgba(255,255,255,0.72)",
+                }}
+              >
+                {c.fvBand.featuresNote}
+              </p>
+            )}
           </section>
 
           {/* ── 6. 無料体験のご予約（AUN #7）＋ CTA① ─────────────── */}
@@ -1064,7 +1094,7 @@ export default function Page() {
                 ))}
             </div>
 
-            <Cta />
+            <Cta trialNote />
           </section>
 
           {/* ── 10. 料金プラン（AUN #20 / #24 / #25） ─────────────── */}
@@ -1705,7 +1735,7 @@ export default function Page() {
               </div>
             </div>
 
-            <Cta />
+            <Cta trialNote />
           </section>
 
           {/* ── 14. 初めてでも大丈夫 ──────────────────────────────── */}
@@ -1980,7 +2010,7 @@ export default function Page() {
               </p>
             </div>
 
-            <Cta />
+            <Cta trialNote />
           </section>
 
           {/* ── フッター ──────────────────────────────────────────── */}
