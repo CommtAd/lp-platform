@@ -95,6 +95,10 @@ const goldGrad = `linear-gradient(160deg, ${accentMid} 0%, ${accent} 100%)`;
    白文字が読める濃緑グラデーション。予約CTAのボタンと追従フッターで共用する。 */
 const stickyBtnGrad = `linear-gradient(135deg, ${shade(accent, 0.12)} 0%, ${shade(accent, -0.15)} 100%)`;
 const creamGrad = "linear-gradient(180deg, #F3E8D8 0%, #E9DAC4 100%)";
+/* 空き枠訴求（＼ 空き枠残りわずか！ ／）の文字色。顧客指定の見本から採色。 */
+const scarcityRose = "#BA4C5F";
+/* 1つ目のCTAのボタン地。見本どおりグラデーションなしの濃緑ベタ。 */
+const accentBtn = "#1C4337";
 const fontMincho = "'Shippori Mincho', serif";
 const fontGothic = "'Zen Kaku Gothic New', serif";
 
@@ -163,7 +167,14 @@ const CheckIcon = ({ color = accent }: { color?: string }) => (
  * 予約CTA。§16 の設置箇所すべてで使う。店舗別に hacomono ウィジェットへ遷移する。
  * url が null（未確定）の場合は死んだリンクを出さず、設定待ちである旨を表示する。
  */
-function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
+function ReserveCta({
+  variant = "light",
+  primary = false,
+}: {
+  variant?: "light" | "dark";
+  /** MV直後の1つ目のCTA。空き枠訴求＋角丸長方形の濃緑ボタン（顧客指定の見本）にする。 */
+  primary?: boolean;
+}) {
   const eyebrowColor = variant === "dark" ? "rgba(255,255,255,0.85)" : "#62655B";
   const noteColor = variant === "dark" ? "rgba(255,255,255,0.7)" : "#9A9C90";
   return (
@@ -180,6 +191,20 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
           }}
         >
           {c.reserve.eyebrow}
+        </p>
+      )}
+      {primary && (
+        <p
+          style={{
+            textAlign: "center",
+            fontSize: 15,
+            fontWeight: 700,
+            letterSpacing: "0.06em",
+            color: scarcityRose,
+            margin: "0 0 10px",
+          }}
+        >
+          {c.reserve.scarcity}
         </p>
       )}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -202,17 +227,17 @@ function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
                   追従フッターのボタンと同じ濃緑に統一して、どの地色でも
                   ボタンだけが浮くようにしている。
                 */
-                background: stickyBtnGrad,
+                background: primary ? accentBtn : stickyBtnGrad,
                 color: "#FFFFFF",
                 textDecoration: "none",
                 fontSize: 15.5,
                 fontWeight: 700,
                 letterSpacing: "0.04em",
-                borderRadius: 999,
+                borderRadius: primary ? 12 : 999,
                 boxShadow: "0 10px 22px rgba(0,40,30,0.28)",
               }}
             >
-              {s.label}
+              {primary ? c.reserve.firstLabel : s.label}
               <span style={{ fontSize: 13 }}>›</span>
             </a>
           ) : (
@@ -694,8 +719,8 @@ export default function Page() {
           {/* pin 27/28: CTAは料金ブロックの前から後ろへ移動（無料訴求を見せてから予約導線） */}
           <section style={{ background: "#FCFBF7", padding: "40px 26px 48px" }}>
             <TrialPriceBlock />
-            {/* CTA 1/4: 体験料金の後 */}
-            <ReserveCta />
+            {/* CTA 1/4: 体験料金の後。空き枠訴求つきの見本デザイン（9/25依頼） */}
+            <ReserveCta primary />
           </section>
 
           {/* ── ② このようなお悩みはありませんか ── */}
@@ -1457,22 +1482,14 @@ export default function Page() {
         buttonGradient={stickyBtnGrad}
         shadowColor="rgba(0,40,30,0.35)"
         borderColor={`${accent}59`}
-        offers={c.sticky.offers.map((o) => (
-          <span key={o.label} style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
-            <span style={{ fontSize: 11, color: "#62655B", letterSpacing: "0.02em" }}>{o.label}</span>
-            <span
-              style={{
-                fontFamily: fontMincho,
-                fontWeight: 700,
-                fontSize: 17,
-                lineHeight: 1,
-                color: accentMid,
-              }}
-            >
-              {o.value}
-            </span>
-          </span>
-        ))}
+        offers={[
+          <span
+            key="scarcity"
+            style={{ fontSize: 14, fontWeight: 700, letterSpacing: "0.06em", color: scarcityRose }}
+          >
+            {c.reserve.scarcity}
+          </span>,
+        ]}
       />
     </LPShell>
   );

@@ -275,10 +275,13 @@ export interface RinneConfig {
     stores: ReserveTarget[];
     /** ボタン下の補足（キャンペーン条件など） */
     note: string;
+    /** 空き枠の訴求（MV直後の1つ目のCTAと追従フッターのボタン上に出す） */
+    scarcity: string;
+    /** MV直後の1つ目のCTAだけボタン文言を変える */
+    firstLabel: string;
   };
 
   sticky: {
-    offers: { label: string; value: string }[];
     buttonText: string;
     anchor: string;
     showAfter?: number;
@@ -718,10 +721,11 @@ const config: RinneConfig = {
       },
     ],
     note: "初回体験 完全無料｜入会金0円｜しつこい勧誘はいたしません。",
+    scarcity: "＼ 空き枠残りわずか！ ／",
+    firstLabel: "今すぐ体験を予約する",
   },
 
   sticky: {
-    offers: [{ label: "体験レッスン", value: "無料" }],
     buttonText: "無料体験を予約する",
     anchor: "#reserve",
     showAfter: 620,
