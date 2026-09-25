@@ -13,6 +13,12 @@ interface FieldBase {
   label: string;
   required?: boolean;
   optionalTag?: string; // e.g. "任意"
+  /**
+   * ラベルのすぐ下に小さく置く注釈（適用条件の但し書きなど）。
+   * 入力欄の上に出るので、入力する前に読ませたい条件に使う。
+   * 値を持たないので送信データには入らない。
+   */
+  hint?: string;
 }
 export type ToggleField = FieldBase & {
   type: "toggle";
@@ -300,6 +306,17 @@ export default function LPForm({
       </span>
     ) : null;
 
+  /** ラベル直下の注釈。未指定なら何も出ない。 */
+  const fieldHint = (f: FieldBase) =>
+    f.hint ? (
+      <p
+        className="lpform-hint"
+        style={{ margin: "2px 0 6px", color: "#8A8C80", fontSize: 11, lineHeight: 1.7 }}
+      >
+        {f.hint}
+      </p>
+    ) : null;
+
   const handleSubmit = async () => {
     // In-flight guard: block repeat taps while a submission is pending, so a
     // double-tap can't fire multiple submissions (each with its own event_id,
@@ -505,6 +522,7 @@ export default function LPForm({
                 {f.label}
                 {requiredTag(f)}
               </label>
+              {fieldHint(f)}
               <div
                 style={{
                   display: "grid",
@@ -548,6 +566,7 @@ export default function LPForm({
                 {f.label}
                 {requiredTag(f)}
               </label>
+              {fieldHint(f)}
               <div
                 style={{
                   display: "grid",
@@ -608,6 +627,7 @@ export default function LPForm({
                 {f.label}
                 {requiredTag(f)}
               </label>
+              {fieldHint(f)}
               <select
                 value={chosen}
                 disabled={disabled}
@@ -659,6 +679,7 @@ export default function LPForm({
                 {f.label}
                 {requiredTag(f)}
               </label>
+              {fieldHint(f)}
               <textarea
                 value={values[f.name] ?? ""}
                 onChange={(e) => setField(f.name, e.target.value)}
@@ -685,6 +706,7 @@ export default function LPForm({
               {f.label}
               {requiredTag(f)}
             </label>
+            {fieldHint(f)}
             <input
               type={f.type}
               value={values[f.name] ?? ""}
