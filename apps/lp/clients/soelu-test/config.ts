@@ -44,6 +44,8 @@ export interface SoeluTestConfig {
       tone: "blue" | "green" | "sky" | "indigo";
       badge?: { main: string; sub: string };
     }[];
+    /** 特徴カードの下に置く注釈（AUN e5kw59 #1）。 */
+    featuresNote?: string;
   };
 
   /** 6. 体験キャンペーン（AUN #7） */
@@ -143,7 +145,7 @@ export interface SoeluTestConfig {
   };
 
   /** CTA共通（AUN #8・#18・#22・#23 でゴールド指定） */
-  cta: { text: string; note: string };
+  cta: { text: string; note: string; trialNote: string };
 
   /** 18. 追従フッターCTA */
   sticky: { label: string; value: string; buttonText: string };
@@ -200,6 +202,10 @@ const config: SoeluTestConfig = {
         badge: { main: "24時間", sub: "いつでも、\n自分のペースで" },
       },
     ],
+    // AUN e5kw59 #1: 受け放題の対象がマット・ヨガであることを明示する。
+    // 料金セクションの「全プラン共通で受け放題」と食い違って読めるため。
+    featuresNote:
+      "※スタジオレッスン受け放題の対象はマット・ヨガレッスンです。マシンピラティスはプランごとの回数に準じます。",
   },
 
   reservation: {
@@ -466,6 +472,8 @@ const config: SoeluTestConfig = {
   cta: {
     text: "無料体験を予約する",
     note: "初回体験 完全無料｜入会金0円｜しつこい勧誘はいたしません。",
+    /** CTA②〜④に出す無料体験の適用条件。予約セクションの notes と同文。 */
+    trialNote: "※体験レッスンが無料となるのは、初めてご予約された方に限ります。",
   },
 
   sticky: { label: "体験レッスン", value: "無料", buttonText: "無料体験を予約する" },
