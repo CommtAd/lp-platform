@@ -591,19 +591,20 @@ export default function Page() {
                 );
               })}
             </div>
-            {c.fvBand.featuresNote && (
+            {c.fvBand.featuresNotes?.map((note, i) => (
               <p
+                key={note}
                 style={{
-                  margin: "10px 0 0",
+                  margin: `${i === 0 ? 10 : 3}px 0 0`,
                   fontFamily: SANS,
                   fontSize: 9.5,
                   lineHeight: 1.6,
                   color: "rgba(255,255,255,0.72)",
                 }}
               >
-                {c.fvBand.featuresNote}
+                {note}
               </p>
-            )}
+            ))}
           </section>
 
           {/* ── 6. 無料体験のご予約（AUN #7）＋ CTA① ─────────────── */}
