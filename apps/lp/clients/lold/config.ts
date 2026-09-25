@@ -16,7 +16,7 @@ const config: PatternCConfig = {
   meta: {
     title: "ザ・フォレストオブロルド｜プレミア試食つきBIGフェア",
     description:
-      "「ザ・フォレストオブロルド」のプレミア試食つきBIGフェアを開催中。ご成約で最大100万円分プレゼント、ご来館で最大7万円分の特典をご用意。チャペル見学・披露宴会場見学・豪華無料試食・お見積り相談を最短30秒でご予約いただけます。",
+      "「ザ・フォレストオブロルド」のプレミア試食つきBIGフェアを開催中。ご成約で最大100万円分プレゼント、ご来館で最大5万円分の特典をご用意。チャペル見学・披露宴会場見学・豪華無料試食・お見積り相談を最短30秒でご予約いただけます。",
     // OGP専用の1枚（1200x630）。会場紹介のチャペル写真から切り出したもので、
     // ファイルは別に持つ。共用すると写真を差し替えてもURLが変わらず、
     // SNS側のキャッシュが古い画像を出し続ける（実際に発生）。
@@ -91,20 +91,20 @@ const config: PatternCConfig = {
 
   // FVを離脱する前に金額だけ持ち帰ってもらうための要約。詳細は privilege 側。
   fvSummary: {
-    headline: "最大7万円の来館ギフトがついてくる",
-    headlineEmphasis: "最大7万円",
+    headline: "最大5万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大5万円",
     headlineOrnament: `${ASSET}/fv-summary-ornament.png`,
     label: "来館特典",
     // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
     items: [
       {
-        amount: "5万円分",
-        name: "JCBギフト券",
+        amount: "2万円分",
+        name: "ギフト券orカタログギフト",
         image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
       },
       {
-        amount: "2万円相当",
-        name: "飛騨牛&フォアグラなど\n豪華無料試食",
+        amount: "3万円相当",
+        name: "飛騨牛など豪華無料試食",
         image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
       },
     ],
@@ -179,17 +179,17 @@ const config: PatternCConfig = {
     heading: "ご来館特典・ご成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
     // 合計はここで言い切るので、パネル下部の TOTAL ブロックは出さない（total 未設定）。
-    headline: "最大7万円の来館ギフトがついてくる",
-    headlineEmphasis: "最大7万円",
+    headline: "最大5万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大5万円",
     items: [
       {
-        title: "JCBギフト券",
-        amount: "5万円分",
+        title: "ギフト券orカタログギフト",
+        amount: "2万円分",
         image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
       },
       {
-        title: "飛騨牛&フォアグラなど\n豪華無料試食",
-        amount: "2万円相当",
+        title: "飛騨牛など豪華無料試食",
+        amount: "3万円相当",
         image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
       },
     ],
@@ -314,8 +314,9 @@ const config: PatternCConfig = {
         label: "ご来館人数",
         required: true,
         placeholder: "選択してください",
+        // 1名は選択肢から外す（来館特典の対象外のため）。注釈でその旨を明記する。
+        hint: "※1名様でご参加の場合、来館特典は対象外となります",
         options: [
-          { value: "1", label: "1名" },
           { value: "2", label: "2名" },
           { value: "3", label: "3名" },
           { value: "4over", label: "4名以上" },
@@ -357,7 +358,7 @@ const config: PatternCConfig = {
 
 /*
  * TODO(lold): 差し替え・確認が残っている項目:
- *  - 見積もり相談 / JCBギフト券の写真（会場の実物ではない汎用カット）
+ *  - 見積もり相談 / ギフト券の写真（会場の実物ではない汎用カット）
  *  - experience 04（見積もり相談）/ recommend / flow はテンプレの原稿のまま
  *  - facility（収容人数は削除済み。必要になったら実数を確認して戻す）
  *  - form（人数・試食の選択肢は案件の原稿に従う）
