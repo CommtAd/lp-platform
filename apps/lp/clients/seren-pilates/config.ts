@@ -115,8 +115,8 @@ export interface SerenConfig {
 }
 
 const ASSET = "/clients/seren-pilates";
-/** 公式サイトと同じ hacomono。店舗と日時は遷移先で選ぶ。 */
-const RESERVE_URL = "https://sanare-pilates.hacomono.jp/";
+/** 予約システム（rusk-reservation）のグループページ。店舗と日時は遷移先で選ぶ。 */
+const RESERVE_URL = "https://rusk-reservation.vercel.app/group/seren-pilates";
 
 const config: SerenConfig = {
   slug: "seren-pilates",
