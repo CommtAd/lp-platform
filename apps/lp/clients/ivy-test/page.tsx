@@ -1617,12 +1617,28 @@ export default function Page() {
                 {c.store.note}
               </p>
 
-              <div
+            </div>
+
+            <div style={{ padding: `0 ${PAD}px` }}>
+              {/*
+                地図全体をリンクにして、顧客支給のGoogleマップへ飛ばす。
+                iframe はクリックを自分で取ってしまうので `pointerEvents: none` で
+                無効化し、上に重ねた <a> に拾わせている。
+                副次的に、スマホでスクロール中に地図の中へ指が吸われる事故も防げる。
+              */}
+              <a
+                href={c.store.mapHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${c.store.name}をGoogleマップで見る`}
                 style={{
+                  display: "block",
+                  position: "relative",
                   marginTop: 20,
                   height: 210,
                   border: `1px solid ${RULE}`,
                   overflow: "hidden",
+                  textDecoration: "none",
                 }}
               >
                 <iframe
@@ -1630,24 +1646,42 @@ export default function Page() {
                   title={`${c.store.name}の地図`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  style={{ width: "100%", height: "100%", border: 0, display: "block" }}
+                  tabIndex={-1}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    border: 0,
+                    display: "block",
+                    pointerEvents: "none",
+                  }}
                 />
-              </div>
+                <span
+                  style={{
+                    position: "absolute",
+                    // 右下ではなく右上に置く。Googleマップ埋め込みは下辺に
+                    // ロゴと著作権表示が入り、利用規約上それを隠せないため。
+                    right: 10,
+                    top: 10,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 5,
+                    padding: "7px 12px",
+                    background: "rgba(255,255,255,0.94)",
+                    border: `1px solid ${RULE}`,
+                    borderRadius: 999,
+                    fontFamily: GOTHIC,
+                    fontSize: 11.5,
+                    fontWeight: 700,
+                    letterSpacing: "0.02em",
+                    color: HEAD,
+                    boxShadow: "0 2px 8px rgba(20,50,70,0.14)",
+                  }}
+                >
+                  {c.store.mapLinkLabel}
+                  <span style={{ fontSize: 10 }}>↗</span>
+                </span>
+              </a>
             </div>
-
-            <FullBleed img={c.store.subImg} ratio="4 / 3" style={{ marginTop: 20 }} />
-            <p
-              style={{
-                margin: "9px 0 0",
-                padding: `0 ${PAD}px`,
-                textAlign: "center",
-                fontFamily: BODY,
-                fontSize: 11.5,
-                color: INK_MUTE,
-              }}
-            >
-              {c.store.subImgCaption}
-            </p>
           </Section>
 
           {/* ─ ⑯ FAQ ──────────────────────────────────────── */}
