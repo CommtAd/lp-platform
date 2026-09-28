@@ -536,6 +536,11 @@ export default function LPForm({
                     <button
                       key={opt.value}
                       type="button"
+                      /* LP側からCSSで未選択時の枠色だけを差し替えられるよう、
+                         クラスと選択状態を属性で出しておく（枠色はインライン
+                         スタイルなので、フックが無いと上書きできない）。 */
+                      className="lpform-toggle"
+                      data-selected={active}
                       onClick={() => setField(f.name, opt.value)}
                       style={{
                         height: 48,
@@ -580,6 +585,8 @@ export default function LPForm({
                     <button
                       key={opt.value}
                       type="button"
+                      className="lpform-toggle"
+                      data-selected={active}
                       onClick={() => toggleCheckboxOption(f.name, opt.value)}
                       style={{
                         height: 48,
