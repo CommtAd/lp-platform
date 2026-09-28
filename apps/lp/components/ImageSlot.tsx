@@ -11,6 +11,14 @@ export interface ImageSlotProps {
   style?: CSSProperties;
   /** CSS object-position for the cropped image. Default "center". */
   objectPosition?: string;
+  /**
+   * How the media fills the slot. Default "cover" (crop to fill) — the
+   * platform default so a photo can be dropped into any slot without breaking
+   * the layout. Use "contain" when the whole subject must stay visible and the
+   * source aspect ratio can't be guaranteed (e.g. portrait and landscape
+   * photos sharing one slot).
+   */
+  objectFit?: CSSProperties["objectFit"];
   /** Still shown until a video slot starts playing. Ignored for image slots. */
   poster?: string;
 }
@@ -27,6 +35,7 @@ export default function ImageSlot({
   radius = 0,
   style,
   objectPosition = "center",
+  objectFit = "cover",
   poster,
 }: ImageSlotProps) {
   return (
@@ -49,14 +58,14 @@ export default function ImageSlot({
           muted
           loop
           playsInline
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition, display: "block" }}
+          style={{ width: "100%", height: "100%", objectFit, objectPosition, display: "block" }}
         />
       ) : src ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
           alt={alt}
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition, display: "block" }}
+          style={{ width: "100%", height: "100%", objectFit, objectPosition, display: "block" }}
         />
       ) : (
         <div
