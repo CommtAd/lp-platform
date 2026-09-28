@@ -157,6 +157,8 @@ export interface IvyBConfig {
     subImg: Slot;
     subImgCaption: string;
     mapEmbedSrc: string;
+    mapHref: string;
+    mapLinkLabel: string;
     note: string;
   };
 
@@ -489,11 +491,25 @@ const config: IvyBConfig = {
       position: "center 30%",
     },
     subImgCaption: "スタジオ入口（ビル4階・402号）",
+    /**
+     * 埋め込み地図。**住所の文字列検索ではなく、店舗リスティングの実座標を打つ。**
+     * 住所検索だとビルにピンが立つだけで、STUDIO IVY 藤沢店そのものを指さない。
+     * 座標は `mapHref`（顧客から支給された共有リンク）の解決先から取得した
+     * 店舗リスティングの値（35.3397871, 139.4830024）。
+     * `(ラベル)` を付けるとピンに店名が出る。
+     */
     mapEmbedSrc:
       "https://maps.google.com/maps?q=" +
-      encodeURIComponent("神奈川県藤沢市藤沢991-36 FJ9フロアビル") +
+      encodeURIComponent("35.3397871,139.4830024(STUDIO IVY 藤沢店)") +
       "&z=17&output=embed",
-    note: "ビル4階です。エレベーターで402号までお上がりください。",
+    /**
+     * 地図をタップしたときに開く先。顧客支給の共有リンクをそのまま使う。
+     * 埋め込みは短縮URLを受け付けないので、表示用（`mapEmbedSrc`）と
+     * 遷移用（ここ）を分けている。
+     */
+    mapHref: "https://maps.app.goo.gl/GER9AewW128xNZvd8",
+    mapLinkLabel: "Googleマップで見る",
+    note: "ビルの4階です。1階でインターホンを押していただき、オートロックを解除いたします。",
   },
 
   faq: {
