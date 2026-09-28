@@ -413,7 +413,7 @@ export default function WpsPilatesPage() {
               </p>
 
               <div style={{ marginTop: 22, borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 26px rgba(30,59,41,0.14)" }}>
-                <ImageSlot src={c.about.photo.src} placeholder={c.about.photo.placeholder} objectPosition={c.about.photo.position} style={{ width: "100%", height: 210, background: sage }} />
+                <ImageSlot src={c.about.photo.src} placeholder={c.about.photo.placeholder} objectPosition={c.about.photo.position} style={{ width: "100%", aspectRatio: "4 / 3", background: sage }} />
               </div>
 
               <p style={{ fontSize: 15, lineHeight: 2, color: ink, textAlign: "center", margin: "22px 0 0" }}>
@@ -497,7 +497,7 @@ export default function WpsPilatesPage() {
               {nl(c.solution.leadTop)}
             </p>
             <div style={{ marginTop: 22, borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 26px rgba(30,59,41,0.16)" }}>
-              <ImageSlot src={c.solution.photo.src} placeholder={c.solution.photo.placeholder} objectPosition={c.solution.photo.position} style={{ width: "100%", height: 230, background: sage }} />
+              <ImageSlot src={c.solution.photo.src} placeholder={c.solution.photo.placeholder} objectPosition={c.solution.photo.position} style={{ width: "100%", aspectRatio: "4 / 3", background: sage }} />
             </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginTop: 28 }}>
               <CrownCircle label={c.solution.duo[0]} />
@@ -537,7 +537,7 @@ export default function WpsPilatesPage() {
                     <div style={{ fontFamily: fontGothic, fontSize: 10.5, letterSpacing: "0.18em", color: gold, fontWeight: 700 }}>{s.en}</div>
                     <h3 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, color: forest, letterSpacing: "0.04em", margin: "4px 0 0" }}>{s.title}</h3>
                     <div style={{ marginTop: 16, borderRadius: 12, overflow: "hidden" }}>
-                      <ImageSlot src={s.photo.src} placeholder={s.photo.placeholder} objectPosition={s.photo.position} style={{ width: "100%", height: 180, background: sage }} />
+                      <ImageSlot src={s.photo.src} placeholder={s.photo.placeholder} objectPosition={s.photo.position} style={{ width: "100%", ...(s.photo.aspectRatio ? { aspectRatio: s.photo.aspectRatio } : { height: 180 }), background: sage }} />
                     </div>
                     <p style={{ fontSize: 14, lineHeight: 1.95, color: ink, margin: "16px 0 0", textAlign: "center" }}>
                       {s.body.map((b, i) => (

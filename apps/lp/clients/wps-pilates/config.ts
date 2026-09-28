@@ -16,6 +16,8 @@ export interface Slot {
   placeholder: string;
   src?: string | null;
   position?: string;
+  /** 指定すると枠をこの比率にして写真を切らずに見せる（例: "4 / 3"） */
+  aspectRatio?: string;
 }
 
 export interface WpsConfig {
@@ -188,7 +190,7 @@ const config: WpsConfig = {
     hero: {
       placeholder: "マシンピラティスのシーン（全面）",
       src: `${ASSET}/hero.jpg`,
-      position: "center 35%",
+      position: "70% 5%",
     },
   },
 
@@ -223,7 +225,7 @@ const config: WpsConfig = {
     photo: {
       placeholder: "スタジオ／マシンの写真",
       src: `${ASSET}/about-studio.jpg`,
-      position: "center 42%",
+      position: "center",
     },
     leadPre: "ただ鍛えるだけではなく、理学療法士が",
     leadHighlight: "身体を分析",
@@ -263,7 +265,7 @@ const config: WpsConfig = {
     photo: {
       placeholder: "ピラティスのシーン写真",
       src: `${ASSET}/solution.jpg`,
-      position: "center 30%",
+      position: "center",
     },
     leadTop: "痛みがあるから無理ではなく、\n痛みがあるからこそ身体を見直す。",
     duo: ["身体分析", "マシン\nピラティス"],
@@ -295,7 +297,7 @@ const config: WpsConfig = {
         no: "02",
         en: "MOVE CORRECTLY WITH PILATES",
         title: "ピラティスで正しく動かす",
-        photo: { placeholder: "マシンピラティスの写真", src: `${ASSET}/method-03.jpg`, position: "center 30%" },
+        photo: { placeholder: "マシンピラティスの写真", src: `${ASSET}/method-03.jpg`, aspectRatio: "4 / 3" },
         body: [
           { text: "分析結果をもとに、正しく使える身体へ。インナーマッスルや姿勢保持にアプローチし、" },
           { text: "を目指します。", hi: "再発しにくい身体づくり" },
