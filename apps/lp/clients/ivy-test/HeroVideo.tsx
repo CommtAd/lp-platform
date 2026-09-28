@@ -84,7 +84,7 @@ export default function HeroVideo({ src, poster, alt }: HeroVideoProps) {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          objectPosition: "center 38%",
+          objectPosition: "center 34%",
           display: "block",
         }}
       />
@@ -103,7 +103,7 @@ export default function HeroVideo({ src, poster, alt }: HeroVideoProps) {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          objectPosition: "center 38%",
+          objectPosition: "center 34%",
           display: "block",
           opacity: playing ? 1 : 0,
           transition: "opacity 0.6s ease",

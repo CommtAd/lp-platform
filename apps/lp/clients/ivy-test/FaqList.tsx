@@ -5,39 +5,30 @@ import { useState } from "react";
 interface FaqListProps {
   items: { q: string; a: string }[];
   accent: string;
-  accentSoft: string;
+  rule: string;
   ink: string;
   inkSoft: string;
 }
 
 /**
- * FAQのアコーディオン。初期状態で1問目だけ開いている。
- * 回答は公式サイトで確認できる内容のみ（config 側で担保）。
+ * FAQ。B案では枠も影も持たせず、**ヘアラインで区切るだけ**にしている。
+ * カードを並べない方針（指示書 §4）に合わせるため。
  */
 export default function FaqList({
   items,
   accent,
-  accentSoft,
+  rule,
   ink,
   inkSoft,
 }: FaqListProps) {
   const [open, setOpen] = useState<number>(0);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <div style={{ borderTop: `1px solid ${rule}` }}>
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
-          <div
-            key={i}
-            style={{
-              background: "#FFFFFF",
-              borderRadius: 14,
-              border: `1px solid ${accentSoft}`,
-              boxShadow: "0 2px 10px rgba(40,70,90,0.06)",
-              overflow: "hidden",
-            }}
-          >
+          <div key={i} style={{ borderBottom: `1px solid ${rule}` }}>
             <button
               type="button"
               onClick={() => setOpen(isOpen ? -1 : i)}
@@ -45,9 +36,9 @@ export default function FaqList({
               style={{
                 width: "100%",
                 display: "flex",
-                alignItems: "center",
-                gap: 11,
-                padding: "15px 16px",
+                alignItems: "flex-start",
+                gap: 12,
+                padding: "18px 2px",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -57,15 +48,12 @@ export default function FaqList({
               <span
                 style={{
                   flexShrink: 0,
-                  width: 22,
-                  height: 22,
-                  borderRadius: "50%",
-                  background: accent,
-                  color: "#FFFFFF",
+                  fontFamily: "'Zen Kaku Gothic New', sans-serif",
                   fontSize: 12,
                   fontWeight: 700,
-                  lineHeight: "22px",
-                  textAlign: "center",
+                  letterSpacing: "0.1em",
+                  lineHeight: 1.75,
+                  color: accent,
                 }}
               >
                 Q
@@ -73,38 +61,57 @@ export default function FaqList({
               <span
                 style={{
                   flex: 1,
+                  fontFamily: "'Noto Sans JP', sans-serif",
                   fontSize: 14,
-                  fontWeight: 700,
+                  fontWeight: 500,
                   color: ink,
-                  lineHeight: 1.6,
+                  lineHeight: 1.75,
                 }}
               >
                 {item.q}
               </span>
+              {/* 細い十字。開いているときは横棒だけにする（＝マイナス）。 */}
               <span
                 style={{
                   flexShrink: 0,
-                  width: 20,
-                  height: 20,
-                  color: accent,
-                  fontSize: 17,
-                  lineHeight: "20px",
-                  textAlign: "center",
-                  fontWeight: 700,
-                  transition: "transform 0.2s ease",
-                  transform: isOpen ? "rotate(45deg)" : "none",
+                  position: "relative",
+                  width: 12,
+                  height: 12,
+                  marginTop: 6,
                 }}
               >
-                ＋
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: 0,
+                    width: 12,
+                    height: 1,
+                    background: accent,
+                  }}
+                />
+                {!isOpen && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      top: 0,
+                      width: 1,
+                      height: 12,
+                      background: accent,
+                    }}
+                  />
+                )}
               </span>
             </button>
             {isOpen && (
               <p
                 style={{
                   margin: 0,
-                  padding: "0 16px 16px 49px",
+                  padding: "0 24px 20px 24px",
+                  fontFamily: "'Noto Sans JP', sans-serif",
                   fontSize: 13,
-                  lineHeight: 1.95,
+                  lineHeight: 2.05,
                   color: inkSoft,
                 }}
               >

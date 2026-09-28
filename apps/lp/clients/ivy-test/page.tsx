@@ -9,47 +9,58 @@ import FaqList from "./FaqList";
 import config from "./config";
 
 /**
- * STUDIO IVY 藤沢店 — Meta広告専用LP（指示書の17セクション構成）。
+ * STUDIO IVY 藤沢店 — Meta広告専用LP / **B案（デザイン刷新版）**。
  *
- * 守っているルール:
- *   1. 幅390pxの1枚のキャンバス（`<LPCanvas>`）。中で `vw` / `vh` は使わない
- *      （CLAUDE.md §16-17）。キャンバス外の地色を敷く `100vh` だけが例外。
- *   2. 本文中の予約CTAは4箇所だけ（⑥体験キャンペーン・⑩選ばれる理由・
- *      ⑬体験の流れ・⑰クロージング）＋下部の追従CTA。文言はすべて
- *      「無料体験を予約する」で統一し、CTAの近くに必ず「通常4,500円 → 初回0円」を置く。
- *   3. 配色はブランドの青系4色のみ。ゴールド・ピンク等を装飾目的で足さない。
- *   4. FVは動画だが、**静止画を先に描画して動画を後から重ねる**（`HeroVideo`）。
- *      中盤以降は静止画のみ。動画の埋め込みはFVの1本だけ。
- *   5. 効果を断定する表現は置かない。「目指す」「サポート」で止める（指示書 §21）。
+ * A案（`ivy-test`）と訴求・事実・CV導線は同じ。**違うのは見せ方だけ**。
+ * B案で徹底していること:
  *
- * PC用の2カラムは作らない。スマホ1カラムのまま中央に置く（指示書 §07）。
+ *   1. **カードを並べない。** 枠と影の箱をやめ、ヘアラインと余白で区切る。
+ *      「選ばれる理由」は4項目すべて別レイアウト（写真大 / 写真大・順序反転 /
+ *      タイポグラフィのみ / 導線図）。指示書 §11-10。
+ *   2. **地色を切り替えない。** ほぼ白で通し、淡色は⑦⑫⑭⑰だけ。
+ *      色ではなく余白・写真・文字組みで見せる（同 §6）。
+ *   3. **写真は全幅で大きく。** ⑨⑩-01⑬⑮は左右の余白を取り払って
+ *      キャンバス端まで出し、リズムの変化点にする。
+ *   4. **FVに白札を重ねない。** 価格もキャンペーンもタイポグラフィで置く（同 §11-04）。
+ *   5. 見出しは明朝、英字キッカーは細い字送りのゴシック。
+ *      明朝は Shippori Mincho 600 で、細すぎないものを使う（同 §7）。
+ *
+ * 共通の制約はA案と同じ:
+ *   - 幅390pxの1枚のキャンバス（`<LPCanvas>`）。中で `vw` / `vh` は使わない
+ *     （CLAUDE.md §16-17）。キャンバス外の地色を敷くぶんだけが例外。
+ *   - CTA文言は「無料体験を予約する」で統一。CTA周辺に必ず
+ *     「通常4,500円 → 初回0円」を置く。
+ *   - 効果を断定する表現は置かない（指示書 §16）。
+ *
+ * CTAの数はA案より1つ多い5箇所。指示書 §11-04 がFVにもCTAを求めているため
+ * （④FV・⑥体験キャンペーン・⑩選ばれる理由・⑬体験の流れ・⑰クロージング）。
  */
 
 const c = config;
 
 /* ── 配色 ────────────────────────────────────────────────────────
-   公式サイト（pilates-ivy.jp）の実測値から。詳細は config.ts の冒頭コメント。 */
-const ACCENT = "#3C7EA6"; // メイン。見出し・帯・濃色地。白地 4.6:1
-const BRAND = "#4E94BF"; // ブランドブルーそのまま。罫・アイコン・装飾のみ
-const DEEP = "#2F6B8F"; // 中間トーン。価格・数字・CTAの最濃部。白地 6.0:1
-const BASE = "#FDFDFC"; // 基本の地（ほぼ白）
-const PALE = "#F3F7FA"; // 淡色の地
-const PALE_DEEP = "#E7F0F6";
-const SOFT = "rgba(78,148,191,0.16)"; // 淡い枠・チップの地
-const INK = "#3E4850";
-const INK_SOFT = "#6B757D";
-const INK_MUTE = "#9AA4AC";
+   A案と同じブランド青系。ただしB案は濃色の面をほぼ使わないので、
+   色は見出し・キッカー・細い罫・数字・CTAにしか乗らない。 */
+const HEAD = "#2B4B5E"; // 見出し。ブランドブルーを暗くしたもの。白地 9.4:1
+const ACCENT = "#3C7EA6"; // キッカー・番号・強調。白地 4.6:1
+const BRAND = "#4E94BF"; // ブランドブルーそのまま。細い装飾罫だけ
+const BASE = "#FFFFFF";
+const PALE = "#F5F9FB"; // 淡色の地。⑦⑫⑭⑰だけで使う
+const RULE = "rgba(43,75,94,0.13)"; // ヘアライン。箱の代わりにこれで区切る
+const INK = "#414A52";
+const INK_SOFT = "#6E7880";
+const INK_MUTE = "#A4AEB6";
 
-/** CTA専用色。ページ内で最もコントラストが高い要素にするため最も濃い。 */
+/** CTA専用色。ページ内で最もコントラストが高い要素にする。 */
 const CTA_GRAD = `linear-gradient(135deg, ${ACCENT} 0%, #27577A 100%)`;
-const CTA_SHADOW = "rgba(39,87,122,0.34)";
+const CTA_SHADOW = "rgba(39,87,122,0.28)";
 
 const MINCHO = "'Shippori Mincho', serif";
 const GOTHIC = "'Zen Kaku Gothic New', sans-serif";
 const BODY = "'Noto Sans JP', sans-serif";
 
-/** 左右の余白。全セクション共通。 */
-const PAD = 22;
+/** 左右の余白。A案（22）より広く取り、軽やかに見せる。 */
+const PAD = 26;
 
 /** "\n" を <br> にする。改行位置は config 側で組版ルールに沿って決めている。 */
 function nl(text: string): ReactNode {
@@ -66,245 +77,260 @@ function nl(text: string): ReactNode {
 
 function Section({
   children,
-  background,
+  background = BASE,
   style,
   id,
+  /** 写真を全幅で出すセクションは左右の余白を自前で管理する。 */
+  flush = false,
 }: {
   children: ReactNode;
   background?: string;
   style?: CSSProperties;
   id?: string;
+  flush?: boolean;
 }) {
   return (
     <section
       id={id}
-      style={{ background, padding: `44px ${PAD}px 46px`, ...style }}
+      style={{
+        background,
+        padding: flush ? "64px 0 66px" : `64px ${PAD}px 66px`,
+        ...style,
+      }}
     >
       {children}
     </section>
   );
 }
 
-/** セクション見出し。明朝＋下に短い罫。濃色地では白抜きにする。 */
-function Heading({
+/** 英字キッカー。細い字送りのゴシックで、見出しの上に小さく置く。 */
+function Kicker({
   text,
-  variant = "accent",
-  size = 23,
   align = "center",
+  color = ACCENT,
 }: {
   text: string;
-  variant?: "accent" | "white";
-  size?: number;
   align?: "center" | "left";
+  color?: string;
 }) {
-  const color = variant === "white" ? "#FFFFFF" : ACCENT;
-  const rule = variant === "white" ? "rgba(255,255,255,0.55)" : BRAND;
   return (
-    <div style={{ textAlign: align }}>
-      <h2
-        style={{
-          margin: 0,
-          fontFamily: MINCHO,
-          fontWeight: 600,
-          fontSize: size,
-          lineHeight: 1.62,
-          letterSpacing: "0.04em",
-          color,
-        }}
-      >
-        {nl(text)}
-      </h2>
-      <div
-        style={{
-          width: 28,
-          height: 2,
-          borderRadius: 2,
-          background: rule,
-          margin: align === "center" ? "13px auto 0" : "13px 0 0",
-        }}
-      />
-    </div>
+    <p
+      style={{
+        margin: 0,
+        textAlign: align,
+        fontFamily: GOTHIC,
+        fontSize: 10,
+        fontWeight: 700,
+        letterSpacing: "0.34em",
+        // letter-spacing は最後の1字の後ろにも入るので、中央寄せのときは
+        // その分だけ左に戻さないと、見た目が右にずれる。
+        textIndent: align === "center" ? "0.34em" : 0,
+        color,
+      }}
+    >
+      {text}
+    </p>
   );
 }
 
-const CheckIcon = ({ color = BRAND, size = 15 }: { color?: string; size?: number }) => (
+/** セクション見出し。明朝。B案は罫を敷かず、余白だけで見出しを立てる。 */
+function Head({
+  text,
+  align = "center",
+  size = 24,
+  color = HEAD,
+}: {
+  text: string;
+  align?: "center" | "left";
+  size?: number;
+  color?: string;
+}) {
+  return (
+    <h2
+      style={{
+        margin: "14px 0 0",
+        textAlign: align,
+        fontFamily: MINCHO,
+        fontWeight: 600,
+        fontSize: size,
+        lineHeight: 1.72,
+        letterSpacing: "0.045em",
+        color,
+      }}
+    >
+      {nl(text)}
+    </h2>
+  );
+}
+
+const Check = ({ color = ACCENT }: { color?: string }) => (
   <svg
-    width={size}
-    height={size}
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
     fill="none"
     stroke={color}
-    strokeWidth="2.6"
+    strokeWidth="2.2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    style={{ flex: "none", marginTop: 3 }}
+    style={{ flex: "none", marginTop: 4 }}
   >
     <path d="M4 12.5l5 5L20 6.5" />
   </svg>
 );
 
 /** 下向き矢印。二重価格の「通常 → 0円」の間に置く。 */
-const DownArrow = ({ color }: { color: string }) => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+const DownArrow = ({ color = BRAND, size = 15 }: { color?: string; size?: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M12 4.5v14M5.5 12.5L12 19l6.5-6.5" />
   </svg>
 );
 
 /**
- * 予約CTA。本文中は4箇所だけ。文言は config で統一し、ボタンの下に
- * 「通常4,500円 → 初回0円」を1行だけ添える（指示書 §15）。
+ * 予約CTA。④⑥⑩⑬⑰の5箇所。文言は config で統一し、
+ * ボタンの下に「通常4,500円 → 初回0円」を1行だけ添える（指示書 §12）。
  */
-function Cta({ variant = "light" }: { variant?: "light" | "dark" }) {
-  const noteColor = variant === "dark" ? "rgba(255,255,255,0.86)" : INK_SOFT;
+function Cta({
+  variant = "solid",
+  marginTop = 30,
+}: {
+  variant?: "solid" | "onPhoto";
+  marginTop?: number;
+}) {
+  const onPhoto = variant === "onPhoto";
   return (
-    <div style={{ marginTop: 26 }}>
+    <div style={{ marginTop }}>
       <a
         href={c.cta.anchor}
         style={{
-          position: "relative",
-          overflow: "hidden",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: 9,
+          gap: 10,
           height: 58,
           borderRadius: 999,
-          background: variant === "dark" ? "#FFFFFF" : CTA_GRAD,
-          color: variant === "dark" ? DEEP : "#FFFFFF",
+          background: onPhoto ? "#FFFFFF" : CTA_GRAD,
+          color: onPhoto ? HEAD : "#FFFFFF",
           textDecoration: "none",
           fontFamily: GOTHIC,
-          fontSize: 16.5,
+          fontSize: 16,
           fontWeight: 800,
-          letterSpacing: "0.06em",
-          boxShadow:
-            variant === "dark"
-              ? "0 8px 20px rgba(20,50,70,0.28)"
-              : `0 8px 20px ${CTA_SHADOW}`,
+          letterSpacing: "0.08em",
+          boxShadow: onPhoto
+            ? "0 6px 20px rgba(12,32,46,0.3)"
+            : `0 8px 22px ${CTA_SHADOW}`,
         }}
       >
-        <span style={{ position: "relative", zIndex: 1 }}>{c.cta.label}</span>
+        {c.cta.label}
         <span
           style={{
-            position: "relative",
-            zIndex: 1,
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 23,
-            height: 23,
+            width: 22,
+            height: 22,
             borderRadius: "50%",
-            background:
-              variant === "dark" ? "rgba(47,107,143,0.14)" : "rgba(255,255,255,0.24)",
-            fontSize: 13,
+            background: onPhoto ? "rgba(43,75,94,0.12)" : "rgba(255,255,255,0.22)",
+            fontSize: 12,
           }}
         >
           →
         </span>
       </a>
-      <p
-        style={{
-          margin: "11px 0 0",
-          textAlign: "center",
-          fontFamily: BODY,
-          fontSize: 12,
-          fontWeight: 500,
-          letterSpacing: "0.02em",
-          color: noteColor,
-        }}
-      >
-        {c.cta.note}
-      </p>
+      {!onPhoto && (
+        <p
+          style={{
+            margin: "12px 0 0",
+            textAlign: "center",
+            fontFamily: BODY,
+            fontSize: 12,
+            color: INK_SOFT,
+          }}
+        >
+          {c.cta.note}
+        </p>
+      )}
     </div>
   );
 }
 
-/** 淡色の丸チップ。FV直下・クロージングで使う。 */
-function Chip({ text, variant = "light" }: { text: string; variant?: "light" | "dark" }) {
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 5,
-        padding: "7px 13px",
-        borderRadius: 999,
-        background: variant === "dark" ? "rgba(255,255,255,0.14)" : "#FFFFFF",
-        border:
-          variant === "dark" ? "1px solid rgba(255,255,255,0.4)" : `1px solid ${SOFT}`,
-        fontFamily: GOTHIC,
-        fontSize: 12.5,
-        fontWeight: 700,
-        letterSpacing: "0.02em",
-        color: variant === "dark" ? "#FFFFFF" : DEEP,
-      }}
-    >
-      {text}
-    </span>
-  );
-}
-
 /**
- * 二重価格プレート（通常4,500円 → 0円）。白プレートに置き、「0」を特大にする。
+ * 二重価格（通常4,500円 → 完全無料 0円）のタイポグラフィ。
+ * 白プレートに載せず、上下のヘアラインだけで囲う（指示書 §4「カードを並べない」）。
  * ⑥体験キャンペーンと⑰クロージングで共用する。
  */
-function CampaignPlate() {
-  const cp = c.campaign;
+function OfferType({
+  label,
+  was,
+  nowLabel,
+  now,
+  nowUnit,
+  note,
+}: {
+  label: string;
+  was: string;
+  nowLabel: string;
+  now: string;
+  nowUnit: string;
+  note?: string;
+}) {
   return (
     <div
       style={{
-        background: "#FFFFFF",
-        borderRadius: 20,
-        border: `1px solid ${SOFT}`,
-        boxShadow: "0 8px 24px rgba(40,80,110,0.12)",
-        padding: "22px 18px 24px",
+        marginTop: 30,
+        padding: "26px 0 28px",
+        borderTop: `1px solid ${RULE}`,
+        borderBottom: `1px solid ${RULE}`,
         textAlign: "center",
       }}
     >
-      <span
-        style={{
-          display: "inline-block",
-          padding: "5px 14px",
-          borderRadius: 999,
-          background: ACCENT,
-          color: "#FFFFFF",
-          fontFamily: GOTHIC,
-          fontSize: 12,
-          fontWeight: 800,
-          letterSpacing: "0.08em",
-        }}
-      >
-        {cp.label}
-      </span>
-
-      <p
-        style={{
-          margin: "16px 0 0",
-          fontFamily: GOTHIC,
-          fontSize: 15,
-          fontWeight: 700,
-          color: INK_MUTE,
-          letterSpacing: "0.02em",
-        }}
-      >
-        {cp.wasLabel}
-        <span style={{ textDecoration: "line-through", marginLeft: 6 }}>{cp.was}</span>
-      </p>
-
-      <div style={{ display: "flex", justifyContent: "center", margin: "8px 0 4px" }}>
-        <DownArrow color={BRAND} />
-      </div>
-
       <p
         style={{
           margin: 0,
           fontFamily: GOTHIC,
-          fontSize: 16,
-          fontWeight: 800,
-          letterSpacing: "0.1em",
-          color: DEEP,
+          fontSize: 12.5,
+          fontWeight: 700,
+          letterSpacing: "0.14em",
+          color: ACCENT,
         }}
       >
-        {cp.nowLabel}
+        {label}
+      </p>
+      <p
+        style={{
+          margin: "14px 0 0",
+          fontFamily: GOTHIC,
+          fontSize: 15,
+          fontWeight: 500,
+          color: INK_MUTE,
+          textDecoration: "line-through",
+        }}
+      >
+        {was}
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", margin: "9px 0 7px" }}>
+        <DownArrow />
+      </div>
+      <p
+        style={{
+          margin: 0,
+          fontFamily: MINCHO,
+          fontWeight: 600,
+          fontSize: 19,
+          letterSpacing: "0.12em",
+          color: HEAD,
+        }}
+      >
+        {nowLabel}
       </p>
       <div
         style={{
@@ -312,84 +338,134 @@ function CampaignPlate() {
           alignItems: "baseline",
           justifyContent: "center",
           gap: 2,
-          marginTop: 2,
+          marginTop: 4,
         }}
       >
+        {/* §17 の「料金・0円など 40〜58px」の上限。ページ内で最大の文字。 */}
         <span
           style={{
             fontFamily: GOTHIC,
-            // §17 の「料金・0円など 40〜58px」の上限。FVの0（46px）と
-            // 料金プランの28,000（40px）より大きく、ページ内で最大になる。
             fontSize: 58,
             fontWeight: 800,
-            lineHeight: 1.05,
+            lineHeight: 1.04,
             letterSpacing: "-0.02em",
-            color: DEEP,
+            color: HEAD,
           }}
         >
-          {cp.now}
+          {now}
         </span>
         <span
-          style={{
-            fontFamily: GOTHIC,
-            fontSize: 23,
-            fontWeight: 800,
-            color: DEEP,
-          }}
+          style={{ fontFamily: GOTHIC, fontSize: 23, fontWeight: 800, color: HEAD }}
         >
-          {cp.nowUnit}
+          {nowUnit}
         </span>
       </div>
-      <p
-        style={{
-          margin: "12px 0 0",
-          fontFamily: BODY,
-          fontSize: 11.5,
-          lineHeight: 1.8,
-          color: INK_SOFT,
-        }}
-      >
-        {cp.note}
-      </p>
+      {note && (
+        <p
+          style={{
+            margin: "14px 0 0",
+            fontFamily: BODY,
+            fontSize: 11.5,
+            lineHeight: 1.85,
+            color: INK_SOFT,
+          }}
+        >
+          {note}
+        </p>
+      )}
     </div>
+  );
+}
+
+/** 小さな丸印つきの項目。チップの代わりに使い、枠を持たせない。 */
+function DotItem({ text, color = BRAND }: { text: string; color?: string }) {
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 7,
+        fontFamily: GOTHIC,
+        fontSize: 13,
+        fontWeight: 700,
+        letterSpacing: "0.02em",
+        color: INK,
+      }}
+    >
+      <span
+        style={{
+          flex: "none",
+          width: 5,
+          height: 5,
+          borderRadius: "50%",
+          background: color,
+        }}
+      />
+      {text}
+    </span>
+  );
+}
+
+/** セクション内で写真を左右いっぱいに出す。リズムの変化点に使う。 */
+function FullBleed({
+  img,
+  ratio = "16 / 10",
+  style,
+}: {
+  img: { src?: string | null; placeholder: string; position?: string };
+  ratio?: string;
+  style?: CSSProperties;
+}) {
+  return (
+    <ImageSlot
+      src={img.src}
+      alt={img.placeholder}
+      placeholder={img.placeholder}
+      objectPosition={img.position ?? "center"}
+      style={{ aspectRatio: ratio, ...style }}
+    />
   );
 }
 
 /* ── ページ ──────────────────────────────────────────────────── */
 
 export default function Page() {
+  const r = c.reasons;
+
   return (
-    <LPShell clientSlug={c.slug} fallback={{ name: "STUDIO IVY 藤沢店", status: c.status }}>
+    <LPShell
+      clientSlug={c.slug}
+      fallback={{ name: "STUDIO IVY 藤沢店（B案）", status: c.status }}
+    >
       {/* キャンバスの外側。地色を画面いっぱいに敷くためのビューポート高さは、
           キャンバス外なので拡大縮小の影響を受けない唯一の例外（CLAUDE.md §17）。 */}
-      <div style={{ background: PALE_DEEP, minHeight: "100vh" }}>
-        <LPCanvas background={BASE} boxShadow="0 0 40px rgba(40,80,110,0.10)">
+      <div style={{ background: "#EAF1F6", minHeight: "100vh" }}>
+        <LPCanvas background={BASE} boxShadow="0 0 40px rgba(30,70,95,0.10)">
           {/* ─ ① ヘッダー ───────────────────────────────── */}
           <header
             style={{
-              background: "#FFFFFF",
-              padding: "13px 20px 12px",
+              background: BASE,
+              padding: "15px 22px 14px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 11,
-              borderBottom: `1px solid ${PALE_DEEP}`,
+              gap: 12,
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={c.header.logo.src ?? ""}
               alt="STUDIO IVY"
-              style={{ width: 126, height: "auto", display: "block" }}
+              style={{ width: 120, height: "auto", display: "block" }}
             />
             <span
               style={{
-                paddingLeft: 11,
-                borderLeft: `1px solid ${PALE_DEEP}`,
+                paddingLeft: 12,
+                borderLeft: `1px solid ${RULE}`,
                 fontFamily: GOTHIC,
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: 700,
-                letterSpacing: "0.08em",
+                letterSpacing: "0.12em",
                 color: INK,
               }}
             >
@@ -397,41 +473,39 @@ export default function Page() {
             </span>
           </header>
 
-          {/* ─ ② オファーバー ─────────────────────────────── */}
+          {/* ─ ② オファーバー ─────────────────────────────
+              セールバナーにしない。淡色地＋細字で、静かに事実だけ置く。 */}
           <div
             style={{
-              background: ACCENT,
+              background: PALE,
               padding: "9px 14px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 9,
+              gap: 8,
             }}
           >
             {c.offerBar.badge && (
               <span
                 style={{
-                  flex: "none",
-                  padding: "3px 9px",
-                  borderRadius: 999,
-                  background: "#FFFFFF",
-                  color: ACCENT,
                   fontFamily: GOTHIC,
                   fontSize: 10.5,
-                  fontWeight: 800,
-                  letterSpacing: "0.04em",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  color: ACCENT,
                 }}
               >
                 {c.offerBar.badge}
               </span>
             )}
+            <span style={{ width: 1, height: 11, background: RULE }} />
             <span
               style={{
                 fontFamily: GOTHIC,
-                fontSize: 12.5,
+                fontSize: 12,
                 fontWeight: 700,
                 letterSpacing: "0.03em",
-                color: "#FFFFFF",
+                color: HEAD,
               }}
             >
               {c.offerBar.lead}
@@ -439,9 +513,9 @@ export default function Page() {
             <span
               style={{
                 fontFamily: GOTHIC,
-                fontSize: 11.5,
+                fontSize: 11,
                 fontWeight: 500,
-                color: "rgba(255,255,255,0.78)",
+                color: INK_MUTE,
                 textDecoration: "line-through",
               }}
             >
@@ -450,39 +524,38 @@ export default function Page() {
             <span
               style={{
                 fontFamily: GOTHIC,
-                fontSize: 17,
+                fontSize: 15,
                 fontWeight: 800,
-                letterSpacing: "0.02em",
-                color: "#FFFFFF",
+                color: ACCENT,
               }}
             >
               {c.offerBar.now}
             </span>
           </div>
 
-          {/* ─ ③ 特徴バー ─────────────────────────────────── */}
+          {/* ─ ③ 特徴バー ─────────────────────────────────
+              白地にヘアラインだけ。細く、静かに。 */}
           <div
             style={{
-              background: PALE,
-              padding: "10px 12px",
+              background: BASE,
+              borderBottom: `1px solid ${RULE}`,
+              padding: "11px 12px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 10,
+              gap: 12,
             }}
           >
             {c.featureBar.map((f, i) => (
               <span key={f} style={{ display: "contents" }}>
-                {i > 0 && (
-                  <span style={{ width: 1, height: 13, background: SOFT }} />
-                )}
+                {i > 0 && <span style={{ width: 1, height: 11, background: RULE }} />}
                 <span
                   style={{
                     fontFamily: GOTHIC,
-                    fontSize: 12.5,
+                    fontSize: 11.5,
                     fontWeight: 700,
-                    letterSpacing: "0.02em",
-                    color: DEEP,
+                    letterSpacing: "0.06em",
+                    color: INK,
                   }}
                 >
                   {f}
@@ -491,20 +564,21 @@ export default function Page() {
             ))}
           </div>
 
-          {/* ─ ④ FV ───────────────────────────────────────── */}
-          <div style={{ position: "relative", height: 528, overflow: "hidden" }}>
+          {/* ─ ④ FV ───────────────────────────────────────
+              白札を重ねず、タイポグラフィと余白だけで組む。文字は左寄せ。 */}
+          <div style={{ position: "relative", height: 610, overflow: "hidden" }}>
             <HeroVideo
               src={c.fv.video}
               poster={c.fv.poster}
               alt="STUDIO IVY 藤沢店のマンツーマンレッスンの様子"
             />
-            {/* 文字の可読性のための暗幕。暗くしすぎない（指示書 §12）。 */}
+            {/* 可読性のための暗幕。下半分だけ効かせ、上は写真をそのまま見せる。 */}
             <div
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(180deg, rgba(20,45,62,0.34) 0%, rgba(20,45,62,0.16) 32%, rgba(18,42,58,0.62) 74%, rgba(16,38,54,0.82) 100%)",
+                  "linear-gradient(180deg, rgba(14,36,50,0.30) 0%, rgba(14,36,50,0.08) 22%, rgba(13,34,48,0.46) 46%, rgba(12,32,46,0.66) 64%, rgba(10,28,42,0.88) 100%)",
               }}
             />
 
@@ -515,76 +589,107 @@ export default function Page() {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "flex-end",
-                padding: `0 ${PAD}px 20px`,
+                padding: `0 ${PAD}px 24px`,
               }}
             >
-              <h1
+              <p
                 style={{
                   margin: 0,
+                  fontFamily: GOTHIC,
+                  fontSize: 9.5,
+                  fontWeight: 700,
+                  letterSpacing: "0.34em",
+                  color: "rgba(255,255,255,0.82)",
+                }}
+              >
+                {c.fv.kicker}
+              </p>
+
+              <h1
+                style={{
+                  // 2行目「パーソナルピラティスを、」が12字。390pxから左右の
+                  // 余白52pxを引いた338pxに収まるよう27pxで固定している。
+                  margin: "14px 0 0",
                   fontFamily: MINCHO,
                   fontWeight: 600,
-                  // 2行目「パーソナルピラティスを、」が12字。390px幅から左右の
-                  // 余白を引いた 346px に3行とも収まるよう 27px に決めている
-                  // （30pxだと2行目だけ折り返し、「を、」が単独行に落ちる）。
                   fontSize: 27,
-                  lineHeight: 1.58,
+                  lineHeight: 1.64,
                   letterSpacing: "0.005em",
                   color: "#FFFFFF",
-                  textShadow: "0 2px 14px rgba(10,30,45,0.5)",
+                  textShadow: "0 2px 16px rgba(8,26,38,0.45)",
                 }}
               >
                 {nl(c.fv.catch)}
               </h1>
 
-              {/* 価格・立地。FVに載せる情報はここまでに絞る。 */}
               <div
                 style={{
-                  marginTop: 16,
-                  display: "flex",
-                  alignItems: "baseline",
-                  gap: 7,
+                  width: 34,
+                  height: 1,
+                  background: "rgba(255,255,255,0.7)",
+                  margin: "20px 0 16px",
                 }}
-              >
+              />
+
+              {/* 価格。白札を置かず、文字だけで見せる。 */}
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
                 <span
                   style={{
                     fontFamily: GOTHIC,
-                    fontSize: 38,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: "rgba(255,255,255,0.9)",
+                  }}
+                >
+                  1回
+                </span>
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 36,
                     fontWeight: 800,
                     lineHeight: 1,
                     letterSpacing: "-0.01em",
                     color: "#FFFFFF",
-                    textShadow: "0 2px 12px rgba(10,30,45,0.45)",
+                    textShadow: "0 2px 12px rgba(8,26,38,0.4)",
                   }}
                 >
-                  {c.fv.facts.price}
+                  {c.fv.price.value}
                 </span>
                 <span
                   style={{
                     fontFamily: GOTHIC,
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: 700,
                     color: "#FFFFFF",
                   }}
                 >
-                  {c.fv.facts.priceUnit}
+                  {c.fv.price.unit}
                 </span>
               </div>
-              <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 6 }}>
-                <Chip text={c.fv.facts.style} variant="dark" />
-                <Chip text={c.fv.facts.access} variant="dark" />
-              </div>
 
-              {/* キャンペーン。FVでは横1行に収め、詳細は⑥に預ける。 */}
+              <p
+                style={{
+                  margin: "9px 0 0",
+                  fontFamily: GOTHIC,
+                  fontSize: 12,
+                  fontWeight: 500,
+                  letterSpacing: "0.04em",
+                  color: "rgba(255,255,255,0.88)",
+                }}
+              >
+                {c.fv.facts.join("　｜　")}
+              </p>
+
+              {/* キャンペーン。1行のタイポグラフィで置く。 */}
               <div
                 style={{
-                  marginTop: 14,
+                  marginTop: 18,
+                  paddingTop: 16,
+                  borderTop: "1px solid rgba(255,255,255,0.28)",
                   display: "flex",
                   alignItems: "center",
                   gap: 10,
-                  padding: "11px 14px",
-                  borderRadius: 14,
-                  background: "rgba(255,255,255,0.94)",
-                  boxShadow: "0 6px 18px rgba(10,30,45,0.28)",
                 }}
               >
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -592,37 +697,38 @@ export default function Page() {
                     style={{
                       margin: 0,
                       fontFamily: GOTHIC,
-                      fontSize: 12,
-                      fontWeight: 800,
-                      letterSpacing: "0.04em",
-                      color: DEEP,
+                      fontSize: 11.5,
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      color: "rgba(255,255,255,0.92)",
                     }}
                   >
                     {c.fv.campaign.label}
                   </p>
                   <p
                     style={{
-                      margin: "2px 0 0",
+                      margin: "3px 0 0",
                       fontFamily: GOTHIC,
                       fontSize: 12,
                       fontWeight: 500,
-                      color: INK_MUTE,
+                      color: "rgba(255,255,255,0.62)",
                       textDecoration: "line-through",
                     }}
                   >
                     {c.fv.campaign.was}
                   </p>
                 </div>
-                <DownArrow color={BRAND} />
+                <DownArrow color="rgba(255,255,255,0.75)" size={16} />
                 <div style={{ display: "flex", alignItems: "baseline", gap: 1 }}>
                   <span
                     style={{
                       fontFamily: GOTHIC,
-                      fontSize: 46,
+                      fontSize: 48,
                       fontWeight: 800,
                       lineHeight: 1,
-                      letterSpacing: "-0.02em",
-                      color: DEEP,
+                      letterSpacing: "-0.03em",
+                      color: "#FFFFFF",
+                      textShadow: "0 2px 14px rgba(8,26,38,0.45)",
                     }}
                   >
                     {c.fv.campaign.now}
@@ -632,78 +738,88 @@ export default function Page() {
                       fontFamily: GOTHIC,
                       fontSize: 19,
                       fontWeight: 800,
-                      color: DEEP,
+                      color: "#FFFFFF",
                     }}
                   >
                     {c.fv.campaign.nowUnit}
                   </span>
                 </div>
               </div>
+
+              <Cta variant="onPhoto" marginTop={16} />
             </div>
           </div>
 
           {/* ─ ⑤ FV直下 ───────────────────────────────────── */}
-          <Section background={BASE}>
-            <Heading text={c.intro.heading} size={22} />
+          <Section>
+            <Kicker text={c.intro.kicker} />
+            <Head text={c.intro.heading} size={23} />
             <p
               style={{
-                margin: "18px 0 0",
+                margin: "22px 0 0",
                 textAlign: "center",
                 fontFamily: BODY,
                 fontSize: 14,
-                lineHeight: 2.05,
+                lineHeight: 2.15,
                 color: INK_SOFT,
               }}
             >
               {nl(c.intro.body)}
             </p>
-            {/* 4つのチップは2列グリッドで組む。flex-wrap だと幅の都合で
-                3＋1になり、最後の1つだけが浮いて見える。 */}
+            {/* チップは枠を持たせず、小さな丸印だけで並べる（指示書 §11-05）。 */}
             <div
               style={{
-                marginTop: 20,
+                marginTop: 26,
                 display: "grid",
                 gridTemplateColumns: "repeat(2, max-content)",
                 justifyContent: "center",
-                gap: 8,
+                gap: "13px 26px",
               }}
             >
               {c.intro.chips.map((t) => (
-                <Chip key={t} text={t} />
+                <DotItem key={t} text={t} />
               ))}
             </div>
           </Section>
 
-          {/* ─ ⑥ 体験キャンペーン（CTA 1/4）───────────────── */}
-          <Section background={PALE}>
-            <Heading text={c.campaign.heading} size={21} />
+          {/* ─ ⑥ 体験キャンペーン（CTA 2/5）───────────────── */}
+          <Section>
+            <Kicker text={c.campaign.kicker} />
+            <Head text={c.campaign.heading} size={22} />
             <p
               style={{
-                margin: "17px 0 22px",
+                margin: "20px 0 0",
                 textAlign: "center",
                 fontFamily: BODY,
                 fontSize: 13.5,
-                lineHeight: 2,
+                lineHeight: 2.05,
                 color: INK_SOFT,
               }}
             >
               {nl(c.campaign.lead)}
             </p>
-            <CampaignPlate />
+            <OfferType
+              label={c.campaign.label}
+              was={c.campaign.was}
+              nowLabel={c.campaign.nowLabel}
+              now={c.campaign.now}
+              nowUnit={c.campaign.nowUnit}
+              note={c.campaign.note}
+            />
             <Cta />
           </Section>
 
-          {/* ─ ⑦ お悩み ───────────────────────────────────── */}
-          <Section background={BASE}>
-            <Heading text={c.worry.heading} size={22} />
+          {/* ─ ⑦ お悩み ─────────────────────────────────────
+              白カードを5枚並べない。淡色地にヘアライン区切りのリストだけ。 */}
+          <Section background={PALE}>
+            <Kicker text={c.worry.kicker} align="left" />
+            <Head text={c.worry.heading} align="left" size={23} />
             <ul
               style={{
                 listStyle: "none",
-                margin: "22px 0 0",
+                margin: "26px 0 0",
                 padding: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
+                borderTop: `1px solid ${RULE}`,
               }}
             >
               {c.worry.items.map((item) => (
@@ -711,482 +827,533 @@ export default function Page() {
                   key={item}
                   style={{
                     display: "flex",
-                    gap: 10,
-                    padding: "13px 15px",
-                    borderRadius: 12,
-                    background: PALE,
+                    gap: 11,
+                    padding: "15px 2px",
+                    borderBottom: `1px solid ${RULE}`,
                     fontFamily: BODY,
                     fontSize: 14,
-                    lineHeight: 1.7,
+                    lineHeight: 1.8,
                     color: INK,
                   }}
                 >
-                  <CheckIcon />
+                  <Check />
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
             <p
               style={{
-                margin: "24px 0 0",
+                margin: "30px 0 0",
                 textAlign: "center",
                 fontFamily: MINCHO,
                 fontWeight: 600,
-                fontSize: 18.5,
-                lineHeight: 1.75,
-                letterSpacing: "0.03em",
-                color: ACCENT,
+                fontSize: 19,
+                lineHeight: 1.85,
+                letterSpacing: "0.04em",
+                color: HEAD,
               }}
             >
               {nl(c.worry.closing)}
             </p>
           </Section>
 
-          {/* ─ ⑧ STUDIO IVYなら ───────────────────────────── */}
-          <Section background={PALE}>
-            <Heading text={c.points.heading} size={22} />
-            <div
-              style={{
-                marginTop: 24,
-                display: "flex",
-                flexDirection: "column",
-                gap: 14,
-              }}
-            >
-              {c.points.items.map((item) => (
-                <div
-                  key={item.num}
-                  style={{
-                    background: "#FFFFFF",
-                    borderRadius: 16,
-                    border: `1px solid ${SOFT}`,
-                    overflow: "hidden",
-                    boxShadow: "0 3px 12px rgba(40,80,110,0.07)",
-                  }}
-                >
-                  {item.img && (
-                    <ImageSlot
-                      src={item.img.src}
-                      alt={item.img.placeholder}
-                      placeholder={item.img.placeholder}
-                      objectPosition={item.img.position ?? "center"}
-                      style={{ aspectRatio: "4 / 3" }}
-                    />
-                  )}
-                  <div style={{ padding: "16px 17px 18px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                      <span
-                        style={{
-                          fontFamily: GOTHIC,
-                          fontSize: 12,
-                          fontWeight: 800,
-                          letterSpacing: "0.1em",
-                          color: BRAND,
-                        }}
-                      >
-                        {item.num}
-                      </span>
-                      <span style={{ width: 16, height: 1, background: SOFT }} />
+          {/* ─ ⑧ STUDIO IVYなら ─────────────────────────────
+              大きな写真1枚＋番号つきのリスト。小カード4枚では並べない。 */}
+          <Section flush>
+            <div style={{ padding: `0 ${PAD}px` }}>
+              <Kicker text={c.points.kicker} />
+              <Head text={c.points.heading} size={23} />
+            </div>
+
+            <FullBleed img={c.points.photo} ratio="4 / 3" style={{ margin: "30px 0 0" }} />
+
+            <div style={{ padding: `0 ${PAD}px` }}>
+              <div style={{ marginTop: 30, borderTop: `1px solid ${RULE}` }}>
+                {c.points.items.map((item) => (
+                  <div
+                    key={item.num}
+                    style={{
+                      display: "flex",
+                      gap: 16,
+                      padding: "20px 2px",
+                      borderBottom: `1px solid ${RULE}`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        flex: "none",
+                        width: 24,
+                        fontFamily: GOTHIC,
+                        fontSize: 13,
+                        fontWeight: 800,
+                        letterSpacing: "0.04em",
+                        lineHeight: 1.7,
+                        color: BRAND,
+                      }}
+                    >
+                      {item.num}
+                    </span>
+                    <div style={{ flex: 1 }}>
                       <h3
                         style={{
                           margin: 0,
-                          fontFamily: GOTHIC,
-                          fontSize: 17,
-                          fontWeight: 800,
-                          letterSpacing: "0.02em",
-                          color: DEEP,
+                          fontFamily: MINCHO,
+                          fontWeight: 600,
+                          fontSize: 18,
+                          letterSpacing: "0.04em",
+                          color: HEAD,
                         }}
                       >
                         {item.title}
                       </h3>
+                      <p
+                        style={{
+                          margin: "8px 0 0",
+                          fontFamily: BODY,
+                          fontSize: 13.5,
+                          lineHeight: 1.95,
+                          color: INK_SOFT,
+                        }}
+                      >
+                        {item.body}
+                      </p>
                     </div>
-                    <p
-                      style={{
-                        margin: "9px 0 0",
-                        fontFamily: BODY,
-                        fontSize: 13.5,
-                        lineHeight: 1.92,
-                        color: INK_SOFT,
-                      }}
-                    >
-                      {item.body}
-                    </p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </Section>
 
-          {/* ─ ⑨ 目指せる未来 ─────────────────────────────── */}
-          <Section background={BASE}>
-            <Heading text={c.future.heading} size={22} />
-            <ImageSlot
-              src={c.future.img.src}
-              alt={c.future.img.placeholder}
-              placeholder={c.future.img.placeholder}
-              objectPosition={c.future.img.position ?? "center"}
-              radius={16}
-              style={{ aspectRatio: "3 / 2", marginTop: 22 }}
-            />
-            <div
-              style={{
-                marginTop: 16,
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 10,
-              }}
-            >
-              {c.future.items.map((item) => (
+          {/* ─ ⑨ 目指せる未来 ───────────────────────────────
+              写真を先に全幅で出し、見出しを後ろに置く。ここだけ順序が逆。 */}
+          <Section flush style={{ paddingTop: 0 }}>
+            <FullBleed img={c.future.img} ratio="3 / 2" />
+            <div style={{ padding: `34px ${PAD}px 0` }}>
+              <Kicker text={c.future.kicker} align="left" />
+              <Head text={c.future.heading} align="left" size={23} />
+              <ol
+                style={{
+                  listStyle: "none",
+                  margin: "26px 0 0",
+                  padding: 0,
+                  borderTop: `1px solid ${RULE}`,
+                }}
+              >
+                {c.future.items.map((item, i) => (
+                  <li
+                    key={item}
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: 14,
+                      padding: "16px 2px",
+                      borderBottom: `1px solid ${RULE}`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        flex: "none",
+                        fontFamily: GOTHIC,
+                        fontSize: 11.5,
+                        fontWeight: 800,
+                        letterSpacing: "0.08em",
+                        color: BRAND,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: MINCHO,
+                        fontWeight: 600,
+                        fontSize: 17,
+                        letterSpacing: "0.04em",
+                        color: HEAD,
+                      }}
+                    >
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <p
+                style={{
+                  margin: "18px 0 0",
+                  fontFamily: BODY,
+                  fontSize: 11.5,
+                  lineHeight: 1.85,
+                  color: INK_MUTE,
+                }}
+              >
+                {c.future.note}
+              </p>
+            </div>
+          </Section>
+
+          {/* ─ ⑩ 選ばれる理由（CTA 3/5）─────────────────────
+              **4項目とも別レイアウト。** 写真大 → 文章先行＋縦写真 →
+              タイポグラフィのみ → 導線図、の順で見え方を変える。 */}
+          <Section flush>
+            <div style={{ padding: `0 ${PAD}px` }}>
+              <Kicker text={r.kicker} />
+              <Head text={r.heading} size={23} />
+            </div>
+
+            {/* 01 完全個室 — 内観写真を全幅で大きく。 */}
+            <FullBleed img={r.privateRoom.img} ratio="4 / 3" style={{ marginTop: 32 }} />
+            <div style={{ padding: `22px ${PAD}px 0` }}>
+              <ReasonLabel num={r.privateRoom.num} />
+              <h3 style={reasonTitleStyle}>{nl(r.privateRoom.title)}</h3>
+              <p style={reasonBodyStyle}>{r.privateRoom.body}</p>
+            </div>
+
+            {/* 02 マンツーマン — 先に文章、後ろに縦位置の写真。01と順序を逆にする。 */}
+            <div style={{ padding: `44px ${PAD}px 0` }}>
+              <ReasonLabel num={r.oneOnOne.num} />
+              <h3 style={reasonTitleStyle}>{nl(r.oneOnOne.title)}</h3>
+              <p style={reasonBodyStyle}>{r.oneOnOne.body}</p>
+            </div>
+            <FullBleed img={r.oneOnOne.img} ratio="4 / 5" style={{ marginTop: 22 }} />
+
+            {/* 03 1回7,000円〜 — 写真を置かず、数字を主役にする。 */}
+            <div style={{ padding: `44px ${PAD}px 0` }}>
+              <ReasonLabel num={r.price.num} />
+              <h3 style={reasonTitleStyle}>{nl(r.price.title)}</h3>
+              <p style={reasonBodyStyle}>{r.price.body}</p>
+              <div
+                style={{
+                  marginTop: 22,
+                  padding: "24px 0 22px",
+                  borderTop: `1px solid ${RULE}`,
+                  borderBottom: `1px solid ${RULE}`,
+                  textAlign: "center",
+                }}
+              >
                 <div
-                  key={item.num}
                   style={{
-                    padding: "15px 13px 16px",
-                    borderRadius: 14,
-                    background: PALE,
-                    border: `1px solid ${SOFT}`,
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "center",
+                    gap: 3,
                   }}
                 >
                   <span
                     style={{
                       fontFamily: GOTHIC,
-                      fontSize: 11.5,
+                      fontSize: 52,
                       fontWeight: 800,
-                      letterSpacing: "0.1em",
-                      color: BRAND,
+                      lineHeight: 1,
+                      letterSpacing: "-0.025em",
+                      color: HEAD,
                     }}
                   >
-                    {item.num}
+                    {r.price.value}
                   </span>
-                  <p
+                  <span
                     style={{
-                      margin: "6px 0 0",
                       fontFamily: GOTHIC,
-                      fontSize: 14,
-                      fontWeight: 700,
-                      lineHeight: 1.62,
-                      color: INK,
+                      fontSize: 21,
+                      fontWeight: 800,
+                      color: HEAD,
                     }}
                   >
-                    {nl(item.title)}
-                  </p>
+                    {r.price.unit}
+                  </span>
                 </div>
-              ))}
-            </div>
-            <p
-              style={{
-                margin: "16px 0 0",
-                fontFamily: BODY,
-                fontSize: 11.5,
-                lineHeight: 1.8,
-                color: INK_MUTE,
-              }}
-            >
-              {c.future.note}
-            </p>
-          </Section>
-
-          {/* ─ ⑩ 選ばれる理由（CTA 2/4）───────────────────── */}
-          <Section background={PALE}>
-            <Heading text={c.reasons.heading} size={22} />
-            <div
-              style={{
-                marginTop: 24,
-                display: "flex",
-                flexDirection: "column",
-                gap: 14,
-              }}
-            >
-              {c.reasons.items.map((item) => (
-                <div
-                  key={item.num}
+                <p
                   style={{
-                    background: "#FFFFFF",
-                    borderRadius: 16,
-                    border: `1px solid ${SOFT}`,
-                    overflow: "hidden",
-                    boxShadow: "0 3px 12px rgba(40,80,110,0.07)",
+                    margin: "10px 0 0",
+                    fontFamily: BODY,
+                    fontSize: 11.5,
+                    color: INK_SOFT,
                   }}
                 >
-                  {item.img && (
-                    <ImageSlot
-                      src={item.img.src}
-                      alt={item.img.placeholder}
-                      placeholder={item.img.placeholder}
-                      objectPosition={item.img.position ?? "center"}
-                      style={{ aspectRatio: "16 / 10" }}
-                    />
-                  )}
-                  <div style={{ padding: "16px 17px 18px" }}>
-                    <span
-                      style={{
-                        display: "inline-block",
-                        padding: "3px 10px",
-                        borderRadius: 999,
-                        background: PALE,
-                        fontFamily: GOTHIC,
-                        fontSize: 10.5,
-                        fontWeight: 800,
-                        letterSpacing: "0.12em",
-                        color: BRAND,
-                      }}
-                    >
-                      REASON {item.num}
-                    </span>
-                    <h3
-                      style={{
-                        margin: "10px 0 0",
-                        fontFamily: GOTHIC,
-                        fontSize: 17.5,
-                        fontWeight: 800,
-                        lineHeight: 1.55,
-                        letterSpacing: "0.02em",
-                        color: DEEP,
-                      }}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      style={{
-                        margin: "9px 0 0",
-                        fontFamily: BODY,
-                        fontSize: 13.5,
-                        lineHeight: 1.92,
-                        color: INK_SOFT,
-                      }}
-                    >
-                      {item.body}
-                    </p>
+                  {r.price.caption}
+                </p>
+              </div>
+            </div>
 
-                    {/* 03だけ価格を大きく見せる（指示書 §10）。 */}
-                    {item.price && (
+            {/* 04 徒歩5分 — 写真ではなく、駅からの導線を細い縦線で見せる。 */}
+            <div style={{ padding: `44px ${PAD}px 0` }}>
+              <ReasonLabel num={r.access.num} />
+              <h3 style={reasonTitleStyle}>{nl(r.access.title)}</h3>
+              <p style={reasonBodyStyle}>{r.access.body}</p>
+              <div style={{ marginTop: 22, paddingLeft: 4 }}>
+                {r.access.route.map((step, i) => {
+                  const last = i === r.access.route.length - 1;
+                  const middle = i === 1;
+                  return (
+                    <div key={step.label} style={{ display: "flex", gap: 14 }}>
+                      {/* 縦の導線と丸印。中間（徒歩5分）は小さい丸にする。 */}
                       <div
                         style={{
-                          marginTop: 14,
-                          padding: "14px 16px",
-                          borderRadius: 14,
-                          background: PALE,
+                          flex: "none",
+                          width: 9,
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          gap: 2,
                         }}
                       >
-                        <span style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
                         <span
                           style={{
-                            fontFamily: GOTHIC,
-                            fontSize: 44,
-                            fontWeight: 800,
-                            lineHeight: 1,
-                            letterSpacing: "-0.02em",
-                            color: DEEP,
+                            width: middle ? 5 : 9,
+                            height: middle ? 5 : 9,
+                            marginTop: middle ? 9 : 7,
+                            borderRadius: "50%",
+                            background: middle ? BRAND : ACCENT,
                           }}
-                        >
-                          {item.price.value}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: GOTHIC,
-                            fontSize: 19,
-                            fontWeight: 800,
-                            color: DEEP,
-                          }}
-                        >
-                          {item.price.unit}
-                        </span>
-                        </span>
-                        {/* キャプションは数字と同じ行に置くと幅が足りず折り返すので、
-                            数字の下に1行で置く。 */}
-                        <span
-                          style={{
-                            fontFamily: BODY,
-                            fontSize: 11.5,
-                            color: INK_SOFT,
-                          }}
-                        >
-                          {item.price.caption}
-                        </span>
+                        />
+                        {!last && (
+                          <span style={{ flex: 1, width: 1, background: RULE }} />
+                        )}
                       </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                      <div style={{ paddingBottom: last ? 0 : 18 }}>
+                        <p
+                          style={{
+                            margin: 0,
+                            fontFamily: GOTHIC,
+                            fontSize: middle ? 13 : 15.5,
+                            fontWeight: middle ? 700 : 800,
+                            letterSpacing: "0.04em",
+                            color: middle ? ACCENT : HEAD,
+                          }}
+                        >
+                          {step.label}
+                        </p>
+                        {step.sub && (
+                          <p
+                            style={{
+                              margin: "3px 0 0",
+                              fontFamily: BODY,
+                              fontSize: 11.5,
+                              color: INK_MUTE,
+                            }}
+                          >
+                            {step.sub}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <Cta />
+
+            <div style={{ padding: `0 ${PAD}px` }}>
+              <Cta marginTop={38} />
+            </div>
           </Section>
 
-          {/* ─ ⑪ 料金プラン ───────────────────────────────── */}
-          <Section background={BASE}>
-            <Heading text={c.price.heading} size={22} />
+          {/* ─ ⑪ 料金プラン ─────────────────────────────────
+              表にしない。月4回だけタイポグラフィで大きく、他2つは細い行で添える。 */}
+          <Section background={PALE}>
+            <Kicker text={c.price.kicker} />
+            <Head text={c.price.heading} size={23} />
             <p
               style={{
-                margin: "17px 0 0",
+                margin: "20px 0 0",
                 textAlign: "center",
                 fontFamily: BODY,
                 fontSize: 13.5,
-                lineHeight: 1.95,
+                lineHeight: 2,
                 color: INK_SOFT,
               }}
             >
               {c.price.lead}
             </p>
+
+            {/* 主役。月4回プラン。 */}
             <div
               style={{
-                marginTop: 22,
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
+                marginTop: 28,
+                padding: "26px 20px 24px",
+                background: BASE,
+                border: `1px solid ${RULE}`,
               }}
             >
-              {c.price.plans.map((p) => (
+              <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 12,
+                    fontWeight: 800,
+                    letterSpacing: "0.18em",
+                    color: ACCENT,
+                  }}
+                >
+                  {c.price.main.name}
+                </span>
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: HEAD,
+                  }}
+                >
+                  {c.price.main.freq}
+                </span>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 12,
+                  display: "flex",
+                  alignItems: "baseline",
+                  gap: 3,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 34,
+                    fontWeight: 800,
+                    lineHeight: 1,
+                    letterSpacing: "-0.02em",
+                    color: HEAD,
+                  }}
+                >
+                  {c.price.main.monthly}
+                </span>
+                <span
+                  style={{ fontFamily: GOTHIC, fontSize: 16, fontWeight: 800, color: HEAD }}
+                >
+                  円
+                </span>
+                <span
+                  style={{
+                    marginLeft: 5,
+                    fontFamily: BODY,
+                    fontSize: 11.5,
+                    color: INK_MUTE,
+                  }}
+                >
+                  / 月（税込）
+                </span>
+              </div>
+
+              {/* 1回あたりを主訴求にする（指示書 §9）。 */}
+              <div
+                style={{
+                  marginTop: 16,
+                  paddingTop: 16,
+                  borderTop: `1px solid ${RULE}`,
+                  display: "flex",
+                  alignItems: "baseline",
+                  gap: 9,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    color: INK_SOFT,
+                  }}
+                >
+                  1回あたり
+                </span>
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 40,
+                    fontWeight: 800,
+                    lineHeight: 1,
+                    letterSpacing: "-0.02em",
+                    color: HEAD,
+                  }}
+                >
+                  {c.price.main.per}
+                </span>
+                <span
+                  style={{ fontFamily: GOTHIC, fontSize: 17, fontWeight: 800, color: HEAD }}
+                >
+                  円
+                </span>
+              </div>
+
+              <p
+                style={{
+                  margin: "14px 0 0",
+                  fontFamily: BODY,
+                  fontSize: 12.5,
+                  lineHeight: 1.8,
+                  color: INK_SOFT,
+                }}
+              >
+                {c.price.main.note}
+              </p>
+            </div>
+
+            {/* 脇の2プラン。箱にせず、細い行で比較できるようにする。 */}
+            <div style={{ marginTop: 22, borderTop: `1px solid ${RULE}` }}>
+              {c.price.others.map((p) => (
                 <div
                   key={p.name}
                   style={{
-                    position: "relative",
-                    borderRadius: 16,
-                    padding: p.featured ? "22px 18px 20px" : "16px 18px",
-                    background: p.featured ? PALE : "#FFFFFF",
-                    border: p.featured
-                      ? `2px solid ${ACCENT}`
-                      : `1px solid ${PALE_DEEP}`,
-                    boxShadow: p.featured
-                      ? "0 8px 22px rgba(40,80,110,0.14)"
-                      : "none",
+                    padding: "16px 2px",
+                    borderBottom: `1px solid ${RULE}`,
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: 10,
                   }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: 9,
-                    }}
-                  >
-                    <span
+                  <div style={{ flex: "none", width: 96 }}>
+                    <p
                       style={{
+                        margin: 0,
                         fontFamily: GOTHIC,
-                        fontSize: p.featured ? 14 : 12.5,
+                        fontSize: 10.5,
                         fontWeight: 800,
-                        letterSpacing: "0.1em",
-                        color: p.featured ? ACCENT : INK_MUTE,
-                      }}
-                    >
-                      {p.name}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: GOTHIC,
-                        fontSize: p.featured ? 16 : 14,
-                        fontWeight: 700,
-                        color: INK,
-                      }}
-                    >
-                      {p.freq}
-                    </span>
-                  </div>
-
-                  <div
-                    style={{
-                      marginTop: p.featured ? 10 : 6,
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: 3,
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: GOTHIC,
-                        fontSize: p.featured ? 40 : 27,
-                        fontWeight: 800,
-                        lineHeight: 1,
-                        letterSpacing: "-0.02em",
-                        color: p.featured ? DEEP : INK,
-                      }}
-                    >
-                      {p.monthly}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: GOTHIC,
-                        fontSize: p.featured ? 17 : 14,
-                        fontWeight: 800,
-                        color: p.featured ? DEEP : INK,
-                      }}
-                    >
-                      円
-                    </span>
-                    <span
-                      style={{
-                        marginLeft: 4,
-                        fontFamily: BODY,
-                        fontSize: 11.5,
+                        letterSpacing: "0.16em",
                         color: INK_MUTE,
                       }}
                     >
-                      / 月（税込）
-                    </span>
-                  </div>
-
-                  {/* 1回あたりを主訴求にする（指示書 §05）。 */}
-                  <div
-                    style={{
-                      marginTop: p.featured ? 12 : 8,
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: 7,
-                      padding: p.featured ? "11px 14px" : "8px 12px",
-                      borderRadius: 11,
-                      background: p.featured ? "#FFFFFF" : PALE,
-                    }}
-                  >
-                    <span
+                      {p.name}
+                    </p>
+                    <p
                       style={{
+                        margin: "3px 0 0",
                         fontFamily: GOTHIC,
-                        fontSize: 11.5,
+                        fontSize: 14,
                         fontWeight: 700,
-                        letterSpacing: "0.04em",
-                        color: INK_SOFT,
+                        color: HEAD,
                       }}
                     >
-                      1回あたり
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: GOTHIC,
-                        fontSize: p.featured ? 30 : 21,
-                        fontWeight: 800,
-                        lineHeight: 1,
-                        letterSpacing: "-0.01em",
-                        color: DEEP,
-                      }}
-                    >
-                      {p.per}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: GOTHIC,
-                        fontSize: p.featured ? 15 : 13,
-                        fontWeight: 800,
-                        color: DEEP,
-                      }}
-                    >
-                      円
-                    </span>
+                      {p.freq}
+                    </p>
                   </div>
-
-                  <p
-                    style={{
-                      margin: "10px 0 0",
-                      fontFamily: BODY,
-                      fontSize: 12.5,
-                      lineHeight: 1.75,
-                      color: INK_SOFT,
-                    }}
-                  >
-                    {p.note}
-                  </p>
+                  <div style={{ flex: 1, textAlign: "right" }}>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontFamily: GOTHIC,
+                        fontSize: 18,
+                        fontWeight: 800,
+                        letterSpacing: "-0.01em",
+                        color: HEAD,
+                      }}
+                    >
+                      {p.monthly}
+                      <span style={{ fontSize: 12 }}>円 / 月</span>
+                    </p>
+                    <p
+                      style={{
+                        margin: "3px 0 0",
+                        fontFamily: GOTHIC,
+                        fontSize: 12.5,
+                        fontWeight: 700,
+                        color: ACCENT,
+                      }}
+                    >
+                      1回あたり {p.per}円
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
+
             <p
               style={{
                 margin: "14px 0 0",
@@ -1199,42 +1366,32 @@ export default function Page() {
             </p>
           </Section>
 
-          {/* ─ ⑫ グループレッスンとの違い ─────────────────── */}
-          <Section background={PALE}>
-            <Heading text={c.compare.heading} size={21} />
-            <div
-              style={{
-                marginTop: 24,
-                display: "flex",
-                flexDirection: "column",
-                gap: 11,
-              }}
-            >
-              <div
-                style={{
-                  padding: "16px 17px",
-                  borderRadius: 14,
-                  background: "#FFFFFF",
-                  border: `1px solid ${PALE_DEEP}`,
-                }}
-              >
-                <span
+          {/* ─ ⑫ グループレッスンとの違い ───────────────────
+              濃色の面を作らず、ラベルと細い縦罫だけで差を見せる。 */}
+          <Section>
+            <Kicker text={c.compare.kicker} />
+            <Head text={c.compare.heading} size={22} />
+
+            <div style={{ marginTop: 30 }}>
+              <div style={{ paddingBottom: 22, borderBottom: `1px solid ${RULE}` }}>
+                <p
                   style={{
+                    margin: 0,
                     fontFamily: GOTHIC,
-                    fontSize: 13.5,
-                    fontWeight: 800,
-                    letterSpacing: "0.04em",
+                    fontSize: 13,
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
                     color: INK_MUTE,
                   }}
                 >
                   {c.compare.group.label}
-                </span>
+                </p>
                 <p
                   style={{
-                    margin: "8px 0 0",
+                    margin: "9px 0 0",
                     fontFamily: BODY,
                     fontSize: 13.5,
-                    lineHeight: 1.92,
+                    lineHeight: 2,
                     color: INK_SOFT,
                   }}
                 >
@@ -1244,191 +1401,116 @@ export default function Page() {
 
               <div
                 style={{
-                  padding: "18px 17px 19px",
-                  borderRadius: 14,
-                  background: ACCENT,
-                  boxShadow: "0 6px 18px rgba(40,80,110,0.2)",
+                  marginTop: 22,
+                  paddingLeft: 15,
+                  borderLeft: `2px solid ${ACCENT}`,
                 }}
               >
-                <span
+                <p
                   style={{
+                    margin: 0,
                     fontFamily: GOTHIC,
-                    fontSize: 14.5,
+                    fontSize: 14,
                     fontWeight: 800,
-                    letterSpacing: "0.06em",
-                    color: "#FFFFFF",
+                    letterSpacing: "0.1em",
+                    color: ACCENT,
                   }}
                 >
                   {c.compare.ivy.label}
-                </span>
+                </p>
                 <p
                   style={{
-                    margin: "8px 0 0",
+                    margin: "9px 0 0",
                     fontFamily: BODY,
                     fontSize: 13.5,
-                    lineHeight: 1.92,
-                    color: "rgba(255,255,255,0.94)",
+                    lineHeight: 2,
+                    color: INK,
                   }}
                 >
                   {c.compare.ivy.body}
                 </p>
               </div>
             </div>
+
             <p
               style={{
-                margin: "24px 0 0",
+                margin: "32px 0 0",
                 textAlign: "center",
                 fontFamily: MINCHO,
                 fontWeight: 600,
-                fontSize: 18,
-                lineHeight: 1.78,
-                letterSpacing: "0.02em",
-                color: ACCENT,
+                fontSize: 18.5,
+                lineHeight: 1.85,
+                letterSpacing: "0.03em",
+                color: HEAD,
               }}
             >
               {nl(c.compare.closing)}
             </p>
           </Section>
 
-          {/* ─ ⑬ 体験レッスンの流れ（CTA 3/4）─────────────── */}
-          <Section background={BASE}>
-            <Heading text={c.flow.heading} size={22} />
+          {/* ─ ⑬ 体験レッスンの流れ（CTA 4/5）───────────────
+              細い縦線のタイムライン。写真はステップ02の直後に全幅で差し込む。 */}
+          <Section flush background={PALE}>
+            <div style={{ padding: `0 ${PAD}px` }}>
+              <Kicker text={c.flow.kicker} />
+              <Head text={c.flow.heading} size={23} />
+            </div>
+
+            <div style={{ padding: `30px ${PAD}px 0` }}>
+              {c.flow.steps.slice(0, c.flow.photoAfterStep).map((s, i) => (
+                <FlowStep key={s.num} step={s} last={false} index={i} />
+              ))}
+            </div>
+
+            <FullBleed img={c.flow.photo} ratio="16 / 10" style={{ margin: "10px 0 26px" }} />
+
+            <div style={{ padding: `0 ${PAD}px` }}>
+              {c.flow.steps.slice(c.flow.photoAfterStep).map((s, i, arr) => (
+                <FlowStep key={s.num} step={s} last={i === arr.length - 1} index={i} />
+              ))}
+              <Cta marginTop={34} />
+            </div>
+          </Section>
+
+          {/* ─ ⑭ 初めてでも大丈夫 ───────────────────────────── */}
+          <Section>
+            <Kicker text={c.beginner.kicker} />
+            <Head text={c.beginner.heading} size={23} />
             <div
               style={{
-                marginTop: 24,
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
+                marginTop: 28,
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gap: 0,
+                borderTop: `1px solid ${RULE}`,
               }}
             >
-              {c.flow.steps.map((step, i) => (
-                <div key={step.num} style={{ position: "relative" }}>
-                  <div
-                    style={{
-                      borderRadius: 14,
-                      border: `1px solid ${SOFT}`,
-                      background: "#FFFFFF",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div style={{ padding: "15px 16px 16px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <span
-                          style={{
-                            flex: "none",
-                            width: 30,
-                            height: 30,
-                            borderRadius: "50%",
-                            background: ACCENT,
-                            color: "#FFFFFF",
-                            fontFamily: GOTHIC,
-                            fontSize: 12.5,
-                            fontWeight: 800,
-                            lineHeight: "30px",
-                            textAlign: "center",
-                          }}
-                        >
-                          {step.num}
-                        </span>
-                        <h3
-                          style={{
-                            margin: 0,
-                            fontFamily: GOTHIC,
-                            fontSize: 16.5,
-                            fontWeight: 800,
-                            letterSpacing: "0.02em",
-                            color: DEEP,
-                          }}
-                        >
-                          {step.title}
-                        </h3>
-                      </div>
-                      <p
-                        style={{
-                          margin: "9px 0 0",
-                          fontFamily: BODY,
-                          fontSize: 13.5,
-                          lineHeight: 1.92,
-                          color: INK_SOFT,
-                        }}
-                      >
-                        {step.body}
-                      </p>
-                    </div>
-                    {step.img && (
-                      <ImageSlot
-                        src={step.img.src}
-                        alt={step.img.placeholder}
-                        placeholder={step.img.placeholder}
-                        objectPosition={step.img.position ?? "center"}
-                        style={{ aspectRatio: "16 / 10" }}
-                      />
-                    )}
-                  </div>
-                  {i < c.flow.steps.length - 1 && (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginTop: 4,
-                      }}
-                    >
-                      <DownArrow color={SOFT} />
-                    </div>
-                  )}
+              {c.beginner.items.map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    display: "flex",
+                    gap: 11,
+                    padding: "14px 2px",
+                    borderBottom: `1px solid ${RULE}`,
+                    fontFamily: BODY,
+                    fontSize: 14,
+                    lineHeight: 1.75,
+                    color: INK,
+                  }}
+                >
+                  <Check />
+                  <span>{item}</span>
                 </div>
               ))}
             </div>
-            <Cta />
-          </Section>
-
-          {/* ─ ⑭ 初めてでも大丈夫 ─────────────────────────── */}
-          <Section background={PALE}>
-            <Heading text={c.beginner.heading} size={22} />
-            <div
-              style={{
-                marginTop: 22,
-                padding: "18px 17px 20px",
-                borderRadius: 16,
-                background: "#FFFFFF",
-                border: `1px solid ${SOFT}`,
-              }}
-            >
-              <ul
-                style={{
-                  listStyle: "none",
-                  margin: 0,
-                  padding: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 11,
-                }}
-              >
-                {c.beginner.items.map((item) => (
-                  <li
-                    key={item}
-                    style={{
-                      display: "flex",
-                      gap: 10,
-                      fontFamily: BODY,
-                      fontSize: 14,
-                      lineHeight: 1.7,
-                      color: INK,
-                    }}
-                  >
-                    <CheckIcon />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
             <p
               style={{
-                margin: "22px 0 0",
+                margin: "28px 0 0",
                 textAlign: "center",
                 fontFamily: BODY,
                 fontSize: 13.5,
-                lineHeight: 2,
+                lineHeight: 2.1,
                 color: INK_SOFT,
               }}
             >
@@ -1436,135 +1518,118 @@ export default function Page() {
             </p>
           </Section>
 
-          {/* ─ ⑮ 店舗情報 ─────────────────────────────────── */}
-          <Section background={BASE}>
-            <Heading text={c.store.heading} size={22} />
+          {/* ─ ⑮ 店舗情報 ───────────────────────────────────
+              事務的にしない。外観を全幅で先に出し、情報は細い行で添える。 */}
+          <Section flush style={{ paddingTop: 0 }}>
+            <FullBleed img={c.store.img} ratio="16 / 10" />
+            <div style={{ padding: `34px ${PAD}px 0` }}>
+              <Kicker text={c.store.kicker} />
+              <h2
+                style={{
+                  margin: "14px 0 0",
+                  textAlign: "center",
+                  fontFamily: MINCHO,
+                  fontWeight: 600,
+                  fontSize: 21,
+                  letterSpacing: "0.06em",
+                  color: HEAD,
+                }}
+              >
+                {c.store.name}
+              </h2>
+              <p
+                style={{
+                  margin: "8px 0 0",
+                  textAlign: "center",
+                  fontFamily: GOTHIC,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                  color: ACCENT,
+                }}
+              >
+                {c.store.access}
+              </p>
 
-            <ImageSlot
-              src={c.store.img.src}
-              alt={c.store.img.placeholder}
-              placeholder={c.store.img.placeholder}
-              objectPosition={c.store.img.position ?? "center"}
-              radius={16}
-              style={{ aspectRatio: "16 / 10", marginTop: 22 }}
-            />
-
-            <h3
-              style={{
-                margin: "18px 0 0",
-                textAlign: "center",
-                fontFamily: MINCHO,
-                fontWeight: 600,
-                fontSize: 19,
-                letterSpacing: "0.04em",
-                color: ACCENT,
-              }}
-            >
-              {c.store.name}
-            </h3>
-            <p
-              style={{
-                margin: "7px 0 0",
-                textAlign: "center",
-                fontFamily: GOTHIC,
-                fontSize: 13.5,
-                fontWeight: 700,
-                color: DEEP,
-              }}
-            >
-              {c.store.access}
-            </p>
-
-            <dl
-              style={{
-                margin: "18px 0 0",
-                padding: "4px 0",
-                borderTop: `1px solid ${PALE_DEEP}`,
-                fontFamily: BODY,
-              }}
-            >
-              {[
-                { k: "住所", v: c.store.address },
-                { k: "営業時間", v: c.store.hours },
-                { k: "レッスン", v: c.store.lesson },
-              ].map((row) => (
-                <div
-                  key={row.k}
-                  style={{
-                    display: "flex",
-                    gap: 14,
-                    padding: "13px 2px",
-                    borderBottom: `1px solid ${PALE_DEEP}`,
-                  }}
-                >
-                  <dt
+              <dl style={{ margin: "26px 0 0", borderTop: `1px solid ${RULE}` }}>
+                {[
+                  { k: "住所", v: c.store.address },
+                  { k: "営業時間", v: c.store.hours },
+                  { k: "レッスン", v: c.store.lesson },
+                ].map((row) => (
+                  <div
+                    key={row.k}
                     style={{
-                      flex: "none",
-                      width: 64,
-                      fontFamily: GOTHIC,
-                      fontSize: 12.5,
-                      fontWeight: 700,
-                      color: INK_MUTE,
-                      lineHeight: 1.9,
+                      display: "flex",
+                      gap: 16,
+                      padding: "14px 2px",
+                      borderBottom: `1px solid ${RULE}`,
                     }}
                   >
-                    {row.k}
-                  </dt>
-                  <dd
-                    style={{
-                      margin: 0,
-                      fontSize: 13.5,
-                      lineHeight: 1.9,
-                      color: INK,
-                    }}
-                  >
-                    {nl(row.v)}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+                    <dt
+                      style={{
+                        flex: "none",
+                        width: 66,
+                        fontFamily: GOTHIC,
+                        fontSize: 11.5,
+                        fontWeight: 700,
+                        letterSpacing: "0.06em",
+                        color: INK_MUTE,
+                        lineHeight: 1.95,
+                      }}
+                    >
+                      {row.k}
+                    </dt>
+                    <dd
+                      style={{
+                        margin: 0,
+                        fontFamily: BODY,
+                        fontSize: 13.5,
+                        lineHeight: 1.95,
+                        color: INK,
+                      }}
+                    >
+                      {nl(row.v)}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
 
-            <p
-              style={{
-                margin: "12px 0 0",
-                fontFamily: BODY,
-                fontSize: 11.5,
-                lineHeight: 1.8,
-                color: INK_MUTE,
-              }}
-            >
-              {c.store.note}
-            </p>
+              <p
+                style={{
+                  margin: "14px 0 0",
+                  fontFamily: BODY,
+                  fontSize: 11.5,
+                  lineHeight: 1.85,
+                  color: INK_MUTE,
+                }}
+              >
+                {c.store.note}
+              </p>
 
-            <div
-              style={{
-                marginTop: 16,
-                borderRadius: 14,
-                overflow: "hidden",
-                border: `1px solid ${PALE_DEEP}`,
-                height: 210,
-              }}
-            >
-              <iframe
-                src={c.store.mapEmbedSrc}
-                title={`${c.store.name}の地図`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                style={{ width: "100%", height: "100%", border: 0, display: "block" }}
-              />
+              <div
+                style={{
+                  marginTop: 20,
+                  height: 210,
+                  border: `1px solid ${RULE}`,
+                  overflow: "hidden",
+                }}
+              >
+                <iframe
+                  src={c.store.mapEmbedSrc}
+                  title={`${c.store.name}の地図`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  style={{ width: "100%", height: "100%", border: 0, display: "block" }}
+                />
+              </div>
             </div>
 
-            <ImageSlot
-              src={c.store.subImg.src}
-              alt={c.store.subImg.placeholder}
-              placeholder={c.store.subImg.placeholder}
-              objectPosition={c.store.subImg.position ?? "center"}
-              radius={14}
-              style={{ aspectRatio: "4 / 3", marginTop: 12 }}
-            />
+            <FullBleed img={c.store.subImg} ratio="4 / 3" style={{ marginTop: 20 }} />
             <p
               style={{
-                margin: "7px 0 0",
+                margin: "9px 0 0",
+                padding: `0 ${PAD}px`,
                 textAlign: "center",
                 fontFamily: BODY,
                 fontSize: 11.5,
@@ -1576,134 +1641,118 @@ export default function Page() {
           </Section>
 
           {/* ─ ⑯ FAQ ──────────────────────────────────────── */}
-          <Section background={PALE}>
-            <Heading text={c.faq.heading} size={22} />
-            <div style={{ marginTop: 22 }}>
+          <Section>
+            <Kicker text={c.faq.kicker} />
+            <Head text={c.faq.heading} size={23} />
+            <div style={{ marginTop: 26 }}>
               <FaqList
                 items={c.faq.items}
                 accent={ACCENT}
-                accentSoft={SOFT}
+                rule={RULE}
                 ink={INK}
                 inkSoft={INK_SOFT}
               />
             </div>
           </Section>
 
-          {/* ─ ⑰ クロージング（CTA 4/4）───────────────────── */}
+          {/* ─ ⑰ クロージング（CTA 5/5）─────────────────────
+              濃色で塗らず、淡いグラデーションでFVに呼応する静かな締めにする。 */}
           <Section
             style={{
-              background: `linear-gradient(165deg, ${ACCENT} 0%, #2A5F80 100%)`,
-              paddingTop: 48,
-              paddingBottom: 50,
+              background: `linear-gradient(180deg, ${BASE} 0%, ${PALE} 34%, #E9F2F7 100%)`,
+              paddingTop: 58,
+              paddingBottom: 60,
             }}
           >
-            <Heading text={c.closing.heading} variant="white" size={23} />
+            <Kicker text={c.closing.kicker} />
+            <Head text={c.closing.heading} size={25} />
             <p
               style={{
-                margin: "20px 0 0",
+                margin: "22px 0 0",
                 textAlign: "center",
                 fontFamily: BODY,
                 fontSize: 13.5,
-                lineHeight: 2.05,
-                color: "rgba(255,255,255,0.93)",
+                lineHeight: 2.15,
+                color: INK_SOFT,
               }}
             >
               {nl(c.closing.body)}
             </p>
             <div
               style={{
-                margin: "20px 0 24px",
+                margin: "26px 0 0",
                 display: "grid",
                 gridTemplateColumns: "repeat(2, max-content)",
                 justifyContent: "center",
-                gap: 8,
+                gap: "13px 26px",
               }}
             >
               {c.closing.chips.map((t) => (
-                <Chip key={t} text={t} variant="dark" />
+                <DotItem key={t} text={t} color={ACCENT} />
               ))}
             </div>
-            <CampaignPlate />
-            <Cta variant="dark" />
+            <OfferType
+              label={c.closing.label}
+              was={c.closing.was}
+              nowLabel={c.closing.nowLabel}
+              now={c.closing.now}
+              nowUnit={c.closing.nowUnit}
+            />
+            <Cta />
           </Section>
 
           {/* ─ 予約フォーム ───────────────────────────────── */}
-          <Section background={BASE} id="form" style={{ scrollMarginTop: 0 }}>
+          <Section id="form">
+            {/*
+              LPForm は全LP共通で、入力欄の枠（#DDD6C8）と必須タグ（#C25B4B）が
+              パターンA由来の暖色で固定されている。共通側は触らず、このLPの中だけ
+              青系に寄せる。枠色はインラインなので !important でしか上書きできない。
+            */}
+            <style>{`
+              #form input, #form textarea, #form select { border-color: ${RULE} !important; border-radius: 4px !important; }
+              #form .lpform-toggle[data-selected="false"] { border-color: ${RULE} !important; border-radius: 4px !important; }
+              #form .lpform-toggle[data-selected="true"] { border-radius: 4px !important; }
+              #form .lpform-required-tag { color: ${ACCENT} !important; }
+              #form .lpform-optional-tag { color: ${INK_MUTE} !important; }
+            `}</style>
+
+            <Kicker text={c.form.kicker} />
+            <Head text={c.form.heading} size={22} />
             <p
               style={{
-                margin: 0,
-                textAlign: "center",
-                fontFamily: GOTHIC,
-                fontSize: 11,
-                fontWeight: 800,
-                letterSpacing: "0.22em",
-                color: BRAND,
-              }}
-            >
-              {c.form.kicker}
-            </p>
-            <div style={{ marginTop: 10 }}>
-              <Heading text={c.form.heading} size={22} />
-            </div>
-            <p
-              style={{
-                margin: "17px 0 22px",
+                margin: "20px 0 26px",
                 textAlign: "center",
                 fontFamily: BODY,
                 fontSize: 13.5,
-                lineHeight: 1.95,
+                lineHeight: 2,
                 color: INK_SOFT,
               }}
             >
               {nl(c.form.lead)}
             </p>
 
-            {/*
-              LPForm は全LP共通なので、入力欄の枠（#DDD6C8）と必須タグ（#C25B4B）が
-              パターンA由来の暖色で固定されている。共通側は触らず、このLPの中だけ
-              青系に寄せる（beat-pilates-nagoyafushimi と同じやり方）。
-              枠色はインラインスタイルなので !important でしか上書きできない。
-            */}
-            <style>{`
-              #form input, #form textarea, #form select { border-color: ${PALE_DEEP} !important; }
-              /* トグルは未選択のときだけ中立色にする。選択時は accent のまま。 */
-              #form .lpform-toggle[data-selected="false"] { border-color: ${PALE_DEEP} !important; }
-              #form .lpform-required-tag { color: ${DEEP} !important; }
-              #form .lpform-optional-tag { color: ${INK_MUTE} !important; }
-            `}</style>
-
-            <div
-              style={{
-                background: "#FFFFFF",
-                borderRadius: 16,
-                border: `1px solid ${SOFT}`,
-                padding: "18px 15px 20px",
-                boxShadow: "0 6px 20px rgba(40,80,110,0.09)",
-              }}
-            >
-              <LPForm
-                clientSlug={c.slug}
-                fields={c.form.fields}
-                accent={ACCENT}
-                submitLabel={c.form.submitLabel}
-                submitStyle={{ background: CTA_GRAD, boxShadow: `0 8px 20px ${CTA_SHADOW}` }}
-                microcopy={
-                  <span style={{ color: DEEP, fontSize: 12.5, fontWeight: 700 }}>
-                    {c.form.microcopy}
-                  </span>
-                }
-                disclaimer={nl(c.form.disclaimer)}
-                errorMessage={c.form.errorMessage}
-              />
-            </div>
+            <LPForm
+              clientSlug={c.slug}
+              fields={c.form.fields}
+              accent={ACCENT}
+              submitLabel={c.form.submitLabel}
+              submitStyle={{ background: CTA_GRAD, boxShadow: `0 8px 22px ${CTA_SHADOW}` }}
+              microcopy={
+                <span style={{ color: HEAD, fontSize: 12.5, fontWeight: 700 }}>
+                  {c.form.microcopy}
+                </span>
+              }
+              disclaimer={nl(c.form.disclaimer)}
+              errorMessage={c.form.errorMessage}
+            />
           </Section>
 
           {/* ─ フッター ───────────────────────────────────── */}
           <footer
             style={{
-              background: "#FFFFFF",
-              borderTop: `1px solid ${PALE_DEEP}`,
-              padding: "22px 20px 26px",
+              background: BASE,
+              borderTop: `1px solid ${RULE}`,
+              padding: "26px 20px 30px",
               textAlign: "center",
             }}
           >
@@ -1711,21 +1760,21 @@ export default function Page() {
             <img
               src={c.header.logo.src ?? ""}
               alt="STUDIO IVY"
-              style={{ width: 132, height: "auto", display: "inline-block" }}
+              style={{ width: 126, height: "auto", display: "inline-block" }}
             />
             <p
               style={{
                 margin: "6px 0 0",
                 fontFamily: GOTHIC,
-                fontSize: 12,
+                fontSize: 11.5,
                 fontWeight: 700,
-                letterSpacing: "0.1em",
+                letterSpacing: "0.14em",
                 color: INK_SOFT,
               }}
             >
               {c.footer.brandSub}
             </p>
-            <p style={{ margin: "14px 0 0", fontSize: 10, color: INK_MUTE }}>
+            <p style={{ margin: "16px 0 0", fontSize: 10, color: INK_MUTE }}>
               © {new Date().getFullYear()} STUDIO IVY
             </p>
           </footer>
@@ -1736,10 +1785,10 @@ export default function Page() {
       <StickyFooterCTA
         anchor={c.cta.anchor}
         buttonText={c.sticky.buttonText}
-        showAfter={560}
+        showAfter={640}
         buttonGradient={CTA_GRAD}
         shadowColor={CTA_SHADOW}
-        borderColor="rgba(78,148,191,0.35)"
+        borderColor="rgba(43,75,94,0.14)"
         offers={[
           <span
             key="offer"
@@ -1748,13 +1797,13 @@ export default function Page() {
               alignItems: "baseline",
               gap: 5,
               fontFamily: GOTHIC,
-              color: DEEP,
+              color: HEAD,
             }}
           >
-            <span style={{ fontSize: 12, fontWeight: 700 }}>
+            <span style={{ fontSize: 11.5, fontWeight: 700 }}>
               {c.sticky.offerLabel}
             </span>
-            <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.01em" }}>
+            <span style={{ fontSize: 19, fontWeight: 800, letterSpacing: "-0.01em" }}>
               {c.sticky.offerValue}
             </span>
           </span>,
@@ -1762,7 +1811,7 @@ export default function Page() {
             key="was"
             style={{
               fontFamily: GOTHIC,
-              fontSize: 11.5,
+              fontSize: 11,
               fontWeight: 500,
               color: INK_MUTE,
               textDecoration: "line-through",
@@ -1773,5 +1822,117 @@ export default function Page() {
         ]}
       />
     </LPShell>
+  );
+}
+
+/* ── ⑩⑬ で使う小さな部品 ──────────────────────────────────── */
+
+const reasonTitleStyle: CSSProperties = {
+  margin: "12px 0 0",
+  fontFamily: MINCHO,
+  fontWeight: 600,
+  fontSize: 21,
+  lineHeight: 1.65,
+  letterSpacing: "0.045em",
+  color: HEAD,
+};
+
+const reasonBodyStyle: CSSProperties = {
+  margin: "12px 0 0",
+  fontFamily: BODY,
+  fontSize: 13.5,
+  lineHeight: 2,
+  color: INK_SOFT,
+};
+
+/** 「選ばれる理由」の番号ラベル。短い罫と組で置く。 */
+function ReasonLabel({ num }: { num: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <span
+        style={{
+          fontFamily: GOTHIC,
+          fontSize: 11,
+          fontWeight: 800,
+          letterSpacing: "0.2em",
+          color: ACCENT,
+        }}
+      >
+        REASON {num}
+      </span>
+      <span style={{ flex: 1, height: 1, background: RULE }} />
+    </div>
+  );
+}
+
+/** ⑬体験レッスンの流れの1ステップ。左に細い縦線を通す。 */
+function FlowStep({
+  step,
+  last,
+}: {
+  step: { num: string; title: string; body: string };
+  last: boolean;
+  index: number;
+}) {
+  return (
+    <div style={{ display: "flex", gap: 15 }}>
+      <div
+        style={{
+          flex: "none",
+          width: 9,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <span
+          style={{
+            width: 9,
+            height: 9,
+            marginTop: 8,
+            borderRadius: "50%",
+            background: ACCENT,
+          }}
+        />
+        {!last && <span style={{ flex: 1, width: 1, background: RULE }} />}
+      </div>
+      <div style={{ paddingBottom: last ? 0 : 24 }}>
+        <p
+          style={{
+            margin: 0,
+            fontFamily: GOTHIC,
+            fontSize: 10.5,
+            fontWeight: 800,
+            letterSpacing: "0.2em",
+            color: BRAND,
+          }}
+        >
+          STEP {step.num}
+        </p>
+        <h3
+          style={{
+            margin: "5px 0 0",
+            fontFamily: MINCHO,
+            fontWeight: 600,
+            fontSize: 18,
+            letterSpacing: "0.04em",
+            color: HEAD,
+          }}
+        >
+          {step.title}
+        </h3>
+        <p
+          style={{
+            margin: "9px 0 0",
+            fontFamily: BODY,
+            fontSize: 13.5,
+            lineHeight: 1.95,
+            color: INK_SOFT,
+          }}
+        >
+          {step.body}
+        </p>
+      </div>
+    </div>
   );
 }
