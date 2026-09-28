@@ -840,12 +840,18 @@ export default function Page() {
                     boxShadow: "0 2px 8px rgba(35,80,110,0.06)",
                   }}
                 >
+                  {/* 写真は縦長(480x600)・横長(900x675)・正方形が混在しているため、
+                      cover だと人物の頭や足が切れる。contain で全体を見せ、地色は
+                      カードと同じ白にして余白が目立たないようにしている。
+                      スロットは縦長写真の比率(0.8)に合わせてあるので、
+                      縦位置の写真は余白なしでぴったり収まる。 */}
                   <ImageSlot
                     src={item.img.src}
                     placeholder={item.img.placeholder}
                     alt={item.title}
                     radius={10}
-                    style={{ flexShrink: 0, width: 112, height: 108 }}
+                    objectFit="contain"
+                    style={{ flexShrink: 0, width: 112, height: 140, background: WHITE }}
                   />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div
