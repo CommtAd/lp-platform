@@ -1,6 +1,45 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+
+/**
+ * FVの切り抜き。**被写体を文字より上へ逃がすための値**で、実測して決めている。
+ *
+ * 支給動画は被写体が画面中央にいるので、素のまま `cover` で敷くと
+ * 立位シーンでキャッチが顔を横切る。そこで:
+ *
+ *   - `objectPosition: center 100%` … 動画の下端を枠の下端に合わせる。
+ *     上側が切れるぶん、被写体が枠の中で上へ上がる。
+ *   - `ZOOM` … さらに拡大して、被写体と文字の間隔を稼ぐ。
+ *
+ * **FVの高さを変えても被写体と文字の間隔は変わらない。**
+ * 高さを増やすとそのぶん切り抜き量が減って相殺されるため（間隔は
+ * `動画の描画高 − 文字ブロックの高さ` で決まり、枠の高さが式から消える）。
+ * 間隔を実際に動かせるのはこの `ZOOM` だけなので、ここで調整すること。
+ *
+ * 1.18 は、3シーン（カウンセリング / リフォーマー / 立位）すべてで顔が
+ * 文字帯を外れ、かつ左右の切れ過ぎない上限として選んだ値。
+ * 大きくするほど被写体は上がるが、横が切れて解像度も落ちる。
+ */
+const ZOOM = 1.18;
+
+/**
+ * 拡大は `transform` ではなく**要素そのものの寸法**で行う。`transform: scale`
+ * は原点まわりに拡縮するため `object-position` の下端合わせと噛み合わず、
+ * 拡大率を変えるたびに位置が狂う。幅・高さを `ZOOM` 倍した要素を
+ * 下端・中央で置けば、拡大率だけを独立に動かせる。
+ */
+const FRAME: CSSProperties = {
+  position: "absolute",
+  left: "50%",
+  bottom: 0,
+  width: `${ZOOM * 100}%`,
+  height: `${ZOOM * 100}%`,
+  transform: "translateX(-50%)",
+  objectFit: "cover",
+  objectPosition: "center 100%",
+  display: "block",
+};
 
 export interface HeroVideoProps {
   /** 背景動画。A/Bで差し替えるときは config の `fv.video` だけを変える。 */
@@ -75,19 +114,7 @@ export default function HeroVideo({ src, poster, alt }: HeroVideoProps) {
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={poster}
-        alt={alt}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center 34%",
-          display: "block",
-        }}
-      />
+      <img src={poster} alt={alt} style={FRAME} />
       <video
         ref={videoRef}
         muted
@@ -98,13 +125,7 @@ export default function HeroVideo({ src, poster, alt }: HeroVideoProps) {
         aria-hidden="true"
         onPlaying={() => setPlaying(true)}
         style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center 34%",
-          display: "block",
+          ...FRAME,
           opacity: playing ? 1 : 0,
           transition: "opacity 0.6s ease",
         }}

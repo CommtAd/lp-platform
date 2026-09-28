@@ -566,7 +566,17 @@ export default function Page() {
 
           {/* ─ ④ FV ───────────────────────────────────────
               白札を重ねず、タイポグラフィと余白だけで組む。文字は左寄せ。 */}
-          <div style={{ position: "relative", height: 610, overflow: "hidden" }}>
+          {/*
+            FVの高さ。**被写体と文字の間隔はここでは決まらない**（高さを増やすと
+            そのぶん切り抜きが減って相殺される）。間隔は `HeroVideo` の
+            `ZOOM` 側で作っているので、ここは「FV内のCTAを折り返しに収める」
+            ためだけの値。
+
+            600pxだと、ヘッダー＋オファーバー＋特徴バーを足したFV内CTAの下端が
+            設計731px。390px幅の実機（iPhone 14 は可視域およそ750px）で
+            CTAが画面内に収まる。660pxでは791pxになり、CTAが切れていた。
+          */}
+          <div style={{ position: "relative", height: 600, overflow: "hidden" }}>
             <HeroVideo
               src={c.fv.video}
               poster={c.fv.poster}
