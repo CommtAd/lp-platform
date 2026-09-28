@@ -18,7 +18,7 @@ import config from "./config";
  *   4. 料金プランのセクションは「一旦非表示」の指示により丸ごと出していない
  *      （config にもデータを持たせていない。復活させるときは両方に足すこと）。
  *
- * 予約は hacomono へ外部遷移するためページ内フォームを持たない。
+ * 予約は外部の予約システムへ遷移するためページ内フォームを持たない。
  * `scripts/check-rules.ts` の FORM_EXEMPT に `seren-pilates` を登録済み。
  */
 
