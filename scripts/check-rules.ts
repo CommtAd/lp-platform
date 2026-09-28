@@ -59,6 +59,8 @@ const FORM_EXEMPT = new Set<string>([
   // 予約導線を公式サイトと同じ hacomono（sanare-pilates.hacomono.jp）へ接続。
   // 店舗と日時は遷移先で選ぶため、LP側にフォームを持たない（2026-09-15）。
   "seren-pilates",
+  // 予約導線を公式サイトと同じ Square（wakata-physio-studio.square.site）へ接続。
+  "wps-test",
 ]);
 
 function clientSlugs(): string[] {
