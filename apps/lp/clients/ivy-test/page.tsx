@@ -1619,22 +1619,6 @@ export default function Page() {
 
             </div>
 
-            {/* 入館の説明のすぐ下に入口の写真を置く。地図の下だと、説明と写真が
-                離れて「どこから入るのか」が結びつかない。 */}
-            <FullBleed img={c.store.subImg} ratio="4 / 3" style={{ marginTop: 20 }} />
-            <p
-              style={{
-                margin: "9px 0 0",
-                padding: `0 ${PAD}px`,
-                textAlign: "center",
-                fontFamily: BODY,
-                fontSize: 11.5,
-                color: INK_MUTE,
-              }}
-            >
-              {c.store.subImgCaption}
-            </p>
-
             <div style={{ padding: `0 ${PAD}px` }}>
               {/*
                 地図全体をリンクにして、顧客支給のGoogleマップへ飛ばす。

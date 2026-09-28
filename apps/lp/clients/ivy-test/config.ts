@@ -154,8 +154,6 @@ export interface IvyBConfig {
     hours: string;
     lesson: string;
     img: Slot;
-    subImg: Slot;
-    subImgCaption: string;
     mapEmbedSrc: string;
     mapHref: string;
     mapLinkLabel: string;
@@ -485,12 +483,6 @@ const config: IvyBConfig = {
     hours: "8:00〜21:00",
     lesson: "1レッスン50分（パーソナル）",
     img: { placeholder: "ビル外観", src: `${ASSET}/exterior.jpg` },
-    subImg: {
-      placeholder: "スタジオのエントランス",
-      src: `${ASSET}/entrance.jpg`,
-      position: "center 30%",
-    },
-    subImgCaption: "スタジオ入口（ビル4階・402号）",
     /**
      * 埋め込み地図。**住所の文字列検索ではなく、店舗リスティングの実座標を打つ。**
      * 住所検索だとビルにピンが立つだけで、STUDIO IVY 藤沢店そのものを指さない。
