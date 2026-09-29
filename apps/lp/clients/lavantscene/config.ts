@@ -81,14 +81,14 @@ const config: PatternCConfig = {
   },
 
   // FVを離脱する前に来館特典だけ持ち帰ってもらうための要約。詳細は privilege 側。
-  // 試食会の金額換算は指示書に無いので、金額ではなく「無料ご招待」で出す。
+  // 試食会の金額換算は指示書に無いので、金額の枠には「無料試食」を置く（顧客指定）。
   // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
   fvSummary: {
     label: "来館特典",
     items: [
       {
-        amount: "無料ご招待",
-        name: "国産牛コース\n試食会",
+        amount: "無料試食",
+        name: "国産牛コース試食会\n無料ご招待",
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
       },
       {
@@ -158,8 +158,8 @@ const config: PatternCConfig = {
     lead: "フェアにご参加いただいた方にご用意しています。",
     items: [
       {
-        title: "国産牛コース\n試食会",
-        amount: "無料ご招待",
+        title: "国産牛コース試食会\n無料ご招待",
+        amount: "無料試食",
         // 支給の横位置カットを正方形に切り出したもの（3皿とも収まる中央）。
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
       },
