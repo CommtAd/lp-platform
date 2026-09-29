@@ -935,18 +935,48 @@ export default function Page() {
                     （枠いっぱいに角が回るぶん privilege より重厚に見える）。
                     高さが中身で変わる箱には CornerFrame を使うこと。
                   */}
-                  {c.grandOffer.frame && (
-                    <span className="pointer-events-none absolute inset-1.5">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={c.grandOffer.frame} alt="" className="h-full w-full" />
-                    </span>
-                  )}
+                  {c.grandOffer.frame &&
+                    (c.grandOffer.images?.length ? (
+                      // 写真を並べると箱の高さが伸びるので、角を自然比で貼る版に切り替える。
+                      <CornerFrame src={c.grandOffer.frame} />
+                    ) : (
+                      <span className="pointer-events-none absolute inset-1.5">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={c.grandOffer.frame} alt="" className="h-full w-full" />
+                      </span>
+                    ))}
                   <p
                     className="text-[17px] leading-snug tracking-[0.18em]"
                     style={{ fontFamily: mincho }}
                   >
                     {c.grandOffer.title}
                   </p>
+                  {/* 特典の中身の写真。四隅の飾りより前面に出すため relative を付ける。 */}
+                  {c.grandOffer.images?.length ? (
+                    <div
+                      className="relative mt-5 grid gap-2"
+                      style={{
+                        gridTemplateColumns: `repeat(${c.grandOffer.images.length}, minmax(0, 1fr))`,
+                      }}
+                    >
+                      {c.grandOffer.images.map((img, i) => (
+                        <figure key={`${img.src ?? img.placeholder}-${i}`}>
+                          <ImageSlot
+                            src={img.src}
+                            placeholder={img.placeholder}
+                            objectPosition={img.position ?? "center"}
+                            radius={2}
+                            style={{ width: "100%", aspectRatio: "4 / 3" }}
+                          />
+                          {img.caption && (
+                            <figcaption className="mt-2 text-[11px] leading-snug opacity-70">
+                              {img.caption}
+                            </figcaption>
+                          )}
+                        </figure>
+                      ))}
+                    </div>
+                  ) : null}
                   {/* 菱形を挟んだ罫。直線1本より装飾として効く。 */}
                   <span className="mt-5 flex items-center justify-center gap-2.5">
                     <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
@@ -1011,6 +1041,14 @@ export default function Page() {
                         >
                           {nl(c.grandOffer.feature.title)}
                         </p>
+                        {c.grandOffer.feature.amount && (
+                          <p
+                            className="mt-3 font-bold leading-none"
+                            style={{ fontFamily: mincho, color: "#F0DDB2" }}
+                          >
+                            {amountEmphasis(c.grandOffer.feature.amount, 40, 18)}
+                          </p>
+                        )}
                         {/* 写真の上ではブランドゴールドの罫線が沈むので淡いシャンパンで引く。 */}
                         <span
                           className="mx-auto mt-4 block h-px w-12"
@@ -1029,6 +1067,14 @@ export default function Page() {
                       <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
                         {nl(c.grandOffer.feature.title)}
                       </p>
+                      {c.grandOffer.feature.amount && (
+                        <p
+                          className="mt-3 font-bold leading-none"
+                          style={{ fontFamily: mincho, color: goldOnWhite }}
+                        >
+                          {amountEmphasis(c.grandOffer.feature.amount, 40, 18)}
+                        </p>
+                      )}
                       <p className="mt-2.5 text-[12px] leading-[1.9] opacity-65">
                         {c.grandOffer.feature.body}
                       </p>

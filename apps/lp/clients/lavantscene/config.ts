@@ -107,10 +107,17 @@ const config: PatternCConfig = {
     // 特典名はカード内で1行に収まらず「選べ／るギフト」で割れたので、中身はリードへ出す。
     lead: "旅行券orカタログギフトなどから選べる",
     title: "選べるギフト",
+    // 選べるギフトの中身を写真で見せる（顧客支給、4:3に切り出し済み）。
+    images: [
+      { placeholder: "旅行券", src: `${ASSET}/gift-travel.jpg`, caption: "旅行券" },
+      { placeholder: "カタログギフト", src: `${ASSET}/gift-catalog.jpg`, caption: "カタログギフト" },
+    ],
     amount: "3万円分プレゼント",
     frame: `${ASSET}/grand-offer-frame.png`,
+    // 15大特典の総額（FVの「最大100万円相当 優待」と同じもの）を金額として立てる。
     feature: {
-      title: "＋ 最大15大特典付き！",
+      title: "＋ 15大特典付き！",
+      amount: "最大100万円相当",
       body: "挙式・衣裳・乾杯ドリンクなどご優待価格にてご案内",
     },
   },

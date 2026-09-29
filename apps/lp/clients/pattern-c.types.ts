@@ -335,13 +335,29 @@ export interface PatternCConfig {
      */
     frame?: string;
     /**
+     * 金額カードの中、`title` の下に並べる写真（特典の中身。旅行券・カタログギフトなど）。
+     * 2〜3枚を横並び・4:3で受ける。`caption` は写真の下に小さく出る。
+     * 渡すとカードの高さが伸びるので、`frame` は四隅を自然比で貼る版（CornerFrame）に切り替わる。
+     */
+    images?: (Slot & { caption?: string })[];
+    /**
      * 目玉特典。**金額プレートとは必ず別カードで描画される。**
      * ひと続きにすると「180万円相当のホテル宿泊券」のように、金額が目玉特典の
      * 中身だと誤読されるため。
      * `image` を渡すと写真を敷いてスクリム＋白文字で載せる（宿泊特典の客室写真など）。
      */
     /** `disclaimer` はカード右下に小さく入る注記（適用条件など）。 */
-    feature?: { title: string; body: string; image?: Slot; disclaimer?: string };
+    /**
+     * `amount` は title と body の間に置く金額（例 "最大100万円相当"）。
+     * 数字部分は金額プレートと同じく自動で特大になる。省略すると出ない。
+     */
+    feature?: {
+      title: string;
+      body: string;
+      amount?: string;
+      image?: Slot;
+      disclaimer?: string;
+    };
     note?: string;
   };
 
