@@ -927,7 +927,10 @@ export default function Page() {
               */}
               <div className="relative mt-10">
                 <div
-                  className="relative rounded-[3px] border px-5 pb-8 pt-11 text-center"
+                  className={`relative rounded-[3px] border px-5 pt-11 text-center ${
+                    // 金額を省いて写真で終わるときは、下の四隅の飾りに写真が掛からないよう下を空ける。
+                    !c.grandOffer.amount && c.grandOffer.images?.length ? "pb-14" : "pb-8"
+                  }`}
                   style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
                 >
                   {/*
@@ -949,7 +952,9 @@ export default function Page() {
                     className="text-[17px] leading-snug tracking-[0.18em]"
                     style={{ fontFamily: mincho }}
                   >
-                    {c.grandOffer.title}
+                    {c.grandOffer.titleEmphasis
+                      ? emphasize(c.grandOffer.title, c.grandOffer.titleEmphasis, goldOnWhite, 26)
+                      : nl(c.grandOffer.title)}
                   </p>
                   {/* 特典の中身の写真。四隅の飾りより前面に出すため relative を付ける。 */}
                   {c.grandOffer.images?.length ? (
@@ -977,34 +982,38 @@ export default function Page() {
                       ))}
                     </div>
                   ) : null}
-                  {/* 菱形を挟んだ罫。直線1本より装飾として効く。 */}
-                  <span className="mt-5 flex items-center justify-center gap-2.5">
-                    <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
-                    <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
-                    <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
-                  </span>
-                  {/* 金額として組むか、説明文として組むか。説明文のときは数字を
-                      特大にしない（"衣装2着…" の 2 だけが巨大になるのを避ける）。 */}
-                  {c.grandOffer.amountProse ? (
-                    <p
-                      className="mt-5 font-bold tracking-[0.02em]"
-                      style={{ fontFamily: mincho, color: c.ink }}
-                    >
-                      {prosePlate(
-                        c.grandOffer.amount,
-                        c.grandOffer.amountProseEmphasis,
-                        c.grandOffer.amountProseSize ?? 13,
+                  {c.grandOffer.amount && (
+                    <>
+                      {/* 菱形を挟んだ罫。直線1本より装飾として効く。 */}
+                      <span className="mt-5 flex items-center justify-center gap-2.5">
+                        <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                        <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
+                        <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                      </span>
+                      {/* 金額として組むか、説明文として組むか。説明文のときは数字を
+                          特大にしない（"衣装2着…" の 2 だけが巨大になるのを避ける）。 */}
+                      {c.grandOffer.amountProse ? (
+                        <p
+                          className="mt-5 font-bold tracking-[0.02em]"
+                          style={{ fontFamily: mincho, color: c.ink }}
+                        >
+                          {prosePlate(
+                            c.grandOffer.amount,
+                            c.grandOffer.amountProseEmphasis,
+                            c.grandOffer.amountProseSize ?? 13,
+                          )}
+                        </p>
+                      ) : (
+                        /* text-[30px] は数字を含まない文字列（テンプレのダミー等）の
+                           フォールバック。数字があれば amountEmphasis 側の span が上書きする。 */
+                        <p
+                          className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
+                          style={{ fontFamily: mincho, color: goldOnWhite }}
+                        >
+                          {amountEmphasis(c.grandOffer.amount)}
+                        </p>
                       )}
-                    </p>
-                  ) : (
-                    /* text-[30px] は数字を含まない文字列（テンプレのダミー等）の
-                       フォールバック。数字があれば amountEmphasis 側の span が上書きする。 */
-                    <p
-                      className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
-                      style={{ fontFamily: mincho, color: goldOnWhite }}
-                    >
-                      {amountEmphasis(c.grandOffer.amount)}
-                    </p>
+                    </>
                   )}
                 </div>
                 {/* バッジはカード上端に跨がらせる。 */}
