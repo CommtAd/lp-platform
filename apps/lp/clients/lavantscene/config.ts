@@ -35,8 +35,10 @@ const config: PatternCConfig = {
   },
 
   header: {
-    // ロゴ未支給のため会場名テキストで出す。支給されたら logo を足す。
     venue: "ベルヴィ ラヴァンセーヌ",
+    // 紋章 + ロゴタイプの縦積み（比率 2.76:1、透過PNG）。ロゴタイプが高さの3割弱なので、
+    // lold と同じく 46px で文字が約12px になる。支給が300px幅と小さく、DPR3では少し甘い。
+    logo: { src: `${ASSET}/logo.png`, height: 46 },
     ctaText: "予約する",
     sticky: false,
   },
@@ -295,7 +297,6 @@ const config: PatternCConfig = {
 
 /*
  * TODO(lavantscene): 差し替え・確認が残っている項目:
- *  - ロゴ（未支給。header.logo を足す）
  *  - 特典の適用条件の注記（指示書に無いので未記載）
  *  - recommend / flow / experience の説明文はテンプレの原稿のまま
  *  - 電話番号（指示書に無いので access.tel 未設定）
