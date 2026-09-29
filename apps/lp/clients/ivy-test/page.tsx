@@ -653,8 +653,10 @@ export default function Page() {
                 }}
               />
 
-              {/* 価格。白札を置かず、文字だけで見せる。 */}
-              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+              {/* 価格。白札を置かず、文字だけで見せる。
+                  「地域最安級」は比較表示なので、根拠の扱いは config 側の
+                  `priceBadge` のコメントを参照すること。 */}
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
                 <span
                   style={{
                     fontFamily: GOTHIC,
@@ -688,7 +690,41 @@ export default function Page() {
                 >
                   {c.fv.price.unit}
                 </span>
+                {c.fv.priceBadge && (
+                  <span
+                    style={{
+                      marginLeft: 4,
+                      alignSelf: "center",
+                      padding: "4px 10px",
+                      border: "1px solid rgba(255,255,255,0.85)",
+                      borderRadius: 999,
+                      fontFamily: GOTHIC,
+                      fontSize: 12,
+                      fontWeight: 800,
+                      letterSpacing: "0.04em",
+                      color: "#FFFFFF",
+                      textShadow: "0 1px 8px rgba(8,26,38,0.55)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {c.fv.priceBadge}
+                  </span>
+                )}
               </div>
+              {c.fv.priceBadgeNote && (
+                <p
+                  style={{
+                    margin: "7px 0 0",
+                    fontFamily: BODY,
+                    fontSize: 10,
+                    lineHeight: 1.6,
+                    color: "rgba(255,255,255,0.8)",
+                    textShadow: "0 1px 6px rgba(8,26,38,0.6)",
+                  }}
+                >
+                  {c.fv.priceBadgeNote}
+                </p>
+              )}
 
               <p
                 style={{

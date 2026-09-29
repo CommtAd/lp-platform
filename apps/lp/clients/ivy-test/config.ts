@@ -54,6 +54,10 @@ export interface IvyBConfig {
     /** 価格・立地を1行で。白札は使わず、罫と余白で区切る。 */
     facts: string[];
     price: { value: string; unit: string };
+    /** 価格の横に出す訴求バッジ。空文字なら出さない。 */
+    priceBadge: string;
+    /** バッジの根拠注記。空文字なら出さない。 */
+    priceBadgeNote: string;
     campaign: { label: string; was: string; now: string; nowUnit: string };
     /**
      * キャンペーンに付く特典。**表示はFVの外**（FV直下の特典バンド）。
@@ -264,6 +268,21 @@ const config: IvyBConfig = {
      * 4箇所すべてを確認すること。
      */
     price: { value: "6,500", unit: "円〜" },
+    /**
+     * 価格の横に出す訴求バッジ。**比較表示なので根拠が要る。**
+     *
+     * 顧客が近隣のピラティススタジオを調査したうえで「問題ない」と判断し、
+     * 注記なしでの掲載を指示（2026-09-29）。景表法上、最安・No.1系の表示は
+     * 調査時期・調査範囲・調査主体の併記が求められるため、**表示を続ける限り
+     * 顧客側で調査記録を保持してもらうこと。** 問い合わせが来たら、
+     * まずこの前提を確認する。
+     *
+     * 併記を足す場合は `priceBadgeNote` を使う（例:
+     * 「※2026年9月自社調べ／藤沢駅徒歩10分圏内のパーソナルピラティス◯店比較」）。
+     * 空文字なら注記は出ない。
+     */
+    priceBadge: "地域最安級",
+    priceBadgeNote: "",
     campaign: {
       label: "初回体験レッスン",
       was: "通常4,500円",
