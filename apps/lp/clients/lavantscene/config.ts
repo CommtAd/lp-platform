@@ -82,11 +82,21 @@ const config: PatternCConfig = {
 
   // FVを離脱する前に来館特典だけ持ち帰ってもらうための要約。詳細は privilege 側。
   // 試食会の金額換算は指示書に無いので、金額ではなく「無料ご招待」で出す。
+  // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
   fvSummary: {
     label: "来館特典",
     items: [
-      { amount: "無料ご招待", name: "国産牛コース\n試食会" },
-      { amount: "1万円分", name: "Amazon\nギフト券" },
+      {
+        amount: "無料ご招待",
+        name: "国産牛コース\n試食会",
+        image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
+      },
+      {
+        amount: "1万円分",
+        name: "Amazon\nギフト券",
+        // lold と同じギフトの写真（顧客指定）。
+        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
+      },
     ],
   },
 
@@ -146,10 +156,18 @@ const config: PatternCConfig = {
   privilege: {
     heading: "ご来館特典・ご成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
-    // 写真は試食会の1枚しか無く、全列そろえられないので items の image は付けない。
     items: [
-      { title: "国産牛コース\n試食会", amount: "無料ご招待" },
-      { title: "Amazon\nギフト券", amount: "1万円分" },
+      {
+        title: "国産牛コース\n試食会",
+        amount: "無料ご招待",
+        // 支給の横位置カットを正方形に切り出したもの（3皿とも収まる中央）。
+        image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
+      },
+      {
+        title: "Amazon\nギフト券",
+        amount: "1万円分",
+        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
+      },
     ],
     frame: `${ASSET}/privilege-frame.png`,
     contract: { label: "さらに、ご成約で", amount: "3万円分の選べるギフト" },
