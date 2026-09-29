@@ -1503,23 +1503,17 @@ export default function Page() {
           </Section>
 
           {/* ─ ⑬ 体験レッスンの流れ（CTA 4/5）───────────────
-              細い縦線のタイムライン。写真はステップ02の直後に全幅で差し込む。 */}
+              細い縦線のタイムライン。写真は顧客判断で削除した（2026-09-29）。 */}
           <Section flush background={PALE}>
             <div style={{ padding: `0 ${PAD}px` }}>
               <Kicker text={c.flow.kicker} />
               <Head text={c.flow.heading} size={23} />
             </div>
 
+            {/* 写真を挟まず1本のタイムラインで通す。最後のステップだけ
+                `last` を立てて、縦線をそこで止める。 */}
             <div style={{ padding: `30px ${PAD}px 0` }}>
-              {c.flow.steps.slice(0, c.flow.photoAfterStep).map((s, i) => (
-                <FlowStep key={s.num} step={s} last={false} index={i} />
-              ))}
-            </div>
-
-            <FullBleed img={c.flow.photo} ratio="16 / 10" style={{ margin: "10px 0 26px" }} />
-
-            <div style={{ padding: `0 ${PAD}px` }}>
-              {c.flow.steps.slice(c.flow.photoAfterStep).map((s, i, arr) => (
+              {c.flow.steps.map((s, i, arr) => (
                 <FlowStep key={s.num} step={s} last={i === arr.length - 1} index={i} />
               ))}
               <Cta marginTop={34} />
