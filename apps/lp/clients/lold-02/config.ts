@@ -407,7 +407,8 @@ const config: PatternCConfig = {
         name: "wedding_wish",
         label: "結婚式への想い",
         optionalTag: "任意",
-        placeholder: "結婚式への想いをご自由にお書きください",
+        // 19文字だと入力欄の幅に収まらず2行になる（16文字までなら1行）。
+        placeholder: "結婚式への想いをお聞かせください",
         rows: 4,
       },
       {
@@ -442,7 +443,7 @@ const config: PatternCConfig = {
     thanksHref: "/lold-02/thanks",
     submitLabel: "この内容で応募する",
     disclaimer:
-      "ご入力いただいた内容はご予約対応のみに利用します。\nしつこいご案内はいたしません。",
+      "ご入力いただいた内容は当キャンペーンのみに利用します。\nしつこいご案内はいたしません。",
     errorMessage: "お名前・電話番号・メールアドレスは必須項目です。",
   },
 
