@@ -1355,7 +1355,9 @@ export default function Page() {
                         ? amountThenInk(c.privilege.contract.amount, c.ink, 48, 20)
                         : amountEmphasis(c.privilege.contract.amount, 48, 20)}
                     </p>
-                    {/* 追加の成約特典は「＋」で区切って一段小さく積む。主役は最初の金額のまま。 */}
+                    {/* 追加の成約特典は「＋」で区切って積む。数字は amount と同じ48pxに揃え、
+                        文字だけ18pxに落として1行に収める（20pxだと "最大100万円相当の15大特典" が
+                        枠から10pxはみ出す）。 */}
                     {c.privilege.contract.extras?.map((extra, i) => (
                       <div key={i}>
                         <p
@@ -1369,8 +1371,8 @@ export default function Page() {
                           style={{ fontFamily: mincho, color: goldOnWhite }}
                         >
                           {c.privilege.contract?.inkAfterAmount
-                            ? amountThenInk(extra, c.ink, 36, 17)
-                            : amountEmphasis(extra, 36, 17)}
+                            ? amountThenInk(extra, c.ink, 48, 18)
+                            : amountEmphasis(extra, 48, 18)}
                         </p>
                       </div>
                     ))}

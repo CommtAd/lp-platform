@@ -466,7 +466,8 @@ export interface PatternCConfig {
       badge?: { lines: string[]; size?: number; bg?: string };
       /**
        * `amount` に続けて「＋」で積む成約特典（例 "最大100万円相当の15大特典"）。
-       * 最初の数字が一段小さい特大になる。1行に収まる長さにすること（13文字程度まで）。
+       * 最初の数字が `amount` と同じ特大（48px）になり、文字は18px。
+       * 1行に収まる長さにすること（"最大100万円相当の15大特典" で残り約12px）。
        */
       extras?: string[];
       /**
