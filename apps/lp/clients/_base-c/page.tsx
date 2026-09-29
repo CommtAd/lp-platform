@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { CarouselItem, Slot } from "@/clients/pattern-c.types";
+import type { CarouselItem, SectionDecor, Slot } from "@/clients/pattern-c.types";
 import LPShell from "@/components/LPShell";
 import LPForm from "@/components/LPForm";
 import LPCanvas, { DESIGN_WIDTH } from "@/components/LPCanvas";
@@ -28,6 +28,32 @@ const goldGrad = (accent: string) => `linear-gradient(135deg, ${accent} 0%, #D8B
  * 読めないため、FVの訴求バンド専用にこの深い金を使う（白地で 4.9:1）。
  */
 const goldOnWhite = "#8C6B2F";
+
+/**
+ * セクションの地に散らす飾り。文字の下に敷くだけなので z は上げず、位置は設計幅基準の
+ * 絶対値で与える（§18: セクションに overflow を足して切らない）。
+ * 置くセクション側に `relative` を付けること。
+ */
+function sectionDecor(decor?: SectionDecor[]): ReactNode {
+  return decor?.map((d, i) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      key={i}
+      src={d.src}
+      alt=""
+      aria-hidden
+      className="pointer-events-none absolute"
+      style={{
+        width: d.size,
+        top: d.top,
+        left: d.left,
+        right: d.right,
+        opacity: d.opacity ?? 0.2,
+        transform: `rotate(${d.rotate ?? 0}deg)`,
+      }}
+    />
+  ));
+}
 
 /**
  * 金額表記の数字部分だけを特大にする（"最大180万円相当" → 180 を特大）。
@@ -76,27 +102,37 @@ function prosePlate(text: string, word: string | undefined, size: number): React
   });
 }
 
-/** 文中の金額語だけを金の明朝に置き換える。語が見つからなければそのまま返す。 */
+/**
+ * 文中の金額語だけを金の明朝に置き換える。語が見つからなければ地の文のまま。
+ * `\n` は `<br>` に変換するので、2行の見出しにも使える
+ * （語が無い行はそのまま出る）。
+ */
 function emphasize(
   text: string,
   word: string | undefined,
   color: string,
   size = 15,
 ): ReactNode {
-  if (!word || !text.includes(word)) return text;
-  const [head, ...rest] = text.split(word);
-  return (
-    <>
-      {head}
-      <span
-        className="font-bold"
-        style={{ fontFamily: mincho, color, fontSize: `${size}px` }}
-      >
-        {word}
+  const lines = text.split("\n");
+  return lines.map((line, li) => {
+    const hit = Boolean(word && line.includes(word));
+    const [head, ...rest] = hit ? line.split(word as string) : [line];
+    return (
+      <span key={li}>
+        {head}
+        {hit && (
+          <span
+            className="font-bold"
+            style={{ fontFamily: mincho, color, fontSize: `${size}px` }}
+          >
+            {word}
+          </span>
+        )}
+        {hit ? rest.join(word as string) : null}
+        {li < lines.length - 1 && <br />}
       </span>
-      {rest.join(word)}
-    </>
-  );
+    );
+  });
 }
 
 /**
@@ -363,17 +399,30 @@ export default function Page() {
       ).toFixed(2)}px`
     : undefined;
   /**
-   * 最長ラベルが2列カードに1行で収まる文字サイズ。項目ごとに変えると不揃いに見えるので
+   * 最長ラベルが2列カードに収まる文字サイズ。項目ごとに変えると不揃いに見えるので
    * いちばん長い1本に全項目を合わせる。
    *
    * カード内の実幅は `(DESIGN_WIDTH - 左右余白40 - 溝8) / 2 - 内側余白16`。
-   * 全角は約1.07em幅なので、これを `文字数 × 1.07` で割った値が上限になる。
+   * 全角は約1.07em幅なので、これを `文字数 × 1.07` で割った値が1行あたりの上限になる。
+   *
+   * `label` に `\n` を入れれば改行位置を指定でき、その場合は最長「行」に合わせる。
+   * 指定が無く、1行に詰めると下限の9pxでも溢れる長さのときだけ自動で2行に落とす
+   * （以前は常に1行で組んでいたため、20文字を超えるラベルが `whitespace-nowrap` の
+   * ままカードからはみ出して切れていた。9px は可読性の下限で、これ以上は縮められない）。
    */
-  const recommendMaxLen = Math.max(...recommendItems.map((i) => i.label.length), 1);
   const recommendCardWidth = (DESIGN_WIDTH - 40 - 8) / 2 - 16;
+  const recommendLabelLines = recommendItems.map((i) => i.label.split("\n"));
+  const recommendMaxLen = Math.max(
+    ...recommendLabelLines.flat().map((line) => line.length),
+    1,
+  );
+  // 改行を明示した設定は、その改行位置を守る＝各行は折り返さない。
+  const recommendNoWrap =
+    recommendLabelLines.some((lines) => lines.length > 1) ||
+    recommendCardWidth / (recommendMaxLen * 1.07) >= 9;
   const recommendFontSize = `${Math.min(
     13,
-    Math.max(9, recommendCardWidth / (recommendMaxLen * 1.07)),
+    Math.max(9, (recommendCardWidth * (recommendNoWrap ? 1 : 2)) / (recommendMaxLen * 1.07)),
   ).toFixed(2)}px`;
 
   /**
@@ -469,9 +518,60 @@ export default function Page() {
   );
 
   /** キッカー・キャッチ・訴求の3点セット。framed なら1枚のプレートに封じる。 */
+  /**
+   * タイトルカードの左下に重ねる円形バッジ（当選枠など）。
+   * カードの角にまたがらせて視線を止めるのが目的なので、プレートの外にはみ出す。
+   * 1行目を小さく、2行目以降を大きく組む（「抽選で」＋「10組様」の形）。
+   */
+  const fvPlateBadge = c.fv.plateBadge ? (
+    <span
+      className="absolute z-20 flex flex-col items-center justify-center rounded-full text-white"
+      style={{
+        // 既定はカード左下にまたがる位置。中央寄せの文言と重なるときは
+        // `left` を負に振って外へ、`bottom` を負に振って下へ逃がす。
+        left: c.fv.plateBadge.left ?? -8,
+        bottom: c.fv.plateBadge.bottom ?? -20,
+        width: c.fv.plateBadge.size ?? 86,
+        height: c.fv.plateBadge.size ?? 86,
+        // 深めのローズ。明るいピンクは白文字で 4:1 を切るうえ、この配色だと浮く。
+        background: c.fv.plateBadge.bg ?? "#B0475F",
+        boxShadow: "0 4px 14px rgba(0,0,0,0.20)",
+        fontFamily: mincho,
+        textShadow: "none",
+        lineHeight: 1.25,
+        // わずかに傾けてスタンプのように見せる（まっすぐだとカードの一部に見える）。
+        transform: "rotate(-10deg)",
+      }}
+    >
+      {/* 縁の少し内側に白い細線。円の内側に一回り小さい輪を重ねて作る。 */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute rounded-full"
+        style={{ inset: 5, border: "1px solid rgba(255,255,255,0.85)" }}
+      />
+      {c.fv.plateBadge.lines.map((line, i) => (
+        <span key={i} className="relative" style={{ fontSize: i === 0 ? 11 : 17 }}>
+          {line}
+        </span>
+      ))}
+    </span>
+  ) : null;
+  /**
+   * `highlight` の直下に置く一言（「お得なブライダルフェアへご招待」など）。
+   * 金額の言い切りを受ける補足なので、金額より一段小さく本文色で置く。
+   * プレート内寸に1行で収まる長さにすること。
+   */
+  const fvHighlightSub = c.fv.highlightSub ? (
+    <p
+      className="mt-2 leading-snug"
+      style={{ fontFamily: mincho, fontSize: c.fv.highlightSubSize ?? 15, color: c.ink }}
+    >
+      {c.fv.highlightSub}
+    </p>
+  ) : null;
   const fvGroup = framed ? (
     <div
-      className="rounded-[3px] border px-2.5 py-3 text-center backdrop-blur-[3px]"
+      className="relative rounded-[3px] border px-2.5 py-3 text-center backdrop-blur-[3px]"
       style={{
         background: "rgba(255,255,255,0.9)",
         borderColor: c.accent,
@@ -479,30 +579,38 @@ export default function Page() {
         textShadow: "none",
       }}
     >
+      {fvPlateBadge}
       {c.fv.ornament?.top && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={c.fv.ornament.top}
           alt=""
-          className="mx-auto mb-1.5 block"
+          className="mx-auto block"
           style={{
             width: c.fv.ornament.width ?? "100%",
             height: c.fv.ornament.height ?? 44,
+            // 飾りは両端が渦・中央が細い罫線なので、中央下は絵として空く。
+            // 負の値で本文を引き上げると、その空きぶんだけ詰められる（両端の渦とは
+            // 中央寄せの文字が重ならない）。
+            marginBottom: c.fv.ornament.gap ?? 6,
           }}
         />
       )}
       {fvKicker}
       {fvCatch}
       {fvHighlight}
+      {fvHighlightSub}
       {c.fv.ornament?.bottom && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={c.fv.ornament.bottom}
           alt=""
-          className="mx-auto mt-1.5 block"
+          className="mx-auto block"
           style={{
             width: c.fv.ornament.width ?? "100%",
-            height: c.fv.ornament.height ?? 44,
+            height: c.fv.ornament.heightBottom ?? c.fv.ornament.height ?? 44,
+            // 上の飾りと同じ理屈で、中央上は絵として空く。負の値で詰められる。
+            marginTop: c.fv.ornament.gapBottom ?? 6,
           }}
         />
       )}
@@ -512,6 +620,7 @@ export default function Page() {
       {fvKicker}
       {fvCatch}
       {fvHighlight}
+      {fvHighlightSub}
     </>
   );
   const vars = {
@@ -530,7 +639,11 @@ export default function Page() {
           <header
             className={`${
               c.header.sticky === false ? "" : "sticky top-0 z-40 "
-            }flex items-center justify-between gap-3 border-b border-[var(--ink)]/10 bg-[var(--paper)]/95 px-5 py-3.5 backdrop-blur`}
+            }flex items-center ${
+              c.header.ctaText ? "justify-between" : "justify-center"
+            } gap-3 border-b border-[var(--ink)]/10 bg-[var(--paper)]/95 px-5 backdrop-blur`}
+            // 高さはロゴの高さ + 上下の余白で決まる。`paddingY` を下げると薄くなる。
+            style={{ paddingTop: c.header.paddingY ?? 14, paddingBottom: c.header.paddingY ?? 14 }}
           >
             <div className="min-w-0 leading-tight">
               {c.header.logo ? (
@@ -559,13 +672,17 @@ export default function Page() {
                 </>
               )}
             </div>
-            <a
-              href="#form"
-              className="shrink-0 rounded-full px-4 py-2.5 text-[11.5px] font-bold tracking-wide text-white"
-              style={{ background: goldGrad(c.accent) }}
-            >
-              {c.header.ctaText}
-            </a>
+            {/* `ctaText` 未設定ならボタンごと出さない（ロゴだけの薄いヘッダー）。
+                追従CTAバーが常時出ているので、ヘッダーのボタンは必須ではない。 */}
+            {c.header.ctaText && (
+              <a
+                href="#form"
+                className="shrink-0 rounded-full px-4 py-2.5 text-[11.5px] font-bold tracking-wide text-white"
+                style={{ background: goldGrad(c.accent) }}
+              >
+                {c.header.ctaText}
+              </a>
+            )}
           </header>
 
           {/* ── FV ── */}
@@ -606,9 +723,10 @@ export default function Page() {
             <div className="absolute inset-0" style={{ background: heroScrim }} />
             {catchTop && (
               <div
-                className={`absolute inset-x-0 top-0 pt-7 text-white ${framed ? "px-3" : "px-6"}`}
+                className={`absolute inset-x-0 top-0 text-white ${framed ? "px-3" : "px-6"}`}
                 // 明るい天井や白ドレスに白文字が重なっても読めるよう、影で輪郭を作る。
-                style={{ textShadow: heroTextShadow }}
+                // 上のアキは既定28px。左右（framed なら12px）に揃えたいときは下げる。
+                style={{ textShadow: heroTextShadow, paddingTop: c.fv.catchTopInset ?? 28 }}
               >
                 {fvGroup}
               </div>
@@ -616,7 +734,8 @@ export default function Page() {
             {fvBottomHasContent && (
               <div
                 className={`absolute inset-x-0 bottom-0 pb-8 text-white ${framed ? "px-3" : "px-6"}`}
-                style={{ textShadow: heroTextShadow }}
+                // 下端の帯と重ならないよう、帯があるぶんだけ底上げする。
+                style={{ textShadow: heroTextShadow, paddingBottom: c.fv.noticeBand ? 56 : undefined }}
               >
                 {!catchTop && fvGroup}
                 {c.fv.lead && (
@@ -635,6 +754,21 @@ export default function Page() {
                   </div>
                 )}
               </div>
+            )}
+            {/*
+              FV最下部のゴールド帯。締切など「今すぐ動く理由」を1行で置く枠。
+              写真の下端に貼り付けて、次のセクションとの境界も兼ねる。
+              CTAと同じゴールドグラデーションを使い、配色は accent に追従する。
+            */}
+            {c.fv.noticeBand && (
+              <p
+                className="absolute inset-x-0 bottom-0 z-10 px-4 py-2.5 text-center text-[14px] font-bold tracking-[0.04em]"
+                // 金地には濃い文字を載せる。白文字だと 2.2:1 しか出ず読めない
+                // （ink なら 5.3:1）。ゴールドは中間トーンという §保持すべき確定要素 と同じ理屈。
+                style={{ background: goldGrad(c.accent), color: c.ink, fontFamily: mincho, textShadow: "none" }}
+              >
+                {c.fv.noticeBand}
+              </p>
             )}
           </section>
 
@@ -1019,10 +1153,10 @@ export default function Page() {
                       </span>
                     )}
                     <p
-                      className="mt-3 whitespace-nowrap leading-[1.7]"
+                      className={`mt-3 leading-[1.7]${recommendNoWrap ? " whitespace-nowrap" : ""}`}
                       style={{ fontFamily: mincho, fontSize: recommendFontSize }}
                     >
-                      {item.label}
+                      {nl(item.label)}
                     </p>
                   </li>
                 ))}
@@ -1031,8 +1165,12 @@ export default function Page() {
           )}
 
           {/* ── privilege（来館特典） ── */}
-          <section className="px-5 py-12" style={{ background: band.bg, color: band.text }}>
-            <div className="text-center">
+          <section
+            className={`px-5 py-12${c.privilege.decor ? " relative" : ""}`}
+            style={{ background: band.bg, color: band.text }}
+          >
+            {sectionDecor(c.privilege.decor)}
+            <div className="relative text-center">
               <span
                 className="text-[11px] italic tracking-[0.2em]"
                 style={{ fontFamily: playfair, color: band.accent }}
@@ -1042,7 +1180,23 @@ export default function Page() {
               <h2 className="mt-2 text-[21px] leading-snug" style={{ fontFamily: mincho }}>
                 {c.privilege.heading}
               </h2>
-              <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">{c.privilege.lead}</p>
+              {c.privilege.lead && (
+                <p className="mt-3 text-[12.5px] leading-[1.9] opacity-75">{c.privilege.lead}</p>
+              )}
+              {/*
+                FVと同じキッカーをパネルの直前に置く。中盤から読み始めた人に、
+                この特典が通年ではなく期間限定のものだと分かるようにする。
+                和文＋数字なので Playfair のイタリックは当てず明朝で組む
+                （イタリックだと "10" が "1o" に見える。kickerEmphasis の注記参照）。
+              */}
+              {c.privilege.campaign?.kicker && (
+                <p
+                  className="mt-4 text-[14px] font-bold tracking-[0.06em]"
+                  style={{ fontFamily: mincho, color: band.accent }}
+                >
+                  {c.privilege.campaign.kicker}
+                </p>
+              )}
             </div>
             {/*
               地の上に小さい箱を並べると面が細切れになってセクションが沈むため、
@@ -1130,6 +1284,35 @@ export default function Page() {
                     </p>
                   </div>
                 </div>
+                {/* FVのプレートバッジと同じスタンプ。抽選などの条件を金額から離さない。 */}
+                {c.privilege.contract.badge && (
+                  <span
+                    className="absolute z-10 flex flex-col items-center justify-center rounded-full text-white"
+                    style={{
+                      // 金額は中央寄せで左に伸びてくるので、円は箱の左上角の外へ逃がす。
+                      left: -10,
+                      top: -34,
+                      width: c.privilege.contract.badge.size ?? 78,
+                      height: c.privilege.contract.badge.size ?? 78,
+                      background: c.privilege.contract.badge.bg ?? "#B0475F",
+                      boxShadow: "0 4px 14px rgba(0,0,0,0.20)",
+                      fontFamily: mincho,
+                      lineHeight: 1.25,
+                      transform: "rotate(-10deg)",
+                    }}
+                  >
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute rounded-full"
+                      style={{ inset: 5, border: "1px solid rgba(255,255,255,0.85)" }}
+                    />
+                    {c.privilege.contract.badge.lines.map((line, i) => (
+                      <span key={i} className="relative" style={{ fontSize: i === 0 ? 10 : 15 }}>
+                        {line}
+                      </span>
+                    ))}
+                  </span>
+                )}
                 <span
                   className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-[2px] px-4 py-1.5 text-[11px] font-bold tracking-[0.08em]"
                   style={{ background: c.ink, color: "#F0DDB2" }}
@@ -1140,6 +1323,23 @@ export default function Page() {
             )}
             {c.privilege.totalNote && (
               <p className="mt-4 text-[11px] leading-[1.9] opacity-75">{c.privilege.totalNote}</p>
+            )}
+            {/*
+              セクション末尾に全幅で敷く帯。FVの noticeBand と同じ扱いで、
+              金地には濃い文字（白だと 2.2:1 で読めない）。
+              セクションの左右・下の余白を打ち消して端まで伸ばす。
+            */}
+            {c.privilege.campaign?.notice && (
+              <p
+                className="-mx-5 -mb-12 mt-10 px-4 py-2.5 text-center text-[14px] font-bold tracking-[0.04em]"
+                style={{
+                  background: c.privilege.campaign.noticeBg ?? goldGrad(c.accent),
+                  color: c.privilege.campaign.noticeColor ?? c.ink,
+                  fontFamily: mincho,
+                }}
+              >
+                {c.privilege.campaign.notice}
+              </p>
             )}
           </section>
 
@@ -1292,8 +1492,16 @@ export default function Page() {
               「STEP番号｜アイコン｜テキスト」の3カラム。番号は左の列で縦罫に繋いで
               進行を示し、見出しと本文は右の列に寄せる。囲みを持たないぶん軽く見える。
               アイコンが1つも無い設定では中央列ごと省いて2カラムで組む。
+
+              `card` を立てると全体を1枚のカードで囲む。地はセクションの反対色
+              （白地セクションなら生成り）にしないと、カードが地に沈んで枠線だけが残る。
             */}
-            <div className="mt-8 flex flex-col">
+            <div
+              className={`mt-8 flex flex-col${
+                c.flow.card ? ` rounded-[3px] border ${oppositeLightBg()} px-4 pb-6 pt-7` : ""
+              }`}
+              style={c.flow.card ? { borderColor: `${c.accent}59` } : undefined}
+            >
               {c.flow.steps.map((s, i) => {
                 const last = i === c.flow.steps.length - 1;
                 return (
@@ -1478,30 +1686,82 @@ export default function Page() {
           {/* ── form ── */}
           <section
             id="form"
-            className={
-              formLight
-                ? `${lightBg()} px-5 py-12`
-                : "bg-[var(--ink)] px-5 py-12 text-[#F6F1E7]"
-            }
+            className={`${
+              formLight ? `${lightBg()} ` : "bg-[var(--ink)] text-[#F6F1E7] "
+            }px-5 py-12${c.form.decor ? " relative" : ""}`}
           >
+            {sectionDecor(c.form.decor)}
+            {/* 飾りは absolute なので、見出しは relative で上に出す（下に敷かれない）。 */}
+            <div className="relative">
             {formLight ? (
-              <Heading kicker="RESERVATION" title={c.form.heading} lead={c.form.lead} />
+              <Heading
+                kicker={c.form.kicker ?? "RESERVATION"}
+                title={c.form.heading}
+                lead={c.form.leadAfterEligibility ? undefined : c.form.lead}
+              />
             ) : (
               <div className="text-center">
                 <span
                   className="text-[11px] italic tracking-[0.2em] text-[var(--accent)]"
                   style={{ fontFamily: playfair }}
                 >
-                  RESERVATION
+                  {c.form.kicker ?? "RESERVATION"}
                 </span>
                 <h2 className="mt-2 text-[21px] leading-snug" style={{ fontFamily: mincho }}>
                   {c.form.heading}
                 </h2>
-                <p className="mt-3 text-[12.5px] leading-[1.9] text-[#F6F1E7]/70">
-                  {nl(c.form.lead)}
-                </p>
+                {!c.form.leadAfterEligibility && (
+                  <p className="mt-3 text-[12.5px] leading-[1.9] text-[#F6F1E7]/70">
+                    {nl(c.form.lead)}
+                  </p>
+                )}
               </div>
             )}
+
+            {/*
+              応募条件のプレート。すぐ下のフォームカード（白地＋金の囲み）と
+              地続きに見えないよう、囲みを外して淡い金の地に置き、左右も一段
+              内側に寄せる。見出しは地に直接置く深い金の明朝。
+            */}
+            {c.form.eligibility && (
+              <div
+                className="mx-3 mt-6 rounded-[3px] px-4 py-4"
+                style={{ background: formLight ? `${c.accent}1F` : "rgba(255,255,255,0.07)" }}
+              >
+                <p
+                  className="text-center text-[12.5px] font-bold tracking-[0.1em]"
+                  style={{ fontFamily: mincho, color: formLight ? goldOnWhite : c.accent }}
+                >
+                  {c.form.eligibility.title}
+                </p>
+                <ul className="mt-3 space-y-1.5">
+                  {c.form.eligibility.items.map((item) => (
+                    <li key={item} className="flex gap-1.5 text-[12.5px] leading-[1.65]">
+                      <span
+                        aria-hidden
+                        className="shrink-0 font-bold"
+                        style={{ color: formLight ? goldOnWhite : c.accent }}
+                      >
+                        ✓
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                {c.form.eligibility.note && (
+                  <p className="mt-2.5 text-[10.5px] leading-[1.6] opacity-60">
+                    {c.form.eligibility.note}
+                  </p>
+                )}
+              </div>
+            )}
+            {/* リードが直後のフォームを指す文面のときは、条件プレートの下に回す。 */}
+            {c.form.leadAfterEligibility && (
+              <p className="mt-7 text-center text-[12.5px] leading-[1.9] opacity-70">
+                {nl(c.form.lead)}
+              </p>
+            )}
+            </div>
             <div
               className={
                 formLight
@@ -1510,6 +1770,15 @@ export default function Page() {
               }
               style={formLight ? { borderColor: `${c.accent}59` } : undefined}
             >
+              {c.form.cardTitle && (
+                // カード内の見出し。下に罫を敷いて、入力欄の群と切り離す。
+                <p
+                  className="mb-6 border-b pb-3 text-center text-[15px] font-bold tracking-[0.08em]"
+                  style={{ fontFamily: mincho, borderColor: `${c.accent}40` }}
+                >
+                  {c.form.cardTitle}
+                </p>
+              )}
               <LPForm
                 clientSlug={c.slug}
                 accent={c.accent}
@@ -1517,6 +1786,7 @@ export default function Page() {
                 submitLabel={c.form.submitLabel}
                 errorMessage={c.form.errorMessage}
                 disclaimer={nl(c.form.disclaimer)}
+                thanksHref={c.form.thanksHref}
                 submitStyle={{
                   background: goldGrad(c.accent),
                   boxShadow: `0 10px 26px ${c.accent}59`,

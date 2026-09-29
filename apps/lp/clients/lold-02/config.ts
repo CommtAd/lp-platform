@@ -20,9 +20,11 @@ const config: PatternCConfig = {
   slug: "lold-02",
   status: "draft",
   meta: {
-    title: "ザ・フォレストオブロルド｜プレミア試食つきBIGフェア",
+    title: "ザ・フォレストオブロルド｜AUTUMN WEDDING CAMPAIGN",
+    // A案（lold）は「フェアの予約」、B案は「キャンペーンへの応募」。
+    // 抽選であること・締切があること・応募が30秒で済むことを本文に入れる。
     description:
-      "「ザ・フォレストオブロルド」のプレミア試食つきBIGフェアを開催中。ご成約で最大100万円分プレゼント、ご来館で最大5万円分の特典をご用意。チャペル見学・披露宴会場見学・豪華無料試食・お見積り相談を最短30秒でご予約いただけます。",
+      "「ザ・フォレストオブロルド」10月限定のAUTUMN WEDDING CAMPAIGN。抽選で10組様に、ご成約で最大100万円相当の特典をプレゼント。ご来館だけでも最大5万円分の特典付きです。応募締切は2026年10月20日(火)、フォームは最短30秒で送信できます。",
     // OGP専用の1枚（1200x630）。会場紹介のチャペル写真から切り出したもので、
     // ファイルは別に持つ。共用すると写真を差し替えてもURLが変わらず、
     // SNS側のキャッシュが古い画像を出し続ける（実際に発生）。
@@ -31,14 +33,18 @@ const config: PatternCConfig = {
   },
   ink: "#3B3730",
   accent: "#B99653",
-  paper: "#FBF8F3",
+  // A案の #FBF8F3 より黄みに振った生成り。ページ全体の地をわずかに温めて秋に寄せる
+  // （差は小さいが全面に効くので、写真とバンドの温かさと喧嘩しない）。
+  paper: "#FAF5EB",
 
   // 特典バンド（限定特典・来館特典）。地・文字とも顧客指定（#A49483 × 白）。
   // 白 on #A49483 は 2.9:1 で WCAG AA（4.5:1／大文字3:1）には届かないが、
   // 見た目の指定を優先するという判断。ここに載るのは見出しと補足のみで、
   // 金額はすべて白プレート＋深い金（4.9:1）に逃がしてある。
   band: {
-    bg: "#A49483",
+    // A案の #A49483 より一段温かく・濃く振った枯葉色。白見出しのコントラストも
+    // 2.94:1 → 3.76:1 に上がる（21pxの大きい文字の基準3:1を満たす）。
+    bg: "#9A7F63",
     text: "#FFFFFF",
     accent: "#FFFFFF",
     rule: "rgba(255,255,255,0.5)",
@@ -47,35 +53,60 @@ const config: PatternCConfig = {
   header: {
     // 英字表記は支給ロゴの表記に合わせている。
     venue: "The Forest of Lold",
-    // 横並びのロゴ（紋章 + ロゴタイプ、比率 2.64:1）。ロゴタイプが高さの3割弱しか
-    // 取らないので、42px だと文字が10px を切って読めない。46px で約13px になる。
-    // 支給素材は白地の不透明PNGだったので、白を透過に起こして余白を詰めてある
-    //（そのまま置くと生成りのヘッダーに白い矩形が出る）。
-    logo: { src: `${ASSET}/logo.png`, height: 46 },
-    ctaText: "予約する",
+    // ヘッダーを薄くする指定（B案の差分）。高さ = ロゴ24 + 余白6×2 + 罫線1 = 37px で、
+    // A案の75pxのほぼ半分。ロゴタイプは約7pxになり文字としては読めないが、
+    // 紋章のシルエットで会場を示す割り切り。
+    logo: { src: `${ASSET}/logo.png`, height: 24 },
+    paddingY: 6,
+    // CTAボタンは非表示。追従バーが常時出ているので導線は確保されている。
     // ヘッダーは追従させない（顧客指定）。
     sticky: false,
   },
 
   fv: {
     brand: "ザ・フォレストオブロルド",
-    kicker: "＼豪華10大特典／",
+    kicker: "＼10月限定キャンペーン／",
     // 英字前提のキッカー枠なので、数字を明朝の立体に逃がさないと "1o" に見える。
     kickerEmphasis: "10",
-    catch: ["プレミア試食つきBIGフェア"],
+    catch: ["AUTUMN WEDDING CAMPAIGN"],
+    // 自動調整は和文基準（半角0.62em）なので、大文字の英字だと幅を過小評価して
+    // 2行に折り返す（24.26px で 403px、プレート内寸は344px）。実測で1行に収まる
+    // 上限が20px（335px）なので明示する。
+    catchSize: 20,
     // キッカー・キャッチ・訴求を1枚のプレートにまとめる。
     framed: true,
     ornament: {
-      top: `${ASSET}/fv-ornament-top.png`,
-      bottom: `${ASSET}/fv-ornament-bottom.png`,
+      // 秋仕様。金の渦からもみじ・銀杏の枝＋中央の金罫に差し替える（B案の差分）。
+      top: `${ASSET}/autumn-ornament-top.png`,
+      bottom: `${ASSET}/autumn-ornament-bottom.png`,
+      // 新しい絵は枝が枠の高さいっぱいまで入っていて上下の空きが無いので、
+      // 金の渦のときのような負のツメ（-20 / -14）は入れない。
+      // 素材の腕をそのまま使えるだけの高さを取る（既定44では枝が小さくなりすぎる）。
+      // 版面の縦横比はプレート内寸344px÷この値に合わせてあるので、値を変えるなら
+      // 画像も作り直すこと。上 900x126 / 下 900x131。
+      height: 48,
+      // 罫は版面の中央なので、枝の上下は絵として空く。負の値でその空きぶんを詰め、
+      // カードの縦を元の高さより伸ばさない。
+      gap: -10,
+      heightBottom: 50,
+      gapBottom: -16,
     },
     highlight: "最大100万円相当プレゼント",
     // 既定22pxから一段下げる（顧客指定）。
     highlightSize: 19,
+    // 金額の言い切りを受ける一言（B案の差分）。
+    highlightSub: "お得なブライダルフェアへご招待",
+    // FV下端のゴールド帯。締切で今すぐ動く理由を作る（B案の差分）。
+    noticeBand: "応募締切：2026年10月20日(火)まで",
+    // タイトルカードの左下に重ねる当選枠のバッジ（B案の差分）。
+    // 中央寄せの訴求文（左端 70.5px）と重ならないよう、左へ逃がして少し小さくする。
+    plateBadge: { lines: ["抽選で", "10組様"], size: 88, left: -10, bottom: -40 },
     // リードとオファーチップは顧客要望で非表示。FVは訴求を highlight 1点に絞る。
-    ctaText: "最短30秒で予約する",
+    ctaText: "キャンペーンに応募",
     // 新郎新婦が写真中央にいるため、キャッチを上に逃がして顔にかぶらないようにする。
     catchPosition: "top",
+    // カード上のアキを左右（12px）に揃える（B案の差分）。
+    catchTopInset: 12,
     // スライドは全て 1360x1814。支給素材が 1627x2170 の 3:4 ちょうどなので、
     // heroAspect と一致し、トリミングは発生しない（幅を詰めただけ）。
     // キャンバスは実寸480pxまでなので、DPR3の端末でも 1440px あれば等倍に届く。
@@ -97,8 +128,8 @@ const config: PatternCConfig = {
 
   // FVを離脱する前に金額だけ持ち帰ってもらうための要約。詳細は privilege 側。
   fvSummary: {
-    headline: "最大5万円の来館ギフトがついてくる",
-    headlineEmphasis: "最大5万円",
+    headline: "今なら！\n最大5万円分来館特典付き",
+    headlineEmphasis: "最大5万円分",
     headlineOrnament: `${ASSET}/fv-summary-ornament.png`,
     label: "来館特典",
     // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
@@ -118,7 +149,7 @@ const config: PatternCConfig = {
   },
 
   grandOffer: {
-    eyebrow: "プレミアブライダルフェア",
+    eyebrow: "AUTUMN WEDDING CAMPAIGN",
     heading: "美食 × 自由度を体験",
     headingSize: 29,
     badge: "最大100万円分プレゼント",
@@ -128,11 +159,12 @@ const config: PatternCConfig = {
     amount: "衣装2着・装花・映像・引出物など\n結婚式に必要なアイテムがお得に！",
     amountProse: true,
     amountProseEmphasis: "衣装2着",
-    frame: `${ASSET}/grand-offer-frame.png`,
+    // 秋仕様。バラの線画からもみじ・銀杏の水彩の枠に差し替える（B案のみ）。
+    frame: `${ASSET}/autumn-frame.png`,
   },
 
   experience: {
-    heading: "このフェアで体験できること",
+    heading: "キャンペーン当選で体験できること",
     lead: "チャペルからお料理、お見積りまで。当日のすべてをご確認いただけます。",
     items: [
       {
@@ -172,21 +204,20 @@ const config: PatternCConfig = {
   },
 
   recommend: {
-    heading: "このフェアがおすすめな方",
+    heading: "こんな方におすすめ",
     items: [
-      { label: "初めて式場見学をする", icon: `${ASSET}/rec-planner.png` },
-      { label: "何から始めればいいか分からない", icon: `${ASSET}/rec-question.png` },
+      { label: "これから\n式場を探し始める", icon: `${ASSET}/rec-planner.png` },
+      { label: "何から始めれば\nいいか分からない", icon: `${ASSET}/rec-question.png` },
       { label: "費用が気になる", icon: `${ASSET}/rec-cost.png` },
-      { label: "少人数婚も相談したい", icon: `${ASSET}/rec-couple.png` },
+      { label: "自分たちのスタイルに\n合った結婚式を挙げたい", icon: `${ASSET}/rec-couple.png` },
     ],
   },
 
   privilege: {
-    heading: "ご来館特典・ご成約特典",
-    lead: "フェアにご参加いただいた方にご用意しています。",
+    heading: "豪華当選特典",
     // 合計はここで言い切るので、パネル下部の TOTAL ブロックは出さない（total 未設定）。
-    headline: "最大5万円の来館ギフトがついてくる",
-    headlineEmphasis: "最大5万円",
+    headline: "今なら！\n最大5万円分来館特典付き",
+    headlineEmphasis: "最大5万円分",
     items: [
       {
         title: "ギフト券orカタログギフト",
@@ -199,9 +230,34 @@ const config: PatternCConfig = {
         image: { placeholder: "婚礼料理のコース", src: `${ASSET}/gift-tasting.jpg` },
       },
     ],
-    frame: `${ASSET}/privilege-frame.png`,
+    frame: `${ASSET}/autumn-frame.png`,
+    // 見出しまわりの余白に落ち葉を薄く敷く。枯葉色の地に同系色なので、
+    // 透過を上げると柄になってしまう。0.2 前後で「地の気配」に留める。
+    decor: [
+      // 傾けると外接矩形が size より一回り大きくなる。キャンバスは overflow-x: clip なので、
+      // 左右の余白はその増分（maple 約9px / ginkgo 約9px）より大きく取ること。
+      { src: `${ASSET}/autumn-leaf-maple.png`, size: 74, top: 16, left: 12, rotate: -18 },
+      { src: `${ASSET}/autumn-leaf-ginkgo.png`, size: 56, top: 92, right: 12, rotate: 24 },
+      { src: `${ASSET}/autumn-leaf-brown.png`, size: 44, top: 8, right: 62, rotate: 34, opacity: 0.16 },
+    ],
     disclaimer: "※特典のお渡しには適用条件がございます",
-    contract: { label: "さらに、ご成約で", amount: "最大100万円分プレゼント" },
+    contract: {
+      label: "さらに、ご成約で",
+      amount: "最大100万円分プレゼント",
+      // 100万円は抽選の賞。FVと同じスタンプを金額に添えて、条件が金額から離れないようにする。
+      badge: { lines: ["抽選で", "10組様"] },
+    },
+    // FVと同じキャンペーンの枠をこのセクションにも被せる（中盤から読み始めた人向け）。
+    campaign: {
+      kicker: "＼10月限定キャンペーン／",
+      notice: "応募締切：2026年10月20日(火)まで",
+      // 顧客指定で白抜き（FV下部の帯は ink のまま）。
+      // ブランドゴールドのままだと白は 2.2:1 で読めないので、地を深い金に振る。
+      // 濃い側 #6B4F20 で 7.6:1、明るい側 #8C6B2F で 4.9:1。どこを取ってもAAを満たす。
+      // #8C6B2F は金額に使っている深い金と同じ色なので、色数は増えない。
+      noticeColor: "#FFFFFF",
+      noticeBg: "linear-gradient(135deg, #6B4F20 0%, #8C6B2F 100%)",
+    },
   },
 
   facility: {
@@ -253,27 +309,41 @@ const config: PatternCConfig = {
     ],
   },
 
+  // B案は「当日の流れ」ではなく、応募から抽選・来館・成約までの全体の流れを見せる。
+  // アイコンは付けない（手持ちは3点＝プランナー／チャペル／署名だけで、抽選・プレゼントに
+  // 当たる絵が無く、5ステップ中2つが空の丸になるため）。icon を省くと page.tsx が
+  // アイコン列ごと落として「番号｜本文」の2カラムで組む。
   flow: {
-    heading: "当日の流れ",
-    lead: "所要時間：2〜3時間",
+    heading: "応募からご成約までの流れ",
+    // 5ステップを1枚のカードで囲む（B案の差分）。
+    card: true,
     steps: [
       {
         num: "1",
-        title: "受付",
-        icon: `${ASSET}/flow-01.png`,
-        body: "ご希望の結婚式のイメージやご要望をお伺いします。",
+        title: "フォームを送信",
+        time: "約30秒",
+        body: "むずかしいご記入はありません。まずはお気軽にご応募ください。",
       },
       {
         num: "2",
-        title: "見学・試食",
-        icon: `${ASSET}/flow-02.png`,
-        body: "チャペルや披露宴会場を実際にご見学いただきます。また、人気の婚礼メニューをご試食いただけます。",
+        title: "抽選",
+        body: "ご応募いただいた方の中から、抽選で10組様を決定します。",
       },
       {
         num: "3",
-        title: "相談・見積り",
-        icon: `${ASSET}/flow-03.png`,
-        body: "ご予算や日程について詳しくご案内いたします。",
+        title: "当選のご連絡",
+        body: "当選されたお客様へ、式場の担当者よりご連絡します。",
+      },
+      {
+        num: "4",
+        title: "ご来館日の確定・ご来館",
+        time: "所要2時間ほど",
+        body: "ご都合のよい日時を調整のうえ、会場のご見学とお料理のご試食をお楽しみください。",
+      },
+      {
+        num: "5",
+        title: "ご成約でプレゼント適用",
+        body: "ご来館いただくと、5万円分の特典付き。さらに、ご成約で最大100万円相当の特典をプレゼント。",
       },
     ],
   },
@@ -296,9 +366,32 @@ const config: PatternCConfig = {
   },
 
   form: {
-    heading: "ブライダルフェアのご予約",
-    lead: "下記フォームよりご希望の日程をお知らせください。\n担当プランナーよりご連絡いたします。",
+    // B案は予約導線を「キャンペーンへの応募」として見せる。
+    heading: "キャンペーン概要",
+    kicker: "CAMPAIGN",
+    // 特典セクションと同じ落ち葉を、見出しまわりの余白に敷く。
+    // 地が生成りで葉と近い色なので、バンド（0.16〜0.2）より少し濃く取る。
+    decor: [
+      { src: `${ASSET}/autumn-leaf-ginkgo.png`, size: 62, top: 18, left: 12, rotate: -22, opacity: 0.28 },
+      { src: `${ASSET}/autumn-leaf-maple.png`, size: 72, top: 78, right: 14, rotate: 20, opacity: 0.28 },
+      { src: `${ASSET}/autumn-leaf-brown.png`, size: 44, top: 10, right: 72, rotate: 36, opacity: 0.22 },
+    ],
+    lead: "下記フォームよりお気軽にご応募ください。",
+    // 「下記フォーム」を指す文面なので、条件プレートの下＝入力欄の直前に置く。
+    leadAfterEligibility: true,
+    cardTitle: "応募フォーム",
     tone: "light",
+    eligibility: {
+      // 見出しは書体と色で立てるので【】は不要。
+      title: "対象となる方",
+      items: [
+        "おふたり揃ってフェアに参加できる方",
+        "当式場のフェアに初めて参加される方",
+      ],
+      note: "※すでにご予約済みの方は対象外です",
+    },
+    // B案は来館日をフォームで取らず、想い＋任意の条件だけ聞いて送信の手数を減らす。
+    // 日程はプランナーからの折り返しで調整する運用（A案との差分の主眼）。
     fields: [
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "山田 太郎" },
       { type: "tel", name: "tel", label: "電話番号", required: true, placeholder: "090-0000-0000" },
@@ -309,55 +402,53 @@ const config: PatternCConfig = {
         required: true,
         placeholder: "example@mail.com",
       },
-      { type: "date", name: "visit_date_1", label: "ご来館希望日（第一希望）", required: true },
-      { type: "date", name: "visit_date_2", label: "ご来館希望日（第二希望）", required: true },
-      { type: "date", name: "visit_date_3", label: "ご来館希望日（第三希望）", required: true },
-      {
-        // 挙式の招待人数ではなく、フェア当日に来館する人数。
-        // おふたりだけか、ご両親が同席するかで案内の準備が変わる。
-        type: "select",
-        name: "guests",
-        label: "ご来館人数",
-        required: true,
-        placeholder: "選択してください",
-        // 1名は選択肢から外す（来館特典の対象外のため）。注釈でその旨を明記する。
-        hint: "※1名様でご参加の場合、来館特典は対象外となります",
-        options: [
-          { value: "2", label: "2名" },
-          { value: "3", label: "3名" },
-          { value: "4over", label: "4名以上" },
-        ],
-      },
-      {
-        type: "toggle",
-        name: "tasting",
-        label: "ご試食の有無",
-        required: true,
-        columns: 2,
-        options: [
-          { value: "yes", label: "試食あり" },
-          { value: "no", label: "試食なし" },
-        ],
-      },
       {
         type: "textarea",
-        name: "note",
-        label: "ご質問・ご相談",
+        name: "wedding_wish",
+        label: "結婚式への想い",
         optionalTag: "任意",
-        placeholder: "ご希望の体験内容や、他の日程のご相談などをご自由にお書きください。",
+        placeholder: "結婚式への想いをご自由にお書きください",
         rows: 4,
       },
+      {
+        type: "select",
+        name: "wedding_timing",
+        label: "挙式時期",
+        optionalTag: "任意",
+        placeholder: "選択してください",
+        options: [
+          { value: "3m", label: "3ヶ月以内" },
+          { value: "6m", label: "6ヶ月以内" },
+          { value: "1y", label: "1年以内" },
+          { value: "unset", label: "未定" },
+        ],
+      },
+      {
+        // 挙式に招待する人数の目安。フェア当日の来館人数ではない。
+        type: "select",
+        name: "guests",
+        label: "挙式人数",
+        optionalTag: "任意",
+        placeholder: "選択してください",
+        options: [
+          { value: "o20", label: "20名以上" },
+          { value: "o30", label: "30名以上" },
+          { value: "o40", label: "40名以上" },
+          { value: "unset", label: "未定" },
+        ],
+      },
     ],
-    submitLabel: "この内容で予約する",
+    // 送信後はサンクスページへ。LINEの友だち追加まで運ぶのが狙い（B案の差分）。
+    thanksHref: "/lold-02/thanks",
+    submitLabel: "この内容で応募する",
     disclaimer:
       "ご入力いただいた内容はご予約対応のみに利用します。\nしつこいご案内はいたしません。",
-    errorMessage:
-      "お名前・電話番号・メールアドレス・ご来館希望日（第一/第二/第三）・ご人数・ご試食の有無は必須項目です。",
+    errorMessage: "お名前・電話番号・メールアドレスは必須項目です。",
   },
 
   sticky: {
-    offerText: "最大100万円分プレゼント",
-    buttonText: "最短30秒で予約",
+    offerText: "最大100万円分が当たる",
+    buttonText: "キャンペーンに応募",
     anchor: "#form",
   },
 };
@@ -367,6 +458,6 @@ const config: PatternCConfig = {
  *  - 見積もり相談 / ギフト券の写真（会場の実物ではない汎用カット）
  *  - experience 04（見積もり相談）/ recommend / flow はテンプレの原稿のまま
  *  - facility（収容人数は削除済み。必要になったら実数を確認して戻す）
- *  - form（人数・試食の選択肢は案件の原稿に従う）
+ *  - form（挙式時期・挙式人数の選択肢は案件の原稿に従う）
  */
 export default config;
