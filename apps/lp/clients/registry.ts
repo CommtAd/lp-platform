@@ -13,6 +13,7 @@ export const clientRegistry: Record<
   "_base-c": () => import("./_base-c/page"),
   "forest-terrace-hiroshima": () => import("./forest-terrace-hiroshima/page"),
   "lold": () => import("./lold/page"),
+  "lold-02": () => import("./lold-02/page"),
   "kaigyo-support": () => import("./kaigyo-support/page"),
   "the-personal-pilates": () => import("./the-personal-pilates/page"),
   "the-personal-gym": () => import("./the-personal-gym/page"),
@@ -49,6 +50,7 @@ export const clientThanksRegistry: Partial<
 > = {
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/thanks"),
   "kaigyo-support": () => import("./kaigyo-support/thanks"),
+  "lold-02": () => import("./lold-02/thanks"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/thanks"),
 };
 
@@ -72,6 +74,7 @@ export const clientMetaRegistry: Record<
   "_base-c": () => import("./_base-c/config"),
   "forest-terrace-hiroshima": () => import("./forest-terrace-hiroshima/config"),
   "lold": () => import("./lold/config"),
+  "lold-02": () => import("./lold-02/config"),
   "kaigyo-support": () => import("./kaigyo-support/config"),
   "the-personal-pilates": () => import("./the-personal-pilates/config"),
   "the-personal-gym": () => import("./the-personal-gym/config"),
