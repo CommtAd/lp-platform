@@ -55,9 +55,18 @@ export interface IvyBConfig {
     facts: string[];
     price: { value: string; unit: string };
     campaign: { label: string; was: string; now: string; nowUnit: string };
+    /** キャンペーンに付く特典。FVでは1行に収めるため、短い語で2つまで。 */
+    bonuses: string[];
   };
 
-  intro: { kicker: string; heading: string; body: string; chips: string[] };
+  intro: {
+    kicker: string;
+    heading: string;
+    body: string;
+    /** 本文とチップの間に挟む正方形の写真。 */
+    img: Slot;
+    chips: string[];
+  };
 
   campaign: {
     kicker: string;
@@ -243,6 +252,9 @@ const config: IvyBConfig = {
       now: "0",
       nowUnit: "円",
     },
+    // 顧客支給の特典内容（2026-09-29 AUN #1）。FVは1行に収める必要があるため、
+    // 語を増やすときは幅（設計338px）に収まるか確認すること。
+    bonuses: ["ピラティスソックスプレゼント", "入会金無料"],
   },
 
   intro: {
@@ -251,6 +263,11 @@ const config: IvyBConfig = {
     body:
       "周りの目を気にせず、\n一人ひとりの身体や目的に合わせたレッスンを。\n" +
       "STUDIO IVYは、完全個室の空間で受けられる\nマンツーマンのマシンピラティススタジオです。",
+    img: {
+      placeholder: "レッスンの様子",
+      src: `${ASSET}/about.jpg`,
+      position: "center 35%",
+    },
     chips: ["完全個室", "マンツーマン", "初心者歓迎", "藤沢駅 徒歩5分"],
   },
 
