@@ -411,15 +411,18 @@ function FullBleed({
   img,
   ratio = "16 / 10",
   style,
+  /** 文字が焼き込まれた画像では、読み上げ用に中身の文言を渡す。 */
+  alt,
 }: {
   img: { src?: string | null; placeholder: string; position?: string };
   ratio?: string;
   style?: CSSProperties;
+  alt?: string;
 }) {
   return (
     <ImageSlot
       src={img.src}
-      alt={img.placeholder}
+      alt={alt ?? img.placeholder}
       placeholder={img.placeholder}
       objectPosition={img.position ?? "center"}
       style={{ aspectRatio: ratio, ...style }}
@@ -885,40 +888,16 @@ export default function Page() {
           </Section>
 
           {/* ─ ⑦ お悩み ─────────────────────────────────────
-              白カードを5枚並べない。淡色地にヘアライン区切りのリストだけ。 */}
-          <Section background={PALE}>
-            <Kicker text={c.worry.kicker} align="left" />
-            <Head text={c.worry.heading} align="left" size={23} />
-            <ul
-              style={{
-                listStyle: "none",
-                margin: "26px 0 0",
-                padding: 0,
-                borderTop: `1px solid ${RULE}`,
-              }}
-            >
-              {c.worry.items.map((item) => (
-                <li
-                  key={item}
-                  style={{
-                    display: "flex",
-                    gap: 11,
-                    padding: "15px 2px",
-                    borderBottom: `1px solid ${RULE}`,
-                    fontFamily: BODY,
-                    fontSize: 14,
-                    lineHeight: 1.8,
-                    color: INK,
-                  }}
-                >
-                  <Check />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+              見出しと悩み項目は顧客支給の画像に焼き込まれている（AUN #6）。
+              そのためキッカー・見出し・リストは置かず、画像を全幅で出して
+              締めの一文だけをLP側で持つ。画像の比率は原寸（1092x1440）と
+              一致させてあるので、`cover` でも切り取られない。 */}
+          <Section background={PALE} flush style={{ padding: "0 0 62px" }}>
+            <FullBleed img={c.worry.img} ratio="1092 / 1440" alt={c.worry.imgAlt} />
             <p
               style={{
-                margin: "30px 0 0",
+                margin: "34px 0 0",
+                padding: `0 ${PAD}px`,
                 textAlign: "center",
                 fontFamily: MINCHO,
                 fontWeight: 600,
