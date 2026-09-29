@@ -6,6 +6,7 @@ import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
 import FaqAccordion from "./FaqAccordion";
 import config from "./config";
+import type { Slot } from "./config";
 
 /**
  * パーソナルマシンピラティス SAKURA — ブランド全体の広告集客用LP。
@@ -14,17 +15,23 @@ import config from "./config";
  * 作れているか」。ブランド紹介ではないので、各ブロックは
  * 「不安を1つ潰す → その場で予約できる」の順に並べている。
  *
- * ブロック順（CVRを意図した並び。入れ替えると理由づけの流れが壊れる）:
- *   FV → 特典 → お悩み → なぜマシンピラティス×マンツーマンか → 選ばれる6つの理由
- *   → パーソナルだからできること → 初心者でも安心 → 数字で見るSAKURA
- *   → レッスン内容 → お客様の声 → 体験の流れ → FAQ → 店舗一覧
+ * ブロック順（2026-09-29 に seren-pilates の構成へ寄せて組み直した）:
+ *   ヘッダー → オファーバー → FV（縦書きキャッチ＋円形バッジ）→ 桜色の帯（サブコピー＋悩みチップ）
+ *   → 体験キャンペーン → お悩み → マシンピラティス×マンツーマンで変わること
+ *   → 選ばれる6つの理由 → 料金 → 体験キャンペーン再掲 → パーソナルだからできること
+ *   → 体験レッスンの流れ → はじめてでも大丈夫 → 店舗 → FAQ → クロージング
  *
- * 料金・他社比較・予約フォームは顧客判断により一旦非表示
- * （SHOW_PRICE / SHOW_COMPARE / SHOW_FORM）。データは config に残してあるので、
- * フラグを true に戻せば元の位置に復帰する。
+ * 組み直しの方針は「文字を大きく、写真を多く」。本文は15px以上。
+ * 写真は21枚すべて別の素材で、頭・顔が枠で切れるものは使わない（素材の出典は config.ts）。
+ * 体験の流れの 01・03・05・06 は割り当てる素材が無いのでテキストのみ。
  *
- * CTAは 特典直後 / 理由の直後 / 初心者不安の解消直後 / お客様の声の直後 / 流れの直後 の
- * 5箇所＋ヘッダー＋追従フッター。**いずれもSAKURA公式の予約サイト（hacomono）へ
+ * 数字で見るSAKURA・レッスン内容・お客様の声・パーソナルの比較表は、この構成では
+ * 出していない（データは config に残してある）。他社比較・予約フォームは
+ * 顧客判断により一旦非表示（SHOW_FORM）。料金は 2026-09-03 に顧客判断で非表示に
+ * していたが、2026-09-29 の組み直しで表として再掲した（公開前に顧客確認を取ること）。
+ *
+ * CTAは 体験キャンペーン / 選ばれる理由 / 体験の流れ / クロージング の4箇所＋
+ * ヘッダー＋追従フッター。**いずれもSAKURA公式の予約サイト（hacomono）へ
  * 外部遷移する**（config.reserve.url）。
  *
  * 見た目の作法:
@@ -48,6 +55,9 @@ const BODY = "#6E6568";
 const MUTED = "#A2969A";
 const BTN = "linear-gradient(135deg, #EC8AA6 0%, #C24F71 100%)";
 const BTN_SHADOW = "0 10px 22px rgba(194,80,113,0.32)";
+/** 白抜き文字を載せる桜色の帯。白字が沈まないよう淡いピンクは使わない。 */
+const BAND = "linear-gradient(120deg, #DB7593 0%, #C2557A 55%, #A8416A 100%)";
+const PALE_GRAD = `linear-gradient(180deg, ${PALE} 0%, ${PALE2} 100%)`;
 
 const MINCHO = "'Shippori Mincho', 'Hiragino Mincho ProN', serif";
 const GOTHIC = "'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif";
@@ -166,16 +176,16 @@ function OfferIcon({ children }: { children: ReactNode }) {
   );
 }
 
-function Kicker({ children }: { children: ReactNode }) {
+function Kicker({ children, color = PINK_DEEP }: { children: ReactNode; color?: string }) {
   return (
     <div
       style={{
         textAlign: "center",
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: 700,
-        letterSpacing: "0.22em",
-        color: PINK_DEEP,
-        marginBottom: 8,
+        letterSpacing: "0.24em",
+        color,
+        marginBottom: 10,
       }}
     >
       {children}
@@ -185,7 +195,7 @@ function Kicker({ children }: { children: ReactNode }) {
 
 function Heading({
   text,
-  size = 21,
+  size = 26,
   color = INK,
 }: {
   text: string;
@@ -212,21 +222,62 @@ function Heading({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: 7,
-          margin: "12px 0 0",
+          gap: 8,
+          margin: "14px 0 0",
         }}
         aria-hidden
       >
-        <span style={{ width: 22, height: 1, background: LINE }} />
-        <SakuraMark size={12} />
-        <span style={{ width: 22, height: 1, background: LINE }} />
+        <span style={{ width: 26, height: 1, background: color === INK ? LINE : "rgba(255,255,255,0.6)" }} />
+        <SakuraMark size={14} color={color === INK ? PINK : "#FFFFFF"} />
+        <span style={{ width: 26, height: 1, background: color === INK ? LINE : "rgba(255,255,255,0.6)" }} />
       </div>
     </div>
   );
 }
 
+const CheckIcon = ({ color = PINK_DEEP, size = 18 }: { color?: string; size?: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ flex: "none", marginTop: 4 }}
+    aria-hidden
+  >
+    <path d="M4 12.5l5 5L20 6.5" />
+  </svg>
+);
+
+/** 写真。config の Slot をそのまま受ける。 */
+function Photo({ slot, style, radius = 0 }: { slot: Slot; style: CSSProperties; radius?: number }) {
+  return (
+    <ImageSlot
+      src={slot.src}
+      placeholder={slot.placeholder}
+      alt={slot.placeholder}
+      objectPosition={slot.position ?? "center"}
+      radius={radius}
+      style={style}
+    />
+  );
+}
+
 /** ページ内の主要CTA。すべて予約サイト（hacomono）へ送る。 */
-function Cta({ text, sub, top = 26 }: { text: string; sub?: string; top?: number }) {
+function Cta({
+  text,
+  sub,
+  top = 32,
+  dark = false,
+}: {
+  text: string;
+  sub?: string;
+  top?: number;
+  dark?: boolean;
+}) {
   return (
     <div style={{ marginTop: top }}>
       <a
@@ -237,14 +288,14 @@ function Cta({ text, sub, top = 26 }: { text: string; sub?: string; top?: number
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: 8,
-          height: 58,
+          gap: 10,
+          height: 64,
           background: BTN,
           color: "#FFFFFF",
           textDecoration: "none",
-          fontSize: 15.5,
+          fontSize: 18,
           fontWeight: 700,
-          letterSpacing: "0.06em",
+          letterSpacing: "0.05em",
           borderRadius: 999,
           boxShadow: BTN_SHADOW,
         }}
@@ -253,13 +304,13 @@ function Cta({ text, sub, top = 26 }: { text: string; sub?: string; top?: number
         <span
           style={{
             display: "inline-flex",
-            width: 21,
-            height: 21,
+            width: 24,
+            height: 24,
             borderRadius: 999,
             background: "rgba(255,255,255,0.26)",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: 12,
+            fontSize: 14,
           }}
         >
           →
@@ -268,11 +319,11 @@ function Cta({ text, sub, top = 26 }: { text: string; sub?: string; top?: number
       {sub && (
         <p
           style={{
-            margin: "10px 0 0",
+            margin: "12px 0 0",
             textAlign: "center",
-            fontSize: 11,
-            letterSpacing: "0.06em",
-            color: MUTED,
+            fontSize: 13,
+            letterSpacing: "0.04em",
+            color: dark ? "rgba(255,255,255,0.85)" : MUTED,
           }}
         >
           {sub}
@@ -283,13 +334,328 @@ function Cta({ text, sub, top = 26 }: { text: string; sub?: string; top?: number
 }
 
 /**
- * 一旦非表示にしているブロック（顧客判断、2026-09-03）。
- * config.price / config.compare のデータはそのまま残してあるので、
- * ここを true に戻すだけで復帰する。boolean 型注釈は、リテラル false に
- * 縮まって「到達しない分岐」と判定されるのを避けるため。
+ * 体験キャンペーンのブロック（MV直下・理由の後・クロージングで使い回す）。
+ *   full    … 見出し＋価格＋受けられる中身（アイコン・写真）＋入会特典
+ *   repeat  … 見出し＋価格＋入会特典（中身は省く）
+ *   compact … 期限バッジ＋価格＋入会特典だけ（クロージング用）
+ * 金額は公式LPのキャンペーンバナー原文どおり（通常5,500円→0円 / 入会金0円 / 専用ソックス）。
  */
-const SHOW_PRICE: boolean = false;
-const SHOW_COMPARE: boolean = false;
+function CampaignBlock({ mode = "full" }: { mode?: "full" | "repeat" | "compact" }) {
+  const o = config.offer;
+  return (
+    <>
+      <div style={{ textAlign: "center" }}>
+        {/* 対象エリア。期限バッジの上に置き、広告の配信エリア（東京都）と揃える。 */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+            marginBottom: 12,
+            fontFamily: MINCHO,
+            fontSize: 21,
+            fontWeight: 700,
+            letterSpacing: "0.06em",
+            color: PINK_INK,
+          }}
+        >
+          <SakuraMark size={16} />
+          {o.area}
+          <SakuraMark size={16} />
+        </div>
+        <span
+          style={{
+            display: "inline-block",
+            background: PINK_DEEP,
+            color: "#FFFFFF",
+            fontSize: 14.5,
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            padding: "8px 18px",
+            borderRadius: 6,
+          }}
+        >
+          {o.note}
+        </span>
+        {mode !== "compact" && (
+          <>
+            <div
+              style={{
+                marginTop: 18,
+                fontSize: 15,
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                color: PINK_INK,
+              }}
+            >
+              {o.eyebrow}
+            </div>
+            <h3
+              style={{
+                margin: "6px 0 0",
+                fontFamily: MINCHO,
+                fontWeight: 600,
+                fontSize: 23,
+                lineHeight: 1.5,
+                letterSpacing: "0.02em",
+                color: INK,
+                display: "inline-block",
+                padding: "0 4px",
+                background: `linear-gradient(transparent 66%, ${PALE2} 66%)`,
+              }}
+            >
+              {o.heading}
+            </h3>
+            <div>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  marginTop: 12,
+                  padding: "5px 14px",
+                  borderRadius: 999,
+                  background: PALE,
+                  fontSize: 13.5,
+                  fontWeight: 700,
+                  color: PINK_INK,
+                }}
+              >
+                <SakuraMark size={13} />
+                {o.duration}・カウンセリング込み
+              </span>
+            </div>
+            <p style={{ margin: "18px 0 0", fontSize: 16, lineHeight: 1.95, color: BODY }}>
+              {nl(o.lead)}
+            </p>
+          </>
+        )}
+      </div>
+
+      {/* 二重価格。通常価格を上段、↓ をはさんで「0円」を特大で置く。 */}
+      <div style={{ marginTop: mode === "compact" ? 20 : 26, textAlign: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+          }}
+        >
+          <span
+            style={{
+              background: PINK_DEEP,
+              color: "#FFFFFF",
+              fontSize: 14,
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              padding: "6px 13px",
+              borderRadius: 4,
+              whiteSpace: "nowrap",
+            }}
+          >
+            体験レッスン
+          </span>
+          <span style={{ fontSize: 14, color: BODY }}>通常</span>
+          <span
+            style={{
+              fontFamily: MINCHO,
+              fontSize: 23,
+              color: MUTED,
+              textDecoration: "line-through",
+            }}
+          >
+            {o.trialWas}
+          </span>
+        </div>
+        <div style={{ fontSize: 22, lineHeight: 1, color: PINK, margin: "10px 0 0" }}>↓</div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            gap: 2,
+            color: PINK_INK,
+            fontFamily: MINCHO,
+            fontWeight: 700,
+          }}
+        >
+          <span style={{ fontSize: 104, lineHeight: 0.95, letterSpacing: "-0.02em" }}>
+            {o.trialNow}
+          </span>
+          <span style={{ fontSize: 36, paddingBottom: 8 }}>{o.trialUnit}</span>
+        </div>
+      </div>
+
+      {mode === "full" && (
+        <>
+          {/* 体験60分で受けられる中身 */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: 10,
+              marginTop: 28,
+            }}
+          >
+            {o.items.map((item, i) => (
+              <div
+                key={item}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 8,
+                  background: PALE,
+                  borderRadius: 14,
+                  padding: "16px 8px 14px",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    width: 58,
+                    height: 58,
+                    flex: "none",
+                    borderRadius: 999,
+                    background: "#FFFFFF",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <OfferIcon>{offerIcons[i]}</OfferIcon>
+                </div>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 14.5,
+                    lineHeight: 1.55,
+                    color: INK,
+                    fontWeight: 700,
+                  }}
+                >
+                  {nl(item)}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 24 }}>
+            {o.photos.map((ph) => (
+              <Photo key={ph.placeholder} slot={ph} radius={14} style={{ width: "100%", aspectRatio: "3 / 2" }} />
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* さらに → 入会特典 */}
+      <div style={{ position: "relative", marginTop: 44 }}>
+        <span
+          style={{
+            position: "absolute",
+            top: -24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            width: 70,
+            height: 70,
+            borderRadius: 999,
+            background: "linear-gradient(160deg, #FDF0F3 0%, #F3C6D2 100%)",
+            border: "1px solid rgba(255,255,255,0.9)",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: MINCHO,
+            fontSize: 17,
+            fontWeight: 700,
+            color: PINK_INK,
+            zIndex: 1,
+            boxShadow: "0 4px 12px rgba(194,80,113,0.18)",
+          }}
+        >
+          {o.bridge}
+        </span>
+        {/* パディング上は「さらに」バッジ(高さ70px・top -24px)の下端を避ける値。 */}
+        <div style={{ background: PALE, borderRadius: 16, padding: "60px 14px 18px" }}>
+          <p
+            style={{
+              margin: 0,
+              textAlign: "center",
+              fontSize: 15,
+              fontWeight: 700,
+              color: PINK_INK,
+              letterSpacing: "0.04em",
+            }}
+          >
+            {o.joinLead}
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
+            {o.perks.map((perk) => (
+              <div
+                key={perk.label}
+                style={{
+                  background: "#FFFFFF",
+                  borderRadius: 12,
+                  padding: "14px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 10,
+                }}
+              >
+                <span style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                  {perk.icon === "socks" && <SocksIcon size={32} />}
+                  <span>
+                    <span style={{ fontSize: 16, fontWeight: 700, color: INK, whiteSpace: "nowrap" }}>
+                      {perk.label}
+                    </span>
+                    {perk.note && (
+                      <span style={{ display: "block", marginTop: 3, fontSize: 11, color: BODY, whiteSpace: "nowrap" }}>
+                        {perk.note}
+                      </span>
+                    )}
+                  </span>
+                </span>
+                <span style={{ display: "flex", alignItems: "baseline", gap: 7, flexShrink: 0 }}>
+                  {perk.was && (
+                    <span style={{ fontSize: 13.5, color: MUTED, textDecoration: "line-through" }}>
+                      {perk.was}
+                    </span>
+                  )}
+                  <span
+                    style={{
+                      fontFamily: MINCHO,
+                      fontSize: perk.now.length > 3 ? 18 : 32,
+                      fontWeight: 700,
+                      lineHeight: 1,
+                      color: PINK_INK,
+                    }}
+                  >
+                    {perk.now}
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+          {mode === "full" && (
+            <p
+              style={{
+                margin: "14px 0 0",
+                fontSize: 13,
+                lineHeight: 1.8,
+                color: BODY,
+                textAlign: "center",
+              }}
+            >
+              {nl(o.foot)}
+            </p>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
 /**
  * 予約はSAKURA公式の予約サイト（hacomono）で受けるため、ページ内フォームは非表示
  * （2026-09-07 の顧客判断）。CTAはすべて config.reserve.url へ外部遷移する。
@@ -301,7 +667,12 @@ const SHOW_COMPARE: boolean = false;
  */
 const SHOW_FORM: boolean = false;
 
-const section: CSSProperties = { padding: "44px 18px" };
+/** セクションの左右余白。本文幅は 390 - 22×2 = 346px。 */
+const PAD_X = 22;
+const section = (bg: string, pad = "60px"): CSSProperties => ({
+  background: bg,
+  padding: `${pad} ${PAD_X}px`,
+});
 
 export default function Page() {
   const c = config;
@@ -320,13 +691,15 @@ export default function Page() {
           color: INK,
           background: "#EFE4E6",
           minHeight: "100vh",
+          /* 長音符・小書き仮名が行頭に来ないよう禁則処理を厳密に。 */
+          lineBreak: "strict",
         }}
       >
         <LPCanvas
           style={{ background: CREAM }}
           boxShadow="0 0 60px rgba(120,80,92,0.16)"
         >
-          {/* ── header（追従。予約ボタンを常に画面上に置く） ── */}
+          {/* ── ヘッダー（追従。予約ボタンを常に画面上に置く） ── */}
           <header
             style={{
               position: "sticky",
@@ -335,19 +708,19 @@ export default function Page() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              padding: "9px 14px",
+              padding: "10px 14px",
               background: "rgba(255,255,255,0.95)",
               backdropFilter: "blur(8px)",
               borderBottom: `1px solid ${LINE}`,
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <SakuraMark size={20} />
-              <div style={{ lineHeight: 1.2 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <SakuraMark size={24} />
+              <div style={{ lineHeight: 1.25 }}>
                 <div
                   style={{
                     fontFamily: MINCHO,
-                    fontSize: 16,
+                    fontSize: 19,
                     fontWeight: 700,
                     letterSpacing: "0.18em",
                     color: INK,
@@ -355,7 +728,7 @@ export default function Page() {
                 >
                   {c.header.brand}
                 </div>
-                <div style={{ fontSize: 8.5, letterSpacing: "0.06em", color: MUTED }}>
+                <div style={{ fontSize: 9.5, letterSpacing: "0.04em", color: BODY }}>
                   {c.header.brandSub}
                 </div>
               </div>
@@ -367,12 +740,12 @@ export default function Page() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                height: 33,
-                padding: "0 14px",
+                height: 38,
+                padding: "0 15px",
                 borderRadius: 999,
                 background: BTN,
                 color: "#FFFFFF",
-                fontSize: 11.5,
+                fontSize: 13,
                 fontWeight: 700,
                 letterSpacing: "0.04em",
                 textDecoration: "none",
@@ -383,571 +756,301 @@ export default function Page() {
             </a>
           </header>
 
-          {/* ── offer bar ── */}
+          {/* ── オファーバー（左に期限バッジ、中央にオファー文） ── */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              gap: 9,
-              padding: "9px 14px",
-              background: "linear-gradient(100deg, #F6BFCD 0%, #E7899F 55%, #D26C88 100%)",
-              color: "#FFFFFF",
+              gap: 12,
+              padding: "14px 16px",
+              background: BAND,
+              boxShadow: "0 3px 10px rgba(120,60,80,0.18)",
             }}
           >
-            <span style={{ fontSize: 10.5, letterSpacing: "0.04em", opacity: 0.95 }}>
-              {c.offerBar.note}
-            </span>
-            <span style={{ width: 1, height: 15, background: "rgba(255,255,255,0.5)" }} />
-            <span style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: "0.02em" }}>
-              {c.offerBar.text}
+            <span
+              style={{
+                flex: "none",
+                fontSize: 15,
+                fontWeight: 700,
+                lineHeight: 1.2,
+                whiteSpace: "nowrap",
+                color: PINK_INK,
+                background: "#FFFFFF",
+                borderRadius: 8,
+                padding: "7px 12px",
+                boxShadow: "0 2px 6px rgba(90,30,50,0.24)",
+              }}
+            >
+              {c.offerBar.badgeText}
             </span>
             <span
               style={{
-                fontFamily: MINCHO,
-                fontSize: 20,
+                flex: 1,
+                textAlign: "center",
+                fontSize: 18.5,
                 fontWeight: 700,
-                lineHeight: 1,
-                letterSpacing: "0.02em",
+                letterSpacing: "0.03em",
+                lineHeight: 1.2,
+                color: "#FFFFFF",
+                textShadow: "0 1px 4px rgba(90,30,50,0.35)",
               }}
             >
-              {c.offerBar.badge}
+              {c.offerBar.text}
             </span>
           </div>
 
-          {/* ── 1. FV ──
-              広告からの流入者が最初の1画面で「誰向け／どうなれる／なぜSAKURA／
-              今なら何が」を掴めるよう、写真の上には縦書きキャッチとサブコピーだけを
-              置き、数字とキャンペーンは写真の直下に分けている。 */}
-          <section>
-            <div style={{ position: "relative" }}>
-              <ImageSlot
-                src={c.fv.hero.src}
-                placeholder={c.fv.hero.placeholder}
-                objectPosition={c.fv.hero.position ?? "center"}
-                alt="女性インストラクターによるマンツーマンのマシンピラティスレッスン"
-                style={{ width: "100%", aspectRatio: "390 / 404" }}
-              />
-              {/* 下方向のグラデーション。サブコピーの可読性を担保する。 */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 32%, rgba(62,58,59,0.06) 58%, rgba(62,58,59,0.62) 100%)",
-                }}
-                aria-hidden
-              />
-              {/* 縦書きキャッチ（白プレート・明朝） */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 18,
-                  left: 14,
-                  display: "flex",
-                  flexDirection: "row-reverse",
-                  gap: 6,
-                }}
-              >
-                {c.fv.catchLines.map((line) => (
-                  <span
-                    key={line}
-                    style={{
-                      writingMode: "vertical-rl",
-                      background: "rgba(255,255,255,0.93)",
-                      color: INK,
-                      fontFamily: MINCHO,
-                      fontWeight: 600,
-                      fontSize: 21,
-                      letterSpacing: "0.12em",
-                      padding: "12px 5px",
-                      boxShadow: "0 2px 10px rgba(120,80,92,0.16)",
-                    }}
-                  >
-                    {line}
-                  </span>
-                ))}
-              </div>
-              <p
-                style={{
-                  position: "absolute",
-                  left: 16,
-                  right: 16,
-                  bottom: 14,
-                  margin: 0,
-                  color: "#FFFFFF",
-                  fontSize: 12.5,
-                  lineHeight: 1.85,
-                  letterSpacing: "0.02em",
-                  textShadow: "0 1px 6px rgba(62,58,59,0.5)",
-                }}
-              >
-                {nl(c.fv.sub)}
-              </p>
-            </div>
-
-            {/* 信頼につながる数字 */}
+          {/* ── FV：写真全面＋縦書きキャッチ（白い札）＋円形バッジ ──
+              写真の領域には縦書きキャッチとバッジしか置かない。サブコピーを重ねると
+              縦書きの真下へ回り込んで文字が被るため、下の帯に分けている。 */}
+          <section style={{ position: "relative", height: 500, overflow: "hidden", background: PALE }}>
+            <Photo
+              slot={c.fv.hero}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+            />
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                background: PALE,
-                borderBottom: `1px solid ${LINE}`,
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to bottom, rgba(60,30,40,0.04) 0%, rgba(60,30,40,0) 40%, rgba(60,30,40,0.22) 100%)",
+                pointerEvents: "none",
+              }}
+            />
+            {/* 縦書きメインコピー。配列の先頭が右に来る。 */}
+            <h1
+              style={{
+                margin: 0,
+                position: "absolute",
+                top: 26,
+                left: 16,
+                zIndex: 2,
+                display: "flex",
+                flexDirection: "row-reverse",
+                alignItems: "flex-start",
+                gap: 7,
               }}
             >
-              {c.fv.stats.map((s, i) => (
-                <div
-                  key={s.label}
+              {c.fv.catchLines.map((line) => (
+                <span
+                  key={line}
                   style={{
-                    padding: "11px 2px 12px",
-                    textAlign: "center",
-                    borderLeft: i === 0 ? "none" : `1px solid ${LINE}`,
+                    writingMode: "vertical-rl",
+                    fontFamily: MINCHO,
+                    fontWeight: 600,
+                    fontSize: 22,
+                    letterSpacing: "0.12em",
+                    /* 札の幅＝行送り。広げると受講者の顔に札が掛かる（写真の切り抜き位置と連動）。 */
+                    lineHeight: 1.35,
+                    color: INK,
+                    background: "#FFFFFF",
+                    padding: "14px 6px",
+                    borderRadius: 4,
+                    boxShadow: "0 4px 14px rgba(0,0,0,0.16)",
                   }}
                 >
-                  <div style={{ lineHeight: 1 }}>
-                    <span
-                      style={{
-                        fontFamily: MINCHO,
-                        fontSize: s.num.length > 3 ? 17 : 22,
-                        fontWeight: 700,
-                        color: PINK_INK,
-                        letterSpacing: "0.01em",
-                      }}
-                    >
-                      {s.num}
-                    </span>
-                    <span
-                      style={{ fontSize: 10, fontWeight: 700, color: PINK_INK, marginLeft: 1 }}
-                    >
-                      {s.unit}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 5,
-                      fontSize: 8.5,
-                      lineHeight: 1.35,
-                      color: BODY,
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    {s.label}
-                  </div>
+                  {line}
+                </span>
+              ))}
+            </h1>
+            {/* 右下の円形バッジ（右上は講師の顔に掛かるため下に置く） */}
+            <div
+              style={{
+                position: "absolute",
+                right: 16,
+                bottom: 20,
+                zIndex: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              {c.fv.chips.map((chip) => (
+                <div
+                  key={chip.big}
+                  style={{
+                    width: 104,
+                    height: 104,
+                    borderRadius: "50%",
+                    background: BAND,
+                    border: "2px solid rgba(255,255,255,0.75)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    lineHeight: 1.2,
+                    color: "#FFFFFF",
+                    boxShadow: "0 6px 16px rgba(90,30,50,0.3)",
+                  }}
+                >
+                  <span style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: "0.02em" }}>
+                    {chip.small}
+                  </span>
+                  <span style={{ fontFamily: MINCHO, fontWeight: 700, fontSize: 34, lineHeight: 1.1 }}>
+                    {chip.big}
+                  </span>
                 </div>
               ))}
             </div>
-
           </section>
 
-          {/* ── 2. 特典（MV直下） ──
-              参考LPの cp ブロックと同じ積み方:
-              「体験で受けられる中身」→「さらに」→「入会時の特典」。
-              金額は公式LPのキャンペーンバナー原文どおり（通常5,500円→0円 / 入会金0円 / 専用ソックス）。 */}
-          <section
-            id="offer"
-            style={{
-              padding: "34px 18px 40px",
-              background: "linear-gradient(180deg, #FBEFF2 0%, #F7E1E7 100%)",
-            }}
-          >
-            <div
-              style={{
-                borderRadius: 18,
-                overflow: "hidden",
-                background: "#FFFFFF",
-                border: `1.5px solid ${PINK}`,
-                boxShadow: "0 10px 28px rgba(194,80,113,0.14)",
-              }}
-            >
-              {/* 見出し＋金額 */}
-              <div
+          {/* ── FV下の桜色の帯（サブコピー＋悩みワードの丸チップ） ── */}
+          <div style={{ background: BAND, padding: "28px 20px 30px", textAlign: "center" }}>
+            {c.fv.subLines.map((line) => (
+              <p
+                key={line}
                 style={{
-                  background: "linear-gradient(100deg, #F6BFCD 0%, #E7899F 55%, #D26C88 100%)",
-                  color: "#FFFFFF",
-                  textAlign: "center",
-                  padding: "9px 12px",
-                  fontSize: 11.5,
+                  margin: 0,
+                  fontSize: 18,
                   fontWeight: 700,
-                  letterSpacing: "0.08em",
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.75,
+                  color: "#FFFFFF",
                 }}
               >
-                ＼ {c.offer.note} ／
-              </div>
-              <div style={{ padding: "18px 15px 4px", textAlign: "center" }}>
-                <div
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    color: PINK_INK,
-                  }}
-                >
-                  {c.offer.eyebrow}
-                </div>
-                <h2
-                  style={{
-                    margin: "7px 0 0",
-                    fontFamily: MINCHO,
-                    fontWeight: 600,
-                    fontSize: 18,
-                    lineHeight: 1.5,
-                    letterSpacing: "0.02em",
-                    color: INK,
-                  }}
-                >
-                  {c.offer.heading}
-                </h2>
-                <div
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    marginTop: 9,
-                    padding: "4px 12px",
-                    borderRadius: 999,
-                    background: PALE,
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: PINK_INK,
-                  }}
-                >
-                  <SakuraMark size={11} />
-                  {c.offer.duration}・カウンセリング込み
-                </div>
-
-                <div
-                  style={{
-                    marginTop: 14,
-                    display: "flex",
-                    alignItems: "flex-end",
-                    justifyContent: "center",
-                    gap: 10,
-                  }}
-                >
-                  <div style={{ textAlign: "right", paddingBottom: 8 }}>
-                    <div style={{ fontSize: 10.5, color: MUTED, lineHeight: 1.5 }}>通常</div>
-                    <div
-                      style={{
-                        fontSize: 15,
-                        color: MUTED,
-                        textDecoration: "line-through",
-                        lineHeight: 1.3,
-                      }}
-                    >
-                      {c.offer.trialWas}
-                    </div>
-                  </div>
-                  <span style={{ fontSize: 15, color: MUTED, paddingBottom: 12 }}>→</span>
-                  <div style={{ display: "flex", alignItems: "flex-end", gap: 2 }}>
-                    <span
-                      style={{
-                        fontFamily: MINCHO,
-                        fontSize: 74,
-                        fontWeight: 700,
-                        lineHeight: 0.86,
-                        color: PINK_INK,
-                        letterSpacing: "-0.02em",
-                      }}
-                    >
-                      {c.offer.trialNow}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: MINCHO,
-                        fontSize: 26,
-                        fontWeight: 700,
-                        color: PINK_INK,
-                        paddingBottom: 5,
-                      }}
-                    >
-                      {c.offer.trialUnit}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 体験60分で受けられる中身 */}
-              <div style={{ padding: "16px 12px 4px" }}>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: 10,
-                  }}
-                >
-                  {c.offer.items.map((item, i) => (
-                    <div key={item} style={{ textAlign: "center" }}>
-                      <div
-                        style={{
-                          width: 66,
-                          height: 66,
-                          margin: "0 auto",
-                          borderRadius: 999,
-                          border: `1px solid ${LINE}`,
-                          background: CREAM,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <OfferIcon>{offerIcons[i]}</OfferIcon>
-                      </div>
-                      <p
-                        style={{
-                          margin: "7px 0 0",
-                          fontSize: 10,
-                          lineHeight: 1.55,
-                          color: BODY,
-                          fontWeight: 500,
-                        }}
-                      >
-                        {nl(item)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ display: "flex", gap: 8, margin: "16px 3px 0" }}>
-                  {c.offer.photos.map((ph) => (
-                    <ImageSlot
-                      key={ph.placeholder}
-                      src={ph.src}
-                      placeholder={ph.placeholder}
-                      alt={ph.placeholder}
-                      radius={10}
-                      style={{ flex: 1, aspectRatio: "4 / 3" }}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* さらに → 入会特典 */}
-              <div style={{ position: "relative", marginTop: 22 }}>
+                {line}
+              </p>
+            ))}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 7,
+                marginTop: 16,
+              }}
+            >
+              {c.fv.notes.map((n) => (
                 <span
+                  key={n}
                   style={{
-                    position: "absolute",
-                    top: -14,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    display: "flex",
-                    width: 62,
-                    height: 62,
-                    borderRadius: 999,
-                    background: "linear-gradient(160deg, #FDF0F3 0%, #F3C6D2 100%)",
-                    border: "1px solid rgba(255,255,255,0.9)",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: MINCHO,
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: 700,
-                    color: PINK_INK,
-                    zIndex: 1,
-                    boxShadow: "0 4px 12px rgba(194,80,113,0.18)",
+                    color: "#FFFFFF",
+                    background: "rgba(255,255,255,0.16)",
+                    border: "1px solid rgba(255,255,255,0.5)",
+                    borderRadius: 999,
+                    padding: "6px 13px",
                   }}
                 >
-                  {c.offer.bridge}
+                  {n}
                 </span>
-                {/* パディング上は「さらに」バッジ(高さ62px・top -14px)の下端を避ける値。
-                    詰めるとバッジがリード文に重なる。 */}
-                <div style={{ background: PALE, padding: "56px 14px 16px" }}>
-                  <p
-                    style={{
-                      margin: 0,
-                      textAlign: "center",
-                      fontSize: 12,
-                      fontWeight: 700,
-                      color: PINK_INK,
-                      letterSpacing: "0.04em",
-                    }}
-                  >
-                    {c.offer.joinLead}
-                  </p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 11 }}>
-                    {c.offer.perks.map((perk) => (
-                      <div
-                        key={perk.label}
-                        style={{
-                          background: "#FFFFFF",
-                          borderRadius: 12,
-                          padding: "11px 13px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          gap: 10,
-                        }}
-                      >
-                        <span style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                          {perk.icon === "socks" && <SocksIcon />}
-                          <span>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: INK }}>
-                            {perk.label}
-                          </span>
-                          {perk.note && (
-                            <span
-                              style={{
-                                display: "block",
-                                marginTop: 3,
-                                fontSize: 9.5,
-                                color: MUTED,
-                              }}
-                            >
-                              {perk.note}
-                            </span>
-                          )}
-                          </span>
-                        </span>
-                        <span
-                          style={{ display: "flex", alignItems: "baseline", gap: 7, flexShrink: 0 }}
-                        >
-                          {perk.was && (
-                            <span
-                              style={{
-                                fontSize: 11.5,
-                                color: MUTED,
-                                textDecoration: "line-through",
-                              }}
-                            >
-                              {perk.was}
-                            </span>
-                          )}
-                          <span
-                            style={{
-                              fontFamily: MINCHO,
-                              fontSize: perk.now.length > 3 ? 17 : 26,
-                              fontWeight: 700,
-                              lineHeight: 1,
-                              color: PINK_INK,
-                            }}
-                          >
-                            {perk.now}
-                          </span>
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <p
-                    style={{
-                      margin: "12px 0 0",
-                      fontSize: 10.5,
-                      lineHeight: 1.75,
-                      color: BODY,
-                      textAlign: "center",
-                    }}
-                  >
-                    {nl(c.offer.foot)}
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
-            <Cta text={c.offer.ctaText} sub={c.offer.ctaSub} top={18} />
+          </div>
+
+          {/* 信頼バッジ（出典: 公式店舗LP・公式 /studios/） */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+              background: "#FFFFFF",
+              borderBottom: `1px solid ${LINE}`,
+            }}
+          >
+            {c.fv.stats.map((s, i) => (
+              <div
+                key={s.label}
+                style={{
+                  textAlign: "center",
+                  padding: "16px 2px 14px",
+                  borderLeft: i === 0 ? "none" : `1px solid ${LINE}`,
+                }}
+              >
+                <div style={{ color: PINK_INK, fontFamily: MINCHO, fontWeight: 700, lineHeight: 1 }}>
+                  <span style={{ fontSize: /\d/.test(s.num) ? 30 : 22 }}>{s.num}</span>
+                  <span style={{ fontSize: s.unit.length > 1 ? 11.5 : 13, marginLeft: 1 }}>{s.unit}</span>
+                </div>
+                <div style={{ marginTop: 7, fontSize: 10.5, lineHeight: 1.4, color: BODY }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* ── 体験キャンペーン ＋ CTA 1/4 ── */}
+          <section id="offer" style={section(CREAM, "48px")}>
+            <CampaignBlock />
+            <Cta text={c.offer.ctaText} sub={c.offer.ctaSub} />
           </section>
 
-          {/* ── 3. こんなお悩みありませんか？ ──
-              2列グリッド＋悩みチップの併用は、写真も文字も小さくなって読みづらかった。
-              チップは1列リストと内容が重複していたので落とし、写真＋コピー＋補足の
-              横並び1列に組み替えている（文字サイズを上げても4件が収まる）。 */}
-          <section style={{ ...section, background: "#FFFFFF" }}>
+          {/* ── お悩み ── 写真＋コピーの横並びで積む（出典: 公式トップ） */}
+          <section style={section(PALE_GRAD)}>
             <Kicker>{c.worry.kicker}</Kicker>
             <Heading text={c.worry.heading} />
             <p
               style={{
-                margin: "16px 0 0",
-                fontSize: 13,
-                lineHeight: 1.95,
-                color: BODY,
+                margin: "20px 0 0",
                 textAlign: "center",
+                fontSize: 16,
+                lineHeight: 1.9,
+                color: BODY,
               }}
             >
               {nl(c.worry.lead)}
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 }}>
-              {c.worry.cards.map((card, i) => (
+            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 28 }}>
+              {c.worry.cards.map((card) => (
                 <div
                   key={card.text}
                   style={{
-                    display: "flex",
-                    gap: 12,
-                    padding: 11,
-                    borderRadius: 14,
-                    background: CREAM,
-                    border: `1px solid ${LINE}`,
+                    background: "#FFFFFF",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    boxShadow: "0 6px 16px rgba(120,80,92,0.08)",
                   }}
                 >
-                  <ImageSlot
-                    src={card.img.src}
-                    placeholder={card.img.placeholder}
-                    alt={card.text.replace("\n", "")}
-                    radius={10}
-                    style={{ width: 96, height: 96, flexShrink: 0 }}
-                  />
-                  <div style={{ flex: 1, minWidth: 0, paddingTop: 2 }}>
-                    <div
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 4,
-                        padding: "2px 8px",
-                        borderRadius: 999,
-                        background: PALE2,
-                        fontSize: 9.5,
-                        fontWeight: 700,
-                        letterSpacing: "0.06em",
-                        color: PINK_INK,
-                      }}
-                    >
-                      CASE 0{i + 1}
+                  {/* 元写真と同じ 3:2 で出して上下を切らない（顔が写真の上端ぎりぎりにあるため）。 */}
+                  <Photo slot={card.img} style={{ width: "100%", aspectRatio: "3 / 2" }} />
+                  <div style={{ padding: "16px 18px 18px" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                      <CheckIcon />
+                      <p
+                        style={{
+                          margin: 0,
+                          fontSize: 18,
+                          fontWeight: 700,
+                          lineHeight: 1.6,
+                          color: INK,
+                        }}
+                      >
+                        {nl(card.text)}
+                      </p>
                     </div>
-                    <h3
-                      style={{
-                        margin: "7px 0 0",
-                        fontSize: 14,
-                        fontWeight: 700,
-                        lineHeight: 1.6,
-                        color: INK,
-                      }}
-                    >
-                      {nl(card.text)}
-                    </h3>
-                    <p
-                      style={{
-                        margin: "6px 0 0",
-                        fontSize: 11,
-                        lineHeight: 1.75,
-                        color: MUTED,
-                      }}
-                    >
+                    <p style={{ margin: "8px 0 0 26px", fontSize: 14.5, lineHeight: 1.85, color: BODY }}>
                       {card.note}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
+            {/* 受けの一文。白カードと同化しないよう、桜色の地に白抜き明朝で反転させる。 */}
             <div
               style={{
-                marginTop: 22,
-                padding: "18px 16px",
-                borderRadius: 14,
-                background: "linear-gradient(180deg, #FBEFF2 0%, #F7E1E7 100%)",
+                marginTop: 34,
+                background: BAND,
+                borderRadius: 18,
+                padding: "30px 18px",
                 textAlign: "center",
+                boxShadow: "0 10px 24px rgba(194,80,113,0.28)",
               }}
             >
               <p
                 style={{
                   margin: 0,
                   fontFamily: MINCHO,
-                  fontSize: 18,
                   fontWeight: 600,
+                  fontSize: 23,
                   lineHeight: 1.7,
-                  color: PINK_INK,
+                  letterSpacing: "0.04em",
+                  color: "#FFFFFF",
                 }}
               >
                 {nl(c.worry.closing)}
               </p>
               <p
                 style={{
-                  margin: "10px 0 0",
-                  fontSize: 11.5,
-                  lineHeight: 1.8,
-                  color: BODY,
+                  margin: "14px 0 0",
+                  fontSize: 15,
+                  lineHeight: 1.85,
+                  color: "rgba(255,255,255,0.92)",
                 }}
               >
                 {nl(c.worry.closingSub)}
@@ -955,1112 +1058,635 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 4. その悩みにSAKURAがおすすめな理由 ── */}
-          <section style={{ ...section, background: CREAM }}>
+          {/* ── マシンピラティス×マンツーマンで変わること ──
+              出典: 公式トップ Concept / 公式店舗LP Benefits 01-03 */}
+          <section style={section(CREAM)}>
             <Kicker>{c.bridge.kicker}</Kicker>
-            <Heading text={c.bridge.heading} size={19} />
-            <ImageSlot
-              src={c.bridge.photo.src}
-              placeholder={c.bridge.photo.placeholder}
-              alt="リフォーマーを使ったマシンピラティスのレッスン"
-              radius={12}
-              style={{ width: "100%", aspectRatio: "16 / 10", marginTop: 20 }}
-            />
-            <p
-              style={{
-                margin: "16px 0 0",
-                fontSize: 12.5,
-                lineHeight: 2,
-                color: BODY,
-              }}
-            >
+            <Heading text={c.bridge.heading} />
+            <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 2, color: BODY }}>
               {c.bridge.lead}
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 }}>
-              {c.bridge.items.map((item, i) => (
+            <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 30 }}>
+              {c.bridge.items.map((item) => (
                 <div
-                  key={item.title}
+                  key={item.num}
                   style={{
                     background: "#FFFFFF",
-                    border: `1px solid ${LINE}`,
-                    borderRadius: 12,
-                    padding: "15px 14px",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                    <span
-                      style={{
-                        flexShrink: 0,
-                        display: "flex",
-                        width: 26,
-                        height: 26,
-                        borderRadius: 999,
-                        background: PALE,
-                        color: PINK_INK,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontFamily: MINCHO,
-                        fontSize: 13,
-                        fontWeight: 700,
-                      }}
-                    >
-                      {i + 1}
-                    </span>
-                    <h3
-                      style={{
-                        margin: 0,
-                        fontFamily: MINCHO,
-                        fontSize: 15,
-                        fontWeight: 600,
-                        lineHeight: 1.55,
-                        color: INK,
-                      }}
-                    >
-                      {nl(item.title)}
-                    </h3>
-                  </div>
-                  <p
-                    style={{
-                      margin: "10px 0 0",
-                      fontSize: 12,
-                      lineHeight: 1.95,
-                      color: BODY,
-                    }}
-                  >
-                    {item.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <Cta text={c.bridge.ctaText} sub={c.bridge.ctaSub} />
-          </section>
-
-          {/* ── 5. SAKURAの特徴・選ばれる理由（6つ） ──
-              「会社の説明」ではなく「見込み客の不安への答え」として出す。
-              各カードは insight（本音）→ タイトル（答え）→ 本文（公式の事実）の順。 */}
-          <section style={{ ...section, background: "#FFFFFF" }}>
-            <Kicker>{c.features.kicker}</Kicker>
-            <Heading text={c.features.heading} />
-            <p
-              style={{
-                margin: "16px 0 0",
-                fontSize: 12.5,
-                lineHeight: 2,
-                color: BODY,
-                textAlign: "center",
-              }}
-            >
-              {nl(c.features.lead)}
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 22 }}>
-              {c.features.items.map((f) => (
-                <div
-                  key={f.num}
-                  style={{
-                    borderRadius: 14,
+                    borderRadius: 16,
                     overflow: "hidden",
                     border: `1px solid ${LINE}`,
-                    background: CREAM,
                   }}
                 >
-                  <div style={{ position: "relative" }}>
-                    {f.img && (
-                      <ImageSlot
-                        src={f.img.src}
-                        placeholder={f.img.placeholder}
-                        alt={f.title.replace("\n", "")}
-                        style={{ width: "100%", aspectRatio: "16 / 9" }}
-                      />
-                    )}
-                    <span
-                      style={{
-                        position: "absolute",
-                        top: 10,
-                        left: 10,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 5,
-                        padding: "4px 10px 4px 8px",
-                        borderRadius: 999,
-                        background: "rgba(255,255,255,0.94)",
-                        color: PINK_INK,
-                        fontSize: 11,
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                      }}
-                    >
-                      <SakuraMark size={11} />
-                      {f.num}
-                    </span>
-                    {f.badge && (
+                  {item.img && <Photo slot={item.img} style={{ width: "100%", aspectRatio: "3 / 2" }} />}
+                  <div style={{ padding: "18px 18px 20px" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
                       <span
                         style={{
-                          position: "absolute",
-                          top: 10,
-                          right: 10,
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 4,
-                          padding: "5px 12px",
-                          borderRadius: 999,
-                          background: BTN,
-                          color: "#FFFFFF",
-                          fontSize: 11.5,
+                          fontFamily: MINCHO,
                           fontWeight: 700,
-                          letterSpacing: "0.04em",
-                          boxShadow: "0 4px 12px rgba(194,80,113,0.34)",
+                          fontSize: 26,
+                          lineHeight: 1.1,
+                          color: PINK,
                         }}
                       >
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                          <path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 16.9 6.1 20l1.2-6.5L2.5 8.9 9.1 8z" />
-                        </svg>
-                        {f.badge}
+                        {item.num}
                       </span>
-                    )}
-                  </div>
-                  <div style={{ padding: "14px 14px 16px" }}>
-                    {/* 見込み客の本音。ここに自分を重ねてから答えを読んでもらう。 */}
-                    <p
-                      style={{
-                        margin: 0,
-                        display: "flex",
-                        gap: 6,
-                        fontSize: 11.5,
-                        lineHeight: 1.7,
-                        color: MUTED,
-                      }}
-                    >
-                      <span style={{ color: PINK, flexShrink: 0 }} aria-hidden>
-                        ❝
-                      </span>
-                      {f.insight}
-                    </p>
-                    <div
-                      style={{ height: 1, background: LINE, margin: "11px 0 12px" }}
-                      aria-hidden
-                    />
-                    <h3
-                      style={{
-                        margin: 0,
-                        fontFamily: MINCHO,
-                        fontSize: 16,
-                        fontWeight: 600,
-                        lineHeight: 1.6,
-                        color: INK,
-                      }}
-                    >
-                      {nl(f.title)}
-                    </h3>
-                    <p
-                      style={{
-                        margin: "10px 0 0",
-                        fontSize: 12,
-                        lineHeight: 1.95,
-                        color: BODY,
-                      }}
-                    >
-                      {f.body}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* ── 6. パーソナルだからできること ── */}
-          <section style={{ ...section, background: PALE }}>
-            <Kicker>{c.personal.kicker}</Kicker>
-            <Heading text={c.personal.heading} />
-            <p
-              style={{
-                margin: "16px 0 0",
-                fontSize: 12.5,
-                lineHeight: 2,
-                color: BODY,
-                textAlign: "center",
-              }}
-            >
-              {c.personal.lead}
-            </p>
-            <ImageSlot
-              src={c.personal.photo.src}
-              placeholder={c.personal.photo.placeholder}
-              alt="女性インストラクターによるマンツーマン指導"
-              radius={12}
-              style={{ width: "100%", aspectRatio: "16 / 10", marginTop: 18 }}
-            />
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 18 }}>
-              {c.personal.items.map((item) => (
-                <div
-                  key={item.title}
-                  style={{
-                    background: "#FFFFFF",
-                    borderRadius: 12,
-                    padding: "13px 14px",
-                  }}
-                >
-                  <h3
-                    style={{
-                      margin: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 7,
-                      fontSize: 13.5,
-                      fontWeight: 700,
-                      lineHeight: 1.5,
-                      color: PINK_INK,
-                    }}
-                  >
-                    <SakuraMark size={12} />
-                    {item.title}
-                  </h3>
-                  <p
-                    style={{ margin: "7px 0 0", fontSize: 12, lineHeight: 1.9, color: BODY }}
-                  >
-                    {item.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* グループレッスンとの対比 */}
-            <div
-              style={{
-                marginTop: 18,
-                borderRadius: 12,
-                overflow: "hidden",
-                border: `1px solid ${LINE}`,
-                background: "#FFFFFF",
-              }}
-            >
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "62px 1fr 1fr",
-                  background: PALE2,
-                  fontSize: 10.5,
-                  fontWeight: 700,
-                  color: PINK_INK,
-                  textAlign: "center",
-                }}
-              >
-                <span style={{ padding: "8px 4px" }} />
-                <span style={{ padding: "8px 4px", color: BODY }}>グループ</span>
-                <span style={{ padding: "8px 4px" }}>SAKURA</span>
-              </div>
-              {c.personal.versus.map((v) => (
-                <div
-                  key={v.label}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "62px 1fr 1fr",
-                    borderTop: `1px solid ${LINE}`,
-                    fontSize: 10.5,
-                    lineHeight: 1.55,
-                  }}
-                >
-                  <span
-                    style={{
-                      padding: "10px 5px",
-                      background: CREAM,
-                      fontWeight: 700,
-                      color: INK,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {v.label}
-                  </span>
-                  <span style={{ padding: "10px 7px", color: MUTED }}>{v.group}</span>
-                  <span
-                    style={{
-                      padding: "10px 7px",
-                      color: PINK_INK,
-                      fontWeight: 700,
-                      background: "#FFF7F9",
-                    }}
-                  >
-                    {v.sakura}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* ── 7. 初心者でも安心できる理由 ── */}
-          <section style={{ ...section, background: "#FFFFFF" }}>
-            <Kicker>{c.beginner.kicker}</Kicker>
-            <Heading text={c.beginner.heading} />
-            <p
-              style={{
-                margin: "16px 0 0",
-                fontSize: 12.5,
-                lineHeight: 2,
-                color: BODY,
-                textAlign: "center",
-              }}
-            >
-              {c.beginner.lead}
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 18 }}>
-              {c.beginner.photos.map((p) => (
-                <ImageSlot
-                  key={p.placeholder}
-                  src={p.src}
-                  placeholder={p.placeholder}
-                  alt={p.placeholder}
-                  radius={10}
-                  style={{ width: "100%", aspectRatio: "4 / 3" }}
-                />
-              ))}
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 18 }}>
-              {c.beginner.items.map((item) => (
-                <div
-                  key={item.title}
-                  style={{
-                    display: "flex",
-                    gap: 10,
-                    padding: "13px 13px",
-                    borderRadius: 12,
-                    background: CREAM,
-                    border: `1px solid ${LINE}`,
-                  }}
-                >
-                  <span
-                    style={{
-                      flexShrink: 0,
-                      display: "flex",
-                      width: 22,
-                      height: 22,
-                      borderRadius: 999,
-                      background: PINK_DEEP,
-                      color: "#FFFFFF",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 12,
-                      marginTop: 1,
-                    }}
-                    aria-hidden
-                  >
-                    ✓
-                  </span>
-                  <div>
-                    <h3
-                      style={{
-                        margin: 0,
-                        fontSize: 13.5,
-                        fontWeight: 700,
-                        lineHeight: 1.5,
-                        color: INK,
-                      }}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      style={{ margin: "6px 0 0", fontSize: 12, lineHeight: 1.9, color: BODY }}
-                    >
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontSize: 18.5,
+                          fontWeight: 700,
+                          lineHeight: 1.55,
+                          color: INK,
+                        }}
+                      >
+                        {nl(item.title)}
+                      </h3>
+                    </div>
+                    <p style={{ margin: "12px 0 0", fontSize: 15, lineHeight: 1.9, color: BODY }}>
                       {item.body}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
-            <Cta text={c.beginner.ctaText} sub={c.beginner.ctaSub} />
-          </section>
-
-          {/* ── 8. 実績・数字・信頼要素 ── */}
-          <section
-            style={{
-              ...section,
-              background: "linear-gradient(180deg, #FBEFF2 0%, #F6E2E8 100%)",
-            }}
-          >
-            <Kicker>{c.proof.kicker}</Kicker>
-            <Heading text={c.proof.heading} />
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gap: 8,
-                marginTop: 22,
-              }}
-            >
-              {c.proof.stats.map((s) => (
-                <div
-                  key={s.label}
-                  style={{
-                    background: "#FFFFFF",
-                    borderRadius: 12,
-                    padding: "14px 6px 12px",
-                    textAlign: "center",
-                  }}
-                >
-                  <div style={{ lineHeight: 1 }}>
-                    <span
-                      style={{
-                        fontFamily: MINCHO,
-                        fontSize: s.num.length > 3 ? 18 : 26,
-                        fontWeight: 700,
-                        color: PINK_INK,
-                      }}
-                    >
-                      {s.num}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: 10.5,
-                        fontWeight: 700,
-                        color: PINK_INK,
-                        marginLeft: 1,
-                      }}
-                    >
-                      {s.unit}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 7,
-                      fontSize: 9,
-                      lineHeight: 1.45,
-                      color: BODY,
-                    }}
-                  >
-                    {s.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 16 }}>
-              {c.proof.badges.map((b) => (
-                <div
-                  key={b}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "10px 12px",
-                    borderRadius: 999,
-                    background: "rgba(255,255,255,0.86)",
-                    border: `1px solid ${LINE}`,
-                    fontSize: 11.5,
-                    fontWeight: 700,
-                    lineHeight: 1.5,
-                    color: PINK_INK,
-                  }}
-                >
-                  <SakuraMark size={13} />
-                  {b}
-                </div>
-              ))}
-            </div>
-            <p style={{ margin: "14px 0 0", fontSize: 9.5, lineHeight: 1.7, color: MUTED }}>
-              {c.proof.note}
-            </p>
-          </section>
-
-          {/* ── 9. レッスン内容・身体へのアプローチ ── */}
-          <section style={{ ...section, background: "#FFFFFF" }}>
-            <Kicker>{c.program.kicker}</Kicker>
-            <Heading text={c.program.heading} />
             <p
               style={{
-                margin: "16px 0 0",
-                fontSize: 12.5,
-                lineHeight: 2,
-                color: BODY,
+                margin: "34px 0 0",
                 textAlign: "center",
+                fontFamily: MINCHO,
+                fontWeight: 600,
+                fontSize: 22,
+                lineHeight: 1.75,
+                letterSpacing: "0.04em",
+                color: INK,
               }}
             >
-              {c.program.lead}
+              {nl(c.bridge.closing)}
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 20 }}>
-              {c.program.groups.map((g) => (
-                <div key={g.label}>
+          </section>
+
+          {/* ── 選ばれる6つの理由 ＋ CTA 2/4 ──
+              出典: 公式店舗LP「『SAKURA』のマシンピラティス 5つの特徴」＋公式トップ System */}
+          <section style={section(PALE_GRAD)}>
+            <Kicker>{c.features.kicker}</Kicker>
+            <Heading text={c.features.heading} />
+            <p
+              style={{
+                margin: "20px 0 0",
+                textAlign: "center",
+                fontSize: 15,
+                lineHeight: 1.9,
+                color: BODY,
+              }}
+            >
+              {nl(c.features.lead)}
+            </p>
+            {c.features.items.map((item, idx) => (
+              <div key={item.num} style={{ marginTop: idx === 0 ? 46 : 54 }}>
+                <div style={{ position: "relative" }}>
+                  {item.img && <Photo slot={item.img} radius={16} style={{ width: "100%", height: 240 }} />}
+                  {/* 右上の菱形バッジ */}
                   <div
                     style={{
+                      position: "absolute",
+                      top: -18,
+                      right: 16,
+                      width: 54,
+                      height: 54,
+                      transform: "rotate(45deg)",
+                      background: BAND,
+                      borderRadius: 9,
                       display: "flex",
                       alignItems: "center",
-                      gap: 8,
-                      marginBottom: 8,
+                      justifyContent: "center",
+                      boxShadow: "0 6px 14px rgba(194,80,113,0.35)",
                     }}
                   >
                     <span
                       style={{
-                        padding: "3px 10px",
-                        borderRadius: 999,
-                        background: PINK_DEEP,
-                        color: "#FFFFFF",
-                        fontSize: 10.5,
+                        transform: "rotate(-45deg)",
+                        fontFamily: MINCHO,
                         fontWeight: 700,
-                        letterSpacing: "0.04em",
+                        fontSize: 21,
+                        color: "#FFFFFF",
                       }}
                     >
-                      {g.label}
+                      {item.num}
                     </span>
-                    <span style={{ flex: 1, height: 1, background: LINE }} aria-hidden />
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                    {g.items.map((it) => (
-                      <div
-                        key={it.en}
-                        style={{
-                          borderRadius: 10,
-                          background: CREAM,
-                          border: `1px solid ${LINE}`,
-                          padding: "11px 12px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 700,
-                            letterSpacing: "0.1em",
-                            color: PINK_INK,
-                          }}
-                        >
-                          {it.en}
-                        </div>
-                        <div
-                          style={{
-                            marginTop: 4,
-                            fontSize: 11.5,
-                            lineHeight: 1.7,
-                            color: BODY,
-                          }}
-                        >
-                          {it.ja}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p style={{ margin: "14px 0 0", fontSize: 9.5, lineHeight: 1.7, color: MUTED }}>
-              {c.program.note}
-            </p>
-          </section>
-
-          {/* ── 10. お客様の声 ── */}
-          <section style={{ ...section, background: CREAM }}>
-            <Kicker>{c.voices.kicker}</Kicker>
-            <Heading text={c.voices.heading} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 22 }}>
-              {c.voices.items.map((v) => (
-                <div
-                  key={v.title}
-                  style={{
-                    background: "#FFFFFF",
-                    border: `1px solid ${LINE}`,
-                    borderRadius: 12,
-                    padding: "14px 14px 13px",
-                  }}
-                >
-                  <div style={{ display: "flex", gap: 2, marginBottom: 7 }} aria-hidden>
-                    {[0, 1, 2, 3, 4].map((n) => (
-                      <span key={n} style={{ fontSize: 11, color: PINK }}>
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                  <h3
-                    style={{
-                      margin: 0,
-                      fontFamily: MINCHO,
-                      fontSize: 14.5,
-                      fontWeight: 600,
-                      lineHeight: 1.55,
-                      color: PINK_INK,
-                    }}
-                  >
-                    {v.title}
-                  </h3>
-                  <p style={{ margin: "8px 0 0", fontSize: 12, lineHeight: 1.95, color: BODY }}>
-                    {v.body}
-                  </p>
-                  <p
-                    style={{
-                      margin: "9px 0 0",
-                      textAlign: "right",
-                      fontSize: 11,
-                      color: MUTED,
-                    }}
-                  >
-                    {v.who}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <p style={{ margin: "14px 0 0", fontSize: 9.5, lineHeight: 1.7, color: MUTED }}>
-              {c.voices.note}
-            </p>
-            <Cta text={c.voices.ctaText} sub={c.voices.ctaSub} />
-          </section>
-
-          {/* ── 料金（一旦非表示） ──
-              顧客判断により 2026-09-03 から非表示。データは config.price に残してあるので
-              SHOW_PRICE を true に戻せばそのまま復帰する。 */}
-          {SHOW_PRICE && (
-          <section style={{ ...section, background: "#FFFFFF" }}>
-            <Kicker>{c.price.kicker}</Kicker>
-            <Heading text={c.price.heading} />
-            <p
-              style={{
-                margin: "16px 0 0",
-                fontSize: 12.5,
-                lineHeight: 2,
-                color: BODY,
-                textAlign: "center",
-              }}
-            >
-              {c.price.lead}
-            </p>
-
-            {/* 入会金（キャンペーン） */}
-            <div
-              style={{
-                marginTop: 18,
-                border: `1.5px solid ${PINK}`,
-                borderRadius: 12,
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  background: PALE2,
-                  padding: "6px 12px",
-                  textAlign: "center",
-                  fontSize: 10.5,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  color: PINK_INK,
-                }}
-              >
-                ＼ {c.price.join.note} ／
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "12px 14px",
-                  background: "#FFFFFF",
-                }}
-              >
-                <span style={{ fontSize: 13.5, fontWeight: 700, color: INK }}>
-                  {c.price.join.label}
-                </span>
-                <span style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                  <span
-                    style={{ fontSize: 12.5, color: MUTED, textDecoration: "line-through" }}
-                  >
-                    {c.price.join.was}
-                  </span>
-                  <span style={{ fontSize: 12, color: MUTED }}>→</span>
-                  <span
-                    style={{
-                      fontFamily: MINCHO,
-                      fontSize: 28,
-                      fontWeight: 700,
-                      lineHeight: 1,
-                      color: PINK_INK,
-                    }}
-                  >
-                    {c.price.join.now}
-                  </span>
-                </span>
-              </div>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 9, marginTop: 14 }}>
-              {c.price.plans.map((p) => (
-                <div
-                  key={p.name}
-                  style={{
-                    position: "relative",
-                    borderRadius: 12,
-                    border: `1px solid ${p.badge === "人気No.1" ? PINK : LINE}`,
-                    background: p.badge === "人気No.1" ? "#FFF7F9" : CREAM,
-                    padding: "14px 14px 13px",
-                  }}
-                >
-                  {p.badge && (
+                  {item.badge && (
                     <span
                       style={{
                         position: "absolute",
-                        top: -9,
                         left: 12,
-                        padding: "3px 10px",
-                        borderRadius: 999,
-                        background: p.badge === "人気No.1" ? BTN : PINK_DEEP,
-                        color: "#FFFFFF",
-                        fontSize: 10,
+                        bottom: 12,
+                        background: "#FFFFFF",
+                        color: PINK_INK,
+                        fontSize: 14,
                         fontWeight: 700,
-                        letterSpacing: "0.04em",
+                        padding: "6px 12px",
+                        borderRadius: 999,
+                        boxShadow: "0 3px 10px rgba(0,0,0,0.15)",
                       }}
                     >
-                      {p.badge}
+                      {item.badge}
                     </span>
                   )}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-end",
-                      justifyContent: "space-between",
-                      gap: 10,
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontSize: 13.5, fontWeight: 700, color: INK }}>
-                        {p.name}
-                      </div>
-                      <div
-                        style={{
-                          marginTop: 4,
-                          fontSize: 10.5,
-                          lineHeight: 1.6,
-                          color: MUTED,
-                        }}
-                      >
-                        {p.desc}
-                      </div>
-                    </div>
-                    <div style={{ textAlign: "right", flexShrink: 0 }}>
-                      <div style={{ lineHeight: 1 }}>
-                        <span
-                          style={{
-                            fontFamily: MINCHO,
-                            fontSize: 23,
-                            fontWeight: 700,
-                            color: PINK_INK,
-                          }}
-                        >
-                          {p.amount}
-                        </span>
-                        <span
-                          style={{ fontSize: 11, fontWeight: 700, color: PINK_INK, marginLeft: 1 }}
-                        >
-                          {p.unit}
-                        </span>
-                      </div>
-                      <div style={{ marginTop: 5, fontSize: 10, color: BODY }}>{p.per}</div>
-                    </div>
-                  </div>
                 </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 12 }}>
-              {c.price.notes.map((n) => (
-                <p key={n} style={{ margin: "2px 0", fontSize: 9.5, lineHeight: 1.7, color: MUTED }}>
-                  {n}
-                </p>
-              ))}
-            </div>
-            <Cta text={c.price.ctaText} sub={c.price.ctaSub} />
-          </section>
-          )}
-
-          {/* ── 他サービスとの違い（一旦非表示） ──
-              顧客判断により 2026-09-03 から非表示。データは config.compare に残してあるので
-              SHOW_COMPARE を true に戻せばそのまま復帰する。
-              4社を横に並べる表は390px幅だと1列88pxになり読めないため、
-              評価軸ごとにカードを立て、その中で4社を縦に並べる形にしてある。 */}
-          {SHOW_COMPARE && (
-          <section style={{ ...section, background: CREAM }}>
-            <Kicker>{c.compare.kicker}</Kicker>
-            <Heading text={c.compare.heading} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 22 }}>
-              {c.compare.axes.map((axis) => (
-                <div
-                  key={axis.label}
+                {/* 見込み客の本音 → SAKURAの答え */}
+                <p
                   style={{
-                    borderRadius: 12,
-                    overflow: "hidden",
-                    border: `1px solid ${LINE}`,
-                    background: "#FFFFFF",
+                    margin: "22px 0 0",
+                    textAlign: "center",
+                    fontSize: 14,
+                    lineHeight: 1.7,
+                    color: PINK_INK,
+                    textWrap: "balance",
                   }}
                 >
-                  <div
+                  「{item.insight}」
+                </p>
+                <h3
+                  style={{
+                    margin: "8px 0 0",
+                    textAlign: "center",
+                    fontSize: 18.5,
+                    fontWeight: 700,
+                    lineHeight: 1.6,
+                    letterSpacing: "0.01em",
+                    color: INK,
+                  }}
+                >
+                  {nl(item.title)}
+                </h3>
+                <div style={{ width: 40, height: 2, background: PINK, margin: "14px auto 0", borderRadius: 2 }} />
+                <p style={{ margin: "16px 0 0", fontSize: 15.5, lineHeight: 2, color: BODY }}>
+                  {item.body}
+                </p>
+              </div>
+            ))}
+            <Cta text={c.offer.ctaText} sub={c.offer.ctaSub} top={40} />
+          </section>
+
+          {/* ── 料金（表） ── 出典: 公式 /price/（税込）
+              プランは「名前・内容」と「1回あたりの金額」の2列の表で並べる。
+              月額・総額は出さず、1回あたりの金額だけを載せる（2026-09-29 の指示）。
+              金額は公式の表記どおり（config.price.plans[].per）。変えるときは必ず顧客確認を取ること。 */}
+          <section id="price" style={section("#FFFFFF")}>
+            <Kicker>{c.price.kicker}</Kicker>
+            <Heading text={c.price.heading} />
+            <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 2, color: BODY }}>
+              {c.price.lead}
+            </p>
+
+            {/* 入会金（キャンペーンで0円） */}
+            <div
+              style={{
+                marginTop: 26,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 10,
+                background: BAND,
+                borderRadius: 14,
+                padding: "16px 18px",
+                color: "#FFFFFF",
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 17, fontWeight: 700 }}>{c.price.join.label}</div>
+                <div style={{ marginTop: 3, fontSize: 12, opacity: 0.92 }}>{c.price.join.note}</div>
+              </div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexShrink: 0 }}>
+                <span style={{ fontSize: 14, textDecoration: "line-through", opacity: 0.85 }}>
+                  {c.price.join.was}
+                </span>
+                <span style={{ fontFamily: MINCHO, fontSize: 34, fontWeight: 700, lineHeight: 1 }}>
+                  {c.price.join.now}
+                </span>
+              </div>
+            </div>
+
+            {/* プラン表 */}
+            <table
+              style={{
+                width: "100%",
+                marginTop: 18,
+                borderCollapse: "separate",
+                borderSpacing: 0,
+                background: "#FFFFFF",
+                border: `1px solid ${LINE}`,
+                borderRadius: 14,
+                overflow: "hidden",
+                tableLayout: "fixed",
+              }}
+            >
+              <thead>
+                <tr style={{ background: PALE }}>
+                  <th
                     style={{
-                      padding: "8px 13px",
-                      background: PALE2,
-                      fontSize: 12,
+                      width: "54%",
+                      padding: "11px 14px",
+                      textAlign: "left",
+                      fontSize: 13.5,
                       fontWeight: 700,
-                      letterSpacing: "0.06em",
                       color: PINK_INK,
                     }}
                   >
-                    {axis.label}
-                  </div>
-                  {axis.rows.map((row, i) => {
-                    const isSakura = i === 0;
-                    return (
-                      <div
-                        key={row.name}
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "104px 1fr",
-                          gap: 8,
-                          padding: "10px 12px",
-                          borderTop: i === 0 ? "none" : `1px solid ${LINE}`,
-                          background: isSakura ? "#FFF7F9" : "#FFFFFF",
-                        }}
-                      >
+                    プラン
+                  </th>
+                  <th
+                    style={{
+                      padding: "11px 14px",
+                      textAlign: "right",
+                      fontSize: 13.5,
+                      fontWeight: 700,
+                      color: PINK_INK,
+                    }}
+                  >
+                    1回あたり（税込）
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {c.price.plans.map((plan) => (
+                  <tr key={plan.name}>
+                    <td
+                      style={{
+                        padding: "16px 8px 16px 14px",
+                        borderTop: `1px solid ${LINE}`,
+                        verticalAlign: "top",
+                      }}
+                    >
+                      {plan.badge && (
                         <span
                           style={{
-                            fontSize: 10.5,
+                            display: "inline-block",
+                            marginBottom: 5,
+                            background: PINK_DEEP,
+                            color: "#FFFFFF",
+                            fontSize: 11.5,
                             fontWeight: 700,
-                            lineHeight: 1.5,
-                            color: isSakura ? PINK_INK : MUTED,
+                            padding: "2px 9px",
+                            borderRadius: 999,
                           }}
                         >
-                          {isSakura ? <>◎ {nl(row.name)}</> : nl(row.name)}
+                          {plan.badge}
                         </span>
-                        <span
-                          style={{
-                            fontSize: 11,
-                            lineHeight: 1.65,
-                            color: isSakura ? INK : BODY,
-                            fontWeight: isSakura ? 500 : 400,
-                          }}
-                        >
-                          {row.text}
-                        </span>
+                      )}
+                      <div style={{ fontSize: 16, fontWeight: 700, lineHeight: 1.45, color: INK }}>
+                        {plan.name}
                       </div>
-                    );
-                  })}
+                      <div style={{ marginTop: 4, fontSize: 12.5, lineHeight: 1.6, color: BODY }}>
+                        {plan.desc}
+                      </div>
+                    </td>
+                    <td
+                      style={{
+                        padding: "16px 14px 16px 4px",
+                        borderTop: `1px solid ${LINE}`,
+                        borderLeft: `1px solid ${LINE}`,
+                        textAlign: "right",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {/* per は「1回あたり8,250円」の形。見出しに「1回あたり」があるので数字だけ出す。 */}
+                      <div style={{ color: PINK_INK, fontWeight: 700, lineHeight: 1.1 }}>
+                        <span style={{ fontFamily: MINCHO, fontSize: 28 }}>
+                          {plan.per.replace(/^1回あたり/, "").replace(/円$/, "")}
+                        </span>
+                        <span style={{ fontSize: 14, marginLeft: 2 }}>円</span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <ul style={{ margin: "16px 0 0", padding: 0, listStyle: "none" }}>
+              {c.price.notes.map((n) => (
+                <li key={n} style={{ fontSize: 12.5, lineHeight: 1.85, color: BODY }}>
+                  {n}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* ── 体験キャンペーン再掲（CTAは置かない） ── */}
+          <section style={section(CREAM, "54px")}>
+            <CampaignBlock mode="repeat" />
+          </section>
+
+          {/* ── パーソナルだから、できること ── */}
+          <section style={{ ...section(CREAM), paddingTop: 10 }}>
+            <Kicker>{c.personal.kicker}</Kicker>
+            <Heading text={c.personal.heading} />
+            {c.personal.photo && (
+              <Photo slot={c.personal.photo} radius={16} style={{ width: "100%", height: 240, marginTop: 30 }} />
+            )}
+            <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 2, color: BODY }}>
+              {c.personal.lead}
+            </p>
+            <div
+              style={{
+                marginTop: 24,
+                background: PALE,
+                borderRadius: 16,
+                padding: "22px 18px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 18,
+              }}
+            >
+              {c.personal.items.map((item) => (
+                <div key={item.title} style={{ display: "flex", alignItems: "flex-start", gap: 9 }}>
+                  <CheckIcon />
+                  <div>
+                    <p style={{ margin: 0, fontSize: 17, fontWeight: 700, lineHeight: 1.6, color: INK }}>
+                      {item.title}
+                    </p>
+                    <p style={{ margin: "5px 0 0", fontSize: 14.5, lineHeight: 1.85, color: BODY }}>
+                      {item.body}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
           </section>
-          )}
 
-          {/* ── 11. 体験レッスンの流れ ── */}
-          <section style={{ ...section, background: "#FFFFFF" }}>
+          {/* ── 体験レッスンの流れ ＋ CTA 3/4 ── 出典: 公式店舗LP「体験予約の流れ」 */}
+          <section style={section(PALE_GRAD)}>
             <Kicker>{c.flow.kicker}</Kicker>
             <Heading text={c.flow.heading} />
             <p
               style={{
-                margin: "16px 0 0",
-                fontSize: 12.5,
-                lineHeight: 2,
+                margin: "20px 0 0",
+                fontSize: 15,
+                lineHeight: 1.9,
                 color: BODY,
-                textAlign: "center",
               }}
             >
-              {c.flow.lead}
+              {nl(c.flow.lead)}
             </p>
-            <div style={{ marginTop: 20, position: "relative" }}>
-              {/* ステップを繋ぐ縦線 */}
-              <span
-                style={{
-                  position: "absolute",
-                  left: 15,
-                  top: 12,
-                  bottom: 12,
-                  width: 1,
-                  background: LINE,
-                }}
-                aria-hidden
-              />
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {c.flow.steps.map((s) => (
-                  <div key={s.num} style={{ display: "flex", gap: 12, position: "relative" }}>
-                    <span
-                      style={{
-                        flexShrink: 0,
-                        display: "flex",
-                        width: 31,
-                        height: 31,
-                        borderRadius: 999,
-                        background: BTN,
-                        color: "#FFFFFF",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 11.5,
-                        fontWeight: 700,
-                        letterSpacing: "0.02em",
-                      }}
-                    >
-                      {s.num}
-                    </span>
-                    <div
-                      style={{
-                        flex: 1,
-                        background: CREAM,
-                        border: `1px solid ${LINE}`,
-                        borderRadius: 12,
-                        padding: "12px 13px",
-                      }}
-                    >
+            <div style={{ display: "flex", flexDirection: "column", marginTop: 32 }}>
+              {c.flow.steps.map((step, i) => {
+                const last = i === c.flow.steps.length - 1;
+                return (
+                  <div key={step.num} style={{ display: "flex", gap: 14 }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: "none" }}>
+                      <span
+                        style={{
+                          width: 46,
+                          height: 46,
+                          borderRadius: "50%",
+                          background: BAND,
+                          color: "#FFFFFF",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontFamily: MINCHO,
+                          fontWeight: 700,
+                          fontSize: 18,
+                          flex: "none",
+                        }}
+                      >
+                        {step.num}
+                      </span>
+                      {!last && <span style={{ width: 2, flex: 1, background: "#EBC9D3" }} />}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0, paddingBottom: last ? 0 : 30 }}>
                       <h3
                         style={{
-                          margin: 0,
-                          fontSize: 13.5,
+                          margin: "9px 0 0",
+                          fontSize: 18.5,
                           fontWeight: 700,
                           lineHeight: 1.5,
                           color: INK,
                         }}
                       >
-                        {s.title}
+                        {step.title}
                       </h3>
-                      <p
-                        style={{ margin: "6px 0 0", fontSize: 11.5, lineHeight: 1.9, color: BODY }}
-                      >
-                        {s.body}
+                      <p style={{ margin: "8px 0 0", fontSize: 15, lineHeight: 1.9, color: BODY }}>
+                        {step.body}
                       </p>
+                      {step.img && (
+                        <Photo slot={step.img} radius={12} style={{ width: "100%", aspectRatio: "3 / 2", marginTop: 12 }} />
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
-            <Cta text={c.flow.ctaText} sub={c.flow.ctaSub} />
+            <Cta text={c.flow.ctaText} sub={c.flow.ctaSub} top={38} />
           </section>
 
-          {/* ── 12. よくある質問 ── */}
-          <section style={{ ...section, background: PALE }}>
-            <Kicker>{c.faq.kicker}</Kicker>
-            <Heading text={c.faq.heading} />
-            <div style={{ marginTop: 22 }}>
-              <FaqAccordion
-                items={c.faq.items}
-                accent={PINK_DEEP}
-                ink={INK}
-                body={BODY}
-                line={LINE}
-              />
-            </div>
-          </section>
-
-          {/* ── 13. 店舗情報 ──
-              東京都限定LPなので都県のグルーピングは持たず、駅名を2列で並べる。
-              「自分の最寄りがあるか」を1画面で確かめられることだけを狙った作り。 */}
-          <section style={{ ...section, background: "#FFFFFF" }}>
-            <Kicker>{c.studios.kicker}</Kicker>
-            <Heading text={c.studios.heading} />
-            <p
-              style={{
-                margin: "16px 0 0",
-                fontSize: 12.5,
-                lineHeight: 2,
-                color: BODY,
-                textAlign: "center",
-              }}
-            >
-              {nl(c.studios.lead)}
+          {/* ── はじめてでも大丈夫 ── 出典: 公式店舗LP・公式FAQ */}
+          <section style={section(CREAM)}>
+            <Kicker>{c.beginner.kicker}</Kicker>
+            <Heading text={c.beginner.heading} />
+            {c.beginner.photo && (
+              <Photo slot={c.beginner.photo} radius={16} style={{ width: "100%", height: 240, marginTop: 30 }} />
+            )}
+            <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 2, color: BODY }}>
+              {c.beginner.lead}
             </p>
-            <ImageSlot
-              src={c.studios.photo.src}
-              placeholder={c.studios.photo.placeholder}
-              alt="SAKURAのスタジオ内観"
-              radius={12}
-              style={{ width: "100%", aspectRatio: "16 / 10", marginTop: 18 }}
-            />
-            <div style={{ marginTop: 16, display: "flex", gap: 8 }}>
-              {[
-                { label: "営業時間", value: c.studios.hours },
-                { label: "定休日", value: c.studios.holiday },
-              ].map((row) => (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 24 }}>
+              {c.beginner.items.map((item) => (
                 <div
-                  key={row.label}
+                  key={item.title}
                   style={{
-                    flex: 1,
-                    borderRadius: 10,
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 9,
                     background: PALE,
-                    padding: "10px 10px",
-                    textAlign: "center",
+                    borderRadius: 14,
+                    padding: "16px 16px",
                   }}
                 >
-                  <div style={{ fontSize: 9.5, color: MUTED, letterSpacing: "0.06em" }}>
-                    {row.label}
-                  </div>
-                  <div style={{ marginTop: 4, fontSize: 12.5, fontWeight: 700, color: PINK_INK }}>
-                    {row.value}
+                  <CheckIcon />
+                  <div>
+                    <p style={{ margin: 0, fontSize: 16.5, fontWeight: 700, lineHeight: 1.6, color: INK }}>
+                      {item.title}
+                    </p>
+                    <p style={{ margin: "5px 0 0", fontSize: 14.5, lineHeight: 1.85, color: BODY }}>
+                      {item.body}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
+          </section>
 
-            <div
+          {/* ── 店舗 ── 出典: 公式 /studios/（2026年9月時点・東京都内のみ） */}
+          <section id="stores" style={section(PALE_GRAD)}>
+            <Kicker>{c.studios.kicker}</Kicker>
+            <Heading text={c.studios.heading} />
+            <p
               style={{
-                marginTop: 16,
-                borderRadius: 12,
-                border: `1px solid ${LINE}`,
-                background: CREAM,
-                padding: "13px 13px 14px",
+                margin: "20px 0 0",
+                textAlign: "center",
+                fontSize: 15.5,
+                lineHeight: 1.9,
+                color: BODY,
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 7,
-                  fontSize: 12,
-                  fontWeight: 700,
-                  color: PINK_INK,
-                }}
-              >
-                <SakuraMark size={11} />
-                東京都
-                <span style={{ fontSize: 10, color: MUTED, fontWeight: 400 }}>
-                  {c.studios.names.length}店舗
-                </span>
-              </div>
-              <div
-                style={{
-                  marginTop: 10,
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "0 8px",
-                }}
-              >
-                {c.studios.names.map((name) => (
-                  <div
-                    key={name}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      padding: "7px 2px",
-                      borderTop: `1px solid ${LINE}`,
-                      fontSize: 11.5,
-                      lineHeight: 1.4,
-                      color: INK,
-                    }}
-                  >
-                    <span
+              {nl(c.studios.lead)}
+            </p>
+            <div
+              style={{
+                marginTop: 28,
+                background: "#FFFFFF",
+                borderRadius: 18,
+                overflow: "hidden",
+                boxShadow: "0 6px 16px rgba(120,80,92,0.10)",
+              }}
+            >
+              <Photo slot={c.studios.photo} style={{ width: "100%", height: 250 }} />
+              <div style={{ padding: "20px 18px 22px" }}>
+                <div style={{ background: PALE, borderRadius: 12, padding: "6px 16px" }}>
+                  {[
+                    { label: "営業時間", value: c.studios.hours },
+                    { label: "定休日", value: c.studios.holiday },
+                  ].map((r, i) => (
+                    <div
+                      key={r.label}
                       style={{
-                        width: 4,
-                        height: 4,
-                        borderRadius: 999,
-                        background: PINK,
-                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "baseline",
+                        gap: 14,
+                        padding: "10px 0",
+                        borderTop: i === 0 ? "none" : `1px solid ${LINE}`,
                       }}
-                      aria-hidden
-                    />
-                    {name}
-                  </div>
-                ))}
+                    >
+                      <span style={{ width: 64, flex: "none", fontSize: 13.5, color: BODY }}>{r.label}</span>
+                      <span style={{ fontSize: 15.5, fontWeight: 700, color: PINK_INK }}>{r.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    margin: "22px 0 0",
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: PINK_INK,
+                  }}
+                >
+                  <SakuraMark size={15} />
+                  東京都
+                  <span style={{ fontSize: 13, fontWeight: 500, color: BODY }}>
+                    {c.studios.names.length}店舗
+                  </span>
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    columnGap: 14,
+                    marginTop: 8,
+                  }}
+                >
+                  {c.studios.names.map((n) => (
+                    <div
+                      key={n}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 7,
+                        padding: "10px 0",
+                        borderBottom: `1px solid ${LINE}`,
+                        fontSize: 15,
+                        color: INK,
+                      }}
+                    >
+                      <span style={{ width: 5, height: 5, borderRadius: 999, background: PINK, flex: "none" }} />
+                      {n}
+                    </div>
+                  ))}
+                </div>
+                <div
+                  style={{
+                    marginTop: 20,
+                    background: PALE,
+                    border: `1px dashed ${PINK}`,
+                    borderRadius: 12,
+                    padding: "14px 14px",
+                  }}
+                >
+                  <p style={{ margin: 0, fontSize: 14.5, fontWeight: 700, color: PINK_INK }}>
+                    {c.studios.upcoming.label}
+                  </p>
+                  <ul style={{ margin: "8px 0 0", padding: 0, listStyle: "none" }}>
+                    {c.studios.upcoming.names.map((n) => (
+                      <li key={n} style={{ fontSize: 15, lineHeight: 1.9, color: INK }}>
+                        ・{n}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
+          </section>
 
-            <div
+          {/* ── FAQ ── 出典: 公式 /faq/ */}
+          <section style={section(BAND)}>
+            <Kicker color="#FFFFFF">{c.faq.kicker}</Kicker>
+            <Heading text={c.faq.heading} color="#FFFFFF" />
+            <div style={{ marginTop: 28 }}>
+              <FaqAccordion items={c.faq.items} accent={PINK_DEEP} ink={INK} body={BODY} line={LINE} />
+            </div>
+          </section>
+
+          {/* ── クロージング ＋ CTA 4/4 ── */}
+          <section id="reserve" style={section(CREAM, "60px")}>
+            <Heading text={c.closing.heading} size={20} />
+            <p
               style={{
-                marginTop: 10,
-                borderRadius: 12,
-                border: `1px dashed ${PINK}`,
-                padding: "12px 13px",
-                background: "#FFF7F9",
+                margin: "22px 0 0",
+                textAlign: "center",
+                fontFamily: MINCHO,
+                fontWeight: 600,
+                fontSize: 18,
+                lineHeight: 1.85,
+                letterSpacing: "0.03em",
+                color: INK,
               }}
             >
-              <div style={{ fontSize: 12, fontWeight: 700, color: PINK_INK }}>
-                {c.studios.upcoming.label}
-              </div>
-              <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.85, color: BODY }}>
-                {c.studios.upcoming.names.join("・")}
-              </p>
+              {nl(c.closing.lead)}
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 8,
+                marginTop: 20,
+              }}
+            >
+              {c.closing.chips.map((chip) => (
+                <span
+                  key={chip}
+                  style={{
+                    fontSize: 13.5,
+                    fontWeight: 700,
+                    color: PINK_INK,
+                    background: PALE,
+                    border: `1px solid ${LINE}`,
+                    borderRadius: 999,
+                    padding: "6px 13px",
+                  }}
+                >
+                  {chip}
+                </span>
+              ))}
             </div>
+            <div style={{ marginTop: 30 }}>
+              <CampaignBlock mode="compact" />
+            </div>
+            <Cta text={c.closing.ctaText} sub={c.closing.ctaSub} />
           </section>
 
           {/* ── 最終CTA・予約フォーム（一旦非表示） ──
@@ -2160,25 +1786,18 @@ export default function Page() {
 
           <footer
             style={{
-              padding: "18px 18px 22px",
+              padding: "24px 18px 28px",
               background: "#FFFFFF",
               borderTop: `1px solid ${LINE}`,
               textAlign: "center",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
-              }}
-            >
-              <SakuraMark size={13} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+              <SakuraMark size={16} />
               <span
                 style={{
                   fontFamily: MINCHO,
-                  fontSize: 14,
+                  fontSize: 17,
                   fontWeight: 700,
                   letterSpacing: "0.18em",
                   color: INK,
@@ -2187,10 +1806,8 @@ export default function Page() {
                 {c.header.brand}
               </span>
             </div>
-            <p style={{ margin: "6px 0 0", fontSize: 9.5, color: MUTED }}>
-              {c.header.brandSub}
-            </p>
-            <p style={{ margin: "12px 0 0", fontSize: 9.5, color: MUTED }}>
+            <p style={{ margin: "8px 0 0", fontSize: 11.5, color: BODY }}>{c.header.brandSub}</p>
+            <p style={{ margin: "12px 0 0", fontSize: 11, color: MUTED }}>
               © {new Date().getFullYear()} SAKURA
             </p>
           </footer>
@@ -2205,7 +1822,7 @@ export default function Page() {
         shadowColor="rgba(194,80,113,0.4)"
         borderColor="rgba(229,139,164,0.45)"
         offers={c.sticky.offers.map((o) => (
-          <span key={o} style={{ fontSize: 12.5, fontWeight: 700, color: PINK_INK }}>
+          <span key={o} style={{ fontSize: 14, fontWeight: 700, color: PINK_INK }}>
             {o}
           </span>
         ))}

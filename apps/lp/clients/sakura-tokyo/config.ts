@@ -31,16 +31,21 @@ export interface SakuraConfig {
   status?: ClientStatus;
   meta: { title: string; description: string; ogpImage?: string };
 
-  /** オファーバー（ヘッダー直下の帯）。公式の店舗キャンペーンバナーと同内容。 */
-  offerBar: { note: string; text: string; badge: string };
+  /** オファーバー（ヘッダー直下の帯）。左に角丸の期限バッジ、中央にオファー文。 */
+  offerBar: { badgeText: string; text: string };
 
   header: { brand: string; brandSub: string; ctaText: string };
 
   fv: {
     /** 縦書きの明朝キャッチ（1要素＝1行）。採用理由は下の CATCH_CANDIDATES を参照。 */
     catchLines: string[];
-    sub: string;
     hero: Slot;
+    /** 写真右下の円形バッジ。 */
+    chips: { small: string; big: string }[];
+    /** FV下の桜色の帯のサブコピー（1要素＝1行）。 */
+    subLines: string[];
+    /** 同・悩みワードの丸チップ。 */
+    notes: string[];
     /** FV下部の信頼バッジ。 */
     stats: { num: string; unit: string; label: string }[];
   };
@@ -53,9 +58,12 @@ export interface SakuraConfig {
    *   さらに体験レッスン後のご入会で「入会金0円」「専用靴下プレゼント」
    */
   offer: {
+    /** 期限バッジの上に出す対象エリアの見出し（例「東京エリア限定キャンペーン」）。 */
+    area: string;
     note: string;
     eyebrow: string;
     heading: string;
+    lead: string;
     duration: string;
     trialLabel: string;
     trialWas: string;
@@ -63,7 +71,8 @@ export interface SakuraConfig {
     trialUnit: string;
     /** 体験60分で受けられる中身。円形アイコンで並べる（アイコンは page.tsx 側で固定）。 */
     items: string[];
-    photos: [Slot, Slot];
+    /** 体験で受けられる中身の写真（0枚以上）。 */
+    photos: Slot[];
     bridge: string;
     joinLead: string;
     perks: { label: string; was?: string; now: string; note?: string; icon?: "socks" }[];
@@ -82,14 +91,13 @@ export interface SakuraConfig {
     closingSub: string;
   };
 
+  /** 「マシンピラティス×マンツーマンで変わること」。写真＋テキストの横並びで積む。 */
   bridge: {
     kicker: string;
     heading: string;
     lead: string;
-    photo: Slot;
-    items: { title: string; body: string }[];
-    ctaText: string;
-    ctaSub: string;
+    items: { num: string; title: string; body: string; img?: Slot }[];
+    closing: string;
   };
 
   features: {
@@ -112,8 +120,9 @@ export interface SakuraConfig {
     kicker: string;
     heading: string;
     lead: string;
-    photo: Slot;
+    photo?: Slot;
     items: { title: string; body: string }[];
+    /** 現在の構成では非表示（グループレッスンとの比較表）。 */
     versus: { label: string; group: string; sakura: string }[];
   };
 
@@ -121,12 +130,12 @@ export interface SakuraConfig {
     kicker: string;
     heading: string;
     lead: string;
-    photos: [Slot, Slot];
+    photo?: Slot;
     items: { title: string; body: string }[];
-    ctaText: string;
-    ctaSub: string;
   };
 
+  /* proof / program / voices / price / compare は現在の構成では非表示。
+     データは残してあるので、page.tsx に描画を足せば復帰できる。 */
   proof: {
     kicker: string;
     heading: string;
@@ -181,12 +190,15 @@ export interface SakuraConfig {
     kicker: string;
     heading: string;
     lead: string;
-    steps: { num: string; title: string; body: string }[];
+    steps: { num: string; title: string; body: string; img?: Slot }[];
     ctaText: string;
     ctaSub: string;
   };
 
   faq: { kicker: string; heading: string; items: { q: string; a: string }[] };
+
+  /** 最終クロージング。体験キャンペーンを再掲してCTAで締める。 */
+  closing: { heading: string; lead: string; chips: string[]; ctaText: string; ctaSub: string };
 
   studios: {
     kicker: string;
@@ -239,6 +251,15 @@ export interface SakuraConfig {
  *  4. C は主語が「自分」で内省的すぎ、E は「60分」が先に立って情緒が弱い。
  * ────────────────────────────────────────────────────────────── */
 
+/**
+ * 写真はすべてSAKURA提供の撮影素材。
+ *   drive-*.jpg … 顧客共有のGoogleドライブ「★広告用撮影素材 > 撮影素材」（2025-02撮影）から
+ *                 2026-09-29 に追加。元は6000px級なので幅1500pxに縮小して置いている。
+ *   welcome.jpg / instructors.jpg … 代々木上原店LPと同じ素材（同ドライブの 070 / 025）。
+ * 方針: 同じ写真は2回使わない／頭・顔が枠で切れる写真は使わない（2026-09-29）。
+ *   worry-1-body / worry-2-posture / worry-4-postnatal は元データの時点で顔が口元までしか
+ *   写っていないため使っていない（ドライブの原本 052〜063 も同じ構図）。
+ */
 const IMG = "/clients/sakura-tokyo";
 
 /**
@@ -280,7 +301,7 @@ const config: SakuraConfig = {
     title:
       "女性専用パーソナルマシンピラティス SAKURA｜東京都内18店舗・体験レッスン＆入会金0円",
     description:
-      "姿勢が変わると、鏡を見るのが楽しみになる。東京都内18店舗、女性専用・完全マンツーマンのマシンピラティスSAKURA。会員様の80%がピラティス未経験、継続率94%。9月30日までのご予約限定で体験レッスン＆入会金が0円。",
+      "姿勢が変わると、鏡を見るのが楽しみになる。東京都内18店舗、女性専用・完全マンツーマンのマシンピラティスSAKURA。会員様の80%がピラティス未経験、継続率94%。10月31日までのご予約限定で体験レッスン＆入会金が0円。",
     // 相対パスだと metadataBase が別ドメインに解決されるため絶対URLで固定する。
     ogpImage: "https://fitness-lp.commitad.com/clients/sakura-tokyo/ogp.jpg",
   },
@@ -290,11 +311,10 @@ const config: SakuraConfig = {
 
      公式バナーは「今月末」という相対表記だが、LPでは締切を明示する方針
      （2026-09-07 の顧客判断）。**月をまたぐたびに下の日付を更新すること。**
-     オファーバーは横幅が詰まっているので、ここだけ短い「9/30」表記にしている。 */
+     オファーバーは横幅が詰まっているので、ここだけ短い「10/31」表記にしている。 */
   offerBar: {
-    note: "9/30までのご予約限定",
-    text: "体験レッスン＆入会金",
-    badge: "0円",
+    badgeText: "10/31まで",
+    text: "体験レッスン＆入会金0円",
   },
 
   header: {
@@ -305,13 +325,20 @@ const config: SakuraConfig = {
 
   fv: {
     catchLines: ["姿勢が変わると、", "鏡を見るのが", "楽しみになる。"],
-    sub: "東京都内18店舗。女性専用・完全マンツーマン。\n運動が初めての方も、あなたの身体に合わせて。",
     hero: {
       placeholder: "マンツーマンレッスン風景",
       src: `${IMG}/hero.jpg`,
       // 縦書きキャッチが左半分を覆うので、被写体が右側に来るよう切り抜きを左へ寄せる。
-      position: "36% center",
+      position: "31% center",
     },
+    chips: [{ small: "体験レッスン", big: "0円" }],
+    subLines: [
+      "東京都内18店舗。",
+      "女性専用・完全マンツーマン。",
+      "運動が初めての方も、",
+      "あなたの身体に合わせて。",
+    ],
+    notes: ["猫背・巻き肩", "ボディライン", "むくみ・冷え", "産後ケア"],
     /* 出典: 公式店舗LP（未経験80% / 継続率94% / スタッフ全員女性）、公式 /studios/（店舗数） */
     stats: [
       { num: "18", unit: "店舗", label: "どの店舗も利用OK" },
@@ -327,9 +354,11 @@ const config: SakuraConfig = {
      ＋ 公式 /studios/<店舗>/ のバナー「今月末までのご予約限定」
      締切は明示する方針なので日付で置く。**月をまたぐたびに更新すること。** */
   offer: {
-    note: "9月30日（水）までのご予約限定",
+    area: "東京エリア限定キャンペーン",
+    note: "10月31日（土）までのご予約限定",
     eyebrow: "＼ 今だけ ／",
     heading: "体験レッスン＆カウンセリング",
+    lead: "10月31日までに体験レッスンを\nご予約いただいた方限定。\nマンツーマン60分の体験が、\n今だけ無料で受けられます。",
     duration: "60分",
     trialLabel: "通常 5,500円 のところ",
     trialWas: "5,500円",
@@ -344,7 +373,7 @@ const config: SakuraConfig = {
       "ウェア・靴下\n無料レンタル",
     ],
     photos: [
-      { placeholder: "レッスン風景", src: `${IMG}/offer-1.jpg` },
+      { placeholder: "マシンピラティス体験", src: `${IMG}/scene-3-morning.jpg` },
       { placeholder: "無料レンタルウェア", src: `${IMG}/offer-2.jpg` },
     ],
     bridge: "さらに",
@@ -370,12 +399,12 @@ const config: SakuraConfig = {
     /* 出典: 公式トップ「SAKURAなら、このようなお悩みをすべて解決」 */
     cards: [
       {
-        img: { placeholder: "姿勢", src: `${IMG}/worry-2-posture.jpg` },
+        img: { placeholder: "姿勢の指導", src: `${IMG}/offer-1.jpg`, position: "35% center" },
         text: "猫背や巻き肩を改善して\n姿勢をすらっとさせたい",
         note: "デスクワークで丸まった背中は、見た目の印象を大きく左右します。",
       },
       {
-        img: { placeholder: "ボディライン", src: `${IMG}/worry-1-body.jpg` },
+        img: { placeholder: "ボディライン", src: `${IMG}/reason-2.jpg`, position: "40% center" },
         text: "筋肉質な感じにさせず\nボディラインを綺麗にしたい",
         note: "鍛えて大きくするのではなく、使い方を整えてしなやかに。",
       },
@@ -385,7 +414,7 @@ const config: SakuraConfig = {
         note: "呼吸と可動域から見直すので、女性特有の不調にも期待できます。",
       },
       {
-        img: { placeholder: "産後ケア", src: `${IMG}/worry-4-postnatal.jpg` },
+        img: { placeholder: "産後ケア", src: `${IMG}/drive-smile-portrait.jpg` },
         text: "産後の骨盤ケアを\nしていきたい",
         note: "産後のからだの変化に寄り添った、専用のプログラムがあります。",
       },
@@ -397,25 +426,30 @@ const config: SakuraConfig = {
   /* 出典: 公式トップ Concept / 公式店舗LP「マシンピラティスで得られる効果」Benefits 01-03 */
   bridge: {
     kicker: "WHY PILATES",
-    heading: "そのお悩みには、\nマシンピラティス × マンツーマン。",
+    heading: "マシンピラティス ×\nマンツーマンで、\n変わること。",
     lead: "体重を落とすだけのボディメイクではなく、習慣化している身体の使い方を修正して奥深いところから鍛えることで『しなやかで美しいボディライン』を手に入れることができます。",
-    photo: { placeholder: "リフォーマーでのレッスン", src: `${IMG}/reason-2.jpg` },
     items: [
       {
+        num: "01",
+        img: { placeholder: "リフォーマーでのレッスン", src: `${IMG}/drive-plank-reformer.jpg` },
         title: "運動が苦手でも、\nマシンが動きを支えてくれる",
         body: "専用マシン「リフォーマー」が身体の動きをサポートしてくれるため、運動が苦手な方や筋力が少ない方でも、効率的に体幹・インナーマッスルを鍛えることができます。",
       },
       {
+        num: "02",
+        /* 上端を切らずに元写真の全体（3:2）を出して、写っている顔をすべて見せる。 */
+        img: { placeholder: "インストラクターのサポート", src: `${IMG}/drive-arm-stretch-tower.jpg` },
         title: "気になる部分に\nピンポイントでアプローチ",
         body: "気になるパーツや悩みのある部分だけに集中してアプローチすることができるので、より効率的に結果を出すことができます。",
       },
       {
+        num: "03",
+        img: { placeholder: "ストレッチ", src: `${IMG}/drive-back-arch-mat.jpg` },
         title: "姿勢だけでなく、\nカラダの不調にも期待できる",
         body: "柔軟性を向上させたり、骨の位置を改善することで痛みの悩みを改善。呼吸も大切にしているので、女性特有の不調にも効果が期待できます。",
       },
     ],
-    ctaText: "自分の身体を知ることから始める",
-    ctaSub: "体験レッスン0円／入会金0円",
+    closing: "変わるのは、\n体型だけではありません。",
   },
 
   /* 出典: 公式店舗LP「『SAKURA』のマシンピラティス 5つの特徴」 */
@@ -429,46 +463,46 @@ const config: SakuraConfig = {
       {
         num: "01",
         insight: "他のジムもヨガも、続けたのに変わらなかった。",
+        img: { placeholder: "レッスン風景", src: `${IMG}/drive-leg-up-reformer.jpg` },
         title: "「効果を感じられなかった」人ほど、\n変化を実感している",
         body: "お客様評価を最も大切にするスタジオなので、他スタジオで効果を感じなかったお客様からとても高い評価をいただいています。結果を出すことに特化した設計です。",
-        img: { placeholder: "レッスン風景", src: `${IMG}/offer-1.jpg` },
       },
       {
         num: "02",
         insight: "なんとなく動くだけで、本当に姿勢が変わるの？",
+        img: { placeholder: "マシン指導", src: `${IMG}/drive-chair-lesson.jpg` },
         title: "「なんとなく」で終わらせない、\n理学療法士監修のメソッド",
         body: "理学療法士とパーソナルトレーナーが監修し、ピラティスにボディメイクの視点を組み合わせた独自メソッドを導入。マシンレッスンをメインに、女性特有のニーズにお応えします。",
-        img: { placeholder: "マシン指導", src: `${IMG}/scene-3-morning.jpg` },
       },
       {
         num: "03",
         insight: "スタジオで体型を見られるのが、どうしても恥ずかしい。",
+        img: { placeholder: "カウンセリング", src: `${IMG}/reason-1.jpg` },
         title: "人の目が気になる人のための、\n完全個室・女性専用スタジオ",
         body: "スタジオもインストラクターも全員女性。人目を気にせず、体型や産後のことなど女性特有のお悩みも、お気軽に相談できる環境です。",
-        img: { placeholder: "カウンセリング", src: `${IMG}/reason-1.jpg` },
       },
       {
         num: "04",
         insight: "パーソナルは効きそうだけど、高くて続けられない。",
         badge: "業界最安級",
+        img: { placeholder: "スタジオ内観", src: `${IMG}/drive-studio-logo-wall.jpg` },
         title: "「高いから続かない」をなくした、\nパーソナルなのにリーズナブル",
         body: "コストカットにより他社よりも続けやすい費用を実現。月額制とチケット制を用意しているので、通うペースに合わせてプランをお選びいただけます。",
-        img: { placeholder: "スタジオ内観", src: `${IMG}/reason-3.jpg` },
       },
       {
         num: "05",
         insight: "産後の体型、もう元には戻らない気がする。",
+        img: { placeholder: "ストレッチ", src: `${IMG}/drive-floor-stretch-closeup.jpg` },
         title: "産後の身体は、戻すのではなく整える。\n産後リカバリーサポート",
         body: "産後のからだの変化に寄り添い、心身ともに快適な日常へとつながる姿勢づくりをサポートします。骨盤まわりに特化したMATERNITYプログラムもご用意しています。",
-        img: { placeholder: "産後ケア", src: `${IMG}/worry-4-postnatal.jpg` },
       },
       {
         /* 出典: 公式トップ「System 予約の取りやすい独自の仕組みづくり」 */
         num: "06",
         insight: "予約が取れないジムに、お金を払い続けたくない。",
+        img: { placeholder: "カウンセリングスペース", src: `${IMG}/access.jpg` },
         title: "予約の取りやすい\n独自の仕組みづくり",
         body: "一気に予約が解放されるスタジオとは異なり、当店独自の仕組みにより可能な限り予約の取りやすい環境を作っています。常に3週間先のスケジュールが開放されるので、予定に合わせて計画的に通えます。",
-        img: { placeholder: "カウンセリングスペース", src: `${IMG}/access.jpg` },
       },
     ],
   },
@@ -476,8 +510,8 @@ const config: SakuraConfig = {
   personal: {
     kicker: "PERSONAL",
     heading: "パーソナルだから、\nできること。",
+    photo: { placeholder: "マンツーマン指導", src: `${IMG}/drive-three-talk.jpg` },
     lead: "決められたメニューをみんなで動くのではなく、あなたの身体だけを見て、その日のコンディションに合わせて組み立てる60分です。",
-    photo: { placeholder: "マンツーマン指導", src: `${IMG}/offer-1.jpg` },
     items: [
       {
         title: "あなたの身体だけを見る60分",
@@ -524,11 +558,8 @@ const config: SakuraConfig = {
   beginner: {
     kicker: "FOR BEGINNERS",
     heading: "はじめてでも、\n大丈夫です。",
+    photo: { placeholder: "インストラクター", src: `${IMG}/instructors.jpg` },
     lead: "SAKURAの会員様は80%がピラティス未経験。幅広い年齢層の方が通われています。",
-    photos: [
-      { placeholder: "レンタルウェア", src: `${IMG}/offer-2.jpg` },
-      { placeholder: "カウンセリングスペース", src: `${IMG}/access.jpg` },
-    ],
     items: [
       {
         title: "会員様の80%がピラティス未経験",
@@ -547,8 +578,6 @@ const config: SakuraConfig = {
         body: "体験レッスンの際はウェアや靴下を無料で貸し出していますので、手ぶらでご来店いただけます。",
       },
     ],
-    ctaText: "運動が苦手でも、まず体験してみる",
-    ctaSub: "体験レッスン0円／手ぶらでOK",
   },
 
   proof: {
@@ -650,7 +679,7 @@ const config: SakuraConfig = {
       label: "入会金",
       was: "33,000円",
       now: "0円",
-      note: "9月30日（水）までのご予約限定",
+      note: "10月31日（土）までのご予約限定",
     },
     plans: [
       {
@@ -667,20 +696,6 @@ const config: SakuraConfig = {
         amount: "63,800",
         unit: "円/月",
         per: "1回あたり7,975円",
-      },
-      {
-        name: "回数券8枚コース",
-        desc: "有効期限内に8回のレッスンが可能",
-        amount: "70,400",
-        unit: "円",
-        per: "1回あたり8,800円",
-      },
-      {
-        name: "6ヶ月プラン",
-        desc: "最大月4回までご利用いただけます",
-        amount: "184,800",
-        unit: "円",
-        per: "1回あたり7,700円",
       },
       {
         name: "12ヶ月プラン",
@@ -767,6 +782,7 @@ const config: SakuraConfig = {
       },
       {
         num: "02",
+        img: { placeholder: "ご来店", src: `${IMG}/welcome.jpg` },
         title: "スタジオへご来店",
         body: "前のお客様がいらっしゃる可能性がございますので、予約時間ちょうどにスタジオへお越しください。",
       },
@@ -777,6 +793,7 @@ const config: SakuraConfig = {
       },
       {
         num: "04",
+        img: { placeholder: "カウンセリング", src: `${IMG}/drive-counseling-tablet.jpg` },
         title: "カウンセリング",
         body: "まずはお客様のご希望やお悩みをヒアリングし、メニューをご提案します。",
       },
@@ -814,7 +831,7 @@ const config: SakuraConfig = {
       },
       {
         q: "男性も通えますか？",
-        a: "SAKURAは女性専用スタジオです。インストラクターも全員女性なので、人目を気にせず安心してお通いいただけます。",
+        a: "申し訳ございませんが、男性の方はご利用いただけません。",
       },
       {
         q: "妊娠中でもレッスンを受けられますか？",
@@ -837,6 +854,14 @@ const config: SakuraConfig = {
         a: "申し訳ございません。体験レッスンは1回限りとさせていただいております。",
       },
     ],
+  },
+
+  closing: {
+    heading: "鏡を見るのが楽しみになる毎日を、\nここから始めませんか。",
+    lead: "10月31日までのご予約で、\n体験レッスン＆入会金が0円に。",
+    chips: ["女性専用", "完全マンツーマン", "手ぶらでOK", "入会金0円"],
+    ctaText: "まずは無料体験を予約する",
+    ctaSub: "所要60分／空き状況はその場で確認できます",
   },
 
   /* 出典: 公式 /studios/（2026年9月時点）。東京都限定LPなので東京都の店舗のみ掲載する。 */
