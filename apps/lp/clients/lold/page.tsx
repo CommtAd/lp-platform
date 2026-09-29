@@ -74,6 +74,22 @@ function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
 }
 
 /**
+ * 金額の部分だけを金のまま残し、後ろに続く文言を本文色で組む（`contract.inkAfterAmount`）。
+ * 金額は「数字＋(万|千)円＋(分|相当)」までとみなす（"3万円分の選べるギフト" → "3万円分"）。
+ * 金額が見つからなければ `amountEmphasis` と同じ結果を返す。
+ */
+function amountThenInk(text: string, ink: string, numSize: number, sideSize: number): ReactNode {
+  const m = text.match(/^(.*?[0-9０-９][0-9０-９,，.．]*(?:万|千)?円(?:分|相当)?)(.+)$/);
+  if (!m) return amountEmphasis(text, numSize, sideSize);
+  return (
+    <>
+      {amountEmphasis(m[1], numSize, sideSize)}
+      <span style={{ fontSize: sideSize, color: ink }}>{m[2]}</span>
+    </>
+  );
+}
+
+/**
  * 金額プレートの文言を説明文として組む（`grandOffer.amountProse`）。
  *
  * `amount` は本来「最大180万円相当」のような金額で、`amountEmphasis` が数字を
@@ -927,7 +943,10 @@ export default function Page() {
               */}
               <div className="relative mt-10">
                 <div
-                  className="relative rounded-[3px] border px-5 pb-8 pt-11 text-center"
+                  className={`relative rounded-[3px] border px-5 pt-11 text-center ${
+                    // 金額を省いて写真で終わるときは、下の四隅の飾りに写真が掛からないよう下を空ける。
+                    !c.grandOffer.amount && c.grandOffer.images?.length ? "pb-14" : "pb-8"
+                  }`}
                   style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
                 >
                   {/*
@@ -935,46 +954,82 @@ export default function Page() {
                     （枠いっぱいに角が回るぶん privilege より重厚に見える）。
                     高さが中身で変わる箱には CornerFrame を使うこと。
                   */}
-                  {c.grandOffer.frame && (
-                    <span className="pointer-events-none absolute inset-1.5">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={c.grandOffer.frame} alt="" className="h-full w-full" />
-                    </span>
-                  )}
+                  {c.grandOffer.frame &&
+                    (c.grandOffer.images?.length ? (
+                      // 写真を並べると箱の高さが伸びるので、角を自然比で貼る版に切り替える。
+                      <CornerFrame src={c.grandOffer.frame} />
+                    ) : (
+                      <span className="pointer-events-none absolute inset-1.5">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={c.grandOffer.frame} alt="" className="h-full w-full" />
+                      </span>
+                    ))}
                   <p
                     className="text-[17px] leading-snug tracking-[0.18em]"
                     style={{ fontFamily: mincho }}
                   >
-                    {c.grandOffer.title}
+                    {c.grandOffer.titleEmphasis
+                      ? emphasize(c.grandOffer.title, c.grandOffer.titleEmphasis, goldOnWhite, 26)
+                      : nl(c.grandOffer.title)}
                   </p>
-                  {/* 菱形を挟んだ罫。直線1本より装飾として効く。 */}
-                  <span className="mt-5 flex items-center justify-center gap-2.5">
-                    <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
-                    <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
-                    <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
-                  </span>
-                  {/* 金額として組むか、説明文として組むか。説明文のときは数字を
-                      特大にしない（"衣装2着…" の 2 だけが巨大になるのを避ける）。 */}
-                  {c.grandOffer.amountProse ? (
-                    <p
-                      className="mt-5 font-bold tracking-[0.02em]"
-                      style={{ fontFamily: mincho, color: c.ink }}
+                  {/* 特典の中身の写真。四隅の飾りより前面に出すため relative を付ける。 */}
+                  {c.grandOffer.images?.length ? (
+                    <div
+                      className="relative mt-5 grid gap-2"
+                      style={{
+                        gridTemplateColumns: `repeat(${c.grandOffer.images.length}, minmax(0, 1fr))`,
+                      }}
                     >
-                      {prosePlate(
-                        c.grandOffer.amount,
-                        c.grandOffer.amountProseEmphasis,
-                        c.grandOffer.amountProseSize ?? 13,
+                      {c.grandOffer.images.map((img, i) => (
+                        <figure key={`${img.src ?? img.placeholder}-${i}`}>
+                          <ImageSlot
+                            src={img.src}
+                            placeholder={img.placeholder}
+                            objectPosition={img.position ?? "center"}
+                            radius={2}
+                            style={{ width: "100%", aspectRatio: "4 / 3" }}
+                          />
+                          {img.caption && (
+                            <figcaption className="mt-2 text-[11px] leading-snug opacity-70">
+                              {img.caption}
+                            </figcaption>
+                          )}
+                        </figure>
+                      ))}
+                    </div>
+                  ) : null}
+                  {c.grandOffer.amount && (
+                    <>
+                      {/* 菱形を挟んだ罫。直線1本より装飾として効く。 */}
+                      <span className="mt-5 flex items-center justify-center gap-2.5">
+                        <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                        <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
+                        <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                      </span>
+                      {/* 金額として組むか、説明文として組むか。説明文のときは数字を
+                          特大にしない（"衣装2着…" の 2 だけが巨大になるのを避ける）。 */}
+                      {c.grandOffer.amountProse ? (
+                        <p
+                          className="mt-5 font-bold tracking-[0.02em]"
+                          style={{ fontFamily: mincho, color: c.ink }}
+                        >
+                          {prosePlate(
+                            c.grandOffer.amount,
+                            c.grandOffer.amountProseEmphasis,
+                            c.grandOffer.amountProseSize ?? 13,
+                          )}
+                        </p>
+                      ) : (
+                        /* text-[30px] は数字を含まない文字列（テンプレのダミー等）の
+                           フォールバック。数字があれば amountEmphasis 側の span が上書きする。 */
+                        <p
+                          className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
+                          style={{ fontFamily: mincho, color: goldOnWhite }}
+                        >
+                          {amountEmphasis(c.grandOffer.amount)}
+                        </p>
                       )}
-                    </p>
-                  ) : (
-                    /* text-[30px] は数字を含まない文字列（テンプレのダミー等）の
-                       フォールバック。数字があれば amountEmphasis 側の span が上書きする。 */
-                    <p
-                      className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
-                      style={{ fontFamily: mincho, color: goldOnWhite }}
-                    >
-                      {amountEmphasis(c.grandOffer.amount)}
-                    </p>
+                    </>
                   )}
                 </div>
                 {/* バッジはカード上端に跨がらせる。 */}
@@ -1011,6 +1066,14 @@ export default function Page() {
                         >
                           {nl(c.grandOffer.feature.title)}
                         </p>
+                        {c.grandOffer.feature.amount && (
+                          <p
+                            className="mt-3 font-bold leading-none"
+                            style={{ fontFamily: mincho, color: "#F0DDB2" }}
+                          >
+                            {amountEmphasis(c.grandOffer.feature.amount, 40, 18)}
+                          </p>
+                        )}
                         {/* 写真の上ではブランドゴールドの罫線が沈むので淡いシャンパンで引く。 */}
                         <span
                           className="mx-auto mt-4 block h-px w-12"
@@ -1029,6 +1092,14 @@ export default function Page() {
                       <p className="text-[15.5px] leading-relaxed" style={{ fontFamily: mincho }}>
                         {nl(c.grandOffer.feature.title)}
                       </p>
+                      {c.grandOffer.feature.amount && (
+                        <p
+                          className="mt-3 font-bold leading-none"
+                          style={{ fontFamily: mincho, color: goldOnWhite }}
+                        >
+                          {amountEmphasis(c.grandOffer.feature.amount, 40, 18)}
+                        </p>
+                      )}
                       <p className="mt-2.5 text-[12px] leading-[1.9] opacity-65">
                         {c.grandOffer.feature.body}
                       </p>
@@ -1280,8 +1351,31 @@ export default function Page() {
                       className="text-[30px] font-bold leading-none"
                       style={{ fontFamily: mincho, color: goldOnWhite }}
                     >
-                      {amountEmphasis(c.privilege.contract.amount, 48, 20)}
+                      {c.privilege.contract.inkAfterAmount
+                        ? amountThenInk(c.privilege.contract.amount, c.ink, 48, 20)
+                        : amountEmphasis(c.privilege.contract.amount, 48, 20)}
                     </p>
+                    {/* 追加の成約特典は「＋」で区切って積む。数字は amount と同じ48pxに揃え、
+                        文字だけ18pxに落として1行に収める（20pxだと "最大100万円相当の15大特典" が
+                        枠から10pxはみ出す）。 */}
+                    {c.privilege.contract.extras?.map((extra, i) => (
+                      <div key={i}>
+                        <p
+                          className="mt-3 text-[20px] leading-none"
+                          style={{ fontFamily: mincho, color: c.accent }}
+                        >
+                          ＋
+                        </p>
+                        <p
+                          className="mt-3 text-[20px] font-bold leading-none"
+                          style={{ fontFamily: mincho, color: goldOnWhite }}
+                        >
+                          {c.privilege.contract?.inkAfterAmount
+                            ? amountThenInk(extra, c.ink, 48, 18)
+                            : amountEmphasis(extra, 48, 18)}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 {/* FVのプレートバッジと同じスタンプ。抽選などの条件を金額から離さない。 */}
