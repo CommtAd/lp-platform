@@ -53,6 +53,10 @@ const config: PatternCConfig = {
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
+      // 罫は渦の中央を通るので、罫と本文の間が絵として空く。負の値でその空きを詰める
+      // （顧客指定。値は金の渦の飾りで lold-02 が使っていたもの）。
+      gap: -20,
+      gapBottom: -14,
     },
     highlight: "最大100万円相当 優待",
     highlightSize: 19,
