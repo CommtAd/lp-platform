@@ -411,15 +411,18 @@ function FullBleed({
   img,
   ratio = "16 / 10",
   style,
+  /** 文字が焼き込まれた画像では、読み上げ用に中身の文言を渡す。 */
+  alt,
 }: {
   img: { src?: string | null; placeholder: string; position?: string };
   ratio?: string;
   style?: CSSProperties;
+  alt?: string;
 }) {
   return (
     <ImageSlot
       src={img.src}
-      alt={img.placeholder}
+      alt={alt ?? img.placeholder}
       placeholder={img.placeholder}
       objectPosition={img.position ?? "center"}
       style={{ aspectRatio: ratio, ...style }}
@@ -576,7 +579,7 @@ export default function Page() {
             設計731px。390px幅の実機（iPhone 14 は可視域およそ750px）で
             CTAが画面内に収まる。660pxでは791pxになり、CTAが切れていた。
           */}
-          <div style={{ position: "relative", height: 600, overflow: "hidden" }}>
+          <div style={{ position: "relative", height: 578, overflow: "hidden" }}>
             <HeroVideo
               src={c.fv.video}
               poster={c.fv.poster}
@@ -588,7 +591,10 @@ export default function Page() {
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(180deg, rgba(14,36,50,0.30) 0%, rgba(14,36,50,0.08) 22%, rgba(13,34,48,0.46) 46%, rgba(12,32,46,0.66) 64%, rgba(10,28,42,0.88) 100%)",
+                  // キッカーは約32%、キャッチは36〜57%に載る。支給動画の立位シーンは
+                  // その帯にマシンの白い腕が入って文字が負けるため、中間を厚くしている。
+                  // 上端は写真を見せたいので薄いまま（指示書「暗くしすぎない」）。
+                  "linear-gradient(180deg, rgba(14,36,50,0.32) 0%, rgba(14,36,50,0.12) 18%, rgba(13,34,48,0.40) 32%, rgba(12,32,46,0.58) 48%, rgba(11,30,44,0.72) 66%, rgba(10,28,42,0.90) 100%)",
               }}
             />
 
@@ -609,7 +615,10 @@ export default function Page() {
                   fontSize: 9.5,
                   fontWeight: 700,
                   letterSpacing: "0.34em",
-                  color: "rgba(255,255,255,0.82)",
+                  color: "rgba(255,255,255,0.92)",
+                  // 細い字なので、明るい背景に重なると暗幕だけでは負ける。
+                  // 影を付けて輪郭を残す（キャッチと同じ考え方）。
+                  textShadow: "0 1px 10px rgba(8,26,38,0.75)",
                 }}
               >
                 {c.fv.kicker}
@@ -756,7 +765,63 @@ export default function Page() {
                 </div>
               </div>
 
-              <Cta variant="onPhoto" marginTop={16} />
+              {/*
+                特典行。FVは1画面に収める制約があるので、ブロックではなく
+                1行のタイポグラフィで置く（高さ約26px）。増やす場合は
+                設計幅338pxに収まるかと、CTAが折り返しに残るかを必ず確認すること。
+              */}
+              <div
+                style={{
+                  marginTop: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 9,
+                }}
+              >
+                <span
+                  style={{
+                    flex: "none",
+                    padding: "3px 8px",
+                    borderRadius: 3,
+                    background: "rgba(255,255,255,0.92)",
+                    fontFamily: GOTHIC,
+                    fontSize: 10,
+                    fontWeight: 800,
+                    letterSpacing: "0.08em",
+                    color: HEAD,
+                  }}
+                >
+                  特典
+                </span>
+                {c.fv.bonuses.map((b, i) => (
+                  <span key={b} style={{ display: "contents" }}>
+                    {i > 0 && (
+                      <span
+                        style={{
+                          width: 1,
+                          height: 11,
+                          background: "rgba(255,255,255,0.4)",
+                        }}
+                      />
+                    )}
+                    <span
+                      style={{
+                        fontFamily: GOTHIC,
+                        fontSize: 11.5,
+                        fontWeight: 700,
+                        letterSpacing: "0.01em",
+                        color: "#FFFFFF",
+                        textShadow: "0 1px 8px rgba(8,26,38,0.5)",
+                      }}
+                    >
+                      {b}
+                    </span>
+                  </span>
+                ))}
+              </div>
+
+              <Cta variant="onPhoto" marginTop={13} />
             </div>
           </div>
 
@@ -776,6 +841,9 @@ export default function Page() {
             >
               {nl(c.intro.body)}
             </p>
+            {/* 顧客支給の写真（2026-09-29 AUN #2）。指示どおり正方形で挟む。 */}
+            <FullBleed img={c.intro.img} ratio="1 / 1" style={{ marginTop: 26 }} />
+
             {/* チップは枠を持たせず、小さな丸印だけで並べる（指示書 §11-05）。 */}
             <div
               style={{
@@ -820,40 +888,16 @@ export default function Page() {
           </Section>
 
           {/* ─ ⑦ お悩み ─────────────────────────────────────
-              白カードを5枚並べない。淡色地にヘアライン区切りのリストだけ。 */}
-          <Section background={PALE}>
-            <Kicker text={c.worry.kicker} align="left" />
-            <Head text={c.worry.heading} align="left" size={23} />
-            <ul
-              style={{
-                listStyle: "none",
-                margin: "26px 0 0",
-                padding: 0,
-                borderTop: `1px solid ${RULE}`,
-              }}
-            >
-              {c.worry.items.map((item) => (
-                <li
-                  key={item}
-                  style={{
-                    display: "flex",
-                    gap: 11,
-                    padding: "15px 2px",
-                    borderBottom: `1px solid ${RULE}`,
-                    fontFamily: BODY,
-                    fontSize: 14,
-                    lineHeight: 1.8,
-                    color: INK,
-                  }}
-                >
-                  <Check />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+              見出しと悩み項目は顧客支給の画像に焼き込まれている（AUN #6）。
+              そのためキッカー・見出し・リストは置かず、画像を全幅で出して
+              締めの一文だけをLP側で持つ。画像の比率は原寸（1092x1440）と
+              一致させてあるので、`cover` でも切り取られない。 */}
+          <Section background={PALE} flush style={{ padding: "0 0 62px" }}>
+            <FullBleed img={c.worry.img} ratio="1092 / 1440" alt={c.worry.imgAlt} />
             <p
               style={{
-                margin: "30px 0 0",
+                margin: "34px 0 0",
+                padding: `0 ${PAD}px`,
                 textAlign: "center",
                 fontFamily: MINCHO,
                 fontWeight: 600,

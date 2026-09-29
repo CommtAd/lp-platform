@@ -55,9 +55,18 @@ export interface IvyBConfig {
     facts: string[];
     price: { value: string; unit: string };
     campaign: { label: string; was: string; now: string; nowUnit: string };
+    /** キャンペーンに付く特典。FVでは1行に収めるため、短い語で2つまで。 */
+    bonuses: string[];
   };
 
-  intro: { kicker: string; heading: string; body: string; chips: string[] };
+  intro: {
+    kicker: string;
+    heading: string;
+    body: string;
+    /** 本文とチップの間に挟む正方形の写真。 */
+    img: Slot;
+    chips: string[];
+  };
 
   campaign: {
     kicker: string;
@@ -71,7 +80,17 @@ export interface IvyBConfig {
     note: string;
   };
 
-  worry: { kicker: string; heading: string; items: string[]; closing: string };
+  /**
+   * ⑦お悩み。**見出しと悩み項目は画像に焼き込まれている**
+   * （顧客支給、2026-09-29 AUN #6）。そのためLP側はキッカー・見出し・
+   * リストのテキストを持たない。文言を直すには画像の作り直しが要る。
+   */
+  worry: {
+    img: Slot;
+    /** 画像内の文言。読み上げと、画像が出ないときのために全項目を入れる。 */
+    imgAlt: string;
+    closing: string;
+  };
 
   /** ⑧STUDIO IVYなら。4項目だが、写真つき1つ＋数字主役1つ＋文字だけ2つで組む。 */
   points: {
@@ -243,6 +262,9 @@ const config: IvyBConfig = {
       now: "0",
       nowUnit: "円",
     },
+    // 顧客支給の特典内容（2026-09-29 AUN #1）。FVは1行に収める必要があるため、
+    // 語を増やすときは幅（設計338px）に収まるか確認すること。
+    bonuses: ["ピラティスソックスプレゼント", "入会金無料"],
   },
 
   intro: {
@@ -251,6 +273,11 @@ const config: IvyBConfig = {
     body:
       "周りの目を気にせず、\n一人ひとりの身体や目的に合わせたレッスンを。\n" +
       "STUDIO IVYは、完全個室の空間で受けられる\nマンツーマンのマシンピラティススタジオです。",
+    img: {
+      placeholder: "レッスンの様子",
+      src: `${ASSET}/about.jpg`,
+      position: "center 35%",
+    },
     chips: ["完全個室", "マンツーマン", "初心者歓迎", "藤沢駅 徒歩5分"],
   },
 
@@ -268,15 +295,15 @@ const config: IvyBConfig = {
   },
 
   worry: {
-    kicker: "CONCERNS",
-    heading: "こんなお悩み、\nありませんか？",
-    items: [
-      "姿勢やボディラインが気になってきた",
-      "運動不足を感じている",
-      "身体を動かしたいけれど、何をすればいいか分からない",
-      "グループレッスンだと周りについていけるか不安",
-      "自分の身体に合った運動を教えてほしい",
-    ],
+    img: {
+      placeholder: "こんなお悩みありませんか？",
+      src: `${ASSET}/worry.jpg`,
+    },
+    imgAlt:
+      "こんなお悩みありませんか？ 姿勢やボディラインが気になってきた／" +
+      "運動不足を感じている／身体を動かしたいけれど、何をすればいいか分からない／" +
+      "グループレッスンだと周りについていけるか不安／" +
+      "自分の身体に合った運動を教えてほしい／ジムは続かなかった",
     closing: "そんな方にこそ、\nマンツーマンのピラティスを。",
   },
 
