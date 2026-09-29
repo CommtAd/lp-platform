@@ -178,7 +178,12 @@ const config: PatternCConfig = {
       },
     ],
     frame: `${ASSET}/privilege-frame.png`,
-    contract: { label: "さらに、ご成約で", amount: "3万円分の選べるギフト" },
+    contract: {
+      label: "さらに、ご成約で",
+      amount: "3万円分の選べるギフト",
+      // 成約特典の2つ目（顧客指定）。総額はFVの「最大100万円相当 優待」と同じもの。
+      extras: ["最大100万円相当の15大特典"],
+    },
   },
 
   facility: {

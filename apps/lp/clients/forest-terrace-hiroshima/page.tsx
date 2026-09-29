@@ -1223,6 +1223,23 @@ export default function Page() {
                     >
                       {amountEmphasis(c.privilege.contract.amount, 48, 20)}
                     </p>
+                    {/* 追加の成約特典は「＋」で区切って一段小さく積む。主役は最初の金額のまま。 */}
+                    {c.privilege.contract.extras?.map((extra, i) => (
+                      <div key={i}>
+                        <p
+                          className="mt-3 text-[20px] leading-none"
+                          style={{ fontFamily: mincho, color: c.accent }}
+                        >
+                          ＋
+                        </p>
+                        <p
+                          className="mt-3 text-[20px] font-bold leading-none"
+                          style={{ fontFamily: mincho, color: goldOnWhite }}
+                        >
+                          {amountEmphasis(extra, 36, 17)}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 {/* FVのプレートバッジと同じスタンプ。抽選などの条件を金額から離さない。 */}
