@@ -1,7 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import LPCanvas from "@/components/LPCanvas";
-import LPForm from "@/components/LPForm";
 import ImageSlot from "@/components/ImageSlot";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import HeroVideo from "./HeroVideo";
@@ -210,7 +209,9 @@ function Cta({
   return (
     <div style={{ marginTop }}>
       <a
-        href={c.cta.anchor}
+        href={c.cta.url}
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           display: "flex",
           alignItems: "center",
@@ -1821,51 +1822,12 @@ export default function Page() {
             <Cta />
           </Section>
 
-          {/* ─ 予約フォーム ───────────────────────────────── */}
-          <Section id="form">
-            {/*
-              LPForm は全LP共通で、入力欄の枠（#DDD6C8）と必須タグ（#C25B4B）が
-              パターンA由来の暖色で固定されている。共通側は触らず、このLPの中だけ
-              青系に寄せる。枠色はインラインなので !important でしか上書きできない。
-            */}
-            <style>{`
-              #form input, #form textarea, #form select { border-color: ${RULE} !important; border-radius: 4px !important; }
-              #form .lpform-toggle[data-selected="false"] { border-color: ${RULE} !important; border-radius: 4px !important; }
-              #form .lpform-toggle[data-selected="true"] { border-radius: 4px !important; }
-              #form .lpform-required-tag { color: ${ACCENT} !important; }
-              #form .lpform-optional-tag { color: ${INK_MUTE} !important; }
-            `}</style>
-
-            <Kicker text={c.form.kicker} />
-            <Head text={c.form.heading} size={22} />
-            <p
-              style={{
-                margin: "20px 0 26px",
-                textAlign: "center",
-                fontFamily: BODY,
-                fontSize: 13.5,
-                lineHeight: 2,
-                color: INK_SOFT,
-              }}
-            >
-              {nl(c.form.lead)}
-            </p>
-
-            <LPForm
-              clientSlug={c.slug}
-              fields={c.form.fields}
-              accent={ACCENT}
-              submitLabel={c.form.submitLabel}
-              submitStyle={{ background: CTA_GRAD, boxShadow: `0 8px 22px ${CTA_SHADOW}` }}
-              microcopy={
-                <span style={{ color: HEAD, fontSize: 12.5, fontWeight: 700 }}>
-                  {c.form.microcopy}
-                </span>
-              }
-              disclaimer={nl(c.form.disclaimer)}
-              errorMessage={c.form.errorMessage}
-            />
-          </Section>
+          {/* ─ 予約フォーム（非表示）─────────────────────────
+              ページ内フォームをやめ、CTAはすべて外部の予約システム
+              （config の `cta.url`）へ送る（2026-09-29 顧客判断）。
+              config の `form` はデータごと残してあるので、戻すときは
+              ここにセクションを書き戻し、`check-rules.ts` の FORM_EXEMPT から
+              `ivy-test` を外す。 */}
 
           {/* ─ フッター ───────────────────────────────────── */}
           <footer
@@ -1903,7 +1865,7 @@ export default function Page() {
 
       {/* ─ 追従CTA ─────────────────────────────────────── */}
       <StickyFooterCTA
-        anchor={c.cta.anchor}
+        href={c.cta.url}
         buttonText={c.sticky.buttonText}
         showAfter={640}
         buttonGradient={CTA_GRAD}
