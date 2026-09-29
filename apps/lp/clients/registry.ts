@@ -50,6 +50,7 @@ export const clientThanksRegistry: Partial<
 > = {
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/thanks"),
   "kaigyo-support": () => import("./kaigyo-support/thanks"),
+  "lold-02": () => import("./lold-02/thanks"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/thanks"),
 };
 

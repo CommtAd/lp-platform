@@ -54,10 +54,26 @@ export interface IvyBConfig {
     /** 価格・立地を1行で。白札は使わず、罫と余白で区切る。 */
     facts: string[];
     price: { value: string; unit: string };
+    /** 価格の横に出す訴求バッジ。空文字なら出さない。 */
+    priceBadge: string;
+    /** バッジの根拠注記。空文字なら出さない。 */
+    priceBadgeNote: string;
     campaign: { label: string; was: string; now: string; nowUnit: string };
+    /**
+     * キャンペーンに付く特典。**表示はFVの外**（FV直下の特典バンド）。
+     * FV内だとトレーナーの顔と文字が重なりすぎるため外に出した（2026-09-29）。
+     */
+    bonuses: string[];
   };
 
-  intro: { kicker: string; heading: string; body: string; chips: string[] };
+  intro: {
+    kicker: string;
+    heading: string;
+    body: string;
+    /** 本文とチップの間に挟む正方形の写真。 */
+    img: Slot;
+    chips: string[];
+  };
 
   campaign: {
     kicker: string;
@@ -71,7 +87,17 @@ export interface IvyBConfig {
     note: string;
   };
 
-  worry: { kicker: string; heading: string; items: string[]; closing: string };
+  /**
+   * ⑦お悩み。**見出しと悩み項目は画像に焼き込まれている**
+   * （顧客支給、2026-09-29 AUN #6）。そのためLP側はキッカー・見出し・
+   * リストのテキストを持たない。文言を直すには画像の作り直しが要る。
+   */
+  worry: {
+    img: Slot;
+    /** 画像内の文言。読み上げと、画像が出ないときのために全項目を入れる。 */
+    imgAlt: string;
+    closing: string;
+  };
 
   /** ⑧STUDIO IVYなら。4項目だが、写真つき1つ＋数字主役1つ＋文字だけ2つで組む。 */
   points: {
@@ -97,7 +123,7 @@ export interface IvyBConfig {
     privateRoom: { num: string; title: string; body: string; img: Slot };
     /** 02 マンツーマン — 人物写真を大きく。 */
     oneOnOne: { num: string; title: string; body: string; img: Slot };
-    /** 03 1回7,000円〜 — タイポグラフィが主役。写真を置かない。 */
+    /** 03 1回6,500円〜 — タイポグラフィが主役。写真を置かない。 */
     price: {
       num: string;
       title: string;
@@ -137,9 +163,6 @@ export interface IvyBConfig {
   flow: {
     kicker: string;
     heading: string;
-    photo: Slot;
-    /** 写真はこのステップの直後に全幅で差し込む。 */
-    photoAfterStep: number;
     steps: { num: string; title: string; body: string }[];
   };
 
@@ -236,13 +259,38 @@ const config: IvyBConfig = {
     kicker: "PERSONAL PILATES STUDIO",
     catch: "完全個室の\nパーソナルピラティスを、\nもっと気軽に。",
     facts: ["完全個室・マンツーマン", "藤沢駅 徒歩5分"],
-    price: { value: "7,000", unit: "円〜" },
+    /**
+     * FVに出す単価。**月8回プラン（52,000円/月）の1回あたり**で、料金表の中で
+     * 最も安い値（顧客判断 2026-09-29）。
+     * 選ばれる理由03も同じ6,500円〜に揃えた（2026-09-29）。
+     * **クロージングのチップと meta 記述はまだ「1回7,000円〜」のまま。**
+     * 単価を動かすときは、FV・選ばれる理由03・クロージング・meta の
+     * 4箇所すべてを確認すること。
+     */
+    price: { value: "6,500", unit: "円〜" },
+    /**
+     * 価格の横に出す訴求バッジ。**比較表示なので根拠が要る。**
+     *
+     * 顧客が近隣のピラティススタジオを調査したうえで「問題ない」と判断し、
+     * 注記なしでの掲載を指示（2026-09-29）。景表法上、最安・No.1系の表示は
+     * 調査時期・調査範囲・調査主体の併記が求められるため、**表示を続ける限り
+     * 顧客側で調査記録を保持してもらうこと。** 問い合わせが来たら、
+     * まずこの前提を確認する。
+     *
+     * 併記を足す場合は `priceBadgeNote` を使う（例:
+     * 「※2026年9月自社調べ／藤沢駅徒歩10分圏内のパーソナルピラティス◯店比較」）。
+     * 空文字なら注記は出ない。
+     */
+    priceBadge: "地域最安級",
+    priceBadgeNote: "",
     campaign: {
       label: "初回体験レッスン",
       was: "通常4,500円",
       now: "0",
       nowUnit: "円",
     },
+    // 顧客支給の特典内容（2026-09-29 AUN #1）。FV直下のバンドに表示する。
+    bonuses: ["ピラティスソックスプレゼント", "入会金無料"],
   },
 
   intro: {
@@ -251,6 +299,11 @@ const config: IvyBConfig = {
     body:
       "周りの目を気にせず、\n一人ひとりの身体や目的に合わせたレッスンを。\n" +
       "STUDIO IVYは、完全個室の空間で受けられる\nマンツーマンのマシンピラティススタジオです。",
+    img: {
+      placeholder: "レッスンの様子",
+      src: `${ASSET}/about.jpg`,
+      position: "center 35%",
+    },
     chips: ["完全個室", "マンツーマン", "初心者歓迎", "藤沢駅 徒歩5分"],
   },
 
@@ -268,15 +321,15 @@ const config: IvyBConfig = {
   },
 
   worry: {
-    kicker: "CONCERNS",
-    heading: "こんなお悩み、\nありませんか？",
-    items: [
-      "姿勢やボディラインが気になってきた",
-      "運動不足を感じている",
-      "身体を動かしたいけれど、何をすればいいか分からない",
-      "グループレッスンだと周りについていけるか不安",
-      "自分の身体に合った運動を教えてほしい",
-    ],
+    img: {
+      placeholder: "こんなお悩みありませんか？",
+      src: `${ASSET}/worry.jpg`,
+    },
+    imgAlt:
+      "こんなお悩みありませんか？ 姿勢やボディラインが気になってきた／" +
+      "運動不足を感じている／身体を動かしたいけれど、何をすればいいか分からない／" +
+      "グループレッスンだと周りについていけるか不安／" +
+      "自分の身体に合った運動を教えてほしい／ジムは続かなかった",
     closing: "そんな方にこそ、\nマンツーマンのピラティスを。",
   },
 
@@ -353,12 +406,14 @@ const config: IvyBConfig = {
     },
     price: {
       num: "03",
-      title: "パーソナルを、\n1回7,000円〜。",
+      title: "パーソナルを、\n1回6,500円〜。",
       body:
-        "月謝制なので、通う回数から決められます。月4回プランなら1回あたり7,000円です。",
-      value: "7,000",
+        "月謝制なので、通う回数から決められます。月8回プランなら1回あたり6,500円です。",
+      value: "6,500",
       unit: "円〜",
-      caption: "1回あたり（月4回プラン・税込）",
+      // 6,500円は月8回プランの単価。どのプランの値かを必ず併記する
+      // （書かないと「月4回でも6,500円」と読めてしまう）。
+      caption: "1回あたり（月8回プラン・税込）",
     },
     access: {
       num: "04",
@@ -421,12 +476,6 @@ const config: IvyBConfig = {
   flow: {
     kicker: "FLOW",
     heading: "初めてでも、\n安心してお越しください。",
-    photo: {
-      placeholder: "カウンセリングの様子",
-      src: `${ASSET}/counseling.jpg`,
-      position: "center 40%",
-    },
-    photoAfterStep: 2,
     steps: [
       {
         num: "01",

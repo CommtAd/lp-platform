@@ -22,6 +22,26 @@ export interface Slot {
 }
 
 /**
+ * セクションの地に散らす飾り（季節の葉など）。見出しまわりの余白を埋めるためのもので、
+ * 位置は設計幅390px基準の絶対値で指定する。
+ *
+ * セクションに overflow を足して切る運用はしない（§18）ので、`size` と位置はキャンバスから
+ * はみ出さない値にすること。**傾けると外接矩形が `size` より一回り大きくなる**ので、
+ * 左右の余白はその増分より大きく取る。文字の下に敷くだけなので `opacity` は低めに取り、
+ * 読みの邪魔をしないこと。
+ */
+export interface SectionDecor {
+  src: string;
+  size: number;
+  top?: number;
+  left?: number;
+  right?: number;
+  rotate?: number;
+  /** 既定 0.2。 */
+  opacity?: number;
+}
+
+/**
  * Pattern C — ブライダルフェア（式場来館予約）LP。
  *
  * パターンA（ピラティス体験）／パターンB（B2B支援パック）とは別系統のデザイン
@@ -54,6 +74,7 @@ export interface PatternCConfig {
   /** Page background (off-white). */
   paper: string;
 
+
   /**
    * 特典バンド（限定特典・来館特典セクション）の配色。
    * 未指定なら「チャコール地 × 生成り文字 × ゴールド」の既定に戻る。
@@ -83,7 +104,17 @@ export interface PatternCConfig {
      * 縦積みのロゴは `height` を上げないと下段の小さい文字が潰れる。
      */
     logo?: { src: string; height?: number };
-    ctaText: string;
+    /**
+     * ヘッダー右のCTAボタン。省略するとボタンごと出ず、ロゴが中央寄せになる
+     *（片側だけ要素が残ると左に寄って見えるため）。
+     */
+    ctaText?: string;
+    /**
+     * ヘッダーの上下の余白(px)。既定 14。
+     * ヘッダーの高さは「ロゴの高さ + これ×2 + 罫線1px」で決まるので、
+     * 薄くしたいときは `logo.height` と合わせて下げる。
+     */
+    paddingY?: number;
     /**
      * ヘッダーをスクロールに追従させるか。既定 true。
      * false にすると先頭に置いたままになり、スクロールすると流れて消える。
@@ -118,6 +149,11 @@ export interface PatternCConfig {
      */
     catchPosition?: "top" | "bottom";
     /**
+     * `catchPosition: "top"` のとき、FV上端からカードまでのアキ(px)。既定 28。
+     * 左右のアキ（`framed` なら12px）に揃えたいときに下げる。
+     */
+    catchTopInset?: number;
+    /**
      * キッカー・キャッチ・`highlight` を1枚のプレートにまとめる（招待状風のタイトルカード）。
      * 3要素がバラけて見えるときに使う。写真に直接白文字を重ねないので、
      * 明るい会場写真でも可読性が安定する。
@@ -138,6 +174,21 @@ export interface PatternCConfig {
        * 素材を横いっぱいに広げてもプレートが縦に伸びないようにするための割り切り。
        */
       height?: number;
+      /**
+       * 下の飾りだけ高さを変えたいときに指定する(px)。既定は `height`。
+       * 上下で絵柄が違う（下だけ片側に寄せた、など）場合に使う。
+       * 画像の縦横比もこの高さに合わせて作り直すこと。
+       */
+      heightBottom?: number;
+      /**
+       * 上の飾りと本文の間のアキ(px)。既定 6。**負の値も入る。**
+       * 飾りは両端が渦・中央が細い罫線という絵柄なので、中央下は絵として空く。
+       * その空きが気になるときは負の値で本文を引き上げる（中央寄せの文字は
+       * 両端の渦とは重ならない）。
+       */
+      gap?: number;
+      /** 下の飾りと本文の間のアキ(px)。既定 6。`gap` と同じく負の値も入る。 */
+      gapBottom?: number;
     };
     /** 最も強い単一訴求（例 "最大180万円相当 優待"）。金額系はここに置く。 */
     highlight?: string;
@@ -146,6 +197,35 @@ export interface PatternCConfig {
      * 文言を詰めて余白が空いたときなどに一段落とす用途。
      */
     highlightSize?: number;
+    /**
+     * `highlight` の直下に置く一言。金額の言い切りを受ける補足で、
+     * 金額より一段小さく本文色で出る。1行に収まる長さにすること。
+     */
+    highlightSub?: string;
+    /** `highlightSub` の文字サイズ(px)。既定 15。 */
+    highlightSubSize?: number;
+    /**
+     * FV最下部に敷くゴールドの帯。締切など「今すぐ動く理由」を1行で置く。
+     * 省略すると帯ごと出ない。長い文言は入らないので1行に収まる長さにすること。
+     * 金地に濃い文字で出る（白文字は金地で 2.2:1 しか出ず読めない）。
+     */
+    noticeBand?: string;
+    /**
+     * タイトルカードの左下に重ねる円形バッジ（当選枠など）。`framed` のときだけ効く。
+     * `lines` は1行目が小さく、2行目以降が大きくなる（「抽選で」＋「10組様」の形）。
+     * 円に収まる長さにすること（1行目5文字・2行目4文字程度が上限）。
+     * `bg` 未指定は深めのローズ `#B0475F`。わずかに傾けてスタンプ風に出る。
+     */
+    plateBadge?: {
+      lines: string[];
+      bg?: string;
+      /** 直径(px)。既定 86。 */
+      size?: number;
+      /** カード左端からの位置(px)。既定 -8（負でカードの外へ出る）。 */
+      left?: number;
+      /** カード下端からの位置(px)。既定 -20（負でカードの下へ出る）。 */
+      bottom?: number;
+    };
     /** 補足リード。`highlight` だけで足りるなら省略してFVを締める。 */
     lead?: string;
     /** Offer chips shown over the hero, e.g. ["来館特典 最大10万円分", "無料試食つき"]. 省略可。 */
@@ -313,13 +393,18 @@ export interface PatternCConfig {
   recommend?: {
     heading: string;
     lead?: string;
+    /**
+     * `label` は `\n` で改行位置を指定できる。文字サイズは最長行に合わせて自動で
+     * 決まるので、長い項目は改行を入れたほうが大きく出る。
+     */
     items: { label: string; icon?: string }[];
   };
 
   /** 来館特典。金額を添えて並べるのがブライダルの慣習。 */
   privilege: {
     heading: string;
-    lead: string;
+    /** 見出しの下のリード。省略すると行ごと出ない。 */
+    lead?: string;
     /**
      * `lead` の下に置く訴求文。バンドの地に載るため、強調は色ではなく級数で付ける
      * （ゴールドは中間トーンの地で消える）。強調部分は `band.accent` になる。
@@ -336,6 +421,8 @@ export interface PatternCConfig {
     items: { title: string; amount: string; image?: Slot }[];
     /** パネルに重ねる四隅のフレーム装飾（中央が透明のPNG）。`grandOffer.frame` と同じ扱い。 */
     frame?: string;
+    /** セクションの地に散らす飾り（季節の葉など）。`SectionDecor` 参照。 */
+    decor?: SectionDecor[];
     /** パネル直下・右寄せの注記（適用条件など）。カードの外に出る。 */
     disclaimer?: string;
     /**
@@ -345,7 +432,36 @@ export interface PatternCConfig {
     total?: string;
     totalNote?: string;
     /** 成約特典への導線をこのセクションの末尾に置く場合。 */
-    contract?: { label: string; amount: string };
+    contract?: {
+      label: string;
+      amount: string;
+      /**
+       * 金額の左上に重ねるローズのスタンプ（FVのプレートバッジと同じ見た目）。
+       * 抽選など、金額に付く条件を金額と切り離さずに見せるためのもの。
+       */
+      badge?: { lines: string[]; size?: number; bg?: string };
+    };
+    /**
+     * FVで出しているキャンペーンの枠を、このセクションにも被せる。
+     * 中盤から読み始めた人にも「期間限定であること」「締切」が伝わるようにするためのもの。
+     */
+    campaign?: {
+      /** リードの下・パネルの上に置く和文のキッカー（例 "＼10月限定キャンペーン／"）。 */
+      kicker?: string;
+      /** セクション末尾に全幅で敷く金の帯（応募締切など）。 */
+      notice?: string;
+      /**
+       * 帯の文字色。既定は ink。
+       * ブランドゴールドの地に白は 2.2:1 しか出ない（ink なら 5.3:1）。
+       * 白抜きにするなら `noticeBg` で地を濃い金に振って 4.5:1 を確保すること。
+       */
+      noticeColor?: string;
+      /**
+       * 帯の地。既定は CTA と同じゴールドのグラデーション。
+       * 白抜きにするときだけ、深い金のグラデーションなどに差し替える。
+       */
+      noticeBg?: string;
+    };
   };
 
   /** 会場ギャラリー（横スクロール）。 */
@@ -388,7 +504,13 @@ export interface PatternCConfig {
    */
   flow: {
     heading: string;
-    lead: string;
+    /** 見出しの下に囲みで置く一行（所要時間など）。省略すると囲みごと出ない。 */
+    lead?: string;
+    /**
+     * ステップ全体を1枚のカードで囲む。既定は囲みなし（地に直接組む）。
+     * 前後のセクションと地続きに見えるときに、ここだけ独立させたい場合に使う。
+     */
+    card?: boolean;
     steps: { num: string; title: string; time?: string; body: string; icon?: string }[];
   };
 
@@ -443,6 +565,40 @@ export interface PatternCConfig {
   form: {
     heading: string;
     lead: string;
+    /** セクションの地に散らす飾り（季節の葉など）。`SectionDecor` 参照。 */
+    decor?: SectionDecor[];
+    /**
+     * セクション上の英字キッカー。既定 "RESERVATION"。
+     * 見出しを「キャンペーン概要」のように予約以外の語に変えたときだけ差し替える。
+     */
+    kicker?: string;
+    /**
+     * 送信成功後に遷移する先。省略するとページ内で完了カードに差し替わる（既定）。
+     * サンクスページを用意して別導線（LINE登録など）に運ぶ案件だけ指定する。
+     * 遷移先は `clients/{slug}/thanks.tsx` と `clientThanksRegistry` で用意すること。
+     */
+    thanksHref?: string;
+    /**
+     * フォームカードの中・最初の入力欄の上に置く見出し（例 "応募フォーム"）。
+     * 省略すると出ない。
+     */
+    cardTitle?: string;
+    /**
+     * `lead` を見出しの直下ではなく、応募条件プレートの下＝フォームの直前に置く。
+     * リードが「下記フォームより〜」のように、直後の入力欄を指す文面のときに使う。
+     */
+    leadAfterEligibility?: boolean;
+    /**
+     * フォームの手前に置く応募条件のプレート（白地＋金の囲み）。
+     * 省略すると丸ごと出ない。
+     */
+    eligibility?: {
+      title: string;
+      /** 先頭に金のチェックが付く条件の行。 */
+      items: string[];
+      /** 条件の下に小さく添える除外条件など。 */
+      note?: string;
+    };
     /**
      * 予約フォームセクションの地。既定 "dark"（濃色地で締める）。
      * "light" にすると生成り地＋白いフォームカードになり、明るいトーンの

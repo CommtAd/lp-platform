@@ -411,15 +411,18 @@ function FullBleed({
   img,
   ratio = "16 / 10",
   style,
+  /** 文字が焼き込まれた画像では、読み上げ用に中身の文言を渡す。 */
+  alt,
 }: {
   img: { src?: string | null; placeholder: string; position?: string };
   ratio?: string;
   style?: CSSProperties;
+  alt?: string;
 }) {
   return (
     <ImageSlot
       src={img.src}
-      alt={img.placeholder}
+      alt={alt ?? img.placeholder}
       placeholder={img.placeholder}
       objectPosition={img.position ?? "center"}
       style={{ aspectRatio: ratio, ...style }}
@@ -576,7 +579,7 @@ export default function Page() {
             設計731px。390px幅の実機（iPhone 14 は可視域およそ750px）で
             CTAが画面内に収まる。660pxでは791pxになり、CTAが切れていた。
           */}
-          <div style={{ position: "relative", height: 600, overflow: "hidden" }}>
+          <div style={{ position: "relative", height: 578, overflow: "hidden" }}>
             <HeroVideo
               src={c.fv.video}
               poster={c.fv.poster}
@@ -588,7 +591,13 @@ export default function Page() {
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(180deg, rgba(14,36,50,0.30) 0%, rgba(14,36,50,0.08) 22%, rgba(13,34,48,0.46) 46%, rgba(12,32,46,0.66) 64%, rgba(10,28,42,0.88) 100%)",
+                  // 実測の文字位置（FV高578pxに対する割合）:
+                  //   キッカー 22〜25% / キャッチ 27〜50% / 価格 57〜63%
+                  //   CTA 86〜96%
+                  // 特典をFVの外へ出して文字が下がったので、上14%は薄いまま
+                  // 写真を見せ、25%から文字の帯に合わせて厚くしている
+                  // （指示書「暗くしすぎない」）。
+                  "linear-gradient(180deg, rgba(14,36,50,0.26) 0%, rgba(14,36,50,0.14) 14%, rgba(13,34,48,0.40) 25%, rgba(13,34,48,0.52) 40%, rgba(12,32,46,0.62) 58%, rgba(11,30,44,0.78) 78%, rgba(10,28,42,0.92) 100%)",
               }}
             />
 
@@ -609,7 +618,10 @@ export default function Page() {
                   fontSize: 9.5,
                   fontWeight: 700,
                   letterSpacing: "0.34em",
-                  color: "rgba(255,255,255,0.82)",
+                  color: "rgba(255,255,255,0.92)",
+                  // 細い字なので、明るい背景に重なると暗幕だけでは負ける。
+                  // 影を付けて輪郭を残す（キャッチと同じ考え方）。
+                  textShadow: "0 1px 10px rgba(8,26,38,0.75)",
                 }}
               >
                 {c.fv.kicker}
@@ -641,8 +653,10 @@ export default function Page() {
                 }}
               />
 
-              {/* 価格。白札を置かず、文字だけで見せる。 */}
-              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+              {/* 価格。白札を置かず、文字だけで見せる。
+                  「地域最安級」は比較表示なので、根拠の扱いは config 側の
+                  `priceBadge` のコメントを参照すること。 */}
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
                 <span
                   style={{
                     fontFamily: GOTHIC,
@@ -676,7 +690,41 @@ export default function Page() {
                 >
                   {c.fv.price.unit}
                 </span>
+                {c.fv.priceBadge && (
+                  <span
+                    style={{
+                      marginLeft: 4,
+                      alignSelf: "center",
+                      padding: "4px 10px",
+                      border: "1px solid rgba(255,255,255,0.85)",
+                      borderRadius: 999,
+                      fontFamily: GOTHIC,
+                      fontSize: 12,
+                      fontWeight: 800,
+                      letterSpacing: "0.04em",
+                      color: "#FFFFFF",
+                      textShadow: "0 1px 8px rgba(8,26,38,0.55)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {c.fv.priceBadge}
+                  </span>
+                )}
               </div>
+              {c.fv.priceBadgeNote && (
+                <p
+                  style={{
+                    margin: "7px 0 0",
+                    fontFamily: BODY,
+                    fontSize: 10,
+                    lineHeight: 1.6,
+                    color: "rgba(255,255,255,0.8)",
+                    textShadow: "0 1px 6px rgba(8,26,38,0.6)",
+                  }}
+                >
+                  {c.fv.priceBadgeNote}
+                </p>
+              )}
 
               <p
                 style={{
@@ -756,7 +804,62 @@ export default function Page() {
                 </div>
               </div>
 
-              <Cta variant="onPhoto" marginTop={16} />
+              <Cta variant="onPhoto" marginTop={18} />
+            </div>
+          </div>
+
+          {/* ─ ④-b 特典バンド ─────────────────────────────
+              FV内に置くとトレーナーの顔と文字が重なりすぎるため、FVの外へ出した
+              （顧客判断 2026-09-29）。写真の上ではないので、白抜き＋影ではなく
+              淡色地に素で置ける。 */}
+          <div
+            style={{
+              background: PALE,
+              borderTop: `1px solid ${RULE}`,
+              borderBottom: `1px solid ${RULE}`,
+              padding: "18px 26px 19px",
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "center",
+              gap: 12,
+            }}
+          >
+            <span
+              style={{
+                flex: "none",
+                marginTop: 2,
+                padding: "4px 11px",
+                borderRadius: 3,
+                background: ACCENT,
+                fontFamily: GOTHIC,
+                fontSize: 11.5,
+                fontWeight: 800,
+                letterSpacing: "0.1em",
+                color: "#FFFFFF",
+              }}
+            >
+              特典
+            </span>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {c.fv.bonuses.map((b) => (
+                <span
+                  key={b}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontFamily: GOTHIC,
+                    fontSize: 15,
+                    fontWeight: 700,
+                    letterSpacing: "0.01em",
+                    lineHeight: 1.45,
+                    color: HEAD,
+                  }}
+                >
+                  <Check />
+                  {b}
+                </span>
+              ))}
             </div>
           </div>
 
@@ -776,6 +879,9 @@ export default function Page() {
             >
               {nl(c.intro.body)}
             </p>
+            {/* 顧客支給の写真（2026-09-29 AUN #2）。指示どおり正方形で挟む。 */}
+            <FullBleed img={c.intro.img} ratio="1 / 1" style={{ marginTop: 26 }} />
+
             {/* チップは枠を持たせず、小さな丸印だけで並べる（指示書 §11-05）。 */}
             <div
               style={{
@@ -820,40 +926,16 @@ export default function Page() {
           </Section>
 
           {/* ─ ⑦ お悩み ─────────────────────────────────────
-              白カードを5枚並べない。淡色地にヘアライン区切りのリストだけ。 */}
-          <Section background={PALE}>
-            <Kicker text={c.worry.kicker} align="left" />
-            <Head text={c.worry.heading} align="left" size={23} />
-            <ul
-              style={{
-                listStyle: "none",
-                margin: "26px 0 0",
-                padding: 0,
-                borderTop: `1px solid ${RULE}`,
-              }}
-            >
-              {c.worry.items.map((item) => (
-                <li
-                  key={item}
-                  style={{
-                    display: "flex",
-                    gap: 11,
-                    padding: "15px 2px",
-                    borderBottom: `1px solid ${RULE}`,
-                    fontFamily: BODY,
-                    fontSize: 14,
-                    lineHeight: 1.8,
-                    color: INK,
-                  }}
-                >
-                  <Check />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+              見出しと悩み項目は顧客支給の画像に焼き込まれている（AUN #6）。
+              そのためキッカー・見出し・リストは置かず、画像を全幅で出して
+              締めの一文だけをLP側で持つ。画像の比率は原寸（1092x1440）と
+              一致させてあるので、`cover` でも切り取られない。 */}
+          <Section background={PALE} flush style={{ padding: "0 0 62px" }}>
+            <FullBleed img={c.worry.img} ratio="1092 / 1440" alt={c.worry.imgAlt} />
             <p
               style={{
-                margin: "30px 0 0",
+                margin: "34px 0 0",
+                padding: `0 ${PAD}px`,
                 textAlign: "center",
                 fontFamily: MINCHO,
                 fontWeight: 600,
@@ -1459,23 +1541,17 @@ export default function Page() {
           </Section>
 
           {/* ─ ⑬ 体験レッスンの流れ（CTA 4/5）───────────────
-              細い縦線のタイムライン。写真はステップ02の直後に全幅で差し込む。 */}
+              細い縦線のタイムライン。写真は顧客判断で削除した（2026-09-29）。 */}
           <Section flush background={PALE}>
             <div style={{ padding: `0 ${PAD}px` }}>
               <Kicker text={c.flow.kicker} />
               <Head text={c.flow.heading} size={23} />
             </div>
 
+            {/* 写真を挟まず1本のタイムラインで通す。最後のステップだけ
+                `last` を立てて、縦線をそこで止める。 */}
             <div style={{ padding: `30px ${PAD}px 0` }}>
-              {c.flow.steps.slice(0, c.flow.photoAfterStep).map((s, i) => (
-                <FlowStep key={s.num} step={s} last={false} index={i} />
-              ))}
-            </div>
-
-            <FullBleed img={c.flow.photo} ratio="16 / 10" style={{ margin: "10px 0 26px" }} />
-
-            <div style={{ padding: `0 ${PAD}px` }}>
-              {c.flow.steps.slice(c.flow.photoAfterStep).map((s, i, arr) => (
+              {c.flow.steps.map((s, i, arr) => (
                 <FlowStep key={s.num} step={s} last={i === arr.length - 1} index={i} />
               ))}
               <Cta marginTop={34} />
