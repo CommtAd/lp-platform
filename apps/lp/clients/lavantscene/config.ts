@@ -53,10 +53,11 @@ const config: PatternCConfig = {
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
-      // 罫は渦の中央を通るので、罫と本文の間が絵として空く。負の値でその空きを詰める
-      // （顧客指定。値は金の渦の飾りで lold-02 が使っていたもの）。
+      // 罫は渦の中央を通るので、罫と本文の間が絵として空く（上下とも約28px）。
+      // 負の値でその空きを詰め、罫と本文のアキを上下とも約8pxに揃える（顧客指定）。
+      // 渦は文字幅（プレートの18〜82%）の範囲では罫より外側にしか無いので重ならない。
       gap: -20,
-      gapBottom: -14,
+      gapBottom: -20,
     },
     highlight: "最大100万円相当 優待",
     highlightSize: 19,
