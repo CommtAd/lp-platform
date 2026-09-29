@@ -591,10 +591,13 @@ export default function Page() {
                 position: "absolute",
                 inset: 0,
                 background:
-                  // キッカーは約32%、キャッチは36〜57%に載る。支給動画の立位シーンは
-                  // その帯にマシンの白い腕が入って文字が負けるため、中間を厚くしている。
-                  // 上端は写真を見せたいので薄いまま（指示書「暗くしすぎない」）。
-                  "linear-gradient(180deg, rgba(14,36,50,0.32) 0%, rgba(14,36,50,0.12) 18%, rgba(13,34,48,0.40) 32%, rgba(12,32,46,0.58) 48%, rgba(11,30,44,0.72) 66%, rgba(10,28,42,0.90) 100%)",
+                  // 実測の文字位置（FV高578pxに対する割合）:
+                  //   キッカー 22〜25% / キャッチ 27〜50% / 価格 57〜63%
+                  //   CTA 86〜96%
+                  // 特典をFVの外へ出して文字が下がったので、上14%は薄いまま
+                  // 写真を見せ、25%から文字の帯に合わせて厚くしている
+                  // （指示書「暗くしすぎない」）。
+                  "linear-gradient(180deg, rgba(14,36,50,0.26) 0%, rgba(14,36,50,0.14) 14%, rgba(13,34,48,0.40) 25%, rgba(13,34,48,0.52) 40%, rgba(12,32,46,0.62) 58%, rgba(11,30,44,0.78) 78%, rgba(10,28,42,0.92) 100%)",
               }}
             />
 
@@ -765,63 +768,62 @@ export default function Page() {
                 </div>
               </div>
 
-              {/*
-                特典行。FVは1画面に収める制約があるので、ブロックではなく
-                1行のタイポグラフィで置く（高さ約26px）。増やす場合は
-                設計幅338pxに収まるかと、CTAが折り返しに残るかを必ず確認すること。
-              */}
-              <div
-                style={{
-                  marginTop: 12,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 9,
-                }}
-              >
+              <Cta variant="onPhoto" marginTop={18} />
+            </div>
+          </div>
+
+          {/* ─ ④-b 特典バンド ─────────────────────────────
+              FV内に置くとトレーナーの顔と文字が重なりすぎるため、FVの外へ出した
+              （顧客判断 2026-09-29）。写真の上ではないので、白抜き＋影ではなく
+              淡色地に素で置ける。 */}
+          <div
+            style={{
+              background: PALE,
+              borderTop: `1px solid ${RULE}`,
+              borderBottom: `1px solid ${RULE}`,
+              padding: "18px 26px 19px",
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "center",
+              gap: 12,
+            }}
+          >
+            <span
+              style={{
+                flex: "none",
+                marginTop: 2,
+                padding: "4px 11px",
+                borderRadius: 3,
+                background: ACCENT,
+                fontFamily: GOTHIC,
+                fontSize: 11.5,
+                fontWeight: 800,
+                letterSpacing: "0.1em",
+                color: "#FFFFFF",
+              }}
+            >
+              特典
+            </span>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {c.fv.bonuses.map((b) => (
                 <span
+                  key={b}
                   style={{
-                    flex: "none",
-                    padding: "3px 8px",
-                    borderRadius: 3,
-                    background: "rgba(255,255,255,0.92)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
                     fontFamily: GOTHIC,
-                    fontSize: 10,
-                    fontWeight: 800,
-                    letterSpacing: "0.08em",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    letterSpacing: "0.01em",
+                    lineHeight: 1.45,
                     color: HEAD,
                   }}
                 >
-                  特典
+                  <Check />
+                  {b}
                 </span>
-                {c.fv.bonuses.map((b, i) => (
-                  <span key={b} style={{ display: "contents" }}>
-                    {i > 0 && (
-                      <span
-                        style={{
-                          width: 1,
-                          height: 11,
-                          background: "rgba(255,255,255,0.4)",
-                        }}
-                      />
-                    )}
-                    <span
-                      style={{
-                        fontFamily: GOTHIC,
-                        fontSize: 11.5,
-                        fontWeight: 700,
-                        letterSpacing: "0.01em",
-                        color: "#FFFFFF",
-                        textShadow: "0 1px 8px rgba(8,26,38,0.5)",
-                      }}
-                    >
-                      {b}
-                    </span>
-                  </span>
-                ))}
-              </div>
-
-              <Cta variant="onPhoto" marginTop={13} />
+              ))}
             </div>
           </div>
 
