@@ -42,7 +42,7 @@ export default function FaqAccordion({ items, accent, ink, body, line }: FaqAcco
                 alignItems: "flex-start",
                 justifyContent: "space-between",
                 gap: 10,
-                padding: "14px 14px",
+                padding: "17px 16px",
                 background: "none",
                 border: "none",
                 textAlign: "left",
@@ -53,7 +53,7 @@ export default function FaqAccordion({ items, accent, ink, body, line }: FaqAcco
                 <span
                   style={{
                     flexShrink: 0,
-                    fontSize: 13,
+                    fontSize: 16,
                     fontWeight: 700,
                     color: accent,
                     lineHeight: 1.6,
@@ -63,7 +63,7 @@ export default function FaqAccordion({ items, accent, ink, body, line }: FaqAcco
                 </span>
                 <span
                   style={{
-                    fontSize: 13.5,
+                    fontSize: 16,
                     fontWeight: 700,
                     lineHeight: 1.6,
                     color: ink,
@@ -76,8 +76,8 @@ export default function FaqAccordion({ items, accent, ink, body, line }: FaqAcco
                 style={{
                   flexShrink: 0,
                   display: "flex",
-                  width: 22,
-                  height: 22,
+                  width: 26,
+                  height: 26,
                   borderRadius: 999,
                   alignItems: "center",
                   justifyContent: "center",
@@ -95,8 +95,8 @@ export default function FaqAccordion({ items, accent, ink, body, line }: FaqAcco
               <p
                 style={{
                   margin: 0,
-                  padding: "0 14px 15px 32px",
-                  fontSize: 12.5,
+                  padding: "0 16px 18px 36px",
+                  fontSize: 14.5,
                   lineHeight: 2,
                   color: body,
                 }}
