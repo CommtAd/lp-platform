@@ -59,6 +59,11 @@ const FORM_EXEMPT = new Set<string>([
   // 予約導線を公式サイトと同じ hacomono（sanare-pilates.hacomono.jp）へ接続。
   // 店舗と日時は遷移先で選ぶため、LP側にフォームを持たない（2026-09-15）。
   "seren-pilates",
+  // 予約導線を公式サイトと同じ予約システム（mypage.pilates-ivy.jp）へ接続。
+  // ページ内フォームは非表示にし、CTAはすべて藤沢店の予約ページへ送る
+  // （2026-09-29、顧客判断）。config の `form` はデータごと残してあるので、
+  // フォームに戻すときはこの行を消すこと。
+  "ivy-test",
 ]);
 
 function clientSlugs(): string[] {

@@ -197,9 +197,22 @@ export interface IvyBConfig {
     nowUnit: string;
   };
 
-  cta: { label: string; note: string; anchor: string };
+  cta: {
+    label: string;
+    note: string;
+    /**
+     * 予約の遷移先。**ページ内フォームをやめ、外部の予約システムへ送る**
+     * （2026-09-29 顧客判断）。`http` で始まるので別タブで開く。
+     */
+    url: string;
+  };
   sticky: { offerLabel: string; offerValue: string; buttonText: string };
 
+  /**
+   * 予約フォーム。**現在は非表示**（2026-09-29、外部予約システムへ切り替え）。
+   * データは戻せるように残してある。復活させるときは `page.tsx` の
+   * フォームセクションと `check-rules.ts` の FORM_EXEMPT を元に戻すこと。
+   */
   form: {
     kicker: string;
     heading: string;
@@ -600,7 +613,13 @@ const config: IvyBConfig = {
   cta: {
     label: "無料体験を予約する",
     note: "通常4,500円の体験レッスンが、初回0円",
-    anchor: "#form",
+    /**
+     * STUDIO IVY 藤沢店の予約ページ。公式サイト（pilates-ivy.jp/studio/fujisawa）が
+     * 使っているものと同じURLで、藤沢ページ内で7回参照されているメイン導線。
+     * 他の3本（72/51・6/7・34/24）は初台・北参道・下北沢なので間違えないこと。
+     * 差し替えるときはこの1行だけでよい（本文4箇所＋FV＋追従CTAが全部これを見ている）。
+     */
+    url: "https://mypage.pilates-ivy.jp/reserve/schedule/157/140",
   },
 
   sticky: {
