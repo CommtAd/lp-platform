@@ -73,6 +73,22 @@ function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
 }
 
 /**
+ * 金額の部分だけを金のまま残し、後ろに続く文言を本文色で組む（`contract.inkAfterAmount`）。
+ * 金額は「数字＋(万|千)円＋(分|相当)」までとみなす（"3万円分の選べるギフト" → "3万円分"）。
+ * 金額が見つからなければ `amountEmphasis` と同じ結果を返す。
+ */
+function amountThenInk(text: string, ink: string, numSize: number, sideSize: number): ReactNode {
+  const m = text.match(/^(.*?[0-9０-９][0-9０-９,，.．]*(?:万|千)?円(?:分|相当)?)(.+)$/);
+  if (!m) return amountEmphasis(text, numSize, sideSize);
+  return (
+    <>
+      {amountEmphasis(m[1], numSize, sideSize)}
+      <span style={{ fontSize: sideSize, color: ink }}>{m[2]}</span>
+    </>
+  );
+}
+
+/**
  * 金額プレートの文言を説明文として組む（`grandOffer.amountProse`）。
  *
  * `amount` は本来「最大180万円相当」のような金額で、`amountEmphasis` が数字を
@@ -1221,7 +1237,9 @@ export default function Page() {
                       className="text-[30px] font-bold leading-none"
                       style={{ fontFamily: mincho, color: goldOnWhite }}
                     >
-                      {amountEmphasis(c.privilege.contract.amount, 48, 20)}
+                      {c.privilege.contract.inkAfterAmount
+                        ? amountThenInk(c.privilege.contract.amount, c.ink, 48, 20)
+                        : amountEmphasis(c.privilege.contract.amount, 48, 20)}
                     </p>
                     {/* 追加の成約特典は「＋」で区切って一段小さく積む。主役は最初の金額のまま。 */}
                     {c.privilege.contract.extras?.map((extra, i) => (
@@ -1236,7 +1254,9 @@ export default function Page() {
                           className="mt-3 text-[20px] font-bold leading-none"
                           style={{ fontFamily: mincho, color: goldOnWhite }}
                         >
-                          {amountEmphasis(extra, 36, 17)}
+                          {c.privilege.contract?.inkAfterAmount
+                            ? amountThenInk(extra, c.ink, 36, 17)
+                            : amountEmphasis(extra, 36, 17)}
                         </p>
                       </div>
                     ))}
