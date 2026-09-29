@@ -156,9 +156,6 @@ export interface IvyBConfig {
   flow: {
     kicker: string;
     heading: string;
-    photo: Slot;
-    /** 写真はこのステップの直後に全幅で差し込む。 */
-    photoAfterStep: number;
     steps: { num: string; title: string; body: string }[];
   };
 
@@ -448,12 +445,6 @@ const config: IvyBConfig = {
   flow: {
     kicker: "FLOW",
     heading: "初めてでも、\n安心してお越しください。",
-    photo: {
-      placeholder: "カウンセリングの様子",
-      src: `${ASSET}/counseling.jpg`,
-      position: "center 40%",
-    },
-    photoAfterStep: 2,
     steps: [
       {
         num: "01",
