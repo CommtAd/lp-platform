@@ -74,6 +74,7 @@ const config: PatternCConfig = {
       position: "center",
     },
     heroSlides: [
+      // 新郎の顔が左で切れていたので、切り出しを左へ寄せて二人を収めた（顧客指定）。
       { placeholder: "ナイトガーデンでの乾杯", src: `${ASSET}/hero-2.jpg` },
       // 神殿は新郎新婦の足元がFVの下端に来るよう、元画像の足元（下から約15%）で切ってある（顧客指定）。
       { placeholder: "神殿（和装の新郎新婦）", src: `${ASSET}/hero-3.jpg` },
