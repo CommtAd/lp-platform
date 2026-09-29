@@ -36,10 +36,11 @@ const config: PatternCConfig = {
 
   header: {
     venue: "ベルヴィ ラヴァンセーヌ",
-    // 紋章 + ロゴタイプの縦積み（比率 2.76:1、透過PNG）。ロゴタイプが高さの3割弱なので、
-    // lold と同じく 46px で文字が約12px になる。支給が300px幅と小さく、DPR3では少し甘い。
-    logo: { src: `${ASSET}/logo.png`, height: 46 },
-    ctaText: "予約する",
+    // lold-02 と同じ薄いヘッダー（顧客指定）。高さ = ロゴ24 + 余白6×2 + 罫線1 = 37px。
+    // ロゴタイプは約6pxで文字としては読めないが、紋章のシルエットで会場を示す割り切り。
+    logo: { src: `${ASSET}/logo.png`, height: 24 },
+    paddingY: 6,
+    // CTAボタンは非表示（ロゴが中央寄せになる）。追従バーが常時出ているので導線は確保されている。
     sticky: false,
   },
 
