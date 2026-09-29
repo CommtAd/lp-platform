@@ -751,10 +751,20 @@ export default function LPForm({
         </p>
       )}
 
+      {/*
+        送信中のスピナー。keyframes はこのコンポーネントに同梱する（HTML納品時も
+        globals.css なしで動かすため）。動きを減らす設定の端末では輪を止め、
+        「送信中…」の文字だけで状態を伝える。
+      */}
+      <style>{`
+@keyframes lpformSpin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .lpform-spinner { animation: none; } }
+`}</style>
       <button
         type="button"
         onClick={handleSubmit}
         disabled={submitting}
+        aria-busy={submitting}
         style={{
           height: 60,
           background: "linear-gradient(135deg, #E8C877 0%, #C1902F 100%)",
@@ -768,9 +778,29 @@ export default function LPForm({
           cursor: submitting ? "wait" : "pointer",
           opacity: submitting ? 0.7 : 1,
           boxShadow: "0 10px 22px rgba(160,120,40,0.4)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 10,
           ...submitStyle,
         }}
       >
+        {submitting && (
+          <span
+            aria-hidden
+            className="lpform-spinner"
+            style={{
+              width: 18,
+              height: 18,
+              flex: "none",
+              borderRadius: "50%",
+              // 輪は半透明、先頭だけ不透明。回転で「先頭が進む」ように見える。
+              border: "2px solid rgba(255,255,255,0.45)",
+              borderTopColor: "#FFFFFF",
+              animation: "lpformSpin 0.7s linear infinite",
+            }}
+          />
+        )}
         {submitting ? "送信中…" : submitLabel}
       </button>
 
