@@ -265,6 +265,117 @@ function Cta({
 }
 
 /**
+ * ご入会特典のブロック。FV直下・体験キャンペーン・クロージングの3箇所で使う。
+ *
+ * B案は箱を並べない方針だが、**ここだけは意図的に囲う**。オファーは本文と
+ * 性質が違ううえ、顧客から「目立たせたい」指示があるため（2026-09-29）。
+ * 罫だけだと本文に埋もれる。
+ *
+ * 見出しは必ず「ご入会特典」。初回体験0円のすぐ近くに出るので、
+ * 「特典」とだけ書くと体験に付く特典と読めてしまう。
+ *
+ * `variant`:
+ *   band … FV直下。キャンバス幅いっぱいの帯。
+ *   inset … セクションの中。左右に余白がある前提の角丸ブロック。
+ */
+function BonusBlock({ variant = "inset" }: { variant?: "band" | "inset" }) {
+  const band = variant === "band";
+  return (
+    <div
+      style={{
+        background: "#EEF5F9",
+        border: band ? "none" : `1px solid rgba(60,126,166,0.30)`,
+        borderTop: band ? `1px solid rgba(60,126,166,0.30)` : undefined,
+        borderBottom: band ? `1px solid rgba(60,126,166,0.30)` : undefined,
+        borderRadius: band ? 0 : 12,
+        padding: band ? "20px 26px 21px" : "20px 14px 21px",
+        marginTop: band ? 0 : 26,
+      }}
+    >
+      <p
+        style={{
+          margin: 0,
+          textAlign: "center",
+          fontFamily: GOTHIC,
+          fontSize: 12.5,
+          fontWeight: 800,
+          letterSpacing: "0.16em",
+          color: ACCENT,
+        }}
+      >
+        {c.bonus.label}
+      </p>
+
+      <div
+        style={{
+          margin: "14px auto 0",
+          display: "flex",
+          flexDirection: "column",
+          gap: 9,
+          width: "max-content",
+          maxWidth: "100%",
+        }}
+      >
+        {c.bonus.items.map((b) => (
+          <span
+            key={b.text}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              // 幅が足りないときは**バッジだけ**を次の行へ送る。text 側を
+              // `nowrap` にしないと、日本語はどこでも折れるので
+              // 「…プレゼン/ト」のように語中で切れる。
+              flexWrap: "wrap",
+              gap: "4px 8px",
+              fontFamily: GOTHIC,
+              fontSize: 15.5,
+              fontWeight: 800,
+              letterSpacing: "0.01em",
+              lineHeight: 1.45,
+              color: HEAD,
+            }}
+          >
+            <Check />
+            <span style={{ whiteSpace: "nowrap" }}>{b.text}</span>
+            {b.badge && (
+              <span
+                style={{
+                  flex: "none",
+                  padding: "3px 7px",
+                  borderRadius: 3,
+                  background: ACCENT,
+                  fontFamily: GOTHIC,
+                  fontSize: 10,
+                  fontWeight: 800,
+                  letterSpacing: "0.04em",
+                  color: "#FFFFFF",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {b.badge}
+              </span>
+            )}
+          </span>
+        ))}
+      </div>
+
+      <p
+        style={{
+          margin: "13px 0 0",
+          textAlign: "center",
+          fontFamily: BODY,
+          fontSize: 11,
+          lineHeight: 1.7,
+          color: INK_SOFT,
+        }}
+      >
+        {c.bonus.note}
+      </p>
+    </div>
+  );
+}
+
+/**
  * 二重価格（通常4,500円 → 完全無料 0円）のタイポグラフィ。
  * 白プレートに載せず、上下のヘアラインだけで囲う（指示書 §4「カードを並べない」）。
  * ⑥体験キャンペーンと⑰クロージングで共用する。
@@ -809,60 +920,10 @@ export default function Page() {
             </div>
           </div>
 
-          {/* ─ ④-b 特典バンド ─────────────────────────────
-              FV内に置くとトレーナーの顔と文字が重なりすぎるため、FVの外へ出した
-              （顧客判断 2026-09-29）。写真の上ではないので、白抜き＋影ではなく
-              淡色地に素で置ける。 */}
-          <div
-            style={{
-              background: PALE,
-              borderTop: `1px solid ${RULE}`,
-              borderBottom: `1px solid ${RULE}`,
-              padding: "18px 26px 19px",
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "center",
-              gap: 12,
-            }}
-          >
-            <span
-              style={{
-                flex: "none",
-                marginTop: 2,
-                padding: "4px 11px",
-                borderRadius: 3,
-                background: ACCENT,
-                fontFamily: GOTHIC,
-                fontSize: 11.5,
-                fontWeight: 800,
-                letterSpacing: "0.1em",
-                color: "#FFFFFF",
-              }}
-            >
-              特典
-            </span>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {c.fv.bonuses.map((b) => (
-                <span
-                  key={b}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontFamily: GOTHIC,
-                    fontSize: 15,
-                    fontWeight: 700,
-                    letterSpacing: "0.01em",
-                    lineHeight: 1.45,
-                    color: HEAD,
-                  }}
-                >
-                  <Check />
-                  {b}
-                </span>
-              ))}
-            </div>
-          </div>
+          {/* ─ ④-b ご入会特典の帯 ─────────────────────────
+              FV内に置くとトレーナーの顔と文字が重なりすぎるため外に出した
+              （2026-09-29）。以降の⑥⑰でも同じブロックを使い回す。 */}
+          <BonusBlock variant="band" />
 
           {/* ─ ⑤ FV直下 ───────────────────────────────────── */}
           <Section>
@@ -923,6 +984,7 @@ export default function Page() {
               nowUnit={c.campaign.nowUnit}
               note={c.campaign.note}
             />
+            <BonusBlock />
             <Cta />
           </Section>
 
@@ -1819,6 +1881,7 @@ export default function Page() {
               now={c.closing.now}
               nowUnit={c.closing.nowUnit}
             />
+            <BonusBlock />
             <Cta />
           </Section>
 
