@@ -52,14 +52,18 @@ const config: PatternCConfig = {
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
-      // キッカー・金額の行は横幅いっぱいまで来るので、lavantscene のように詰めると
-      // 両端の渦に文字がかかる。罫と本文のアキは詰めずに残す。
+      // キッカーは横幅いっぱいまで来るので、lavantscene のように詰めると
+      // 両端の渦に文字がかかる。上は詰めずに残す。
+      // 下の飾りに接するのは幅の狭い「プレゼント」なので、渦にはかからず詰められる。
       gap: 0,
-      gapBottom: 0,
+      gapBottom: -20,
     },
+    // 金額を大きく見せるため「プレゼント」は次の行（highlightSub）へ送る。
     // 指示書の末尾の「！」は飾り罫にかかるので外している。
-    highlight: "豪華試食＋最大70万円分 プレゼント",
-    highlightSize: 16,
+    highlight: "豪華試食＋最大70万円分",
+    highlightSize: 22,
+    highlightSub: "プレゼント",
+    highlightSubSize: 16,
     ctaText: "最短30秒で予約する",
     catchPosition: "top",
     catchTopInset: 12,
