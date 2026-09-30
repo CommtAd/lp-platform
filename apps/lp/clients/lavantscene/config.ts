@@ -128,7 +128,7 @@ const config: PatternCConfig = {
 
   experience: {
     heading: "このフェアで体験できること",
-    lead: "チャペルからお料理まで。当日の雰囲気をまるごとご体感いただけます。",
+    lead: "チャペルからお料理、お見積りまで。当日のすべてをご確認いただけます。",
     items: [
       {
         tag: "01",
@@ -150,6 +150,16 @@ const config: PatternCConfig = {
         title: "国産牛コース試食会",
         body: "国産牛を使った婚礼コースをご試食いただき、おもてなしのイメージをご確認いただけます。",
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/tasting.jpg` },
+      },
+      {
+        // lold と同じ原稿・写真（顧客指定）。
+        tag: "04",
+        title: "見積もり相談",
+        body: "ご予算やご希望の日程に合わせて、専属プランナーが丁寧にご案内いたします。",
+        image: {
+          placeholder: "プランナーとのお見積り相談カット",
+          src: `${ASSET}/planner.jpg`,
+        },
       },
     ],
   },
