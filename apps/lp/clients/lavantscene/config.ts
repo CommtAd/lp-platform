@@ -64,6 +64,8 @@ const config: PatternCConfig = {
     highlightSize: 19,
     ctaText: "最短30秒で予約する",
     catchPosition: "top",
+    // カード上のアキを左右のアキ（framed で12px）に揃える（顧客指定。既定は28px）。
+    catchTopInset: 12,
     // FVの4枚は顧客がFV用に3:4（1008x1350）で切り出し直した素材（2026-09-30支給）。
     // こちらでのトリミングはしていない。支給ファイル名との対応:
     // hero = lav_04（チャペル）/ hero-2 = lav_02（ナイトガーデン）/
