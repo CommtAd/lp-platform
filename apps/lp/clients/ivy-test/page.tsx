@@ -925,68 +925,18 @@ export default function Page() {
               （2026-09-29）。以降の⑥⑰でも同じブロックを使い回す。 */}
           <BonusBlock variant="band" />
 
-          {/* ─ ⑤ FV直下 ───────────────────────────────────── */}
-          <Section>
-            <Kicker text={c.intro.kicker} />
-            <Head text={c.intro.heading} size={23} />
-            <p
-              style={{
-                margin: "22px 0 0",
-                textAlign: "center",
-                fontFamily: BODY,
-                fontSize: 14,
-                lineHeight: 2.15,
-                color: INK_SOFT,
-              }}
-            >
-              {nl(c.intro.body)}
-            </p>
-            {/* 顧客支給の写真（2026-09-29 AUN #2）。指示どおり正方形で挟む。 */}
-            <FullBleed img={c.intro.img} ratio="1 / 1" style={{ marginTop: 26 }} />
-
-            {/* チップは枠を持たせず、小さな丸印だけで並べる（指示書 §11-05）。 */}
-            <div
-              style={{
-                marginTop: 26,
-                display: "grid",
-                gridTemplateColumns: "repeat(2, max-content)",
-                justifyContent: "center",
-                gap: "13px 26px",
-              }}
-            >
-              {c.intro.chips.map((t) => (
-                <DotItem key={t} text={t} />
-              ))}
-            </div>
+          {/* ─ ⑤ FV直下 ───────────────────────────────────
+              見出し・本文・特徴アイコンまで顧客支給の画像に焼き込まれている
+              （2026-09-30 AUN #3）。⑦お悩みと同じく、画像を全幅で出すだけ。
+              比率は原寸（946x1663）と一致させてあるので切り取られない。 */}
+          <Section flush style={{ padding: "0 0 0" }}>
+            <FullBleed img={c.intro.img} ratio="946 / 1663" alt={c.intro.imgAlt} />
           </Section>
 
-          {/* ─ ⑥ 体験キャンペーン（CTA 2/5）───────────────── */}
-          <Section>
-            <Kicker text={c.campaign.kicker} />
-            <Head text={c.campaign.heading} size={22} />
-            <p
-              style={{
-                margin: "20px 0 0",
-                textAlign: "center",
-                fontFamily: BODY,
-                fontSize: 13.5,
-                lineHeight: 2.05,
-                color: INK_SOFT,
-              }}
-            >
-              {nl(c.campaign.lead)}
-            </p>
-            <OfferType
-              label={c.campaign.label}
-              was={c.campaign.was}
-              nowLabel={c.campaign.nowLabel}
-              now={c.campaign.now}
-              nowUnit={c.campaign.nowUnit}
-              note={c.campaign.note}
-            />
-            <BonusBlock />
-            <Cta />
-          </Section>
+          {/* ─ ⑥ 体験キャンペーン（非表示）─────────────────
+              顧客判断で削除（2026-09-30 AUN #5）。config の `campaign` は
+              データごと残してあるので、戻すときはここに書き戻す。
+              **このセクションにあったCTAとご入会特典ブロックも一緒に消えている。** */}
 
           {/* ─ ⑦ お悩み ─────────────────────────────────────
               見出しと悩み項目は顧客支給の画像に焼き込まれている（AUN #6）。

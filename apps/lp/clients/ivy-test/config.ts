@@ -80,15 +80,22 @@ export interface IvyBConfig {
     }[];
   };
 
+  /**
+   * ⑤FV直下。**見出し・本文・特徴アイコンまで画像に焼き込まれている**
+   * （顧客支給、2026-09-30 AUN #3）。そのためLP側はテキストを持たない。
+   * ⑦お悩みと同じ扱い。文言を直すには画像の作り直しが要る。
+   */
   intro: {
-    kicker: string;
-    heading: string;
-    body: string;
-    /** 本文とチップの間に挟む正方形の写真。 */
     img: Slot;
-    chips: string[];
+    /** 画像内の文言。読み上げと、画像が出ないときのために入れる。 */
+    imgAlt: string;
   };
 
+  /**
+   * ⑥体験キャンペーン。**現在は非表示**（2026-09-30 AUN #5「削除」）。
+   * データは戻せるように残してある。復活させるときは `page.tsx` に
+   * セクションを書き戻すこと。
+   */
   campaign: {
     kicker: string;
     heading: string;
@@ -329,17 +336,15 @@ const config: IvyBConfig = {
   },
 
   intro: {
-    kicker: "ABOUT",
-    heading: "自分のペースで、\n自分の身体と向き合える。",
-    body:
-      "周りの目を気にせず、\n一人ひとりの身体や目的に合わせたレッスンを。\n" +
-      "STUDIO IVYは、完全個室の空間で受けられる\nマンツーマンのマシンピラティススタジオです。",
     img: {
-      placeholder: "レッスンの様子",
+      placeholder: "What is STUDIO IVY? あなたの身体に、ちょうどいいピラティスを。",
       src: `${ASSET}/about.jpg`,
-      position: "center 35%",
     },
-    chips: ["完全個室", "マンツーマン", "初心者歓迎", "藤沢駅 徒歩5分"],
+    imgAlt:
+      "What is STUDIO IVY? あなたの身体に、“ちょうどいい”ピラティスを。" +
+      "カウンセリング（身体の状態・悩み・目標を丁寧にヒアリング）×" +
+      "オーダーメイドレッスン（一人ひとりに合わせたプログラムをご提案）。" +
+      "完全個室／マンツーマン指導／目的に合わせたプログラム。",
   },
 
   campaign: {
