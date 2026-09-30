@@ -64,10 +64,12 @@ const config: PatternCConfig = {
     highlightSize: 19,
     ctaText: "最短30秒で予約する",
     catchPosition: "top",
-    // 支給素材は横位置（3:2）と正方形なので、3:4に切り出してある（1360x1814）。
-    // プレートがFVの上約55%を覆うため、人物が下半分に来るように切った。
-    // 2枚目・4枚目は人物が上寄りなので、下側を落として人物を下げている。
-    // 4枚目は元が1500px角と小さく、切り出し幅が832pxしかない（高精細端末ではやや甘い）。
+    // カード上のアキを左右のアキ（framed で12px）に揃える（顧客指定。既定は28px）。
+    catchTopInset: 12,
+    // FVの4枚は顧客がFV用に3:4（1008x1350）で切り出し直した素材（2026-09-30支給）。
+    // こちらでのトリミングはしていない。支給ファイル名との対応:
+    // hero = lav_04（チャペル）/ hero-2 = lav_02（ナイトガーデン）/
+    // hero-3 = lav_03（神殿）/ hero-4 = lav_01（パーティー会場）。
     heroAspect: "3 / 4",
     hero: {
       placeholder: "チャペル（三面窓と新郎新婦）",
@@ -75,9 +77,7 @@ const config: PatternCConfig = {
       position: "center",
     },
     heroSlides: [
-      // 新郎の顔が左で切れていたので、切り出しを左へ寄せて二人を収めた（顧客指定）。
       { placeholder: "ナイトガーデンでの乾杯", src: `${ASSET}/hero-2.jpg` },
-      // 神殿は新郎新婦の足元がFVの下端に来るよう、元画像の足元（下から約15%）で切ってある（顧客指定）。
       { placeholder: "神殿（和装の新郎新婦）", src: `${ASSET}/hero-3.jpg` },
       { placeholder: "パーティー会場での乾杯", src: `${ASSET}/hero-4.jpg` },
     ],
@@ -128,7 +128,7 @@ const config: PatternCConfig = {
 
   experience: {
     heading: "このフェアで体験できること",
-    lead: "チャペルからお料理まで。当日の雰囲気をまるごとご体感いただけます。",
+    lead: "チャペルからお料理、お見積りまで。当日のすべてをご確認いただけます。",
     items: [
       {
         tag: "01",
@@ -150,6 +150,16 @@ const config: PatternCConfig = {
         title: "国産牛コース試食会",
         body: "国産牛を使った婚礼コースをご試食いただき、おもてなしのイメージをご確認いただけます。",
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/tasting.jpg` },
+      },
+      {
+        // lold と同じ原稿・写真（顧客指定）。
+        tag: "04",
+        title: "見積もり相談",
+        body: "ご予算やご希望の日程に合わせて、専属プランナーが丁寧にご案内いたします。",
+        image: {
+          placeholder: "プランナーとのお見積り相談カット",
+          src: `${ASSET}/planner.jpg`,
+        },
       },
     ],
   },
@@ -295,6 +305,8 @@ const config: PatternCConfig = {
         label: "ご来館人数",
         required: true,
         placeholder: "選択してください",
+        // lold と同じ注釈（顧客指定）。lold と違い 1名 の選択肢は残す（参加自体は受け付ける）。
+        hint: "※1名様でご参加の場合、来館特典は対象外となります",
         options: [
           { value: "1", label: "1名" },
           { value: "2", label: "2名" },
