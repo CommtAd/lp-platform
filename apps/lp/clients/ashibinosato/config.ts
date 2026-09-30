@@ -59,10 +59,9 @@ const config: PatternCConfig = {
       gapBottom: -20,
     },
     // 金額を大きく見せるため「プレゼント」は次の行（highlightSub）へ送る。
-    // 指示書の末尾の「！」は飾り罫にかかるので外している。
     highlight: "豪華試食＋最大70万円分",
     highlightSize: 22,
-    highlightSub: "プレゼント",
+    highlightSub: "プレゼント！",
     highlightSubSize: 16,
     ctaText: "最短30秒で予約する",
     catchPosition: "top",
