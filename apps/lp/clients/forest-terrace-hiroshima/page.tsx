@@ -710,6 +710,7 @@ export default function Page() {
           {c.fvSummary && (
             <div className="bg-[var(--paper)] px-5 pt-9">
               {c.fvSummary.headline &&
+                c.fvSummary.headlinePosition !== "afterLabel" &&
                 (c.fvSummary.headlineOrnament ? (
                   // 装飾は自然比のまま横幅に合わせ、その高さの中央に文字を置く。
                   // 文字の分量で箱を作って装飾を引き伸ばすと角飾りが歪む。
@@ -759,7 +760,21 @@ export default function Page() {
                 </span>
                 <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
               </div>
-              <div className="mt-7">
+              {/* 見出しの罫の直下に訴求文を置く版（headlinePosition: "afterLabel"）。 */}
+              {c.fvSummary.headline && c.fvSummary.headlinePosition === "afterLabel" && (
+                <p
+                  className="mt-5 text-center text-[15px] leading-[1.7]"
+                  style={{ fontFamily: mincho }}
+                >
+                  {emphasize(
+                    c.fvSummary.headline,
+                    c.fvSummary.headlineEmphasis,
+                    goldOnWhite,
+                    21,
+                  )}
+                </p>
+              )}
+              <div className={c.fvSummary.headlinePosition === "afterLabel" ? "mt-5" : "mt-7"}>
                 <AmountRow
                   items={c.fvSummary.items.map((i) => ({
                     amount: i.amount,
@@ -1224,7 +1239,14 @@ export default function Page() {
             {c.privilege.contract && (
               // 成約特典は二重枠＋跨ぎラベルで、来館特典より格上に見せる。
               // 暗い箱で締めるとセクション全体が沈むので、明るいまま枠の強さで差をつける。
-              <div className="relative mt-9">
+              <div
+                className="relative mt-9"
+                style={
+                  c.privilege.contract.outset
+                    ? { marginInline: -c.privilege.contract.outset }
+                    : undefined
+                }
+              >
                 <div
                   className="rounded-[3px] border p-2"
                   style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
@@ -1262,6 +1284,14 @@ export default function Page() {
                         </p>
                       </div>
                     ))}
+                    {c.privilege.contract.footer && (
+                      <p
+                        className="mt-4 text-[22px] font-bold leading-none tracking-[0.08em]"
+                        style={{ fontFamily: mincho, color: c.ink }}
+                      >
+                        {c.privilege.contract.footer}
+                      </p>
+                    )}
                   </div>
                 </div>
                 {/* FVのプレートバッジと同じスタンプ。抽選などの条件を金額から離さない。 */}

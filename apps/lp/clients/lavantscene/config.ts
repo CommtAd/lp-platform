@@ -46,9 +46,9 @@ const config: PatternCConfig = {
 
   fv: {
     brand: "ベルヴィ ラヴァンセーヌ",
-    kicker: "＼最大4万円相当の選べるギフト付き／",
+    kicker: "＼最大3万円相当の選べるギフト付き／",
     // 英字前提のキッカー枠なので、数字を明朝の立体に逃がす。
-    kickerEmphasis: "4",
+    kickerEmphasis: "3",
     catch: ["10月限定", "プレミアムフェア開催"],
     framed: true,
     ornament: {
@@ -60,7 +60,7 @@ const config: PatternCConfig = {
       gap: -20,
       gapBottom: -20,
     },
-    highlight: "最大100万円相当 優待",
+    highlight: "最大100万円相当 プレゼント",
     highlightSize: 19,
     ctaText: "最短30秒で予約する",
     catchPosition: "top",
@@ -84,14 +84,18 @@ const config: PatternCConfig = {
   },
 
   // FVを離脱する前に来館特典だけ持ち帰ってもらうための要約。詳細は privilege 側。
-  // 試食会の金額換算は指示書に無いので、金額の枠には「無料試食」を置く（顧客指定）。
+  // 試食会は「5万円相当」で出す（2026-09-30 顧客指定）。
   // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
   fvSummary: {
     label: "来館特典",
+    // 「来館特典」の罫と写真の間に置く（顧客指定）。
+    headline: "最大6万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大6万円",
+    headlinePosition: "afterLabel",
     items: [
       {
-        amount: "無料試食",
-        name: "国産牛コース試食会\n無料ご招待",
+        amount: "5万円相当",
+        name: "国産牛コース\n豪華無料試食",
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
       },
       {
@@ -118,10 +122,10 @@ const config: PatternCConfig = {
       { placeholder: "カタログギフト", src: `${ASSET}/gift-catalog.jpg`, caption: "カタログギフト" },
     ],
     frame: `${ASSET}/grand-offer-frame.png`,
-    // 15大特典の総額（FVの「最大100万円相当 優待」と同じもの）を金額として立てる。
+    // 15大特典の総額（FVの「最大100万円相当 プレゼント」と同じもの）を金額として立てる。
     feature: {
       title: "＋ 15大特典付き！",
-      amount: "最大100万円相当",
+      amount: "最大100万円相当プレゼント",
       body: "挙式・衣裳・乾杯ドリンクなどご優待価格にてご案内",
     },
   },
@@ -179,8 +183,8 @@ const config: PatternCConfig = {
     lead: "フェアにご参加いただいた方にご用意しています。",
     items: [
       {
-        title: "国産牛コース試食会\n無料ご招待",
-        amount: "無料試食",
+        title: "国産牛コース\n豪華無料試食",
+        amount: "5万円相当",
         // 支給の横位置カットを正方形に切り出したもの（3皿とも収まる中央）。
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
       },
@@ -194,10 +198,13 @@ const config: PatternCConfig = {
     contract: {
       label: "さらに、ご成約で",
       amount: "3万円分の選べるギフト",
-      // 成約特典の2つ目（顧客指定）。総額はFVの「最大100万円相当 優待」と同じもの。
+      // 成約特典の2つ目（顧客指定）。総額はFVの「最大100万円相当 プレゼント」と同じもの。
       extras: ["最大100万円相当の15大特典"],
       // 金額（3万円分 / 最大100万円相当）だけを金にし、特典名は本文色で組む（顧客指定）。
       inkAfterAmount: true,
+      // 締めの一言とカード幅の拡張（顧客指定）。左右のアキがFVのプレートと同じ12pxになる。
+      footer: "プレゼント！",
+      outset: 8,
     },
   },
 
@@ -342,7 +349,7 @@ const config: PatternCConfig = {
   },
 
   sticky: {
-    offerText: "最大100万円相当 優待",
+    offerText: "最大100万円相当 プレゼント",
     buttonText: "最短30秒で予約",
     anchor: "#form",
   },

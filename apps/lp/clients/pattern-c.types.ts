@@ -279,6 +279,11 @@ export interface PatternCConfig {
     /** `headline` の中で金額として強調する部分文字列（21pxの深い金になる）。 */
     headlineEmphasis?: string;
     /**
+     * `headline` の位置。既定 "top"（`label` の上）。"afterLabel" にすると
+     * `label`（「来館特典」の罫）と写真の間に置く。"afterLabel" では `headlineOrnament` は使わない。
+     */
+    headlinePosition?: "top" | "afterLabel";
+    /**
      * `headline` を囲む装飾（中央が透明のPNG）。横幅いっぱいに自然比で敷き、
      * その高さの中央に文字が乗る。装飾側が高さを決めるので、文字が2行に
      * なるほど長い `headline` には使わない。
@@ -476,6 +481,13 @@ export interface PatternCConfig {
        * 金額の後ろに特典名が続く文言で、金額を際立たせたいときに使う。
        */
       inkAfterAmount?: boolean;
+      /** 金額・`extras` の下に置く締めの一言（例 "プレゼント！"）。本文色の明朝太字。 */
+      footer?: string;
+      /**
+       * カードを左右に広げる量(px)。セクションの左右アキ（20px）からこの分だけ外へ出す。
+       * `extras` で文言が長くなり、内寸が足りないときに使う（8 でFVのプレートと同じ12pxのアキ）。
+       */
+      outset?: number;
     };
     /**
      * FVで出しているキャンペーンの枠を、このセクションにも被せる。
