@@ -582,6 +582,14 @@ export default function Page() {
             <FullBleed img={c.trial.img} ratio="984 / 1599" alt={c.trial.imgAlt} />
           </a>
 
+          {/* ─ ④-c アクセス図 ──────────────────────────────
+              顧客支給（2026-09-30 AUN #4）。**下部にあった住所・営業時間の帯は
+              誤記だったため切り落としてある**（詳細は config の `access`）。
+              正確な位置と店舗情報は⑮のGoogleマップ埋め込みが担う。 */}
+          <Section flush style={{ padding: "26px 0 0" }}>
+            <FullBleed img={c.access.img} ratio="1100 / 740" alt={c.access.imgAlt} />
+          </Section>
+
           {/* ─ ⑤ FV直下 ───────────────────────────────────
               見出し・本文・特徴アイコンまで顧客支給の画像に焼き込まれている
               （2026-09-30 AUN #3）。⑦お悩みと同じく、画像を全幅で出すだけ。
