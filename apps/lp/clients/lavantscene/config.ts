@@ -88,6 +88,10 @@ const config: PatternCConfig = {
   // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
   fvSummary: {
     label: "来館特典",
+    // 「来館特典」の罫と写真の間に置く（顧客指定）。
+    headline: "最大6万円の来館ギフトがついてくる",
+    headlineEmphasis: "最大6万円",
+    headlinePosition: "afterLabel",
     items: [
       {
         amount: "無料試食",
