@@ -154,10 +154,16 @@ export interface IvyBConfig {
     items: { num: string; title: string; body: string }[];
   };
 
+  /**
+   * ⑨目指せる未来。**画像1枚で出す**（2026-09-30 AUN #4）。
+   * `kicker` / `heading` / `items` / `note` は画像に焼き込まれているため
+   * 描画には使っていない。文言を戻すときの元データとして残してある。
+   */
   future: {
     kicker: string;
     heading: string;
     img: Slot;
+    imgAlt: string;
     items: string[];
     note: string;
   };
@@ -188,10 +194,17 @@ export interface IvyBConfig {
     };
   };
 
+  /**
+   * ⑪料金プラン。**画像1枚で出す**（2026-09-30 AUN #20）。
+   * **金額は画像に焼き込まれている。** 値上げ・プラン変更のときは
+   * 下のデータだけ直しても表示は変わらない。必ず画像を作り直すこと。
+   */
   price: {
     kicker: string;
     heading: string;
     lead: string;
+    img: Slot;
+    imgAlt: string;
     /** 主役。月4回プラン。 */
     main: { name: string; freq: string; monthly: string; per: string; note: string };
     /** 脇。月2回・月8回。 */
@@ -207,9 +220,15 @@ export interface IvyBConfig {
     closing: string;
   };
 
+  /**
+   * ⑬体験レッスンの流れ。**画像1枚で出す**（2026-09-30 AUN #21）。
+   * STEP 01〜05 は画像に焼き込まれている。`steps` は元データとして残すだけ。
+   */
   flow: {
     kicker: string;
     heading: string;
+    img: Slot;
+    imgAlt: string;
     steps: { num: string; title: string; body: string }[];
   };
 
@@ -465,7 +484,18 @@ const config: IvyBConfig = {
   future: {
     kicker: "YOUR FUTURE",
     heading: "ピラティスを、\n毎日の身体づくりの習慣に。",
-    img: { placeholder: "ピラティスのイメージ", src: `${ASSET}/future.jpg` },
+    img: {
+      placeholder: "マシンピラティスで、理想の身体へ。",
+      src: `${ASSET}/future.jpg`,
+    },
+    imgAlt:
+      "マシンピラティスで、理想の身体へ。" +
+      "01 姿勢を整える／02 気になる部位へアプローチ／03 しなやかに動ける身体へ。" +
+      "マシンが動きをサポートするから、運動が苦手でも始めやすい。" +
+      "身体が硬くてうまく動けるか不安、運動経験がほとんどない、" +
+      "ピラティスが初めてでついていけるか心配という方へ。" +
+      "鍛えるだけじゃない。姿勢から、理想の身体をつくる。" +
+      "美しい姿勢／引き締まったボディライン／動きやすいしなやかな身体／健康的で前向きな毎日。",
     items: [
       "すっと伸びた姿勢へ",
       "すっきりしたボディラインへ",
@@ -527,6 +557,13 @@ const config: IvyBConfig = {
     kicker: "PRICE",
     heading: "無理なく続けられる\nパーソナルピラティス。",
     lead: "月謝制の3プラン。まずは週1回ペースの月4回プランから。",
+    img: { placeholder: "料金プラン", src: `${ASSET}/price.jpg` },
+    imgAlt:
+      "PRICE 無理なく続けられるパーソナルピラティス。月謝制の3プラン。" +
+      "おすすめ STANDARD 月4回 28,000円／月（税込）、1回あたり7,000円。" +
+      "BASIC 月2回 15,000円／月（税込）、1回あたり7,500円。" +
+      "PREMIUM 月8回 52,000円／月（税込）、1回あたり6,500円。" +
+      "※表示はすべて税込です。",
     main: {
       name: "STANDARD",
       freq: "月4回",
@@ -572,6 +609,14 @@ const config: IvyBConfig = {
   flow: {
     kicker: "FLOW",
     heading: "初めてでも、\n安心してお越しください。",
+    img: { placeholder: "体験レッスンの流れ", src: `${ASSET}/flow.jpg` },
+    imgAlt:
+      "FLOW 初めてでも、安心してお越しください。ご予約からレッスン後まで、丁寧にサポートいたします。" +
+      "STEP01 ご予約：このページのフォームから、ご希望の日時をお送りください。" +
+      "STEP02 ご来店・カウンセリング：お着替えの時間があるため、開始5分前を目安にご来店ください。" +
+      "STEP03 身体やお悩みの確認：現在の身体の状態やお悩み、これまでの運動習慣をうかがいます。" +
+      "STEP04 パーソナルレッスン：インストラクターがマンツーマンで50分のレッスンを進めます。" +
+      "STEP05 振り返り・アドバイス：レッスン後に身体の状態を振り返り、これからの続け方をご案内します。",
     steps: [
       {
         num: "01",
