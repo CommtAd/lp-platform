@@ -46,9 +46,9 @@ const config: PatternCConfig = {
 
   fv: {
     brand: "ベルヴィ ラヴァンセーヌ",
-    kicker: "＼最大4万円相当の選べるギフト付き／",
+    kicker: "＼最大3万円相当の選べるギフト付き／",
     // 英字前提のキッカー枠なので、数字を明朝の立体に逃がす。
-    kickerEmphasis: "4",
+    kickerEmphasis: "3",
     catch: ["10月限定", "プレミアムフェア開催"],
     framed: true,
     ornament: {
@@ -60,7 +60,7 @@ const config: PatternCConfig = {
       gap: -20,
       gapBottom: -20,
     },
-    highlight: "最大100万円相当 優待",
+    highlight: "最大100万円相当 プレゼント",
     highlightSize: 19,
     ctaText: "最短30秒で予約する",
     catchPosition: "top",
@@ -118,7 +118,7 @@ const config: PatternCConfig = {
       { placeholder: "カタログギフト", src: `${ASSET}/gift-catalog.jpg`, caption: "カタログギフト" },
     ],
     frame: `${ASSET}/grand-offer-frame.png`,
-    // 15大特典の総額（FVの「最大100万円相当 優待」と同じもの）を金額として立てる。
+    // 15大特典の総額（FVの「最大100万円相当 プレゼント」と同じもの）を金額として立てる。
     feature: {
       title: "＋ 15大特典付き！",
       amount: "最大100万円相当",
@@ -194,7 +194,7 @@ const config: PatternCConfig = {
     contract: {
       label: "さらに、ご成約で",
       amount: "3万円分の選べるギフト",
-      // 成約特典の2つ目（顧客指定）。総額はFVの「最大100万円相当 優待」と同じもの。
+      // 成約特典の2つ目（顧客指定）。総額はFVの「最大100万円相当 プレゼント」と同じもの。
       extras: ["最大100万円相当の15大特典"],
       // 金額（3万円分 / 最大100万円相当）だけを金にし、特典名は本文色で組む（顧客指定）。
       inkAfterAmount: true,
@@ -342,7 +342,7 @@ const config: PatternCConfig = {
   },
 
   sticky: {
-    offerText: "最大100万円相当 優待",
+    offerText: "最大100万円相当 プレゼント",
     buttonText: "最短30秒で予約",
     anchor: "#form",
   },
