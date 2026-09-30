@@ -84,7 +84,7 @@ const config: PatternCConfig = {
   },
 
   // FVを離脱する前に来館特典だけ持ち帰ってもらうための要約。詳細は privilege 側。
-  // 試食会の金額換算は指示書に無いので、金額の枠には「無料試食」を置く（顧客指定）。
+  // 試食会は「5万円相当」で出す（2026-09-30 顧客指定）。
   // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
   fvSummary: {
     label: "来館特典",
@@ -94,8 +94,8 @@ const config: PatternCConfig = {
     headlinePosition: "afterLabel",
     items: [
       {
-        amount: "無料試食",
-        name: "国産牛コース試食会\n無料ご招待",
+        amount: "5万円相当",
+        name: "国産牛コース\n豪華無料試食",
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
       },
       {
@@ -183,8 +183,8 @@ const config: PatternCConfig = {
     lead: "フェアにご参加いただいた方にご用意しています。",
     items: [
       {
-        title: "国産牛コース試食会\n無料ご招待",
-        amount: "無料試食",
+        title: "国産牛コース\n豪華無料試食",
+        amount: "5万円相当",
         // 支給の横位置カットを正方形に切り出したもの（3皿とも収まる中央）。
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
       },
