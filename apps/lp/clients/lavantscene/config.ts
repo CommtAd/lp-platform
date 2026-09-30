@@ -305,6 +305,8 @@ const config: PatternCConfig = {
         label: "ご来館人数",
         required: true,
         placeholder: "選択してください",
+        // lold と同じ注釈（顧客指定）。lold と違い 1名 の選択肢は残す（参加自体は受け付ける）。
+        hint: "※1名様でご参加の場合、来館特典は対象外となります",
         options: [
           { value: "1", label: "1名" },
           { value: "2", label: "2名" },
