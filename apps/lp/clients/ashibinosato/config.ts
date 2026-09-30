@@ -44,22 +44,22 @@ const config: PatternCConfig = {
   },
 
   fv: {
-    // カードの文字量を絞るため、指示書の4行を3段にまとめている。
-    // 「豪華試食」は highlight と重複するのでキャッチから外し、
-    // 「奈良で見つける、ふたりらしい結婚式。」は会場紹介のリードへ移した。
-    kicker: "＼毎月満席の人気フェア／",
-    catch: ["1日1組貸切", "BIGフェア"],
-    catchSize: 30,
+    // 指示書の1行目はカードに入れると文字量が多くなるので、ヘッダー直下の帯に出す。
+    topBand: "奈良で見つける、ふたりらしい結婚式。",
+    kicker: "＼毎月満席の人気フェア、今月も開催！／",
+    catch: ["1日1組貸切×豪華試食付き", "BIGフェア"],
     framed: true,
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
-      // lavantscene と同じ詰め（罫と本文のアキを上下とも約8pxに揃える）。
-      gap: -20,
-      gapBottom: -20,
+      // キッカー・金額の行は横幅いっぱいまで来るので、lavantscene のように詰めると
+      // 両端の渦に文字がかかる。罫と本文のアキは詰めずに残す。
+      gap: 0,
+      gapBottom: 0,
     },
-    highlight: "豪華試食＋最大70万円分プレゼント",
-    highlightSize: 17,
+    // 指示書の末尾の「！」は飾り罫にかかるので外している。
+    highlight: "豪華試食＋最大70万円分 プレゼント",
+    highlightSize: 16,
     ctaText: "最短30秒で予約する",
     catchPosition: "top",
     catchTopInset: 12,
@@ -182,7 +182,7 @@ const config: PatternCConfig = {
 
   facility: {
     heading: "会場のご紹介",
-    lead: "奈良で見つける、ふたりらしい結婚式。",
+    lead: "奈良町の緑に包まれた、1日1組の貸切会場",
     // 支給素材を 3:2 に揃えて受ける。
     aspect: "3 / 2",
     bodySize: 13,
