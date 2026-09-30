@@ -36,6 +36,32 @@ export interface IvyBConfig {
   status?: ClientStatus;
   meta: { title: string; description: string; ogpImage?: string };
 
+  /**
+   * ①〜④（ヘッダー・オファーバー・特徴バー・FV）を**1枚の画像で置き換えている**
+   * （顧客支給、2026-09-30 AUN #1）。そのため `header` / `offerBar` /
+   * `featureBar` / `fv` のデータは残っているが**表示には使われていない**。
+   * 戻すときは page.tsx に元のブロックを書き戻すこと。
+   */
+  topImage: { img: Slot; imgAlt: string };
+  /**
+   * ご入会特典バンドを置き換える体験レッスンの画像（同 AUN #2）。
+   * **画像の中にCTAボタンが描かれている**ので、画像全体をリンクにしている。
+   * そうしないとボタンが押せない見た目だけの絵になる。
+   */
+  trial: { img: Slot; imgAlt: string };
+  /**
+   * 駅からのアクセス図（同 AUN #4）。
+   *
+   * **支給画像の下部にあった住所・営業時間の帯は切り落としてある。**
+   * そこに書かれていた「鵠沼石上1-5-4 ISM藤沢2F / 9:00〜21:00」は誤りで、
+   * 正しくは「藤沢991-36 FJ9フロアビル402号 / 8:00〜21:00」（顧客確認済み、
+   * 2026-09-30）。誤った住所を載せると来店先を間違えるため、帯ごと除いた。
+   *
+   * 地図自体は生成画像なので**図解であって正式な地図ではない**。
+   * 正確な位置は⑮店舗情報のGoogleマップ埋め込みが担う。
+   */
+  access: { img: Slot; imgAlt: string };
+
   header: { logo: Slot; store: string };
   /** ②オファーバー。セールバナーにしないため、淡色地＋細字で静かに置く。 */
   offerBar: { badge?: string; lead: string; was: string; now: string };
@@ -80,15 +106,22 @@ export interface IvyBConfig {
     }[];
   };
 
+  /**
+   * ⑤FV直下。**見出し・本文・特徴アイコンまで画像に焼き込まれている**
+   * （顧客支給、2026-09-30 AUN #3）。そのためLP側はテキストを持たない。
+   * ⑦お悩みと同じ扱い。文言を直すには画像の作り直しが要る。
+   */
   intro: {
-    kicker: string;
-    heading: string;
-    body: string;
-    /** 本文とチップの間に挟む正方形の写真。 */
     img: Slot;
-    chips: string[];
+    /** 画像内の文言。読み上げと、画像が出ないときのために入れる。 */
+    imgAlt: string;
   };
 
+  /**
+   * ⑥体験キャンペーン。**現在は非表示**（2026-09-30 AUN #5「削除」）。
+   * データは戻せるように残してある。復活させるときは `page.tsx` に
+   * セクションを書き戻すこと。
+   */
   campaign: {
     kicker: string;
     heading: string;
@@ -253,6 +286,36 @@ const config: IvyBConfig = {
     ogpImage: `${ASSET}/hero-poster.jpg`,
   },
 
+  topImage: {
+    img: {
+      placeholder: "STUDIO IVY 藤沢店 もっと好きになれる、私の身体へ。",
+      src: `${ASSET}/hero-top.jpg`,
+    },
+    imgAlt:
+      "このサイト限定 無料体験レッスン実施中。STUDIO IVY PILATES。" +
+      "もっと好きになれる、私の身体へ。姿勢から、美しく整える。マシンピラティス。" +
+      "完全パーソナル（マンツーマンで理想の身体へ）×1回あたり6,500円〜（続けやすい月額プラン）。",
+  },
+
+  trial: {
+    img: {
+      placeholder: "初回限定 体験レッスン 0円",
+      src: `${ASSET}/trial.jpg`,
+    },
+    imgAlt:
+      "初回限定 体験レッスン。完全個室×パーソナルマシンピラティス。" +
+      "通常価格4,500円のところ初回体験0円。完全個室／マンツーマン／マシンピラティス／カウンセリング。" +
+      "藤沢店限定、ご入会でピラティスソックスプレゼント。無料体験を予約する。",
+  },
+
+  access: {
+    img: {
+      placeholder: "スタジオは駅近で通いやすい！ 藤沢駅から徒歩5分。",
+      src: `${ASSET}/access.jpg`,
+    },
+    imgAlt: "スタジオは駅近で通いやすい。藤沢駅から徒歩5分。",
+  },
+
   header: {
     logo: { placeholder: "STUDIO IVY", src: `${ASSET}/logo.jpg` },
     store: "藤沢店",
@@ -329,17 +392,15 @@ const config: IvyBConfig = {
   },
 
   intro: {
-    kicker: "ABOUT",
-    heading: "自分のペースで、\n自分の身体と向き合える。",
-    body:
-      "周りの目を気にせず、\n一人ひとりの身体や目的に合わせたレッスンを。\n" +
-      "STUDIO IVYは、完全個室の空間で受けられる\nマンツーマンのマシンピラティススタジオです。",
     img: {
-      placeholder: "レッスンの様子",
+      placeholder: "What is STUDIO IVY? あなたの身体に、ちょうどいいピラティスを。",
       src: `${ASSET}/about.jpg`,
-      position: "center 35%",
     },
-    chips: ["完全個室", "マンツーマン", "初心者歓迎", "藤沢駅 徒歩5分"],
+    imgAlt:
+      "What is STUDIO IVY? あなたの身体に、“ちょうどいい”ピラティスを。" +
+      "カウンセリング（身体の状態・悩み・目標を丁寧にヒアリング）×" +
+      "オーダーメイドレッスン（一人ひとりに合わせたプログラムをご提案）。" +
+      "完全個室／マンツーマン指導／目的に合わせたプログラム。",
   },
 
   campaign: {
