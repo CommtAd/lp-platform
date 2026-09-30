@@ -279,6 +279,11 @@ export interface PatternCConfig {
     /** `headline` の中で金額として強調する部分文字列（21pxの深い金になる）。 */
     headlineEmphasis?: string;
     /**
+     * `headline` の位置。既定 "top"（`label` の上）。"afterLabel" にすると
+     * `label`（「来館特典」の罫）と写真の間に置く。"afterLabel" では `headlineOrnament` は使わない。
+     */
+    headlinePosition?: "top" | "afterLabel";
+    /**
      * `headline` を囲む装飾（中央が透明のPNG）。横幅いっぱいに自然比で敷き、
      * その高さの中央に文字が乗る。装飾側が高さを決めるので、文字が2行に
      * なるほど長い `headline` には使わない。
@@ -315,10 +320,18 @@ export interface PatternCConfig {
     lead?: string;
     /** 対象条件のバッジ、例 "2027年5月までの挙式披露宴が対象"。 */
     badge?: string;
-    /** 特典の名前、例 "豪華10大特典"。 */
+    /** 特典の名前、例 "豪華10大特典"。`\n` で改行位置を指定できる。 */
     title: string;
-    /** 金額訴求、例 "最大180万円相当"。数字部分は自動で特大になる。 */
-    amount: string;
+    /**
+     * `title` の中で金額として強調する部分文字列（例 "3万円分"）。深い金の太字・大きめになる。
+     * 金額を `title` に含めて `amount` を省く組み方のときに使う。
+     */
+    titleEmphasis?: string;
+    /**
+     * 金額訴求、例 "最大180万円相当"。数字部分は自動で特大になる。
+     * 省略すると菱形の罫ごと出ない（金額を `title` 側で言い切る場合）。
+     */
+    amount?: string;
     /**
      * `amount` を金額ではなく説明文として組む。数字の特大化をやめ、`\n` の行ごとに
      * 積んで読ませる。金額をバッジ側に出して、プレートでは特典の中身を説明する
@@ -335,13 +348,29 @@ export interface PatternCConfig {
      */
     frame?: string;
     /**
+     * 金額カードの中、`title` の下に並べる写真（特典の中身。旅行券・カタログギフトなど）。
+     * 2〜3枚を横並び・4:3で受ける。`caption` は写真の下に小さく出る。
+     * 渡すとカードの高さが伸びるので、`frame` は四隅を自然比で貼る版（CornerFrame）に切り替わる。
+     */
+    images?: (Slot & { caption?: string })[];
+    /**
      * 目玉特典。**金額プレートとは必ず別カードで描画される。**
      * ひと続きにすると「180万円相当のホテル宿泊券」のように、金額が目玉特典の
      * 中身だと誤読されるため。
      * `image` を渡すと写真を敷いてスクリム＋白文字で載せる（宿泊特典の客室写真など）。
      */
     /** `disclaimer` はカード右下に小さく入る注記（適用条件など）。 */
-    feature?: { title: string; body: string; image?: Slot; disclaimer?: string };
+    /**
+     * `amount` は title と body の間に置く金額（例 "最大100万円相当"）。
+     * 数字部分は金額プレートと同じく自動で特大になる。省略すると出ない。
+     */
+    feature?: {
+      title: string;
+      body: string;
+      amount?: string;
+      image?: Slot;
+      disclaimer?: string;
+    };
     note?: string;
   };
 
@@ -440,6 +469,25 @@ export interface PatternCConfig {
        * 抽選など、金額に付く条件を金額と切り離さずに見せるためのもの。
        */
       badge?: { lines: string[]; size?: number; bg?: string };
+      /**
+       * `amount` に続けて「＋」で積む成約特典（例 "最大100万円相当の15大特典"）。
+       * 最初の数字が `amount` と同じ特大（48px）になり、文字は18px。
+       * 1行に収まる長さにすること（"最大100万円相当の15大特典" で残り約12px）。
+       */
+      extras?: string[];
+      /**
+       * 金額の部分（"3万円分" "最大100万円相当" まで）だけを金にし、続く文言
+       * （"の選べるギフト" など）を本文色で組む。`amount` と `extras` の両方に効く。
+       * 金額の後ろに特典名が続く文言で、金額を際立たせたいときに使う。
+       */
+      inkAfterAmount?: boolean;
+      /** 金額・`extras` の下に置く締めの一言（例 "プレゼント！"）。本文色の明朝太字。 */
+      footer?: string;
+      /**
+       * カードを左右に広げる量(px)。セクションの左右アキ（20px）からこの分だけ外へ出す。
+       * `extras` で文言が長くなり、内寸が足りないときに使う（8 でFVのプレートと同じ12pxのアキ）。
+       */
+      outset?: number;
     };
     /**
      * FVで出しているキャンペーンの枠を、このセクションにも被せる。
