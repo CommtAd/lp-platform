@@ -35,16 +35,21 @@ const config: PatternCConfig = {
   },
 
   header: {
-    // ロゴは未支給のため会場名テキストで出す。支給されたら lavantscene と同じく logo を渡す。
     venue: "奈良町あしびの郷ウエディング",
-    // CTAボタンは非表示（会場名が中央寄せになる）。追従バーが常時出ているので導線は確保されている。
+    // 支給ロゴ（2026-09-30、透過WebPをPNGに変換）。横長なので高さ32で約113px幅。
+    logo: { src: `${ASSET}/logo.png`, height: 32 },
+    paddingY: 8,
+    // CTAボタンは非表示（ロゴが中央寄せになる）。追従バーが常時出ているので導線は確保されている。
     sticky: false,
   },
 
   fv: {
-    brand: "奈良で見つける、ふたりらしい結婚式。",
-    kicker: "＼毎月満席の人気フェア、今月も開催！／",
-    catch: ["1日1組貸切×豪華試食付き", "BIGフェア"],
+    // カードの文字量を絞るため、指示書の4行を3段にまとめている。
+    // 「豪華試食」は highlight と重複するのでキャッチから外し、
+    // 「奈良で見つける、ふたりらしい結婚式。」は会場紹介のリードへ移した。
+    kicker: "＼毎月満席の人気フェア／",
+    catch: ["1日1組貸切", "BIGフェア"],
+    catchSize: 30,
     framed: true,
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
@@ -53,7 +58,7 @@ const config: PatternCConfig = {
       gap: -20,
       gapBottom: -20,
     },
-    highlight: "豪華試食＋最大70万円分 プレゼント！",
+    highlight: "豪華試食＋最大70万円分プレゼント",
     highlightSize: 17,
     ctaText: "最短30秒で予約する",
     catchPosition: "top",
@@ -177,7 +182,7 @@ const config: PatternCConfig = {
 
   facility: {
     heading: "会場のご紹介",
-    lead: "奈良町の緑に包まれた、1日1組の貸切会場",
+    lead: "奈良で見つける、ふたりらしい結婚式。",
     // 支給素材を 3:2 に揃えて受ける。
     aspect: "3 / 2",
     bodySize: 13,
