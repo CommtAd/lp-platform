@@ -1353,7 +1353,14 @@ export default function Page() {
             {c.privilege.contract && (
               // 成約特典は二重枠＋跨ぎラベルで、来館特典より格上に見せる。
               // 暗い箱で締めるとセクション全体が沈むので、明るいまま枠の強さで差をつける。
-              <div className="relative mt-9">
+              <div
+                className="relative mt-9"
+                style={
+                  c.privilege.contract.outset
+                    ? { marginInline: -c.privilege.contract.outset }
+                    : undefined
+                }
+              >
                 <div
                   className="rounded-[3px] border p-2"
                   style={{ background: c.paper, borderColor: c.accent, color: c.ink }}
@@ -1391,6 +1398,14 @@ export default function Page() {
                         </p>
                       </div>
                     ))}
+                    {c.privilege.contract.footer && (
+                      <p
+                        className="mt-4 text-[22px] font-bold leading-none tracking-[0.08em]"
+                        style={{ fontFamily: mincho, color: c.ink }}
+                      >
+                        {c.privilege.contract.footer}
+                      </p>
+                    )}
                   </div>
                 </div>
                 {/* FVのプレートバッジと同じスタンプ。抽選などの条件を金額から離さない。 */}

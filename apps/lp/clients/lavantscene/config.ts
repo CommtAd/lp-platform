@@ -202,6 +202,9 @@ const config: PatternCConfig = {
       extras: ["最大100万円相当の15大特典"],
       // 金額（3万円分 / 最大100万円相当）だけを金にし、特典名は本文色で組む（顧客指定）。
       inkAfterAmount: true,
+      // 締めの一言とカード幅の拡張（顧客指定）。左右のアキがFVのプレートと同じ12pxになる。
+      footer: "プレゼント！",
+      outset: 8,
     },
   },
 
