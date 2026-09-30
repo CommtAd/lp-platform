@@ -36,6 +36,20 @@ export interface IvyBConfig {
   status?: ClientStatus;
   meta: { title: string; description: string; ogpImage?: string };
 
+  /**
+   * ①〜④（ヘッダー・オファーバー・特徴バー・FV）を**1枚の画像で置き換えている**
+   * （顧客支給、2026-09-30 AUN #1）。そのため `header` / `offerBar` /
+   * `featureBar` / `fv` のデータは残っているが**表示には使われていない**。
+   * 戻すときは page.tsx に元のブロックを書き戻すこと。
+   */
+  topImage: { img: Slot; imgAlt: string };
+  /**
+   * ご入会特典バンドを置き換える体験レッスンの画像（同 AUN #2）。
+   * **画像の中にCTAボタンが描かれている**ので、画像全体をリンクにしている。
+   * そうしないとボタンが押せない見た目だけの絵になる。
+   */
+  trial: { img: Slot; imgAlt: string };
+
   header: { logo: Slot; store: string };
   /** ②オファーバー。セールバナーにしないため、淡色地＋細字で静かに置く。 */
   offerBar: { badge?: string; lead: string; was: string; now: string };
@@ -258,6 +272,28 @@ const config: IvyBConfig = {
     description:
       "藤沢駅徒歩5分。完全個室・マンツーマンのパーソナルマシンピラティス。1回7,000円〜、初回体験レッスンは通常4,500円のところ0円。運動が初めての方も、自分のペースで始められます。",
     ogpImage: `${ASSET}/hero-poster.jpg`,
+  },
+
+  topImage: {
+    img: {
+      placeholder: "STUDIO IVY 藤沢店 もっと好きになれる、私の身体へ。",
+      src: `${ASSET}/hero-top.jpg`,
+    },
+    imgAlt:
+      "このサイト限定 無料体験レッスン実施中。STUDIO IVY PILATES。" +
+      "もっと好きになれる、私の身体へ。姿勢から、美しく整える。マシンピラティス。" +
+      "完全パーソナル（マンツーマンで理想の身体へ）×1回あたり6,500円〜（続けやすい月額プラン）。",
+  },
+
+  trial: {
+    img: {
+      placeholder: "初回限定 体験レッスン 0円",
+      src: `${ASSET}/trial.jpg`,
+    },
+    imgAlt:
+      "初回限定 体験レッスン。完全個室×パーソナルマシンピラティス。" +
+      "通常価格4,500円のところ初回体験0円。完全個室／マンツーマン／マシンピラティス／カウンセリング。" +
+      "藤沢店限定、ご入会でピラティスソックスプレゼント。無料体験を予約する。",
   },
 
   header: {
