@@ -198,6 +198,11 @@ export interface PatternCConfig {
      */
     highlightSize?: number;
     /**
+     * `highlight` の1行目を金額として組む（例 "最大180万円相当の\n特典をプレゼント" の1行目）。
+     * 数字は `numSize`、それ以外の文字は `sideSize`(px)。2行目以降は `highlightSize` のまま。
+     */
+    highlightAmount?: { numSize: number; sideSize: number };
+    /**
      * `highlight` の直下に置く一言。金額の言い切りを受ける補足で、
      * 金額より一段小さく本文色で出る。1行に収まる長さにすること。
      */

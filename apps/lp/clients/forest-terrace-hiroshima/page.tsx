@@ -475,6 +475,25 @@ export default function Page() {
    * 文言を詰めたときに一段落としたい、といった微調整のために config から上書きできる。
    */
   const fvHighlightSize = c.fv.highlightSize ?? (framed ? 22 : 17);
+  /**
+   * `highlightAmount` があれば1行目を金額として組む（数字を特大にし、行全体も一段大きく）。
+   * 2行目以降は `fvHighlightSize` のまま。金額の桁を最初に目に入れるのが目的。
+   */
+  const fvHighlightText = (() => {
+    const text = c.fv.highlight ?? "";
+    if (!c.fv.highlightAmount) return text;
+    const [first, ...rest] = text.split("\n");
+    return (
+      <>
+        <span className="block leading-none">
+          {amountEmphasis(first, c.fv.highlightAmount.numSize, c.fv.highlightAmount.sideSize)}
+        </span>
+        {rest.length > 0 && (
+          <span className="mt-1.5 block leading-[1.3]">{rest.join("\n")}</span>
+        )}
+      </>
+    );
+  })();
   const fvHighlight = !c.fv.highlight ? null : framed ? (
     <>
       <span className="mt-2.5 block h-px" style={{ background: `${c.accent}66` }} />
@@ -482,7 +501,7 @@ export default function Page() {
         className="mt-2.5 whitespace-pre-line font-bold tracking-[0.06em]"
         style={{ fontFamily: mincho, color: goldOnWhite, fontSize: fvHighlightSize }}
       >
-        {c.fv.highlight}
+        {fvHighlightText}
       </p>
     </>
   ) : (
@@ -497,7 +516,7 @@ export default function Page() {
         textShadow: "none",
       }}
     >
-      {c.fv.highlight}
+      {fvHighlightText}
     </p>
   );
 
@@ -517,10 +536,14 @@ export default function Page() {
         <img
           src={c.fv.ornament.top}
           alt=""
-          className="mx-auto mb-1.5 block"
+          className="mx-auto block"
           style={{
             width: c.fv.ornament.width ?? "100%",
             height: c.fv.ornament.height ?? 44,
+            // 飾りは両端が渦・中央が細い罫線なので、中央下は絵として空く。
+            // 負の値で本文を引き上げると、その空きぶんだけ詰められる（両端の渦とは
+            // 中央寄せの文字が重ならない）。
+            marginBottom: c.fv.ornament.gap ?? 6,
           }}
         />
       )}
@@ -532,10 +555,12 @@ export default function Page() {
         <img
           src={c.fv.ornament.bottom}
           alt=""
-          className="mx-auto mt-1.5 block"
+          className="mx-auto block"
           style={{
             width: c.fv.ornament.width ?? "100%",
             height: c.fv.ornament.height ?? 44,
+            // 上の飾りと同じ理屈で、中央上は絵として空く。負の値で詰められる。
+            marginTop: c.fv.ornament.gapBottom ?? 6,
           }}
         />
       )}
