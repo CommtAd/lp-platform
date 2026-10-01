@@ -563,7 +563,7 @@ export default function Page() {
               戻すときはここに元のブロックを書き戻す。 */}
           <FullBleed
             img={c.topImage.img}
-            ratio="984 / 1599"
+            ratio="984 / 1392"
             alt={c.topImage.imgAlt}
           />
 
@@ -595,7 +595,7 @@ export default function Page() {
               （2026-09-30 AUN #3）。⑦お悩みと同じく、画像を全幅で出すだけ。
               比率は原寸（946x1663）と一致させてあるので切り取られない。 */}
           <Section flush style={{ padding: "0 0 0" }}>
-            <FullBleed img={c.intro.img} ratio="946 / 1663" alt={c.intro.imgAlt} />
+            <FullBleed img={c.intro.img} ratio="946 / 1372" alt={c.intro.imgAlt} />
           </Section>
 
           {/* ─ ⑥ 体験キャンペーン（非表示）─────────────────
@@ -627,611 +627,51 @@ export default function Page() {
             </p>
           </Section>
 
-          {/* ─ ⑧ STUDIO IVYなら ─────────────────────────────
-              大きな写真1枚＋番号つきのリスト。小カード4枚では並べない。 */}
-          <Section flush>
-            <div style={{ padding: `0 ${PAD}px` }}>
-              <Kicker text={c.points.kicker} />
-              <Head text={c.points.heading} size={23} />
-            </div>
-
-            <FullBleed img={c.points.photo} ratio="4 / 3" style={{ margin: "30px 0 0" }} />
-
-            <div style={{ padding: `0 ${PAD}px` }}>
-              <div style={{ marginTop: 30, borderTop: `1px solid ${RULE}` }}>
-                {c.points.items.map((item) => (
-                  <div
-                    key={item.num}
-                    style={{
-                      display: "flex",
-                      gap: 16,
-                      padding: "20px 2px",
-                      borderBottom: `1px solid ${RULE}`,
-                    }}
-                  >
-                    <span
-                      style={{
-                        flex: "none",
-                        width: 24,
-                        fontFamily: GOTHIC,
-                        fontSize: 13,
-                        fontWeight: 800,
-                        letterSpacing: "0.04em",
-                        lineHeight: 1.7,
-                        color: BRAND,
-                      }}
-                    >
-                      {item.num}
-                    </span>
-                    <div style={{ flex: 1 }}>
-                      <h3
-                        style={{
-                          margin: 0,
-                          fontFamily: MINCHO,
-                          fontWeight: 600,
-                          fontSize: 18,
-                          letterSpacing: "0.04em",
-                          color: HEAD,
-                        }}
-                      >
-                        {item.title}
-                      </h3>
-                      <p
-                        style={{
-                          margin: "8px 0 0",
-                          fontFamily: BODY,
-                          fontSize: 13.5,
-                          lineHeight: 1.95,
-                          color: INK_SOFT,
-                        }}
-                      >
-                        {item.body}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Section>
+          {/* ─ ⑧ STUDIO IVYなら（非表示）─────────────────────
+              顧客判断で削除（2026-09-30 AUN #3）。config の `points` は
+              データごと残してあるので、戻すときはここに書き戻す。 */}
 
           {/* ─ ⑨ 目指せる未来 ───────────────────────────────
-              写真を先に全幅で出し、見出しを後ろに置く。ここだけ順序が逆。 */}
-          <Section flush style={{ paddingTop: 0 }}>
-            <FullBleed img={c.future.img} ratio="3 / 2" />
-            <div style={{ padding: `34px ${PAD}px 0` }}>
-              <Kicker text={c.future.kicker} align="left" />
-              <Head text={c.future.heading} align="left" size={23} />
-              <ol
-                style={{
-                  listStyle: "none",
-                  margin: "26px 0 0",
-                  padding: 0,
-                  borderTop: `1px solid ${RULE}`,
-                }}
-              >
-                {c.future.items.map((item, i) => (
-                  <li
-                    key={item}
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: 14,
-                      padding: "16px 2px",
-                      borderBottom: `1px solid ${RULE}`,
-                    }}
-                  >
-                    <span
-                      style={{
-                        flex: "none",
-                        fontFamily: GOTHIC,
-                        fontSize: 11.5,
-                        fontWeight: 800,
-                        letterSpacing: "0.08em",
-                        color: BRAND,
-                      }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: MINCHO,
-                        fontWeight: 600,
-                        fontSize: 17,
-                        letterSpacing: "0.04em",
-                        color: HEAD,
-                      }}
-                    >
-                      {item}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-              <p
-                style={{
-                  margin: "18px 0 0",
-                  fontFamily: BODY,
-                  fontSize: 11.5,
-                  lineHeight: 1.85,
-                  color: INK_MUTE,
-                }}
-              >
-                {c.future.note}
-              </p>
-            </div>
+              顧客支給の画像に置き換え（2026-09-30 AUN #4）。
+              指示どおり本文の説明文は画像側から削り、見出しと
+              アイコンのラベルだけ残してある。config の `future` は
+              データごと残してあるが、描画には使っていない。 */}
+          <Section flush style={{ padding: "0" }}>
+            <FullBleed img={c.future.img} ratio="758 / 2073" alt={c.future.imgAlt} />
           </Section>
 
           {/* ─ ⑩ 選ばれる理由（CTA 3/5）─────────────────────
-              **4項目とも別レイアウト。** 写真大 → 文章先行＋縦写真 →
-              タイポグラフィのみ → 導線図、の順で見え方を変える。 */}
-          <Section flush>
+              本文は顧客判断で全削除（2026-09-30 AUN #18）。
+              **CTAだけは残す。** ここを丸ごと消すと、ページ前半の導線が
+              体験バナー画像の中のボタン1つだけになってしまう。
+              config の `reasons` はデータごと残してある。 */}
+          <Section flush style={{ padding: "40px 0 44px" }}>
             <div style={{ padding: `0 ${PAD}px` }}>
-              <Kicker text={r.kicker} />
-              <Head text={r.heading} size={23} />
-            </div>
-
-            {/* 01 完全個室 — 内観写真を全幅で大きく。 */}
-            <FullBleed img={r.privateRoom.img} ratio="4 / 3" style={{ marginTop: 32 }} />
-            <div style={{ padding: `22px ${PAD}px 0` }}>
-              <ReasonLabel num={r.privateRoom.num} />
-              <h3 style={reasonTitleStyle}>{nl(r.privateRoom.title)}</h3>
-              <p style={reasonBodyStyle}>{r.privateRoom.body}</p>
-            </div>
-
-            {/* 02 マンツーマン — 先に文章、後ろに縦位置の写真。01と順序を逆にする。 */}
-            <div style={{ padding: `44px ${PAD}px 0` }}>
-              <ReasonLabel num={r.oneOnOne.num} />
-              <h3 style={reasonTitleStyle}>{nl(r.oneOnOne.title)}</h3>
-              <p style={reasonBodyStyle}>{r.oneOnOne.body}</p>
-            </div>
-            <FullBleed img={r.oneOnOne.img} ratio="4 / 5" style={{ marginTop: 22 }} />
-
-            {/* 03 1回7,000円〜 — 写真を置かず、数字を主役にする。 */}
-            <div style={{ padding: `44px ${PAD}px 0` }}>
-              <ReasonLabel num={r.price.num} />
-              <h3 style={reasonTitleStyle}>{nl(r.price.title)}</h3>
-              <p style={reasonBodyStyle}>{r.price.body}</p>
-              <div
-                style={{
-                  marginTop: 22,
-                  padding: "24px 0 22px",
-                  borderTop: `1px solid ${RULE}`,
-                  borderBottom: `1px solid ${RULE}`,
-                  textAlign: "center",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    justifyContent: "center",
-                    gap: 3,
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: GOTHIC,
-                      fontSize: 52,
-                      fontWeight: 800,
-                      lineHeight: 1,
-                      letterSpacing: "-0.025em",
-                      color: HEAD,
-                    }}
-                  >
-                    {r.price.value}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: GOTHIC,
-                      fontSize: 21,
-                      fontWeight: 800,
-                      color: HEAD,
-                    }}
-                  >
-                    {r.price.unit}
-                  </span>
-                </div>
-                <p
-                  style={{
-                    margin: "10px 0 0",
-                    fontFamily: BODY,
-                    fontSize: 11.5,
-                    color: INK_SOFT,
-                  }}
-                >
-                  {r.price.caption}
-                </p>
-              </div>
-            </div>
-
-            {/* 04 徒歩5分 — 写真ではなく、駅からの導線を細い縦線で見せる。 */}
-            <div style={{ padding: `44px ${PAD}px 0` }}>
-              <ReasonLabel num={r.access.num} />
-              <h3 style={reasonTitleStyle}>{nl(r.access.title)}</h3>
-              <p style={reasonBodyStyle}>{r.access.body}</p>
-              <div style={{ marginTop: 22, paddingLeft: 4 }}>
-                {r.access.route.map((step, i) => {
-                  const last = i === r.access.route.length - 1;
-                  const middle = i === 1;
-                  return (
-                    <div key={step.label} style={{ display: "flex", gap: 14 }}>
-                      {/* 縦の導線と丸印。中間（徒歩5分）は小さい丸にする。 */}
-                      <div
-                        style={{
-                          flex: "none",
-                          width: 9,
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span
-                          style={{
-                            width: middle ? 5 : 9,
-                            height: middle ? 5 : 9,
-                            marginTop: middle ? 9 : 7,
-                            borderRadius: "50%",
-                            background: middle ? BRAND : ACCENT,
-                          }}
-                        />
-                        {!last && (
-                          <span style={{ flex: 1, width: 1, background: RULE }} />
-                        )}
-                      </div>
-                      <div style={{ paddingBottom: last ? 0 : 18 }}>
-                        <p
-                          style={{
-                            margin: 0,
-                            fontFamily: GOTHIC,
-                            fontSize: middle ? 13 : 15.5,
-                            fontWeight: middle ? 700 : 800,
-                            letterSpacing: "0.04em",
-                            color: middle ? ACCENT : HEAD,
-                          }}
-                        >
-                          {step.label}
-                        </p>
-                        {step.sub && (
-                          <p
-                            style={{
-                              margin: "3px 0 0",
-                              fontFamily: BODY,
-                              fontSize: 11.5,
-                              color: INK_MUTE,
-                            }}
-                          >
-                            {step.sub}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div style={{ padding: `0 ${PAD}px` }}>
-              <Cta marginTop={38} />
+              <Cta marginTop={0} />
             </div>
           </Section>
 
           {/* ─ ⑪ 料金プラン ─────────────────────────────────
-              表にしない。月4回だけタイポグラフィで大きく、他2つは細い行で添える。 */}
-          <Section background={PALE}>
-            <Kicker text={c.price.kicker} />
-            <Head text={c.price.heading} size={23} />
-            <p
-              style={{
-                margin: "20px 0 0",
-                textAlign: "center",
-                fontFamily: BODY,
-                fontSize: 13.5,
-                lineHeight: 2,
-                color: INK_SOFT,
-              }}
-            >
-              {c.price.lead}
-            </p>
-
-            {/* 主役。月4回プラン。 */}
-            <div
-              style={{
-                marginTop: 28,
-                padding: "26px 20px 24px",
-                background: BASE,
-                border: `1px solid ${RULE}`,
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-                <span
-                  style={{
-                    fontFamily: GOTHIC,
-                    fontSize: 12,
-                    fontWeight: 800,
-                    letterSpacing: "0.18em",
-                    color: ACCENT,
-                  }}
-                >
-                  {c.price.main.name}
-                </span>
-                <span
-                  style={{
-                    fontFamily: GOTHIC,
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: HEAD,
-                  }}
-                >
-                  {c.price.main.freq}
-                </span>
-              </div>
-
-              <div
-                style={{
-                  marginTop: 12,
-                  display: "flex",
-                  alignItems: "baseline",
-                  gap: 3,
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: GOTHIC,
-                    fontSize: 34,
-                    fontWeight: 800,
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                    color: HEAD,
-                  }}
-                >
-                  {c.price.main.monthly}
-                </span>
-                <span
-                  style={{ fontFamily: GOTHIC, fontSize: 16, fontWeight: 800, color: HEAD }}
-                >
-                  円
-                </span>
-                <span
-                  style={{
-                    marginLeft: 5,
-                    fontFamily: BODY,
-                    fontSize: 11.5,
-                    color: INK_MUTE,
-                  }}
-                >
-                  / 月（税込）
-                </span>
-              </div>
-
-              {/* 1回あたりを主訴求にする（指示書 §9）。 */}
-              <div
-                style={{
-                  marginTop: 16,
-                  paddingTop: 16,
-                  borderTop: `1px solid ${RULE}`,
-                  display: "flex",
-                  alignItems: "baseline",
-                  gap: 9,
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: GOTHIC,
-                    fontSize: 12,
-                    fontWeight: 700,
-                    letterSpacing: "0.06em",
-                    color: INK_SOFT,
-                  }}
-                >
-                  1回あたり
-                </span>
-                <span
-                  style={{
-                    fontFamily: GOTHIC,
-                    fontSize: 40,
-                    fontWeight: 800,
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                    color: HEAD,
-                  }}
-                >
-                  {c.price.main.per}
-                </span>
-                <span
-                  style={{ fontFamily: GOTHIC, fontSize: 17, fontWeight: 800, color: HEAD }}
-                >
-                  円
-                </span>
-              </div>
-
-              <p
-                style={{
-                  margin: "14px 0 0",
-                  fontFamily: BODY,
-                  fontSize: 12.5,
-                  lineHeight: 1.8,
-                  color: INK_SOFT,
-                }}
-              >
-                {c.price.main.note}
-              </p>
-            </div>
-
-            {/* 脇の2プラン。箱にせず、細い行で比較できるようにする。 */}
-            <div style={{ marginTop: 22, borderTop: `1px solid ${RULE}` }}>
-              {c.price.others.map((p) => (
-                <div
-                  key={p.name}
-                  style={{
-                    padding: "16px 2px",
-                    borderBottom: `1px solid ${RULE}`,
-                    display: "flex",
-                    alignItems: "baseline",
-                    gap: 10,
-                  }}
-                >
-                  <div style={{ flex: "none", width: 96 }}>
-                    <p
-                      style={{
-                        margin: 0,
-                        fontFamily: GOTHIC,
-                        fontSize: 10.5,
-                        fontWeight: 800,
-                        letterSpacing: "0.16em",
-                        color: INK_MUTE,
-                      }}
-                    >
-                      {p.name}
-                    </p>
-                    <p
-                      style={{
-                        margin: "3px 0 0",
-                        fontFamily: GOTHIC,
-                        fontSize: 14,
-                        fontWeight: 700,
-                        color: HEAD,
-                      }}
-                    >
-                      {p.freq}
-                    </p>
-                  </div>
-                  <div style={{ flex: 1, textAlign: "right" }}>
-                    <p
-                      style={{
-                        margin: 0,
-                        fontFamily: GOTHIC,
-                        fontSize: 18,
-                        fontWeight: 800,
-                        letterSpacing: "-0.01em",
-                        color: HEAD,
-                      }}
-                    >
-                      {p.monthly}
-                      <span style={{ fontSize: 12 }}>円 / 月</span>
-                    </p>
-                    <p
-                      style={{
-                        margin: "3px 0 0",
-                        fontFamily: GOTHIC,
-                        fontSize: 12.5,
-                        fontWeight: 700,
-                        color: ACCENT,
-                      }}
-                    >
-                      1回あたり {p.per}円
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <p
-              style={{
-                margin: "14px 0 0",
-                fontFamily: BODY,
-                fontSize: 11.5,
-                color: INK_MUTE,
-              }}
-            >
-              {c.price.note}
-            </p>
+              顧客支給の画像に置き換え（2026-09-30 AUN #20）。
+              **金額は画像に焼き込まれている**（月4回28,000円／月2回15,000円／
+              月8回52,000円）。値上げやプラン変更のときは config を直すだけでは
+              表示が変わらない。必ず画像を作り直すこと。 */}
+          <Section flush background={PALE} style={{ padding: "0" }}>
+            <FullBleed img={c.price.img} ratio="1024 / 1536" alt={c.price.imgAlt} />
           </Section>
 
-          {/* ─ ⑫ グループレッスンとの違い ───────────────────
-              濃色の面を作らず、ラベルと細い縦罫だけで差を見せる。 */}
-          <Section>
-            <Kicker text={c.compare.kicker} />
-            <Head text={c.compare.heading} size={22} />
-
-            <div style={{ marginTop: 30 }}>
-              <div style={{ paddingBottom: 22, borderBottom: `1px solid ${RULE}` }}>
-                <p
-                  style={{
-                    margin: 0,
-                    fontFamily: GOTHIC,
-                    fontSize: 13,
-                    fontWeight: 700,
-                    letterSpacing: "0.08em",
-                    color: INK_MUTE,
-                  }}
-                >
-                  {c.compare.group.label}
-                </p>
-                <p
-                  style={{
-                    margin: "9px 0 0",
-                    fontFamily: BODY,
-                    fontSize: 13.5,
-                    lineHeight: 2,
-                    color: INK_SOFT,
-                  }}
-                >
-                  {c.compare.group.body}
-                </p>
-              </div>
-
-              <div
-                style={{
-                  marginTop: 22,
-                  paddingLeft: 15,
-                  borderLeft: `2px solid ${ACCENT}`,
-                }}
-              >
-                <p
-                  style={{
-                    margin: 0,
-                    fontFamily: GOTHIC,
-                    fontSize: 14,
-                    fontWeight: 800,
-                    letterSpacing: "0.1em",
-                    color: ACCENT,
-                  }}
-                >
-                  {c.compare.ivy.label}
-                </p>
-                <p
-                  style={{
-                    margin: "9px 0 0",
-                    fontFamily: BODY,
-                    fontSize: 13.5,
-                    lineHeight: 2,
-                    color: INK,
-                  }}
-                >
-                  {c.compare.ivy.body}
-                </p>
-              </div>
-            </div>
-
-            <p
-              style={{
-                margin: "32px 0 0",
-                textAlign: "center",
-                fontFamily: MINCHO,
-                fontWeight: 600,
-                fontSize: 18.5,
-                lineHeight: 1.85,
-                letterSpacing: "0.03em",
-                color: HEAD,
-              }}
-            >
-              {nl(c.compare.closing)}
-            </p>
-          </Section>
+          {/* ─ ⑫ グループレッスンとの違い（非表示）─────────────
+              顧客判断で削除（2026-09-30 AUN #19）。config の `compare` は
+              データごと残してあるので、戻すときはここに書き戻す。 */}
 
           {/* ─ ⑬ 体験レッスンの流れ（CTA 4/5）───────────────
-              細い縦線のタイムライン。写真は顧客判断で削除した（2026-09-29）。 */}
+              顧客支給の画像に置き換え（2026-09-30 AUN #21）。STEP 01〜05 の
+              内容は画像に焼き込まれているので、`config.flow.steps` は
+              データごと残してあるだけで描画には使っていない。
+              **CTAは画像の外に残す**（ここがページ後半で唯一の導線）。 */}
           <Section flush background={PALE}>
+            <FullBleed img={c.flow.img} ratio="1024 / 1536" alt={c.flow.imgAlt} />
             <div style={{ padding: `0 ${PAD}px` }}>
-              <Kicker text={c.flow.kicker} />
-              <Head text={c.flow.heading} size={23} />
-            </div>
-
-            {/* 写真を挟まず1本のタイムラインで通す。最後のステップだけ
-                `last` を立てて、縦線をそこで止める。 */}
-            <div style={{ padding: `30px ${PAD}px 0` }}>
-              {c.flow.steps.map((s, i, arr) => (
-                <FlowStep key={s.num} step={s} last={i === arr.length - 1} index={i} />
-              ))}
               <Cta marginTop={34} />
             </div>
           </Section>
