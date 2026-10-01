@@ -595,7 +595,7 @@ export default function Page() {
               （2026-09-30 AUN #3）。⑦お悩みと同じく、画像を全幅で出すだけ。
               比率は原寸（946x1663）と一致させてあるので切り取られない。 */}
           <Section flush style={{ padding: "0 0 0" }}>
-            <FullBleed img={c.intro.img} ratio="946 / 1372" alt={c.intro.imgAlt} />
+            <FullBleed img={c.intro.img} ratio="946 / 1581" alt={c.intro.imgAlt} />
           </Section>
 
           {/* ─ ⑥ 体験キャンペーン（非表示）─────────────────
