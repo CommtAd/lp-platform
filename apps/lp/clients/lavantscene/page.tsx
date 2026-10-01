@@ -61,14 +61,14 @@ function sectionDecor(decor?: SectionDecor[]): ReactNode {
  * 数字が見つからない文字列はそのまま返す。
  */
 function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
-  const m = text.match(/^(.*?)([0-9０-９][0-9０-９,，.．]*)(.*)$/);
+  const m = text.match(/^(.*?)([0-9０-９][0-9０-９,，.．]*)([\s\S]*)$/);
   if (!m) return text;
   const [, head, num, tail] = m;
   return (
     <>
       {head && <span style={{ fontSize: sideSize }}>{head}</span>}
       <span style={{ fontSize: numSize }}>{num}</span>
-      {tail && <span style={{ fontSize: sideSize }}>{tail}</span>}
+      {tail && <span style={{ fontSize: sideSize, whiteSpace: "pre-line" }}>{tail}</span>}
     </>
   );
 }
@@ -511,7 +511,7 @@ export default function Page() {
     <>
       <span className="mt-2.5 block h-px" style={{ background: `${c.accent}66` }} />
       <p
-        className="mt-2.5 font-bold tracking-[0.06em]"
+        className="mt-2.5 whitespace-pre-line font-bold tracking-[0.06em]"
         style={{ fontFamily: mincho, color: goldOnWhite, fontSize: fvHighlightSize }}
       >
         {c.fv.highlight}
@@ -519,7 +519,7 @@ export default function Page() {
     </>
   ) : (
     <p
-      className="mt-4 inline-block rounded-[2px] border px-6 py-2.5 font-bold tracking-[0.14em] backdrop-blur-[3px]"
+      className="mt-4 inline-block whitespace-pre-line rounded-[2px] border px-6 py-2.5 font-bold tracking-[0.14em] backdrop-blur-[3px]"
       style={{
         fontFamily: mincho,
         fontSize: fvHighlightSize,
