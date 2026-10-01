@@ -61,14 +61,14 @@ function sectionDecor(decor?: SectionDecor[]): ReactNode {
  * 数字が見つからない文字列はそのまま返す。
  */
 function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
-  const m = text.match(/^(.*?)([0-9０-９][0-9０-９,，.．]*)(.*)$/);
+  const m = text.match(/^(.*?)([0-9０-９][0-9０-９,，.．]*)([\s\S]*)$/);
   if (!m) return text;
   const [, head, num, tail] = m;
   return (
     <>
       {head && <span style={{ fontSize: sideSize }}>{head}</span>}
       <span style={{ fontSize: numSize }}>{num}</span>
-      {tail && <span style={{ fontSize: sideSize }}>{tail}</span>}
+      {tail && <span style={{ fontSize: sideSize, whiteSpace: "pre-line" }}>{tail}</span>}
     </>
   );
 }
@@ -507,19 +507,38 @@ export default function Page() {
    * 文言を詰めたときに一段落としたい、といった微調整のために config から上書きできる。
    */
   const fvHighlightSize = c.fv.highlightSize ?? (framed ? 22 : 17);
+  /**
+   * `highlightAmount` があれば1行目を金額として組む（数字を特大にし、行全体も一段大きく）。
+   * 2行目以降は `fvHighlightSize` のまま。金額の桁を最初に目に入れるのが目的。
+   */
+  const fvHighlightText = (() => {
+    const text = c.fv.highlight ?? "";
+    if (!c.fv.highlightAmount) return text;
+    const [first, ...rest] = text.split("\n");
+    return (
+      <>
+        <span className="block leading-none">
+          {amountEmphasis(first, c.fv.highlightAmount.numSize, c.fv.highlightAmount.sideSize)}
+        </span>
+        {rest.length > 0 && (
+          <span className="mt-1.5 block leading-[1.3]">{rest.join("\n")}</span>
+        )}
+      </>
+    );
+  })();
   const fvHighlight = !c.fv.highlight ? null : framed ? (
     <>
       <span className="mt-2.5 block h-px" style={{ background: `${c.accent}66` }} />
       <p
-        className="mt-2.5 font-bold tracking-[0.06em]"
+        className="mt-2.5 whitespace-pre-line font-bold tracking-[0.06em]"
         style={{ fontFamily: mincho, color: goldOnWhite, fontSize: fvHighlightSize }}
       >
-        {c.fv.highlight}
+        {fvHighlightText}
       </p>
     </>
   ) : (
     <p
-      className="mt-4 inline-block rounded-[2px] border px-6 py-2.5 font-bold tracking-[0.14em] backdrop-blur-[3px]"
+      className="mt-4 inline-block whitespace-pre-line rounded-[2px] border px-6 py-2.5 font-bold tracking-[0.14em] backdrop-blur-[3px]"
       style={{
         fontFamily: mincho,
         fontSize: fvHighlightSize,
@@ -529,7 +548,7 @@ export default function Page() {
         textShadow: "none",
       }}
     >
-      {c.fv.highlight}
+      {fvHighlightText}
     </p>
   );
 

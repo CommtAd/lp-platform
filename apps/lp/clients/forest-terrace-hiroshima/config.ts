@@ -14,7 +14,7 @@ const config: PatternCConfig = {
   meta: {
     title: "ザ・フォレストテラス広島｜グランドオープン記念BIGフェア",
     description:
-      "広島市中区のホテルウェディング「ザ・フォレストテラス広島」。グランドオープンを記念したBIGフェアを開催中。ご成約で最大180万円相当の優待、ご来館で最大10万円分の特典をご用意。チャペル見学・披露宴会場見学・豪華無料試食・お見積り相談を最短30秒でご予約いただけます。",
+      "広島市中区のホテルウェディング「ザ・フォレストテラス広島」。グランドオープンを記念したBIGフェアを開催中。ご成約で最大180万円相当の特典をプレゼント、ご来館で最大10万円分の特典をご用意。チャペル見学・披露宴会場見学・豪華無料試食・お見積り相談を最短30秒でご予約いただけます。",
     // OGP専用の1枚（1200x630）。FVの hero.jpg を共用すると、FVを差し替えても
     // URLが変わらずSNS側のキャッシュが古い画像を出し続ける（実際に発生）。
     // 差し替えるときは必ずファイル名も変えること。
@@ -52,8 +52,14 @@ const config: PatternCConfig = {
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
+      // 金額を大きくしたぶん、飾りの中央の空きで吸収してカードの高さを据え置く。
+      gap: -5,
+      gapBottom: -5,
     },
-    highlight: "最大180万円相当 優待",
+    highlight: "最大180万円相当の\n特典をプレゼント",
+    // 1行目の金額を主役に。360px幅でもプレート内1行に収まる上限のサイズ。
+    highlightAmount: { numSize: 48, sideSize: 28 },
+    highlightSize: 26,
     // リードとオファーチップは顧客要望で非表示。FVは訴求を highlight 1点に絞る。
     ctaText: "最短30秒で予約する",
     // 新郎新婦が写真中央にいるため、キャッチを上に逃がして顔にかぶらないようにする。
@@ -127,7 +133,7 @@ const config: PatternCConfig = {
     lead: "＼グランドオープンを記念したスペシャルなフェアを開催！／",
     badge: "2027年5月までの挙式披露宴が対象",
     title: "豪華10大特典",
-    amount: "最大180万円相当",
+    amount: "最大180万円相当の\n特典をプレゼント",
     frame: `${ASSET}/grand-offer-frame.png`,
     feature: {
       title: "エグゼクティブルームを\n1泊2日でプレゼント",
@@ -213,7 +219,7 @@ const config: PatternCConfig = {
     ],
     frame: `${ASSET}/privilege-frame.png`,
     disclaimer: "※特典のお渡しには適用条件がございます",
-    contract: { label: "さらに、ご成約で", amount: "最大180万円優待" },
+    contract: { label: "さらに、ご成約で", amount: "最大180万円相当の\n特典をプレゼント" },
   },
 
   // 会場名・キャッチ・収容人数は公式サイト（forestterrace-hs.jp/banquet/）に準拠。
@@ -363,7 +369,7 @@ const config: PatternCConfig = {
   },
 
   sticky: {
-    offerText: "最大180万円相当優待",
+    offerText: "最大180万円相当プレゼント",
     buttonText: "最短30秒で予約",
     anchor: "#form",
   },
