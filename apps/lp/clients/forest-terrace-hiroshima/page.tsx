@@ -485,10 +485,12 @@ export default function Page() {
     const [first, ...rest] = text.split("\n");
     return (
       <>
-        <span className="block leading-[1.25]">
+        <span className="block leading-none">
           {amountEmphasis(first, c.fv.highlightAmount.numSize, c.fv.highlightAmount.sideSize)}
         </span>
-        {rest.join("\n")}
+        {rest.length > 0 && (
+          <span className="mt-1.5 block leading-[1.3]">{rest.join("\n")}</span>
+        )}
       </>
     );
   })();
@@ -534,10 +536,14 @@ export default function Page() {
         <img
           src={c.fv.ornament.top}
           alt=""
-          className="mx-auto mb-1.5 block"
+          className="mx-auto block"
           style={{
             width: c.fv.ornament.width ?? "100%",
             height: c.fv.ornament.height ?? 44,
+            // 飾りは両端が渦・中央が細い罫線なので、中央下は絵として空く。
+            // 負の値で本文を引き上げると、その空きぶんだけ詰められる（両端の渦とは
+            // 中央寄せの文字が重ならない）。
+            marginBottom: c.fv.ornament.gap ?? 6,
           }}
         />
       )}
@@ -549,10 +555,12 @@ export default function Page() {
         <img
           src={c.fv.ornament.bottom}
           alt=""
-          className="mx-auto mt-1.5 block"
+          className="mx-auto block"
           style={{
             width: c.fv.ornament.width ?? "100%",
             height: c.fv.ornament.height ?? 44,
+            // 上の飾りと同じ理屈で、中央上は絵として空く。負の値で詰められる。
+            marginTop: c.fv.ornament.gapBottom ?? 6,
           }}
         />
       )}

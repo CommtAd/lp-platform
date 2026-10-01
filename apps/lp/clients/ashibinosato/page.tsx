@@ -517,10 +517,12 @@ export default function Page() {
     const [first, ...rest] = text.split("\n");
     return (
       <>
-        <span className="block leading-[1.25]">
+        <span className="block leading-none">
           {amountEmphasis(first, c.fv.highlightAmount.numSize, c.fv.highlightAmount.sideSize)}
         </span>
-        {rest.join("\n")}
+        {rest.length > 0 && (
+          <span className="mt-1.5 block leading-[1.3]">{rest.join("\n")}</span>
+        )}
       </>
     );
   })();
