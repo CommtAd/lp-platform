@@ -563,24 +563,18 @@ export default function Page() {
               戻すときはここに元のブロックを書き戻す。 */}
           <FullBleed
             img={c.topImage.img}
-            ratio="984 / 1392"
+            ratio="1085 / 1450"
             alt={c.topImage.imgAlt}
           />
 
           {/* ─ ④-b 体験レッスン ──────────────────────────
-              顧客支給の画像に置き換え（2026-09-30 AUN #2）。
-              **画像の中に「無料体験を予約する」ボタンが描かれている**ので、
-              画像全体をリンクにしてタップできるようにしている。
-              そうしないと押せない絵になる。 */}
-          <a
-            href={c.cta.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={c.cta.label}
-            style={{ display: "block" }}
-          >
-            <FullBleed img={c.trial.img} ratio="984 / 1599" alt={c.trial.imgAlt} />
-          </a>
+              顧客支給の画像に置き換え（2026-09-30 AUN #2、2026-10-01 差し替え）。
+              差し替え後の画像には予約ボタンが描かれていないため、
+              画像はリンクにせず、下に実体の <Cta> を置く。 */}
+          <FullBleed img={c.trial.img} ratio="1061 / 1483" alt={c.trial.imgAlt} />
+          <div style={{ background: "#EEF5F9", padding: "4px 24px 28px" }}>
+            <Cta marginTop={0} />
+          </div>
 
           {/* ─ ④-c アクセス図 ──────────────────────────────
               顧客支給（2026-09-30 AUN #4）。**下部にあった住所・営業時間の帯は
@@ -595,7 +589,7 @@ export default function Page() {
               （2026-09-30 AUN #3）。⑦お悩みと同じく、画像を全幅で出すだけ。
               比率は原寸（946x1663）と一致させてあるので切り取られない。 */}
           <Section flush style={{ padding: "0 0 0" }}>
-            <FullBleed img={c.intro.img} ratio="946 / 1372" alt={c.intro.imgAlt} />
+            <FullBleed img={c.intro.img} ratio="946 / 1581" alt={c.intro.imgAlt} />
           </Section>
 
           {/* ─ ⑥ 体験キャンペーン（非表示）─────────────────
