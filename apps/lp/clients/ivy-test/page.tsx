@@ -563,7 +563,7 @@ export default function Page() {
               戻すときはここに元のブロックを書き戻す。 */}
           <FullBleed
             img={c.topImage.img}
-            ratio="1085 / 1450"
+            ratio="1027 / 1450"
             alt={c.topImage.imgAlt}
           />
 
@@ -602,11 +602,11 @@ export default function Page() {
               そのためキッカー・見出し・リストは置かず、画像を全幅で出して
               締めの一文だけをLP側で持つ。画像の比率は原寸（1092x1440）と
               一致させてあるので、`cover` でも切り取られない。 */}
-          <Section background={PALE} flush style={{ padding: "0 0 62px" }}>
+          <Section background={PALE} flush style={{ padding: "0 0 48px" }}>
             <FullBleed img={c.worry.img} ratio="1092 / 1440" alt={c.worry.imgAlt} />
             <p
               style={{
-                margin: "34px 0 0",
+                margin: "46px 0 0",
                 padding: `0 ${PAD}px`,
                 textAlign: "center",
                 fontFamily: MINCHO,
@@ -631,7 +631,7 @@ export default function Page() {
               アイコンのラベルだけ残してある。config の `future` は
               データごと残してあるが、描画には使っていない。 */}
           <Section flush style={{ padding: "0" }}>
-            <FullBleed img={c.future.img} ratio="758 / 2073" alt={c.future.imgAlt} />
+            <FullBleed img={c.future.img} ratio="758 / 2003" alt={c.future.imgAlt} />
           </Section>
 
           {/* ─ ⑩ 選ばれる理由（CTA 3/5）─────────────────────
@@ -651,7 +651,7 @@ export default function Page() {
               月8回52,000円）。値上げやプラン変更のときは config を直すだけでは
               表示が変わらない。必ず画像を作り直すこと。 */}
           <Section flush background={PALE} style={{ padding: "0" }}>
-            <FullBleed img={c.price.img} ratio="1024 / 1536" alt={c.price.imgAlt} />
+            <FullBleed img={c.price.img} ratio="1024 / 1516" alt={c.price.imgAlt} />
           </Section>
 
           {/* ─ ⑫ グループレッスンとの違い（非表示）─────────────
