@@ -326,13 +326,15 @@ export default function LPForm({
       (f) => f.type !== "note" && f.required && !(values[f.name] ?? "").trim(),
     );
     // Defense in depth: browsers that fall back to a plain text input for
-    // type="date" would otherwise let someone type today's date manually,
-    // bypassing the native picker's min attribute.
+    // type="date" would otherwise let someone type a date manually,
+    // bypassing the native picker's min/max attributes.
     const invalidDate = fields.some((f) => {
       if (f.type !== "date") return false;
       const v = values[f.name];
       if (!v) return false;
-      return v < (f.min ?? tomorrowISODate());
+      if (v < (f.min ?? tomorrowISODate())) return true;
+      if (f.max && v > f.max) return true;
+      return false;
     });
     if (missing || invalidDate) {
       setError(true);
