@@ -363,7 +363,7 @@ const config: PatternCConfig = {
   },
 
   sticky: {
-    offerText: "最大180万円相当の特典をプレゼント",
+    offerText: "最大180万円相当プレゼント",
     buttonText: "最短30秒で予約",
     anchor: "#form",
   },
