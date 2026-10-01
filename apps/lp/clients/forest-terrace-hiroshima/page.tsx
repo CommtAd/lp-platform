@@ -604,6 +604,16 @@ export default function Page() {
             </a>
           </header>
 
+          {/* ヘッダー直下の帯。FVのカードから外したタグラインを置く（topBand 未設定なら出ない）。 */}
+          {c.fv.topBand && (
+            <p
+              className="px-4 py-2 text-center text-[13px] tracking-[0.12em]"
+              style={{ background: c.ink, color: c.paper, fontFamily: mincho }}
+            >
+              {c.fv.topBand}
+            </p>
+          )}
+
           {/* ── FV ── */}
           <section className="relative">
             {heroSlides.length === 1 ? (
