@@ -251,6 +251,14 @@ export interface IvyBConfig {
 
   faq: { kicker: string; heading: string; items: { q: string; a: string }[] };
 
+  /**
+   * ⑰クロージングを置き換える画像（顧客支給、2026-10-01）。
+   * 見出し・チップ・0円・ご入会特典がすべて画像に入っている。
+   * そのため下の `closing` / `BonusBlock` のデータは残っているが**表示には使われていない**。
+   * 画像にはCTAボタンが無いので、page.tsx 側で実体の <Cta> を下に置く。
+   */
+  closingImage: { img: Slot; imgAlt: string };
+
   closing: {
     kicker: string;
     heading: string;
@@ -723,6 +731,14 @@ const config: IvyBConfig = {
         a: "お着替えの時間がありますので、開始5分前を目安にご来店ください。到着が早すぎる場合は、前のお客様のレッスン中でスタジオに入れないことがあります。",
       },
     ],
+  },
+
+  closingImage: {
+    img: { placeholder: "完全個室のパーソナルピラティスを、もっと気軽に。", src: `${ASSET}/closing.jpg` },
+    imgAlt:
+      "完全個室のパーソナルピラティスを、もっと気軽に。周りを気にせず、あなたの身体に合わせたレッスンを。" +
+      "藤沢駅徒歩5分／完全個室／マンツーマン／1回7,000円〜。初回体験レッスン、通常4,500円のところ完全無料0円。" +
+      "ご入会特典：ピラティスソックスプレゼント（藤沢店限定）、入会金無料。体験後にご入会された方が対象です。",
   },
 
   closing: {

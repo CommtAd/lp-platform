@@ -888,51 +888,15 @@ export default function Page() {
           </Section>
 
           {/* ─ ⑰ クロージング（CTA 5/5）─────────────────────
-              濃色で塗らず、淡いグラデーションでFVに呼応する静かな締めにする。 */}
-          <Section
-            style={{
-              background: `linear-gradient(180deg, ${BASE} 0%, ${PALE} 34%, #E9F2F7 100%)`,
-              paddingTop: 58,
-              paddingBottom: 60,
-            }}
-          >
-            <Kicker text={c.closing.kicker} />
-            <Head text={c.closing.heading} size={25} />
-            <p
-              style={{
-                margin: "22px 0 0",
-                textAlign: "center",
-                fontFamily: BODY,
-                fontSize: 13.5,
-                lineHeight: 2.15,
-                color: INK_SOFT,
-              }}
-            >
-              {nl(c.closing.body)}
-            </p>
-            <div
-              style={{
-                margin: "26px 0 0",
-                display: "grid",
-                gridTemplateColumns: "repeat(2, max-content)",
-                justifyContent: "center",
-                gap: "13px 26px",
-              }}
-            >
-              {c.closing.chips.map((t) => (
-                <DotItem key={t} text={t} color={ACCENT} />
-              ))}
+              顧客支給の画像に置き換え（2026-10-01）。見出し・チップ・0円・
+              ご入会特典は画像に入っている（config の `closing` はデータだけ残置）。
+              画像にボタンは無いので、下に実体の <Cta> を置く。 */}
+          <div style={{ background: "#FFFFFF", paddingBottom: 48 }}>
+            <FullBleed img={c.closingImage.img} ratio="1024 / 1536" alt={c.closingImage.imgAlt} />
+            <div style={{ padding: "0 24px" }}>
+              <Cta marginTop={8} />
             </div>
-            <OfferType
-              label={c.closing.label}
-              was={c.closing.was}
-              nowLabel={c.closing.nowLabel}
-              now={c.closing.now}
-              nowUnit={c.closing.nowUnit}
-            />
-            <BonusBlock />
-            <Cta />
-          </Section>
+          </div>
 
           {/* ─ 予約フォーム（非表示）─────────────────────────
               ページ内フォームをやめ、CTAはすべて外部の予約システム
