@@ -37,7 +37,7 @@ const ASSET = "/clients/pilates-rinne-ebina";
  * ■ 未確定（ブリーフ §18 優先確認事項）— すべて `null` / 〇〇 / 00 表記
  * もっともらしい仮の値は入れていない。実データと区別できなくなり、
  * そのまま公開される事故につながるため。
- *   1. reserve.stores[].url — hacomono海老名店予約URL（★これが無いとCTAが機能しない）
+ *   1. （確定済み）reserve.stores[].url — hacomono海老名店予約URL（studioId=3）
  *   2. stores[].tel — 海老名店の電話番号（住所・営業時間・定休日・アクセスは確定済み）
  *   3. plans — 金額は辻堂店と同一の全店共通料金として転記（2026-09-18 指示）。
  *      海老名店固有の料金表が出てきた場合は要差し替え。入会金・事務手数料・
@@ -655,8 +655,13 @@ const config: RinneConfig = {
 
   reserve: {
     // 辻堂店に合わせて eyebrow は出さない（ボタンだけを置く）。
-    // ★TBD(§18): hacomono 海老名店の予約URL。null の間は非リンク描画になる。
-    stores: [{ label: "無料体験を予約する", url: null }],
+    // hacomono 海老名店（studioId=3）。辻堂店は studioId=4。
+    stores: [
+      {
+        label: "無料体験を予約する",
+        url: "https://rinne-pilates.hacomono.jp/widgets/4?isShowProgramName=true&studioId=3",
+      },
+    ],
     note: "空き状況の確認のみでもご利用いただけます。",
   },
 
