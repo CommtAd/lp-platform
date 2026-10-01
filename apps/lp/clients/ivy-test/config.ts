@@ -311,9 +311,9 @@ const config: IvyBConfig = {
       src: `${ASSET}/hero-top.jpg`,
     },
     imgAlt:
-      "このサイト限定 無料体験レッスン実施中。STUDIO IVY PILATES。" +
+      "藤沢店限定 無料体験レッスン実施中。STUDIO IVY PILATES。藤沢駅から徒歩5分。" +
       "もっと好きになれる、私の身体へ。姿勢から、美しく整える。マシンピラティス。" +
-      "完全パーソナル（マンツーマンで理想の身体へ）×1回あたり6,500円〜（続けやすい月額プラン）。",
+      "完全パーソナル（マンツーマンで理想の身体へ）×地域最安級（1回あたり6,500円〜・続けやすい月額プラン）。",
   },
 
   trial: {
@@ -329,10 +329,10 @@ const config: IvyBConfig = {
 
   access: {
     img: {
-      placeholder: "スタジオは駅近で通いやすい！ 藤沢駅から徒歩5分。",
+      placeholder: "藤沢駅から徒歩5分。",
       src: `${ASSET}/access.jpg`,
     },
-    imgAlt: "スタジオは駅近で通いやすい。藤沢駅から徒歩5分。",
+    imgAlt: "藤沢駅からSTUDIO IVY藤沢店まで徒歩5分の地図。",
   },
 
   header: {

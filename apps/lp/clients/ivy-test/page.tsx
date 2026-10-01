@@ -587,7 +587,7 @@ export default function Page() {
               誤記だったため切り落としてある**（詳細は config の `access`）。
               正確な位置と店舗情報は⑮のGoogleマップ埋め込みが担う。 */}
           <Section flush style={{ padding: "26px 0 0" }}>
-            <FullBleed img={c.access.img} ratio="1100 / 740" alt={c.access.imgAlt} />
+            <FullBleed img={c.access.img} ratio="1857 / 847" alt={c.access.imgAlt} />
           </Section>
 
           {/* ─ ⑤ FV直下 ───────────────────────────────────
