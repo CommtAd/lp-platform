@@ -892,7 +892,7 @@ export default function Page() {
               ご入会特典は画像に入っている（config の `closing` はデータだけ残置）。
               画像にボタンは無いので、下に実体の <Cta> を置く。 */}
           <div style={{ background: "#FFFFFF", paddingBottom: 48 }}>
-            <FullBleed img={c.closingImage.img} ratio="1024 / 1536" alt={c.closingImage.imgAlt} />
+            <FullBleed img={c.closingImage.img} ratio="1024 / 1640" alt={c.closingImage.imgAlt} />
             <div style={{ padding: "0 24px" }}>
               <Cta marginTop={8} />
             </div>
