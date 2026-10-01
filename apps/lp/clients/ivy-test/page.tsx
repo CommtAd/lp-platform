@@ -563,7 +563,7 @@ export default function Page() {
               戻すときはここに元のブロックを書き戻す。 */}
           <FullBleed
             img={c.topImage.img}
-            ratio="984 / 1392"
+            ratio="1085 / 1450"
             alt={c.topImage.imgAlt}
           />
 
