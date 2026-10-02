@@ -561,9 +561,13 @@ export default function Page() {
               予約導線は直下の体験レッスン画像（リンク付き）と追従CTAが担う。
               config の header / offerBar / featureBar / fv はデータを残してあるので、
               戻すときはここに元のブロックを書き戻す。 */}
+          {/* 最上部の帯（顧客支給、AUN 2026-10-02）。
+              「祝・藤沢店 NEW OPEN」と「藤沢店限定 無料体験レッスン受付中」を
+              1枚にした画像。FV画像側にあった旧い帯は切り落としてある。 */}
+          <FullBleed img={c.topBand.img} ratio="1996 / 380" alt={c.topBand.imgAlt} />
           <FullBleed
             img={c.topImage.img}
-            ratio="1027 / 1450"
+            ratio="1027 / 1356"
             alt={c.topImage.imgAlt}
           />
 
@@ -571,7 +575,7 @@ export default function Page() {
               顧客支給の画像に置き換え（2026-09-30 AUN #2、2026-10-01 差し替え）。
               差し替え後の画像には予約ボタンが描かれていないため、
               画像はリンクにせず、下に実体の <Cta> を置く。 */}
-          <FullBleed img={c.trial.img} ratio="1061 / 1483" alt={c.trial.imgAlt} />
+          <FullBleed img={c.trial.img} ratio="1086 / 1448" alt={c.trial.imgAlt} />
           <div style={{ background: "#EEF5F9", padding: "4px 24px 28px" }}>
             <Cta marginTop={0} />
           </div>
@@ -651,7 +655,35 @@ export default function Page() {
               月8回52,000円）。値上げやプラン変更のときは config を直すだけでは
               表示が変わらない。必ず画像を作り直すこと。 */}
           <Section flush background={PALE} style={{ padding: "0" }}>
-            <FullBleed img={c.price.img} ratio="1024 / 1516" alt={c.price.imgAlt} />
+            {/* STANDARD（月4回）にも「地域最安級」を足した（AUN 2026-10-02 #2）。
+                PREMIUM 側のバッジは画像に焼き込まれているため、こちらは重ねて置く。
+                位置は画像比（1024x1516）の%で指定し、1回あたり欄の右上に掛ける。 */}
+            <div style={{ position: "relative" }}>
+              <FullBleed img={c.price.img} ratio="1024 / 1516" alt={c.price.imgAlt} />
+              <span
+                aria-hidden
+                style={{
+                  position: "absolute",
+                  left: "60.5%",
+                  top: "47.9%",
+                  width: "22%",
+                  height: "3.9%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 999,
+                  background: "#3B7EA5",
+                  color: "#FFFFFF",
+                  fontFamily: GOTHIC,
+                  fontWeight: 700,
+                  fontSize: 12,
+                  letterSpacing: "0.02em",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {c.fv.priceBadge}
+              </span>
+            </div>
           </Section>
 
           {/* ─ ⑫ グループレッスンとの違い（非表示）─────────────
@@ -892,7 +924,28 @@ export default function Page() {
               ご入会特典は画像に入っている（config の `closing` はデータだけ残置）。
               画像にボタンは無いので、下に実体の <Cta> を置く。 */}
           <div style={{ background: "#FFFFFF", paddingBottom: 48 }}>
-            <FullBleed img={c.closingImage.img} ratio="1024 / 1640" alt={c.closingImage.imgAlt} />
+            {/* 画像上部の「藤沢店限定」バッジは画像から切り落とし、
+                「新規オープン記念 藤沢店限定」に大きくして HTML で置いた
+                （AUN 2026-10-02 #3）。 */}
+            <div style={{ textAlign: "center", padding: "22px 0 4px" }}>
+              <span
+                style={{
+                  display: "inline-block",
+                  background: ACCENT,
+                  color: "#FFFFFF",
+                  fontFamily: MINCHO,
+                  fontWeight: 700,
+                  fontSize: 19,
+                  letterSpacing: "0.08em",
+                  lineHeight: 1,
+                  padding: "11px 26px",
+                  borderRadius: 999,
+                }}
+              >
+                新規オープン記念　藤沢店限定
+              </span>
+            </div>
+            <FullBleed img={c.closingImage.img} ratio="1024 / 1530" alt={c.closingImage.imgAlt} />
             <div style={{ padding: "0 24px" }}>
               <Cta marginTop={8} />
             </div>
