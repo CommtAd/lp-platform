@@ -559,7 +559,7 @@ export default function Page() {
                   {c.campaign.limitText}
                 </div>
                 <div style={{ fontSize: 11, letterSpacing: "0.04em", color: "rgba(255,255,255,0.9)", marginTop: 4 }}>
-                  定員に達し次第、受付を終了いたします
+                  本気で改善したい方限定｜体験枠には限りがございます
                 </div>
               </div>
             )}
@@ -889,6 +889,23 @@ export default function Page() {
               {nl(c.reserve.lead)}
             </p>
             <div style={{ marginTop: 28 }}>
+              {/* 注意喚起：安易な予約送信・無断キャンセルを心理的に抑制する */}
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  lineHeight: 1.8,
+                  color: "#A96E58",
+                  background: "#FFFFFF",
+                  border: "1px solid rgba(169,110,88,0.45)",
+                  borderRadius: 10,
+                  padding: "12px 14px",
+                  margin: "0 0 18px",
+                }}
+              >
+                {nl(c.reserve.caution)}
+              </p>
               <a
                 href={c.reserve.url}
                 target="_blank"

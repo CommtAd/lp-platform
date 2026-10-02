@@ -42,6 +42,16 @@ function nl(text: string): ReactNode {
   ));
 }
 
+/** Split text into plain / highlighted runs for the given words. */
+function highlightParts(text: string, words: string[]): { t: string; hl: boolean }[] {
+  if (words.length === 0) return [{ t: text, hl: false }];
+  const escaped = words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  return text
+    .split(new RegExp(`(${escaped.join("|")})`))
+    .filter((t) => t !== "")
+    .map((t) => ({ t, hl: words.includes(t) }));
+}
+
 /* ── icon library (hand-drawn line icons, 24x24, stroke-only) ────────── */
 const iconPaths: Record<string, ReactNode> = {
   run: (
@@ -422,7 +432,7 @@ function BenefitsSection() {
   const bene = config.benefits;
   return (
     <section style={{ padding: "6px 18px 48px", background: bg }}>
-      <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: ink }}>
+      <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 28, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: ink }}>
         {bene.heading}
         <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{bene.headingHighlight}</span>
       </h2>
@@ -596,23 +606,55 @@ export default function Page() {
                   {c.hero.catchLines[1]}
                 </span>
               </h1>
-              <p
+              {/* サブコピー: 明朝・左に縦のアクセント線・行ごとに細い罫線。強調語だけピンクにする */}
+              <div
                 style={{
-                  fontFamily: fontGothic,
+                  position: "relative",
+                  display: "inline-block",
+                  margin: "16px 0 0",
+                  paddingLeft: 14,
+                  fontFamily: fontMincho,
                   fontWeight: 700,
-                  fontSize: 16,
-                  lineHeight: 1.6,
-                  letterSpacing: "0.03em",
-                  margin: "12px 0 0",
-                  background: `linear-gradient(90deg, #FF5FA8 0%, #FF9ACB 60%, #D9C2FF 100%)`,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
-                  filter: `drop-shadow(0 0 10px ${pink}88)`,
+                  fontSize: 17,
+                  letterSpacing: "0.06em",
+                  color: "#FFFFFF",
+                  textShadow: "0 2px 10px rgba(20,8,50,0.75)",
                 }}
               >
-                {nl(c.hero.subCatch)}
-              </p>
+                <span
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 4,
+                    bottom: 4,
+                    width: 3,
+                    borderRadius: 2,
+                    background: `linear-gradient(180deg, ${pink} 0%, #FFFFFF 100%)`,
+                    boxShadow: `0 0 8px ${pink}AA`,
+                  }}
+                />
+                {c.hero.subCatch.split("\n").map((line, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      padding: "5px 6px 5px 0",
+                      borderBottom: "1px solid rgba(255,255,255,0.45)",
+                      lineHeight: 1.45,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {highlightParts(line, c.hero.subCatchHighlights ?? []).map((part, j) =>
+                      part.hl ? (
+                        <span key={j} style={{ color: "#FF6FB5", fontSize: 19, textShadow: `0 0 10px ${pink}99, 0 2px 10px rgba(20,8,50,0.75)` }}>
+                          {part.t}
+                        </span>
+                      ) : (
+                        <span key={j}>{part.t}</span>
+                      )
+                    )}
+                  </div>
+                ))}
+              </div>
               {c.hero.body && (
                 <p style={{ fontSize: 11, lineHeight: 1.85, color: "rgba(255,255,255,0.8)", margin: "16px 0 0", textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>{nl(c.hero.body)}</p>
               )}
@@ -840,12 +882,12 @@ export default function Page() {
                         background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%)",
                       }}
                     />
-                    <h3 style={{ position: "absolute", left: 18, right: 18, top: 16, display: "flex", alignItems: "center", gap: 12, fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.02em", margin: 0, color: "#FFFFFF" }}>
+                    <h3 style={{ position: "absolute", left: 18, right: 18, top: 16, display: "flex", alignItems: "center", gap: 12, fontFamily: fontMincho, fontWeight: 700, fontSize: 27, letterSpacing: "0.02em", margin: 0, color: "#FFFFFF" }}>
                       <span
                         style={{
                           flexShrink: 0,
-                          width: 36,
-                          height: 36,
+                          width: 40,
+                          height: 40,
                           borderRadius: "50%",
                           display: "inline-flex",
                           alignItems: "center",
@@ -861,7 +903,7 @@ export default function Page() {
                             fontFamily: fontDisplay,
                             fontStyle: "italic",
                             fontWeight: 700,
-                            fontSize: 16,
+                            fontSize: 18,
                             color: accent,
                             textShadow: `0 0 8px ${accent}88`,
                           }}
@@ -907,9 +949,9 @@ export default function Page() {
               }}
             />
             <div style={{ position: "relative", zIndex: 2, minHeight: 420, display: "flex", flexDirection: "column", padding: "10px 22px 44px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.04em", lineHeight: 1.5, margin: 0, background: "linear-gradient(90deg, #FF8FC4 0%, #E7D6FF 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66) drop-shadow(0 2px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 3px rgba(0,0,0,0.9))` }}>{nl(c.about.heading)}</h2>
-              <p style={{ maxWidth: 300, fontSize: 12, lineHeight: 1.7, color: "#FFFFFF", margin: "12px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body1)}</p>
-              <p style={{ maxWidth: 300, fontSize: 11.5, lineHeight: 1.7, color: "rgba(255,255,255,0.8)", margin: "8px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body2)}</p>
+              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", lineHeight: 1.5, margin: 0, background: "linear-gradient(90deg, #FF8FC4 0%, #E7D6FF 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66) drop-shadow(0 2px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 3px rgba(0,0,0,0.9))` }}>{nl(c.about.heading)}</h2>
+              <p style={{ maxWidth: 300, fontSize: 13, lineHeight: 1.7, color: "#FFFFFF", margin: "12px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body1)}</p>
+              <p style={{ maxWidth: 300, fontSize: 12.5, lineHeight: 1.7, color: "rgba(255,255,255,0.8)", margin: "8px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body2)}</p>
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", paddingTop: 32 }}>
                 {c.about.tags.map((t, i) => {
                   const accent = i === 1 ? violet : i === 2 ? purple : pink;
@@ -970,7 +1012,7 @@ export default function Page() {
 
           {/* ── reasons (選ばれる3つの理由) ── */}
           <section style={{ padding: "36px 22px 66px", background: bgAlt }}>
-            <SectionHeading plain={c.reasons.heading} fontSize={20} />
+            <SectionHeading plain={c.reasons.heading} fontSize={23} />
             {c.reasons.items.map((item, idx) => {
               const accent = idx === 1 ? violet : idx === 2 ? purple : pink;
               return (
@@ -987,10 +1029,10 @@ export default function Page() {
                     <div
                       style={{
                         position: "absolute",
-                        top: -16,
+                        top: -20,
                         right: 16,
-                        width: 50,
-                        height: 50,
+                        width: 58,
+                        height: 58,
                         transform: "rotate(45deg)",
                         background: "#FFFFFF",
                         border: `2px solid ${accent}`,
@@ -1007,7 +1049,7 @@ export default function Page() {
                           fontFamily: fontDisplay,
                           fontStyle: "italic",
                           fontWeight: 700,
-                          fontSize: 18,
+                          fontSize: 22,
                           color: accent,
                         }}
                       >
@@ -1019,7 +1061,7 @@ export default function Page() {
                     style={{
                       fontFamily: fontMincho,
                       fontWeight: 700,
-                      fontSize: 19,
+                      fontSize: 21,
                       lineHeight: 1.6,
                       letterSpacing: "0.02em",
                       margin: "22px 0 0",
@@ -1035,7 +1077,7 @@ export default function Page() {
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                       {item.trio.map((t, i) => (
                         <div key={i} style={{ borderRadius: 12, border: `1px solid ${accent}55`, background: "#FFFFFF", minHeight: 54, padding: "12px 4px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-                          <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 11, lineHeight: 1.4, color: accent, whiteSpace: "nowrap" }}>{t.label}</span>
+                          <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 12, lineHeight: 1.4, color: accent, whiteSpace: "nowrap" }}>{t.label}</span>
                         </div>
                       ))}
                     </div>
