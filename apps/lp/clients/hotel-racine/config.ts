@@ -212,36 +212,43 @@ const config: PatternCConfig = {
   facility: {
     heading: "会場のご紹介",
     lead: "大聖堂チャペルとホテルの上質な空間で叶える、ふたりの結婚式",
-    aspect: "16 / 9",
+    // 挙式会場2・披露宴会場2（公式サイトの会場ページと同じ4つ、顧客指定）。
+    // 披露宴会場の支給写真がほぼ正方形（600x600 / 655x600）なので、16:9 だと上下が
+    // 大きく切れる。4:3 で受ける。
+    aspect: "4 / 3",
     bodySize: 13,
     items: [
       {
         tag: "01",
-        title: "大聖堂チャペル「ガブリエル」",
-        body: "ステンドグラスと大理石のバージンロード。パイプオルガンの音色が響く大聖堂",
-        image: { placeholder: "大聖堂チャペル", src: `${ASSET}/facility-chapel.jpg` },
+        title: "大聖堂「ガブリエル」",
+        note: "挙式会場｜キリスト教式・人前式｜約90名",
+        body: "大理石のバージンロードとステンドグラス。パイプオルガンと聖歌隊の調べに包まれる大聖堂",
+        image: { placeholder: "大聖堂ガブリエル", src: `${ASSET}/facility-chapel.jpg` },
       },
       {
         tag: "02",
-        title: "披露宴会場「銀河」",
-        body: "5連のシャンデリアが高い天井に煌めく、ホテルならではの大空間",
-        // 体験セクションと同一カット（披露宴会場の支給素材がこの1枚のみ）。
-        image: { placeholder: "披露宴会場「銀河」", src: `${ASSET}/banquet.jpg` },
+        title: "神殿「神楽殿」",
+        note: "挙式会場｜神前式・人前式｜約60名",
+        body: "総檜造りのお社で、雅楽の調べとともに執り行う格調高い和の挙式",
+        image: { placeholder: "神殿 神楽殿", src: `${ASSET}/facility-kaguraden.jpg` },
       },
       {
         tag: "03",
-        title: "ドレスサロン",
-        body: "館内のサロンで、当日のドレス選びまでご相談いただけます",
-        image: { placeholder: "ドレスサロン", src: `${ASSET}/facility-dress.jpg` },
+        title: "披露宴会場「銀河」",
+        note: "披露宴会場｜約230名",
+        body: "高い天井に5連のシャンデリアが煌めく、幻想的で華やかな大空間",
+        image: { placeholder: "披露宴会場 銀河", src: `${ASSET}/facility-ginga.jpg` },
       },
       {
         tag: "04",
-        title: "和装",
-        body: "白無垢や色打掛など、和装のご相談も承ります",
-        image: { placeholder: "和装の衣裳室", src: `${ASSET}/facility-kimono.jpg` },
+        title: "披露宴会場「ロイヤルオーキッド」",
+        note: "披露宴会場｜約120名",
+        body: "白とロイヤルブルーを基調にした、クラシカルで品格ある英国調の会場",
+        image: { placeholder: "披露宴会場 ロイヤルオーキッド", src: `${ASSET}/facility-orchid.jpg` },
       },
     ],
   },
+
 
   flow: {
     heading: "当日の流れ",
@@ -343,7 +350,7 @@ const config: PatternCConfig = {
 
 /*
  * TODO(hotel-racine): 差し替え・確認が残っている項目:
- *  - facility の説明文・flow は指示書に記載がなく、公式情報から起こした原稿
+ *  - facility の説明文は公式サイトの会場ページ、flow はテンプレの原稿から起こしたもの
  *  - 特典の適用条件（※注記）・1名来館時の扱いは顧客確認
  */
 export default config;
