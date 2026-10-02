@@ -37,26 +37,37 @@ const config: PatternCConfig = {
   header: {
     venue: "Hotel Racine Shinmaebashi",
     // 横並びのロゴ（紋章 + ロゴタイプ、比率 4.16:1）。支給の透過PNGの余白を詰めてある。
-    logo: { src: `${ASSET}/logo.png`, height: 44 },
-    ctaText: "予約する",
+    // ヘッダーは ashibinosato に揃えて薄く組む（顧客指定）。
+    logo: { src: `${ASSET}/logo.png`, height: 34 },
+    paddingY: 8,
+    // CTAボタンは非表示（ロゴが中央寄せになる）。追従バーが常時出ているので導線は確保されている。
     sticky: false,
   },
 
   fv: {
-    brand: "ホテルラシーネ新前橋",
+    // ヘッダー直下の帯（顧客指定）。カードの文字量を減らすため、キャッチの1行目をここへ出す。
+    topBand: "大聖堂チャペル×ホテルウェディング",
+    // 会場名はヘッダーのロゴで出すので、カードには置かない（ashibinosato と同じ構成）。
     kicker: "＼豪華来館特典付き／",
-    catch: ["大聖堂チャペル×ホテルウェディング", "プレミアム ブライダルフェア"],
-    catchSize: 19,
+    catch: ["プレミアム", "ブライダルフェア"],
     framed: true,
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
+      // 余白の詰め方は ashibinosato と同じ。下の飾りに接するのは幅の狭い
+      // 「プレゼント！」なので、渦にはかからず詰められる。
+      gap: 0,
+      gapBottom: -20,
     },
-    highlight: "最大40万円相当プレゼント",
-    highlightSize: 19,
+    // 金額を大きく見せるため「プレゼント」は次の行（highlightSub）へ送る。
+    highlight: "最大40万円相当",
+    highlightSize: 22,
+    highlightSub: "プレゼント！",
+    highlightSubSize: 16,
     ctaText: "最短30秒で予約する",
     // lold と同じくプレートを上に置く（顧客指定）。
     catchPosition: "top",
+    catchTopInset: 12,
     // スライドはFV用に支給された 1008x1350（ほぼ 3:4）の5枚。いずれも顔が
     // 高さの55%より下にあり、上53%を覆うプレートにかからない。順序は支給どおり。
     heroAspect: "3 / 4",
