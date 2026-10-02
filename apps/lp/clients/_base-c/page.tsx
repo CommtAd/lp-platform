@@ -1027,8 +1027,8 @@ export default function Page() {
                       </span>
                     ))}
                   <p
-                    className="text-[17px] leading-snug tracking-[0.18em]"
-                    style={{ fontFamily: mincho }}
+                    className="leading-snug tracking-[0.18em]"
+                    style={{ fontFamily: mincho, fontSize: c.grandOffer.titleSize ?? 17 }}
                   >
                     {c.grandOffer.titleEmphasis
                       ? emphasize(c.grandOffer.title, c.grandOffer.titleEmphasis, goldOnWhite, 26)

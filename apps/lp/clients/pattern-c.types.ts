@@ -338,6 +338,8 @@ export interface PatternCConfig {
      * 金額を `title` に含めて `amount` を省く組み方のときに使う。
      */
     titleEmphasis?: string;
+    /** `title` の文字サイズ(px)。既定 17。 */
+    titleSize?: number;
     /**
      * 金額訴求、例 "最大180万円相当"。数字部分は自動で特大になる。
      * 省略すると菱形の罫ごと出ない（金額を `title` 側で言い切る場合）。

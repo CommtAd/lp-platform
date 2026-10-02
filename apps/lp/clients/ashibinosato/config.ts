@@ -107,6 +107,7 @@ const config: PatternCConfig = {
     eyebrow: "ご成約特典",
     heading: "プレミアムブライダルフェア",
     title: "15大特典付き",
+    titleSize: 23,
     // 「プレゼント！」は次の行へ送る（顧客指定）。
     amount: "最大70万円分\nプレゼント！",
     frame: `${ASSET}/grand-offer-frame.png`,
