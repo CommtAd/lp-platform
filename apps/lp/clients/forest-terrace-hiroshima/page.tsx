@@ -633,7 +633,11 @@ export default function Page() {
           {c.fv.topBand && (
             <p
               className="px-4 py-2 text-center text-[13px] tracking-[0.12em]"
-              style={{ background: c.ink, color: c.paper, fontFamily: mincho }}
+              style={{
+                background: c.fv.topBandColors?.bg ?? c.ink,
+                color: c.fv.topBandColors?.text ?? c.paper,
+                fontFamily: mincho,
+              }}
             >
               {c.fv.topBand}
             </p>
