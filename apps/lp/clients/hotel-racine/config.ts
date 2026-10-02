@@ -211,7 +211,7 @@ const config: PatternCConfig = {
 
   facility: {
     heading: "会場のご紹介",
-    lead: "大聖堂チャペルとホテルの上質な空間で叶える、ふたりの結婚式",
+    lead: "大聖堂チャペルとホテルの上質な空間で叶える、\nふたりの結婚式",
     // 挙式会場2・披露宴会場2（公式サイトの会場ページと同じ4つ、顧客指定）。
     // 披露宴会場の支給写真がほぼ正方形（600x600 / 655x600）なので、16:9 だと上下が
     // 大きく切れる。4:3 で受ける。
@@ -234,14 +234,14 @@ const config: PatternCConfig = {
       },
       {
         tag: "03",
-        title: "披露宴会場「銀河」",
+        title: "銀河",
         note: "披露宴会場｜約230名",
         body: "高い天井に5連のシャンデリアが煌めく、幻想的で華やかな大空間",
         image: { placeholder: "披露宴会場 銀河", src: `${ASSET}/facility-ginga.jpg` },
       },
       {
         tag: "04",
-        title: "披露宴会場「ロイヤルオーキッド」",
+        title: "ロイヤルオーキッド",
         note: "披露宴会場｜約120名",
         body: "白とロイヤルブルーを基調にした、クラシカルで品格ある英国調の会場",
         image: { placeholder: "披露宴会場 ロイヤルオーキッド", src: `${ASSET}/facility-orchid.jpg` },
