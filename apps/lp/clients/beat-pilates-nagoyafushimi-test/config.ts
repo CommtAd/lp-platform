@@ -192,6 +192,8 @@ export interface BeatPilatesConfig {
   hero: {
     catchLines: [string, string];
     subCatch: string;
+    /** subCatch のうちピンクで強調する語（文中の出現順は問わない）。 */
+    subCatchHighlights?: string[];
     body: string;
     hero: Slot;
     trialBadge: { label: string; price: string; unit: string };
@@ -350,6 +352,7 @@ const config: BeatPilatesConfig = {
   hero: {
     catchLines: ["暗闇だから、周りを気にせず。", "音楽があるから、楽しく続く。"],
     subCatch: "人目を気にせず、自分に集中\n音楽に合わせて楽しむ45分",
+    subCatchHighlights: ["人目", "自分に集中", "音楽", "合わせて"],
     body: "",
     hero: {
       placeholder: "マシンピラティスレッスンの動画（全面）",

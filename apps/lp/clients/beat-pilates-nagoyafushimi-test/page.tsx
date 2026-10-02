@@ -42,6 +42,16 @@ function nl(text: string): ReactNode {
   ));
 }
 
+/** Split text into plain / highlighted runs for the given words. */
+function highlightParts(text: string, words: string[]): { t: string; hl: boolean }[] {
+  if (words.length === 0) return [{ t: text, hl: false }];
+  const escaped = words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  return text
+    .split(new RegExp(`(${escaped.join("|")})`))
+    .filter((t) => t !== "")
+    .map((t) => ({ t, hl: words.includes(t) }));
+}
+
 /* ── icon library (hand-drawn line icons, 24x24, stroke-only) ────────── */
 const iconPaths: Record<string, ReactNode> = {
   run: (
@@ -596,23 +606,55 @@ export default function Page() {
                   {c.hero.catchLines[1]}
                 </span>
               </h1>
-              <p
+              {/* サブコピー: 明朝・左に縦のアクセント線・行ごとに細い罫線。強調語だけピンクにする */}
+              <div
                 style={{
-                  fontFamily: fontGothic,
+                  position: "relative",
+                  display: "inline-block",
+                  margin: "16px 0 0",
+                  paddingLeft: 14,
+                  fontFamily: fontMincho,
                   fontWeight: 700,
-                  fontSize: 16,
-                  lineHeight: 1.6,
-                  letterSpacing: "0.03em",
-                  margin: "12px 0 0",
-                  background: `linear-gradient(90deg, #FF5FA8 0%, #FF9ACB 60%, #D9C2FF 100%)`,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
-                  filter: `drop-shadow(0 0 10px ${pink}88)`,
+                  fontSize: 17,
+                  letterSpacing: "0.06em",
+                  color: "#FFFFFF",
+                  textShadow: "0 2px 10px rgba(20,8,50,0.75)",
                 }}
               >
-                {nl(c.hero.subCatch)}
-              </p>
+                <span
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 4,
+                    bottom: 4,
+                    width: 3,
+                    borderRadius: 2,
+                    background: `linear-gradient(180deg, ${pink} 0%, #FFFFFF 100%)`,
+                    boxShadow: `0 0 8px ${pink}AA`,
+                  }}
+                />
+                {c.hero.subCatch.split("\n").map((line, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      padding: "5px 6px 5px 0",
+                      borderBottom: "1px solid rgba(255,255,255,0.45)",
+                      lineHeight: 1.45,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {highlightParts(line, c.hero.subCatchHighlights ?? []).map((part, j) =>
+                      part.hl ? (
+                        <span key={j} style={{ color: "#FF6FB5", fontSize: 19, textShadow: `0 0 10px ${pink}99, 0 2px 10px rgba(20,8,50,0.75)` }}>
+                          {part.t}
+                        </span>
+                      ) : (
+                        <span key={j}>{part.t}</span>
+                      )
+                    )}
+                  </div>
+                ))}
+              </div>
               {c.hero.body && (
                 <p style={{ fontSize: 11, lineHeight: 1.85, color: "rgba(255,255,255,0.8)", margin: "16px 0 0", textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>{nl(c.hero.body)}</p>
               )}
