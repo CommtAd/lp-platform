@@ -5,7 +5,7 @@ const ASSET = "/clients/bee-pilates-ebisu";
 
 /** 予約システム（hacomono）。全CTAの共通遷移先。 */
 const CTA_URL =
-  "https://pilatesbee.hacomono.jp/reserve/schedule/12/7?date_from=2026-08-03";
+  "https://pilatesbee.hacomono.jp/reserve/schedule/12/7";
 
 /** An image position in the layout. `src` empty → placeholder box. */
 export interface Slot {
