@@ -166,13 +166,33 @@ const config: PatternCConfig = {
 
   privilege: {
     heading: "来館特典・フェア成約特典",
-    lead: "大聖堂チャペル見学とあわせてご用意しています。",
+    lead: "フェアにご参加いただいた方にご用意しています。",
     headline: "最大40万円相当の特典をプレゼント",
     headlineEmphasis: "最大40万円相当",
+    // 4点を写真つきで並べるので2×2で組む（横4列だと1列75px前後まで潰れる）。
+    // 客室写真は支給素材が小さく（392px / 450px）、高精細端末では少し甘く出る。
+    columns: 2,
     items: [
-      { title: "国産牛フィレ肉を\n含むハーフコース", amount: "無料試食" },
-      { title: "新郎新婦様の\n挙式当日", amount: "宿泊ご招待" },
-      { title: "ご列席の\nゲスト様", amount: "宿泊特別優待" },
+      {
+        title: "国産牛フィレ肉を\n含むハーフコース",
+        amount: "無料試食",
+        image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/priv-tasting.jpg` },
+      },
+      {
+        title: "大聖堂チャペル\n「ガブリエル」",
+        amount: "チャペル見学",
+        image: { placeholder: "大聖堂チャペル", src: `${ASSET}/priv-chapel.jpg` },
+      },
+      {
+        title: "新郎新婦様の\n挙式当日",
+        amount: "宿泊ご招待",
+        image: { placeholder: "デラックスツイン", src: `${ASSET}/priv-suite.jpg` },
+      },
+      {
+        title: "ご列席の\nゲスト様",
+        amount: "宿泊特別優待",
+        image: { placeholder: "ツインルーム", src: `${ASSET}/priv-twin.jpg` },
+      },
     ],
     frame: `${ASSET}/privilege-frame.png`,
     disclaimer: "※特典のお渡しには適用条件がございます",

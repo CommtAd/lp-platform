@@ -488,6 +488,11 @@ export interface PatternCConfig {
      */
     /** `title` は `\n` で改行位置を指定できる。 */
     items: { title: string; amount: string; image?: Slot }[];
+    /**
+     * 1行に並べる数。既定は `items` の数（全部を横1列）。
+     * 4点を写真つきで並べると1列75px前後まで潰れるので、2 を渡して2×2で組む。
+     */
+    columns?: number;
     /** パネルに重ねる四隅のフレーム装飾（中央が透明のPNG）。`grandOffer.frame` と同じ扱い。 */
     frame?: string;
     /** セクションの地に散らす飾り（季節の葉など）。`SectionDecor` 参照。 */

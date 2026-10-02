@@ -267,22 +267,28 @@ function Carousel({
 function AmountRow({
   items,
   ink,
+  columns,
 }: {
   items: { amount: string; label: string; image?: Slot }[];
   ink: string;
+  /** 1行に並べる数。既定は items の数（横1列）。折り返す場合は行間を空ける。 */
+  columns?: number;
 }) {
   // 写真を伴う場合は列同士が写真で分かれるので、縦罫は引かず溝で離す。
   const withImages = items.some((i) => i.image);
+  const cols = columns ?? items.length;
+  // 縦罫は同じ行の2列目以降にだけ引く（折り返した行の先頭には引かない）。
+  const ruled = (i: number) => !withImages && i % cols > 0;
   return (
     <div
-      className={`grid ${withImages ? "gap-2" : ""}`}
-      style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
+      className={`grid ${withImages ? "gap-x-2" : ""} ${cols < items.length ? "gap-y-6" : ""}`}
+      style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
     >
       {items.map((item, i) => (
         <div
           key={`${item.label}-${i}`}
-          className={`px-1.5 text-center ${!withImages && i > 0 ? "border-l" : ""}`}
-          style={!withImages && i > 0 ? { borderColor: `${ink}1F` } : undefined}
+          className={`px-1.5 text-center ${ruled(i) ? "border-l" : ""}`}
+          style={ruled(i) ? { borderColor: `${ink}1F` } : undefined}
         >
           {item.image && (
             <ImageSlot
@@ -1437,6 +1443,7 @@ export default function Page() {
                     image: p.image,
                   }))}
                   ink={c.ink}
+                  columns={c.privilege.columns}
                 />
                 {c.privilege.total && (
                   <>
