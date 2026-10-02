@@ -878,8 +878,26 @@ export default function Page() {
                 「180万円相当のホテル宿泊券」のように、金額が目玉特典の中身だと誤読される。
               */}
               <div className="relative mt-10">
+                {/* カード上端の帯。金額カードと隙間なく接続して1枚のカードに見せる。 */}
+                {c.grandOffer.cardHeader && (
+                  <div
+                    className="rounded-t-[3px] px-4 py-3 text-center"
+                    style={{ background: c.ink, color: "#F0DDB2" }}
+                  >
+                    <p className="text-[16px] leading-snug tracking-[0.08em]" style={{ fontFamily: mincho }}>
+                      {c.grandOffer.cardHeader.title}
+                    </p>
+                    {c.grandOffer.cardHeader.sub && (
+                      <p className="mt-1 text-[12px] leading-snug tracking-[0.04em] text-white/85">
+                        {c.grandOffer.cardHeader.sub}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div
-                  className={`relative rounded-[3px] border px-5 pt-11 text-center ${
+                  className={`relative ${
+                    c.grandOffer.cardHeader ? "" : "rounded-t-[3px] "
+                  }${c.grandOffer.cardFooter ? "" : "rounded-b-[3px] "}border px-5 pt-11 text-center ${
                     // 金額を省いて写真で終わるときは、下の四隅の飾りに写真が掛からないよう下を空ける。
                     !c.grandOffer.amount && c.grandOffer.images?.length ? "pb-14" : "pb-8"
                   }`}
@@ -968,6 +986,15 @@ export default function Page() {
                     </>
                   )}
                 </div>
+                {/* カード下端の帯。特典の中身の補足を、カードの外の小さな注記ではなく読ませる位置に置く。 */}
+                {c.grandOffer.cardFooter && (
+                  <p
+                    className="rounded-b-[3px] border border-t-0 px-4 py-3.5 text-center text-[13.5px] font-bold leading-[1.7] tracking-[0.04em]"
+                    style={{ background: "#F1E8D6", borderColor: c.accent, color: c.ink, fontFamily: mincho }}
+                  >
+                    {nl(c.grandOffer.cardFooter)}
+                  </p>
+                )}
                 {/* バッジはカード上端に跨がらせる。 */}
                 {c.grandOffer.badge && (
                   <span

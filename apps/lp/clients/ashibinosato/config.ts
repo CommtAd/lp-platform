@@ -106,11 +106,16 @@ const config: PatternCConfig = {
   grandOffer: {
     eyebrow: "ご成約特典",
     heading: "プレミアムブライダルフェア",
-    lead: "1日1組だけの貸切ウェディング\nー時間も空間も、ふたりとゲストだけー",
     title: "15大特典付き",
     amount: "最大70万円分 プレゼント！",
     frame: `${ASSET}/grand-offer-frame.png`,
-    note: "挙式・衣裳・スナップ写真などご優待価格にてご案内",
+    // 指示書でリードと注記だった2文は、セクションに流すと読まれないので
+    // カードの上下の帯としてカードと一体で出す（顧客指定）。
+    cardHeader: {
+      title: "1日1組だけの貸切ウェディング",
+      sub: "ー時間も空間も、ふたりとゲストだけー",
+    },
+    cardFooter: "挙式・衣裳・スナップ写真など\nご優待価格にてご案内",
   },
 
   experience: {
