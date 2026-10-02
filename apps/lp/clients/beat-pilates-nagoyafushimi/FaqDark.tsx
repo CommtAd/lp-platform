@@ -18,8 +18,9 @@ export default function FaqDark({ items, pink }: FaqDarkProps) {
           <div
             key={i}
             style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              background: "#FFFFFF",
+              border: "1px solid rgba(108,63,209,0.16)",
+              boxShadow: "0 6px 18px rgba(108,63,209,0.08)",
               borderRadius: 14,
               overflow: "hidden",
             }}
@@ -55,7 +56,7 @@ export default function FaqDark({ items, pink }: FaqDarkProps) {
               >
                 Q
               </span>
-              <span style={{ flex: 1, fontSize: 13.5, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.5 }}>
+              <span style={{ flex: 1, fontSize: 13.5, fontWeight: 700, color: "#2D2145", lineHeight: 1.5 }}>
                 {item.q}
               </span>
               <span style={{ flexShrink: 0, fontSize: 18, color: pink, lineHeight: 1 }}>
@@ -69,7 +70,7 @@ export default function FaqDark({ items, pink }: FaqDarkProps) {
                   padding: "0 20px 18px 54px",
                   fontSize: 12.5,
                   lineHeight: 1.9,
-                  color: "rgba(255,255,255,0.65)",
+                  color: "rgba(45,33,69,0.72)",
                 }}
               >
                 {item.a}

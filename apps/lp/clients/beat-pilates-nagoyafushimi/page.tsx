@@ -6,17 +6,26 @@ import FaqDark from "./FaqDark";
 import StickyDark from "./StickyDark";
 import config from "./config";
 
-const pink = "#FF3D93";
-const blue = "#3FA0FF";
-const violet = "#8B5CF6";
-const bg = "#0A0A10";
-const panel = "rgba(255,255,255,0.04)";
-const border = "rgba(255,255,255,0.1)";
-const textDim = "rgba(255,255,255,0.65)";
-const textDim2 = "rgba(255,255,255,0.48)";
-const ctaGrad = `linear-gradient(90deg, ${pink} 0%, ${violet} 55%, ${blue} 100%)`;
-const duoTextGrad = `linear-gradient(90deg, ${pink} 0%, ${violet} 55%, ${blue} 100%)`;
-const pinkTextGrad = `linear-gradient(90deg, ${pink} 0%, #FF8FC4 100%)`;
+// 白ベース × 紫メイン × ピンク差し色
+const pink = "#FF2E8B";
+const purple = "#6C3FD1";
+const violet = "#9D6BF0";
+const ink = "#2D2145";
+const inkSoft = "rgba(45,33,69,0.82)";
+const bg = "#FFFFFF";
+const bgAlt = "#F6F1FE";
+const panel = "#FFFFFF";
+const border = "rgba(108,63,209,0.16)";
+const textDim = "rgba(45,33,69,0.72)";
+const textDim2 = "rgba(45,33,69,0.5)";
+const headerGrad = `linear-gradient(90deg, #4B2A9E 0%, ${purple} 100%)`;
+const ctaGrad = `linear-gradient(90deg, #FF4A9E 0%, ${pink} 50%, #E0186F 100%)`;
+const duoTextGrad = `linear-gradient(90deg, ${purple} 0%, #9450E0 55%, ${pink} 100%)`;
+/** 素材の青い照明を紫寄りに転調する。写真の直後に置く。 */
+const MoodTint = ({ radius = 0 }: { radius?: number }) => (
+  <div style={{ position: "absolute", inset: 0, borderRadius: radius, background: "linear-gradient(160deg, #9A6CFF 0%, #6B3FD6 100%)", mixBlendMode: "color", opacity: 0.45, pointerEvents: "none" }} />
+);
+const pinkTextGrad = `linear-gradient(90deg, ${pink} 0%, #FF5FA8 100%)`;
 const fontGothic = "'Zen Kaku Gothic New', sans-serif";
 const fontSans = "'Noto Sans JP', sans-serif";
 const fontDisplay = "'Playfair Display', serif";
@@ -286,16 +295,15 @@ function SectionHeading({
         fontWeight: 700,
         fontSize,
         letterSpacing: "0.06em",
-        color: "#FFFFFF",
+        color: ink,
         lineHeight: 1.4,
         margin: 0,
         textAlign: "center",
-        textShadow: `0 0 12px ${pink}55, 0 0 4px rgba(255,255,255,0.25)`,
       }}
     >
       {plain && nl(plain)}
       {highlight && (
-        <span style={{ background: duoTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66)` }}>
+        <span style={{ background: duoTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
           {highlight}
         </span>
       )}
@@ -345,7 +353,7 @@ function CtaButton({ text }: { text: string }) {
         fontWeight: 700,
         letterSpacing: "0.04em",
         borderRadius: 999,
-        boxShadow: "0 10px 26px rgba(255,61,147,0.32)",
+        boxShadow: "0 10px 26px rgba(255,46,139,0.32)",
       }}
     >
       {text}
@@ -357,11 +365,11 @@ function CtaButton({ text }: { text: string }) {
 function OfferSection({ topPad = 48 }: { topPad?: number }) {
   const o = config.offer;
   return (
-    <section style={{ padding: `${topPad}px 18px 52px`, background: "#0A0A10" }}>
-      <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, lineHeight: 1.4, textAlign: "center", color: "#FFFFFF", margin: 0, textShadow: "0 0 14px rgba(255,255,255,0.25)" }}>
+    <section style={{ padding: `${topPad}px 18px 52px`, background: bg }}>
+      <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, lineHeight: 1.4, textAlign: "center", color: ink, margin: 0 }}>
         {o.headingParts.map((p, i) =>
           p.hl ? (
-            <span key={i} style={{ fontSize: 30, background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}88)`, padding: "0 4px" }}>
+            <span key={i} style={{ fontSize: 30, background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", padding: "0 4px" }}>
               {p.t}
             </span>
           ) : (
@@ -371,11 +379,12 @@ function OfferSection({ topPad = 48 }: { topPad?: number }) {
       </h2>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 26 }}>
         {o.cards.map((card, i) => {
-          const accent = i === 1 ? blue : pink;
+          const accent = i === 1 ? purple : pink;
           return (
             <div key={i} style={{ position: "relative", borderRadius: 18, overflow: "hidden", border: `1px solid ${accent}66`, boxShadow: `0 0 22px ${accent}33` }}>
-              <ImageSlot src={card.img.src} placeholder={card.img.placeholder} objectPosition={card.img.position ?? "center"} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#12121A" }} />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(10,10,16,0.55) 0%, rgba(10,10,16,0.8) 100%)" }} />
+              <ImageSlot src={card.img.src} placeholder={card.img.placeholder} objectPosition={card.img.position ?? "center"} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#26162F" }} />
+              <MoodTint />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(58,28,120,0.35) 0%, rgba(44,20,96,0.72) 100%)" }} />
               <div style={{ position: "relative", zIndex: 2, padding: "22px 14px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <p style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 20, lineHeight: 1.35, textAlign: "center", color: "#FFFFFF", margin: 0, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>{nl(card.label)}</p>
                 <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", marginTop: 4 }}>
@@ -390,14 +399,14 @@ function OfferSection({ topPad = 48 }: { topPad?: number }) {
           );
         })}
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0, marginTop: 16, padding: "12px 8px", borderRadius: 999, border: `1px solid ${pink}44`, background: "rgba(255,61,147,0.04)", boxShadow: `0 0 16px ${pink}22` }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0, marginTop: 16, padding: "12px 8px", borderRadius: 999, border: `1px solid ${pink}44`, background: "#FFFFFF", boxShadow: `0 6px 18px ${purple}14` }}>
         {o.badges.map((b, i) => {
-          const accent = i === 0 ? blue : i === 1 ? pink : violet;
+          const accent = i === 0 ? purple : i === 1 ? pink : violet;
           return (
             <span key={i} style={{ display: "contents" }}>
-              {i > 0 && <span style={{ width: 1, height: 20, background: "rgba(255,255,255,0.2)" }} />}
+              {i > 0 && <span style={{ width: 1, height: 20, background: "border" }} />}
               <span style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 12.5, color: accent, whiteSpace: "nowrap", textShadow: `0 0 8px ${accent}99` }}>{b.label}</span>
+                <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 12.5, color: accent, whiteSpace: "nowrap" }}>{b.label}</span>
               </span>
             </span>
           );
@@ -411,14 +420,14 @@ function OfferSection({ topPad = 48 }: { topPad?: number }) {
 function BenefitsSection() {
   const bene = config.benefits;
   return (
-    <section style={{ padding: "6px 18px 48px", background: "#0A0A10" }}>
-      <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: "#FFFFFF" }}>
+    <section style={{ padding: "6px 18px 48px", background: bg }}>
+      <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: ink }}>
         {bene.heading}
-        <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66)` }}>{bene.headingHighlight}</span>
+        <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{bene.headingHighlight}</span>
       </h2>
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 24 }}>
         {bene.items.map((b, i) => {
-          const accent = i === 0 ? pink : blue;
+          const accent = i === 0 ? pink : purple;
           return (
             <div
               key={i}
@@ -429,8 +438,8 @@ function BenefitsSection() {
                 gap: 14,
                 borderRadius: 16,
                 border: `1px solid ${accent}55`,
-                background: `${accent}0F`,
-                boxShadow: `0 0 20px ${accent}22, inset 0 0 16px ${accent}0A`,
+                background: "#FFFFFF",
+                boxShadow: `0 8px 22px ${accent}1A`,
                 padding: "18px 16px 18px 22px",
                 overflow: "hidden",
               }}
@@ -444,33 +453,33 @@ function BenefitsSection() {
                   bottom: 0,
                   width: 5,
                   background: `linear-gradient(180deg, ${accent} 0%, ${accent}AA 100%)`,
-                  boxShadow: `0 0 12px ${accent}`,
+                  boxShadow: "none",
                 }}
               />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ display: "flex", alignItems: "flex-start", gap: 7, fontFamily: fontGothic, fontWeight: 800, fontSize: 15, lineHeight: 1.45, color: "#FFFFFF", margin: 0, textShadow: `0 0 10px ${accent}44` }}>
-                  <span style={{ flexShrink: 0, color: accent, fontSize: 13, lineHeight: 1.6, textShadow: `0 0 8px ${accent}` }}>◆</span>
+                <p style={{ display: "flex", alignItems: "flex-start", gap: 7, fontFamily: fontGothic, fontWeight: 800, fontSize: 15, lineHeight: 1.45, color: ink, margin: 0 }}>
+                  <span style={{ flexShrink: 0, color: accent, fontSize: 13, lineHeight: 1.6 }}>◆</span>
                   <span>{b.title}</span>
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
-                  <span style={{ flexShrink: 0, fontFamily: fontGothic, fontWeight: 800, fontSize: 11, color: accent, textShadow: `0 0 8px ${accent}88` }}>{b.nowLabel}</span>
+                  <span style={{ flexShrink: 0, fontFamily: fontGothic, fontWeight: 800, fontSize: 11, color: accent }}>{b.nowLabel}</span>
                   <span style={{ fontSize: 11.5, lineHeight: 1.5, color: textDim }}>{b.body}</span>
                 </div>
                 {b.price && (
                   <div style={{ display: "flex", alignItems: "flex-end", gap: 8, marginTop: 8 }}>
                     {b.price.unit && (
-                      <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "4px 10px", borderRadius: 999, background: accent, fontFamily: fontGothic, fontWeight: 800, fontSize: 12, color: "#FFFFFF", boxShadow: `0 0 10px ${accent}77` }}>{b.price.unit}</span>
+                      <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "4px 10px", borderRadius: 999, background: accent, fontFamily: fontGothic, fontWeight: 800, fontSize: 12, color: "#FFFFFF", boxShadow: "none" }}>{b.price.unit}</span>
                     )}
                     <span style={{ display: "flex", alignItems: "flex-end" }}>
                       {b.price.note && <span style={{ fontSize: 10, color: textDim2, marginRight: 6, marginBottom: 6 }}>{b.price.note}</span>}
-                      <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 40, lineHeight: 1.15, fontVariantNumeric: "lining-nums", padding: "0 3px", background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}88)` }}>{b.price.value}</span>
-                      <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 18, lineHeight: 1, color: "#FFFFFF", marginLeft: 1, marginBottom: 4 }}>{b.price.suffix}</span>
+                      <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 40, lineHeight: 1.15, fontVariantNumeric: "lining-nums", padding: "0 3px", background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{b.price.value}</span>
+                      <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 18, lineHeight: 1, color: ink, marginLeft: 1, marginBottom: 4 }}>{b.price.suffix}</span>
                     </span>
                   </div>
                 )}
               </div>
               {b.gift && (
-                <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 54, height: 54, borderRadius: 14, background: `${accent}18`, border: `1px solid ${accent}55`, boxShadow: `0 0 14px ${accent}33`, overflow: "hidden" }}>
+                <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 54, height: 54, borderRadius: 14, background: `${accent}18`, border: `1px solid ${accent}55`, boxShadow: "none", overflow: "hidden" }}>
                   {b.giftImage ? (
                     <img src={b.giftImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   ) : (
@@ -495,17 +504,17 @@ export default function Page() {
   const c = config;
   return (
     <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
-      <div style={{ fontFamily: fontSans, background: bg, minHeight: "100vh", color: "#FFFFFF" }}>
+      <div style={{ fontFamily: fontSans, background: bg, minHeight: "100vh", color: ink }}>
         <div style={{ maxWidth: 480, margin: "0 auto", background: bg, overflow: "hidden", position: "relative" }}>
           {/* ── header ── */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "14px 20px", borderBottom: `1px solid ${border}` }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "14px 20px", background: headerGrad }}>
             {c.header.logo ? (
               <img src={c.header.logo} alt={c.header.logoAlt ?? c.header.brand} style={{ height: 40, width: "auto", display: "block" }} />
             ) : (
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <svg width="22" height="18" viewBox="0 0 22 18" fill="none">
                   {[3, 8, 13, 10, 5].map((h, i) => (
-                    <rect key={i} x={i * 4.5} y={(18 - h) / 2} width="2.4" height={h} rx="1.2" fill={i % 2 === 0 ? pink : blue} />
+                    <rect key={i} x={i * 4.5} y={(18 - h) / 2} width="2.4" height={h} rx="1.2" fill={i % 2 === 0 ? pink : purple} />
                   ))}
                 </svg>
                 <div style={{ lineHeight: 1.15 }}>
@@ -520,7 +529,7 @@ export default function Page() {
               {c.hero.access.map((a, i) => (
                 <span key={i} style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
                   {a.station}
-                  <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${blue}, 0 0 3px ${blue}, 0 0 1px ${blue}` }}>
+                  <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 400, textShadow: `0 0 6px ${pink}, 0 0 3px ${pink}` }}>
                     {a.walk.split(/(\d+)/).map((part, j) =>
                       /^\d+$/.test(part) ? <b key={j} style={{ fontWeight: 700 }}>{part}</b> : part
                     )}
@@ -531,29 +540,30 @@ export default function Page() {
           </div>
 
           {/* ── FV / hero ── */}
-          <section style={{ position: "relative", minHeight: "clamp(400px, 115vw, 560px)", overflow: "hidden", background: "#12121A" }}>
+          <section style={{ position: "relative", minHeight: "clamp(400px, 115vw, 560px)", overflow: "hidden", background: "#26162F" }}>
             <ImageSlot
               src={c.hero.hero.src}
               placeholder={c.hero.hero.placeholder}
               poster={c.hero.hero.poster}
               objectPosition={c.hero.hero.position ?? "center"}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#161620" }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#2C1A36" }}
             />
+            <MoodTint />
             {/* 動画は静止画より明るく動きもあるため、全面に薄いベールを敷いて文字を保護する */}
-            <div style={{ position: "absolute", inset: 0, background: "rgba(8,8,13,0.22)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "rgba(40,20,90,0.12)" }} />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(180deg, rgba(8,8,13,0.9) 0%, rgba(8,8,13,0.74) 30%, rgba(8,8,13,0.3) 52%, rgba(8,8,13,0) 72%)",
+                  "linear-gradient(180deg, rgba(40,20,90,0.82) 0%, rgba(40,20,90,0.62) 30%, rgba(40,20,90,0.22) 52%, rgba(40,20,90,0) 72%)",
               }}
             />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(180deg, rgba(8,8,13,0) 62%, rgba(8,8,13,0.9) 100%)",
+                background: "linear-gradient(180deg, rgba(40,20,90,0) 58%, rgba(40,20,90,0.78) 100%)",
               }}
             />
             <div style={{ position: "relative", zIndex: 2, padding: "48px 22px 24px" }}>
@@ -592,7 +602,7 @@ export default function Page() {
                   lineHeight: 1.6,
                   letterSpacing: "0.03em",
                   margin: "12px 0 0",
-                  background: `linear-gradient(90deg, ${pink} 0%, #FF8FC4 60%, ${blue} 100%)`,
+                  background: `linear-gradient(90deg, #FF5FA8 0%, #FF9ACB 60%, #D9C2FF 100%)`,
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   color: "transparent",
@@ -612,9 +622,9 @@ export default function Page() {
                   position: "relative",
                   padding: "8px 24px 16px",
                   background:
-                    "radial-gradient(120% 130% at 50% 25%, rgba(190,40,130,0.82) 0%, rgba(110,25,90,0.9) 48%, rgba(45,12,45,0.95) 100%)",
+                    "radial-gradient(120% 130% at 50% 25%, rgba(150,90,240,0.85) 0%, rgba(98,52,200,0.9) 48%, rgba(56,26,130,0.95) 100%)",
                   border: `2px solid ${pink}`,
-                  boxShadow: `0 0 34px ${pink}AA, 0 0 10px ${pink}, inset 0 0 22px rgba(255,61,147,0.28)`,
+                  boxShadow: `0 0 34px ${pink}AA, 0 0 10px ${pink}, inset 0 0 22px rgba(255,46,139,0.28)`,
                   clipPath:
                     "polygon(20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0% calc(100% - 20px), 0% 20px)",
                 }}
@@ -657,7 +667,7 @@ export default function Page() {
                     padding: "8px 14px",
                     borderRadius: 999,
                     border: `1.5px solid ${pink}`,
-                    background: "rgba(20,6,22,0.4)",
+                    background: "rgba(40,20,90,0.4)",
                     textAlign: "center",
                     fontFamily: fontGothic,
                     fontSize: 15.5,
@@ -679,7 +689,7 @@ export default function Page() {
 
               <div style={{ display: "flex", gap: 8 }}>
                 {c.hero.tags.map((t, i) => (
-                  <PillTag key={i} accent={i === 1 ? blue : pink} fill>{t}</PillTag>
+                  <PillTag key={i} accent={i === 1 ? purple : pink} fill>{t}</PillTag>
                 ))}
               </div>
               </div>
@@ -703,32 +713,31 @@ export default function Page() {
                   justifyContent: "center",
                   padding: "6px 22px",
                   borderRadius: 999,
-                  border: `1px solid ${violet}`,
-                  background: `${violet}14`,
-                  boxShadow: `0 0 14px ${violet}55, inset 0 0 8px ${violet}22`,
+                  border: `1px solid ${purple}`,
+                  background: `${purple}12`,
+                  boxShadow: "none",
                   fontFamily: fontGothic,
                   fontWeight: 800,
                   fontSize: 14,
                   letterSpacing: "0.18em",
-                  color: "#FFFFFF",
-                  textShadow: `0 0 8px ${violet}88`,
+                  color: purple,
                 }}
               >
                 {c.worry.eyebrow}
               </span>
-              <span style={{ width: 1, height: 18, background: `${violet}88`, boxShadow: `0 0 6px ${violet}` }} />
+              <span style={{ width: 1, height: 18, background: `${purple}88` }} />
             </div>
-            <h2 style={{ fontFamily: fontMincho, fontWeight: 700, textAlign: "center", margin: "6px 0 0", lineHeight: 1.35, color: "#FFFFFF" }}>
-              <span style={{ display: "block", fontSize: 32, textShadow: `0 0 14px ${blue}66, 0 0 4px rgba(255,255,255,0.3)` }}>{c.worry.headingLarge}</span>
-              <span style={{ display: "block", fontSize: 24, marginTop: 4, color: "rgba(255,255,255,0.9)" }}>{c.worry.headingSmall}</span>
+            <h2 style={{ fontFamily: fontMincho, fontWeight: 700, textAlign: "center", margin: "6px 0 0", lineHeight: 1.35, color: ink }}>
+              <span style={{ display: "block", fontSize: 32 }}>{c.worry.headingLarge}</span>
+              <span style={{ display: "block", fontSize: 24, marginTop: 4, color: inkSoft }}>{c.worry.headingSmall}</span>
             </h2>
             <div
               style={{
                 marginTop: 30,
                 borderRadius: 18,
-                border: `1px solid ${blue}44`,
-                background: "rgba(63,160,255,0.04)",
-                boxShadow: `0 0 22px ${blue}22, inset 0 0 18px rgba(63,160,255,0.05)`,
+                border: `1px solid ${purple}33`,
+                background: "#FFFFFF",
+                boxShadow: `0 10px 28px ${purple}1A`,
                 padding: "26px 14px",
                 display: "flex",
                 flexDirection: "column",
@@ -748,22 +757,21 @@ export default function Page() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      border: `1.5px solid ${violet}`,
-                      boxShadow: `0 0 12px ${violet}88, inset 0 0 6px ${violet}33`,
+                      border: `1.5px solid ${purple}`,
+                      boxShadow: "none",
                     }}
                   >
-                    <Icon name="check" size={16} color={violet} />
+                    <Icon name="check" size={16} color={purple} />
                   </span>
-                  <span style={{ fontFamily: fontGothic, fontSize: 13, fontWeight: 700, lineHeight: 1.5, whiteSpace: "nowrap", color: "rgba(255,255,255,0.92)" }}>
+                  <span style={{ fontFamily: fontGothic, fontSize: 13, fontWeight: 700, lineHeight: 1.5, whiteSpace: "nowrap", color: ink }}>
                     {item.parts.map((p, j) =>
                       p.hl ? (
                         <span
                           key={j}
                           style={{
-                            color: "#FFFFFF",
+                            color: ink,
                             fontWeight: 800,
-                            background: `linear-gradient(transparent 58%, ${pink}66 58%)`,
-                            textShadow: `0 0 8px ${pink}99`,
+                            background: `linear-gradient(transparent 58%, ${pink}40 58%)`,
                           }}
                         >
                           {p.t}
@@ -780,17 +788,17 @@ export default function Page() {
           </section>
 
           {/* ── why (だからBeat Pilates) ── */}
-          <section style={{ padding: "12px 22px 54px", background: "#0D0D14" }}>
-            <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 26, letterSpacing: "0.06em", textAlign: "center", margin: 0, color: "#FFFFFF", textShadow: `0 0 12px ${pink}55, 0 0 4px rgba(255,255,255,0.25)` }}>
+          <section style={{ padding: "12px 22px 54px", background: bgAlt }}>
+            <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 26, letterSpacing: "0.06em", textAlign: "center", margin: 0, color: ink }}>
               {c.why.heading}
-              <span style={{ display: "block", fontFamily: fontMincho, fontWeight: 700, fontSize: 34, letterSpacing: "0.04em", background: duoTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", marginTop: 6, filter: `drop-shadow(0 0 10px ${pink}66)` }}>
+              <span style={{ display: "block", fontFamily: fontMincho, fontWeight: 700, fontSize: 34, letterSpacing: "0.04em", background: duoTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", marginTop: 6 }}>
                 {c.why.headingHighlight}
               </span>
             </h2>
             <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 1.9, color: textDim, margin: "16px 0 0" }}>{nl(c.why.lead)}</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 30 }}>
               {c.why.items.map((item, i) => {
-                const accent = i === 1 ? violet : i === 2 ? blue : pink;
+                const accent = i === 1 ? violet : i === 2 ? purple : pink;
                 return (
                 <div
                   key={i}
@@ -799,7 +807,7 @@ export default function Page() {
                     borderRadius: 20,
                     overflow: "hidden",
                     border: `1px solid ${border}`,
-                    background: "#0D0D14",
+                    background: "#FFFFFF",
                   }}
                 >
                   <div style={{ position: "relative", height: 200 }}>
@@ -807,8 +815,9 @@ export default function Page() {
                       src={item.img.src}
                       placeholder={item.img.placeholder}
                       objectPosition={item.img.position ?? "center"}
-                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#161620" }}
+                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#2C1A36" }}
                     />
+                    <MoodTint />
                     <div
                       style={{
                         position: "absolute",
@@ -816,7 +825,7 @@ export default function Page() {
                         right: 0,
                         top: 0,
                         height: 110,
-                        background: "linear-gradient(180deg, rgba(8,8,13,0.8) 0%, rgba(8,8,13,0.4) 55%, rgba(8,8,13,0) 100%)",
+                        background: "linear-gradient(180deg, rgba(40,20,90,0.72) 0%, rgba(40,20,90,0.35) 55%, rgba(40,20,90,0) 100%)",
                       }}
                     />
                     <div
@@ -826,7 +835,7 @@ export default function Page() {
                         right: 0,
                         bottom: 0,
                         height: 76,
-                        background: "linear-gradient(180deg, rgba(13,13,20,0) 0%, #0D0D14 100%)",
+                        background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%)",
                       }}
                     />
                     <h3 style={{ position: "absolute", left: 18, right: 18, top: 16, display: "flex", alignItems: "center", gap: 12, fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.02em", margin: 0, color: "#FFFFFF" }}>
@@ -839,7 +848,7 @@ export default function Page() {
                           display: "inline-flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          background: "rgba(10,10,16,0.55)",
+                          background: "rgba(40,20,90,0.55)",
                           border: `2px solid ${accent}`,
                           boxShadow: `0 0 16px ${accent}AA, 0 0 4px ${accent}`,
                           backdropFilter: "blur(4px)",
@@ -862,7 +871,7 @@ export default function Page() {
                     </h3>
                   </div>
                   <div style={{ padding: "16px 20px 24px" }}>
-                    <p style={{ fontSize: 14.5, lineHeight: 1.8, color: "rgba(255,255,255,0.75)", margin: 0 }}>
+                    <p style={{ fontSize: 14.5, lineHeight: 1.8, color: textDim, margin: 0 }}>
                       {item.body}
                     </p>
                   </div>
@@ -872,41 +881,42 @@ export default function Page() {
           </section>
 
           {/* ── about (暗闇マシンピラティスとは) ── */}
-          <section style={{ position: "relative", minHeight: 420, overflow: "hidden", background: "#12121A" }}>
+          <section style={{ position: "relative", minHeight: 420, overflow: "hidden", background: "#26162F" }}>
             <ImageSlot
               src={c.about.photo.src}
               placeholder={c.about.photo.placeholder}
               objectPosition={c.about.photo.position ?? "center"}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#161620", transform: "scaleX(-1)" }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#2C1A36", transform: "scaleX(-1)" }}
             />
+            <MoodTint />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(100deg, rgba(8,8,13,0.96) 0%, rgba(8,8,13,0.9) 34%, rgba(8,8,13,0.55) 58%, rgba(8,8,13,0.12) 78%, rgba(8,8,13,0) 92%)",
+                  "linear-gradient(100deg, rgba(40,20,90,0.96) 0%, rgba(40,20,90,0.9) 34%, rgba(40,20,90,0.55) 58%, rgba(40,20,90,0.12) 78%, rgba(40,20,90,0) 92%)",
               }}
             />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(180deg, rgba(8,8,13,0) 60%, rgba(8,8,13,0.85) 100%)",
+                background: "linear-gradient(180deg, rgba(40,20,90,0) 60%, rgba(40,20,90,0.85) 100%)",
               }}
             />
             <div style={{ position: "relative", zIndex: 2, minHeight: 420, display: "flex", flexDirection: "column", padding: "10px 22px 44px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.04em", lineHeight: 1.5, margin: 0, background: duoTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66) drop-shadow(0 2px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 3px rgba(0,0,0,0.9))` }}>{nl(c.about.heading)}</h2>
+              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.04em", lineHeight: 1.5, margin: 0, background: "linear-gradient(90deg, #FF8FC4 0%, #E7D6FF 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66) drop-shadow(0 2px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 3px rgba(0,0,0,0.9))` }}>{nl(c.about.heading)}</h2>
               <p style={{ maxWidth: 300, fontSize: 12, lineHeight: 1.7, color: "#FFFFFF", margin: "12px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body1)}</p>
               <p style={{ maxWidth: 300, fontSize: 11.5, lineHeight: 1.7, color: "rgba(255,255,255,0.8)", margin: "8px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body2)}</p>
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", paddingTop: 32 }}>
                 {c.about.tags.map((t, i) => {
-                  const accent = i === 1 ? violet : i === 2 ? blue : pink;
+                  const accent = i === 1 ? violet : i === 2 ? purple : pink;
                   return (
                     <span key={i} style={{ display: "contents" }}>
                       {i > 0 && (
                         <span style={{ fontSize: 18, fontWeight: 700, color: "#FFFFFF", flexShrink: 0 }}>×</span>
                       )}
-                      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "18px 4px", borderRadius: 14, border: `1px solid ${accent}`, background: "rgba(10,10,16,0.5)", backdropFilter: "blur(4px)", boxShadow: `0 0 14px ${accent}66, inset 0 0 10px ${accent}22` }}>
+                      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "18px 4px", borderRadius: 14, border: `1px solid ${accent}`, background: "rgba(40,20,90,0.5)", backdropFilter: "blur(4px)", boxShadow: `0 0 14px ${accent}66, inset 0 0 10px ${accent}22` }}>
                         <span
                           style={{
                             fontFamily: fontMincho,
@@ -930,13 +940,13 @@ export default function Page() {
           {/* ── movie (スタジオ紹介ムービー) ── */}
           <section style={{ padding: "34px 22px 52px" }}>
             <div style={{ textAlign: "center" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: "#FFFFFF", lineHeight: 1.4, margin: 0, textShadow: `0 0 12px ${blue}55` }}>
+              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: ink, lineHeight: 1.4, margin: 0 }}>
                 {c.movie.heading}
               </h2>
-              <div style={{ width: 30, height: 2, background: blue, borderRadius: 2, margin: "14px auto 0", boxShadow: `0 0 8px ${blue}` }} />
+              <div style={{ width: 30, height: 2, background: purple, borderRadius: 2, margin: "14px auto 0" }} />
             </div>
             <div style={{ display: "flex", justifyContent: "center", marginTop: 30 }}>
-              <div style={{ width: "100%", maxWidth: 300, borderRadius: 20, overflow: "hidden", border: `1px solid ${blue}55`, boxShadow: `0 0 26px ${blue}33`, background: "#0A0A10" }}>
+              <div style={{ width: "100%", maxWidth: 300, borderRadius: 20, overflow: "hidden", border: `1px solid ${purple}55`, boxShadow: `0 12px 30px ${purple}26`, background: "#1C1024" }}>
                 <video
                   src={c.movie.src}
                   autoPlay
@@ -944,7 +954,7 @@ export default function Page() {
                   loop
                   playsInline
                   controls
-                  style={{ display: "block", width: "100%", aspectRatio: "9 / 16", objectFit: "cover", background: "#0A0A10" }}
+                  style={{ display: "block", width: "100%", aspectRatio: "9 / 16", objectFit: "cover", background: "#1C1024" }}
                 />
               </div>
             </div>
@@ -957,10 +967,10 @@ export default function Page() {
           <BenefitsSection />
 
           {/* ── reasons (選ばれる3つの理由) ── */}
-          <section style={{ padding: "36px 22px 66px", background: "#0D0D14" }}>
+          <section style={{ padding: "36px 22px 66px", background: bgAlt }}>
             <SectionHeading plain={c.reasons.heading} fontSize={20} />
             {c.reasons.items.map((item, idx) => {
-              const accent = idx === 1 ? violet : idx === 2 ? blue : pink;
+              const accent = idx === 1 ? violet : idx === 2 ? purple : pink;
               return (
                 <div key={idx} style={{ marginTop: idx === 0 ? 40 : 48 }}>
                   <div style={{ position: "relative" }}>
@@ -969,8 +979,9 @@ export default function Page() {
                       placeholder={item.img.placeholder}
                       objectPosition={item.img.position ?? "center"}
                       radius={16}
-                      style={{ width: "100%", height: 210, background: "#161620" }}
+                      style={{ width: "100%", height: 210, background: "#2C1A36" }}
                     />
+                    <MoodTint radius={16} />
                     <div
                       style={{
                         position: "absolute",
@@ -979,13 +990,13 @@ export default function Page() {
                         width: 50,
                         height: 50,
                         transform: "rotate(45deg)",
-                        background: "rgba(10,10,16,0.85)",
+                        background: "#FFFFFF",
                         border: `2px solid ${accent}`,
                         borderRadius: 8,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        boxShadow: `0 0 18px ${accent}AA, 0 0 6px ${accent}`,
+                        boxShadow: `0 6px 16px ${accent}40`,
                       }}
                     >
                       <span
@@ -996,7 +1007,6 @@ export default function Page() {
                           fontWeight: 700,
                           fontSize: 18,
                           color: accent,
-                          textShadow: `0 0 8px ${accent}88`,
                         }}
                       >
                         {item.num}
@@ -1011,20 +1021,19 @@ export default function Page() {
                       lineHeight: 1.6,
                       letterSpacing: "0.02em",
                       margin: "22px 0 0",
-                      color: "#FFFFFF",
+                      color: ink,
                       textAlign: "center",
-                      textShadow: `0 0 10px ${accent}66`,
                     }}
                   >
                     {nl(item.title)}
                   </h3>
-                  <div style={{ width: 40, height: 2, background: `${accent}88`, margin: "14px auto 0", boxShadow: `0 0 8px ${accent}` }} />
+                  <div style={{ width: 40, height: 2, background: `${accent}88`, margin: "14px auto 0" }} />
                   <p style={{ fontSize: 13.5, lineHeight: 2, color: textDim, margin: item.trio ? "16px 0 20px" : "16px 0 0" }}>{item.body}</p>
                   {item.trio && (
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                       {item.trio.map((t, i) => (
-                        <div key={i} style={{ borderRadius: 12, border: `1px solid ${accent}55`, background: `${accent}12`, minHeight: 54, padding: "12px 4px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-                          <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 11, lineHeight: 1.4, color: "#FFFFFF", whiteSpace: "nowrap", textShadow: `0 0 10px ${accent}, 0 0 4px ${accent}CC` }}>{t.label}</span>
+                        <div key={i} style={{ borderRadius: 12, border: `1px solid ${accent}55`, background: "#FFFFFF", minHeight: 54, padding: "12px 4px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+                          <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 11, lineHeight: 1.4, color: accent, whiteSpace: "nowrap" }}>{t.label}</span>
                         </div>
                       ))}
                     </div>
@@ -1039,10 +1048,10 @@ export default function Page() {
           {/* ── trainers (インストラクター紹介) ── */}
           <section style={{ padding: "34px 0 52px" }}>
             <div style={{ textAlign: "center", padding: "0 22px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: "#FFFFFF", lineHeight: 1.4, margin: 0, textShadow: `0 0 12px ${pink}55` }}>
+              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: ink, lineHeight: 1.4, margin: 0 }}>
                 {c.trainers.heading}
               </h2>
-              <div style={{ width: 30, height: 2, background: pink, borderRadius: 2, margin: "14px auto 0", boxShadow: `0 0 8px ${pink}` }} />
+              <div style={{ width: 30, height: 2, background: pink, borderRadius: 2, margin: "14px auto 0" }} />
               <p style={{ fontSize: 12.5, lineHeight: 1.9, color: textDim, margin: "18px 0 0" }}>{nl(c.trainers.lead)}</p>
             </div>
             <div
@@ -1050,18 +1059,18 @@ export default function Page() {
               style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 22px 8px" }}
             >
               {c.trainers.items.map((t, i) => {
-                const accent = i === 1 ? violet : i === 2 ? blue : pink;
+                const accent = i === 1 ? violet : i === 2 ? purple : pink;
                 return (
-                  <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: panel, borderRadius: 18, overflow: "hidden", border: `1px solid ${accent}55`, boxShadow: `0 0 20px ${accent}33` }}>
-                    <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264, background: "#161620" }} />
+                  <div key={i} style={{ flex: "none", width: 244, scrollSnapAlign: "center", background: panel, borderRadius: 18, overflow: "hidden", border: `1px solid ${accent}55`, boxShadow: `0 10px 26px ${accent}1F` }}>
+                    <ImageSlot src={t.img.src} placeholder={t.img.placeholder} style={{ width: "100%", height: 264, background: "#2C1A36" }} />
                     <div style={{ padding: "18px 20px 22px" }}>
                       <div style={{ fontSize: 11, letterSpacing: "0.14em", color: accent }}>{t.role}</div>
-                      <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: "#FFFFFF", marginTop: 6 }}>{t.name}</div>
+                      <div style={{ fontFamily: fontMincho, fontSize: 20, letterSpacing: "0.04em", color: ink, marginTop: 6 }}>{t.name}</div>
                       <div style={{ fontSize: 12, color: textDim2, marginTop: 2 }}>{t.nameEn}</div>
                       <p style={{ fontSize: 12.5, lineHeight: 1.9, color: textDim, margin: "12px 0 0" }}>{t.body}</p>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 14 }}>
                         {t.tags.map((tag, ti) => (
-                          <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: "#FFFFFF", border: `1px solid ${accent}66`, background: `${accent}18`, borderRadius: 999, padding: "4px 10px" }}>{tag}</span>
+                          <span key={ti} style={{ fontSize: 10.5, letterSpacing: "0.02em", color: accent, border: `1px solid ${accent}66`, background: `${accent}18`, borderRadius: 999, padding: "4px 10px" }}>{tag}</span>
                         ))}
                       </div>
                     </div>
@@ -1075,7 +1084,7 @@ export default function Page() {
           </section>
 
           {/* ── FAQ ── */}
-          <section style={{ padding: "34px 22px 54px", background: "#0D0D14" }}>
+          <section style={{ padding: "34px 22px 54px", background: bgAlt }}>
             <SectionHeading plain={c.faq.heading} />
             <div style={{ marginTop: 28 }}>
               <FaqDark items={c.faq.items} pink={pink} />
@@ -1083,12 +1092,12 @@ export default function Page() {
           </section>
 
           {/* ── pricing (料金プラン) ── */}
-          <section style={{ padding: "34px 22px 54px", background: "#0D0D14" }}>
-            <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: "#FFFFFF" }}>
+          <section style={{ padding: "34px 22px 54px", background: bg }}>
+            <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: ink }}>
               {c.pricing.heading}
-              <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66)` }}>{c.pricing.headingHighlight}</span>
+              <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{c.pricing.headingHighlight}</span>
             </h2>
-            <div style={{ marginTop: 28, borderRadius: 16, border: `1px solid ${pink}44`, background: "rgba(255,61,147,0.04)", boxShadow: `0 0 20px ${pink}22, inset 0 0 16px rgba(255,61,147,0.05)`, overflow: "hidden" }}>
+            <div style={{ marginTop: 28, borderRadius: 16, border: `1px solid ${pink}44`, background: "#FFFFFF", boxShadow: `0 10px 26px ${pink}14`, overflow: "hidden" }}>
               {c.pricing.plans.map((p, i) => (
                 <div
                   key={i}
@@ -1099,7 +1108,7 @@ export default function Page() {
                   }}
                 >
                   <div style={{ flex: 1, padding: "16px 16px" }}>
-                    <div style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 15, color: "#FFFFFF" }}>{p.label}</div>
+                    <div style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 15, color: ink }}>{p.label}</div>
                     {p.sublabel && <div style={{ fontSize: 10.5, color: textDim2, marginTop: 3 }}>{p.sublabel}</div>}
                   </div>
                   <div style={{ flex: 1, padding: "16px 16px", borderLeft: `1px solid ${border}`, textAlign: "center" }}>
@@ -1113,7 +1122,6 @@ export default function Page() {
                         WebkitBackgroundClip: "text",
                         backgroundClip: "text",
                         color: "transparent",
-                        filter: `drop-shadow(0 0 8px ${pink}77)`,
                       }}
                     >
                       {p.price}
@@ -1126,33 +1134,33 @@ export default function Page() {
           </section>
 
           {/* ── voices (お客様の声) ── */}
-          <section style={{ padding: "34px 0 52px", background: "#0D0D14" }}>
+          <section style={{ padding: "34px 0 52px", background: bgAlt }}>
             <div style={{ textAlign: "center", padding: "0 22px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: "#FFFFFF", lineHeight: 1.4, margin: 0, textShadow: `0 0 12px ${pink}55` }}>
+              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 24, letterSpacing: "0.06em", color: ink, lineHeight: 1.4, margin: 0 }}>
                 {c.voices.heading}
               </h2>
-              <div style={{ width: 30, height: 2, background: pink, borderRadius: 2, margin: "14px auto 0", boxShadow: `0 0 8px ${pink}` }} />
+              <div style={{ width: 30, height: 2, background: pink, borderRadius: 2, margin: "14px auto 0" }} />
             </div>
             <div
               className="no-scrollbar"
               style={{ display: "flex", gap: 16, overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", padding: "30px 22px 8px" }}
             >
               {c.voices.items.map((v, i) => {
-                const accent = i === 1 ? violet : i === 2 ? blue : pink;
+                const accent = i === 1 ? violet : i === 2 ? purple : pink;
                 return (
-                  <div key={i} style={{ flex: "none", width: 288, maxWidth: "84vw", scrollSnapAlign: "center", background: panel, borderRadius: 18, border: `1px solid ${accent}55`, boxShadow: `0 0 20px ${accent}33`, padding: "24px 22px 26px", display: "flex", flexDirection: "column" }}>
+                  <div key={i} style={{ flex: "none", width: 288, maxWidth: "84vw", scrollSnapAlign: "center", background: panel, borderRadius: 18, border: `1px solid ${accent}55`, boxShadow: `0 10px 26px ${accent}1F`, padding: "24px 22px 26px", display: "flex", flexDirection: "column" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ flexShrink: 0, width: 46, height: 46, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fontMincho, fontSize: 18, color: "#FFFFFF", border: `1.5px solid ${accent}`, background: `${accent}1A`, boxShadow: `0 0 12px ${accent}66, inset 0 0 8px ${accent}22` }}>
+                      <span style={{ flexShrink: 0, width: 46, height: 46, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fontMincho, fontSize: 18, color: accent, border: `1.5px solid ${accent}`, background: `${accent}1A`, boxShadow: "none" }}>
                         {v.name.charAt(0)}
                       </span>
                       <div>
-                        <div style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 14.5, color: "#FFFFFF" }}>{v.name}</div>
+                        <div style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 14.5, color: ink }}>{v.name}</div>
                         <div style={{ fontSize: 11.5, color: textDim2, marginTop: 2 }}>{v.meta}</div>
                       </div>
                     </div>
                     <div style={{ display: "flex", gap: 2, marginTop: 14, color: accent }}>
                       {Array.from({ length: v.rating }).map((_, si) => (
-                        <span key={si} style={{ fontSize: 15, textShadow: `0 0 8px ${accent}99` }}>★</span>
+                        <span key={si} style={{ fontSize: 15 }}>★</span>
                       ))}
                     </div>
                     <p style={{ fontSize: 13, lineHeight: 1.95, color: textDim, margin: "14px 0 0" }}>{v.comment}</p>
@@ -1170,16 +1178,16 @@ export default function Page() {
             <SectionHeading plain={c.access.heading} />
             <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 30 }}>
               {c.access.stores.map((store, i) => {
-                const accent = blue;
+                const accent = purple;
                 return (
-                <div key={i} style={{ borderRadius: 16, overflow: "hidden", border: `1.5px solid ${accent}`, background: panel, boxShadow: `0 0 14px ${accent}66, inset 0 0 10px ${accent}22` }}>
-                  <ImageSlot src={store.img.src} placeholder={store.img.placeholder} style={{ width: "100%", height: 160, background: "#161620" }} />
+                <div key={i} style={{ borderRadius: 16, overflow: "hidden", border: `1.5px solid ${accent}`, background: panel, boxShadow: `0 10px 26px ${accent}1F` }}>
+                  <ImageSlot src={store.img.src} placeholder={store.img.placeholder} style={{ width: "100%", height: 160, background: "#2C1A36" }} />
                   <div style={{ padding: 20 }}>
-                    <h3 style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 17, letterSpacing: "0.04em", margin: 0, color: "#FFFFFF" }}>{store.name}</h3>
+                    <h3 style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 17, letterSpacing: "0.04em", margin: 0, color: ink }}>{store.name}</h3>
                     <p style={{ fontSize: 12, lineHeight: 1.9, color: textDim, margin: "8px 0 0" }}>
                       {store.address}
                       <br />
-                      <span style={{ color: blue, fontWeight: 700 }}>{store.hours}</span>
+                      <span style={{ color: purple, fontWeight: 700 }}>{store.hours}</span>
                       <br />
                       {nl(store.route)}
                     </p>
@@ -1189,7 +1197,7 @@ export default function Page() {
               })}
             </div>
             {c.access.mapEmbedSrc && (
-              <div style={{ marginTop: 18, borderRadius: 16, overflow: "hidden", border: `1.5px solid ${blue}`, boxShadow: `0 0 14px ${blue}66, inset 0 0 10px ${blue}22`, lineHeight: 0 }}>
+              <div style={{ marginTop: 18, borderRadius: 16, overflow: "hidden", border: `1.5px solid ${purple}`, boxShadow: `0 10px 26px ${purple}1F`, lineHeight: 0 }}>
                 <iframe
                   src={c.access.mapEmbedSrc}
                   title={`${c.access.stores[0]?.name ?? c.header.brand} の地図`}
@@ -1205,9 +1213,9 @@ export default function Page() {
           </section>
 
           {/* ── form ── */}
-          <section id="form" style={{ padding: "34px 22px 30px", background: "linear-gradient(160deg, #0B1030 0%, #171436 55%, #2A1A47 100%)" }}>
+          <section id="form" style={{ padding: "34px 22px 30px", background: "linear-gradient(160deg, #F3ECFF 0%, #EBDFFF 55%, #FBE6F2 100%)" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 20px", borderRadius: 999, border: `1px solid ${pink}`, background: `${pink}14`, color: "#FFFFFF", fontSize: 12, fontWeight: 800, letterSpacing: "0.04em", boxShadow: `0 0 14px ${pink}55, inset 0 0 8px ${pink}22`, textShadow: `0 0 8px ${pink}` }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 20px", borderRadius: 999, border: `1px solid ${pink}`, background: "#FFFFFF", color: pink, fontSize: 12, fontWeight: 800, letterSpacing: "0.04em" }}>
                 ＼ 今なら初回体験0円 ／
               </span>
             </div>
@@ -1215,24 +1223,23 @@ export default function Page() {
             <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 1.9, color: textDim, margin: "16px 0 0" }}>{nl(c.form.lead)}</p>
             <div style={{ display: "flex", justifyContent: "center", gap: 10, margin: "18px 0 0" }}>
               {c.sticky.offers.map((o, i) => {
-                const accent = i % 2 === 0 ? pink : blue;
+                const accent = i % 2 === 0 ? pink : purple;
                 return (
-                  <span key={o.label} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 18px", borderRadius: 12, border: `1.5px solid ${accent}`, background: `${accent}12`, boxShadow: `0 0 12px ${accent}44, inset 0 0 8px ${accent}18` }}>
-                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.75)" }}>{o.label}</span>
-                    <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 18, color: "#FFFFFF", textShadow: `0 0 8px ${accent}, 0 0 3px ${accent}` }}>{o.value}</span>
+                  <span key={o.label} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 18px", borderRadius: 12, border: `1.5px solid ${accent}`, background: "#FFFFFF" }}>
+                    <span style={{ fontSize: 11, color: textDim }}>{o.label}</span>
+                    <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 18, color: accent }}>{o.value}</span>
                   </span>
                 );
               })}
             </div>
-            {/* LPForm's <label> text is styled dark (for pattern A's light background); override
-                to white here since this section sits on the dark theme's near-black background. */}
+            {/* LPForm's <label> text is already dark, which suits this light theme;
+                only the required tag and disclaimer are tuned here. */}
             <style>{`
-              #form label { color: #FFFFFF !important; }
               #form .lpform-required-tag { color: ${pink} !important; font-weight: 700; }
               #form .lpform-disclaimer { font-size: 9.5px !important; letter-spacing: -0.01em; white-space: nowrap; }
               @keyframes beatCtaPulse {
-                0%, 100% { transform: scale(1); box-shadow: 0 10px 26px rgba(255,61,147,0.32); }
-                50% { transform: scale(1.02); box-shadow: 0 12px 32px rgba(255,61,147,0.55), 0 0 24px rgba(63,160,255,0.42); }
+                0%, 100% { transform: scale(1); box-shadow: 0 10px 26px rgba(255,46,139,0.32); }
+                50% { transform: scale(1.02); box-shadow: 0 12px 32px rgba(255,46,139,0.55), 0 0 24px rgba(108,63,209,0.3); }
               }
             `}</style>
             <LPForm
@@ -1242,14 +1249,14 @@ export default function Page() {
               submitLabel={c.form.submitLabel}
               errorMessage={c.form.errorMessage}
               disclaimer={c.form.disclaimer}
-              submitStyle={{ background: ctaGrad, boxShadow: "0 10px 26px rgba(255,61,147,0.32)", letterSpacing: "0.06em", whiteSpace: "nowrap", animation: "beatCtaPulse 1.8s ease-in-out infinite" }}
+              submitStyle={{ background: ctaGrad, boxShadow: "0 10px 26px rgba(255,46,139,0.32)", letterSpacing: "0.06em", whiteSpace: "nowrap", animation: "beatCtaPulse 1.8s ease-in-out infinite" }}
               thanksHref={`/${c.slug}/thanks`}
             />
           </section>
 
           {/* ── footer ── */}
-          <footer style={{ padding: "18px 22px 22px", background: bg, borderTop: `1px solid ${border}`, textAlign: "center" }}>
-            <p style={{ margin: 0, fontFamily: fontGothic, fontSize: 10.5, letterSpacing: "0.08em", color: textDim2 }}>{c.footer.copyright}</p>
+          <footer style={{ padding: "18px 22px 22px", background: headerGrad, textAlign: "center" }}>
+            <p style={{ margin: 0, fontFamily: fontGothic, fontSize: 10.5, letterSpacing: "0.08em", color: "rgba(255,255,255,0.75)" }}>{c.footer.copyright}</p>
           </footer>
         </div>
       </div>

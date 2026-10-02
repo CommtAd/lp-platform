@@ -1,27 +1,27 @@
 import LPShell from "@/components/LPShell";
 import config from "./config";
 
-const pink = "#FF3D93";
-const blue = "#3FA0FF";
-const violet = "#8B5CF6";
-const bg = "#0A0A10";
-const border = "rgba(255,255,255,0.1)";
-const textDim = "rgba(255,255,255,0.65)";
+const pink = "#FF2E8B";
+const purple = "#6C3FD1";
+const ink = "#2D2145";
+const bg = "#FFFFFF";
+const textDim = "rgba(45,33,69,0.72)";
+const headerGrad = `linear-gradient(90deg, #4B2A9E 0%, ${purple} 100%)`;
 const fontGothic = "'Zen Kaku Gothic New', sans-serif";
 const fontSans = "'Noto Sans JP', sans-serif";
-const ctaGrad = `linear-gradient(90deg, ${pink} 0%, ${violet} 55%, ${blue} 100%)`;
+const ctaGrad = `linear-gradient(90deg, #FF4A9E 0%, ${pink} 50%, #E0186F 100%)`;
 
 export default function ThanksPage() {
   const c = config;
   return (
     <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
-      <div style={{ fontFamily: fontSans, background: bg, minHeight: "100vh", color: "#FFFFFF" }}>
+      <div style={{ fontFamily: fontSans, background: bg, minHeight: "100vh", color: ink }}>
         <div style={{ maxWidth: 480, margin: "0 auto", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", alignItems: "center", padding: "14px 20px", borderBottom: `1px solid ${border}` }}>
+          <div style={{ display: "flex", alignItems: "center", padding: "14px 20px", background: headerGrad }}>
             {c.header.logo ? (
               <img src={c.header.logo} alt={c.header.logoAlt ?? c.header.brand} style={{ height: 40, width: "auto", display: "block" }} />
             ) : (
-              <div style={{ fontFamily: fontGothic, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em" }}>{c.header.brand}</div>
+              <div style={{ fontFamily: fontGothic, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", color: "#FFFFFF" }}>{c.header.brand}</div>
             )}
           </div>
 
@@ -36,7 +36,8 @@ export default function ThanksPage() {
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: 30,
-                boxShadow: `0 10px 26px rgba(255,61,147,0.32)`,
+                color: "#FFFFFF",
+                boxShadow: `0 10px 26px rgba(255,46,139,0.32)`,
               }}
             >
               ✓
@@ -59,7 +60,7 @@ export default function ThanksPage() {
                 padding: "14px 32px",
                 borderRadius: 999,
                 border: `1.5px solid ${pink}`,
-                color: "#FFFFFF",
+                color: pink,
                 fontSize: 13,
                 fontWeight: 700,
                 letterSpacing: "0.04em",
@@ -70,8 +71,8 @@ export default function ThanksPage() {
             </a>
           </div>
 
-          <footer style={{ padding: "18px 22px 22px", borderTop: `1px solid ${border}`, textAlign: "center" }}>
-            <p style={{ margin: 0, fontFamily: fontGothic, fontSize: 10.5, letterSpacing: "0.08em", color: textDim }}>{c.footer.copyright}</p>
+          <footer style={{ padding: "18px 22px 22px", background: headerGrad, textAlign: "center" }}>
+            <p style={{ margin: 0, fontFamily: fontGothic, fontSize: 10.5, letterSpacing: "0.08em", color: "rgba(255,255,255,0.75)" }}>{c.footer.copyright}</p>
           </footer>
         </div>
       </div>
