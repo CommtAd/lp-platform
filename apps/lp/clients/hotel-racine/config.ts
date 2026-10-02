@@ -155,7 +155,8 @@ const config: PatternCConfig = {
     // 写真＋1列のチェックリスト（顧客指定でベースから組み方を変えた）。
     // 7項目と奇数なので、2列のカードだと最後の1枚が余って間延びする。
     // 1行に収まらない項目は、自然に折ると語の途中で割れるので意味の切れ目で改行する。
-    photo: { placeholder: "チャペルの新郎新婦", src: `${ASSET}/recommend.jpg` },
+    // 写真は支給のおすすめ用カット（花のウォールの前の新郎新婦）。
+    photo: { placeholder: "花のウォールの前の新郎新婦", src: `${ASSET}/recommend-couple.jpg` },
     items: [
       { label: "初めての式場見学で\n何から見ればいいかわからない" },
       { label: "ホテルウェディングを\n実際に見てみたい" },
