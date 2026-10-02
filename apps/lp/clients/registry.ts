@@ -29,6 +29,7 @@ export const clientRegistry: Record<
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/page"),
   "bee-pilates-okusawa": () => import("./bee-pilates-okusawa/page"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/page"),
+  "sakura-shinjukusantyome": () => import("./sakura-shinjukusantyome/page"),
   "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/page"),
   "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/page"),
   "estudio": () => import("./estudio/page"),
@@ -55,6 +56,7 @@ export const clientThanksRegistry: Partial<
   "kaigyo-support": () => import("./kaigyo-support/thanks"),
   "lold-02": () => import("./lold-02/thanks"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/thanks"),
+  "sakura-shinjukusantyome": () => import("./sakura-shinjukusantyome/thanks"),
 };
 
 interface ClientMeta {
@@ -93,6 +95,7 @@ export const clientMetaRegistry: Record<
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/config"),
   "bee-pilates-okusawa": () => import("./bee-pilates-okusawa/config"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/config"),
+  "sakura-shinjukusantyome": () => import("./sakura-shinjukusantyome/config"),
   "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/config"),
   "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/config"),
   "estudio": () => import("./estudio/config"),
