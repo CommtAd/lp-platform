@@ -113,7 +113,7 @@ const config: PatternCConfig = {
     headingSize: 29,
     badge: "最大40万円相当プレゼント",
     title: "フェア成約特典",
-    amount: "ご成約で、最大40万円相当の\n特典をプレゼントいたします",
+    amount: "最大40万円相当の特典をプレゼント",
     amountProse: true,
     amountProseEmphasis: "最大40万円相当",
     frame: `${ASSET}/grand-offer-frame.png`,
