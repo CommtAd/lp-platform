@@ -37,8 +37,9 @@ const config: PatternCConfig = {
   header: {
     venue: "Hotel Racine Shinmaebashi",
     // 横並びのロゴ（紋章 + ロゴタイプ、比率 4.16:1）。支給の透過PNGの余白を詰めてある。
-    // ヘッダーは ashibinosato に揃えて薄く組む（顧客指定）。
-    logo: { src: `${ASSET}/logo.png`, height: 34 },
+    // ヘッダーは ashibinosato と同じ高さ（ロゴ32px＋上下8px）で薄く組む（顧客指定）。
+    // 下段の「SHINMAEBASHI」は小さくなるが、ヘッダーの薄さを優先する判断。
+    logo: { src: `${ASSET}/logo.png`, height: 32 },
     paddingY: 8,
     // CTAボタンは非表示（ロゴが中央寄せになる）。追従バーが常時出ているので導線は確保されている。
     sticky: false,
