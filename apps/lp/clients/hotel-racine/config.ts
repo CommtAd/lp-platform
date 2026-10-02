@@ -40,7 +40,8 @@ const config: PatternCConfig = {
     // ヘッダーは ashibinosato と同じ高さ（ロゴ32px＋上下8px）で薄く組む（顧客指定）。
     // 下段の「SHINMAEBASHI」は小さくなるが、ヘッダーの薄さを優先する判断。
     logo: { src: `${ASSET}/logo.png`, height: 32 },
-    paddingY: 8,
+    // ashibinosato（8）よりさらに一段薄く（顧客指定）。
+    paddingY: 4,
     // CTAボタンは非表示（ロゴが中央寄せになる）。追従バーが常時出ているので導線は確保されている。
     sticky: false,
   },
@@ -50,14 +51,18 @@ const config: PatternCConfig = {
     topBand: "大聖堂チャペル×ホテルウェディング",
     // 会場名はヘッダーのロゴで出すので、カードには置かない（ashibinosato と同じ構成）。
     kicker: "＼豪華来館特典付き／",
-    catch: ["プレミアム", "ブライダルフェア"],
+    // 1行で出す（顧客指定）。既定26pxだとカードの内寸（344px）ぎりぎりなので一段下げる（24pxで約318px）。
+    catch: ["プレミアム ブライダルフェア"],
+    catchSize: 24,
     framed: true,
     ornament: {
       top: `${ASSET}/fv-ornament-top.png`,
       bottom: `${ASSET}/fv-ornament-bottom.png`,
       // 余白の詰め方は ashibinosato と同じ。下の飾りに接するのは幅の狭い
       // 「プレゼント！」なので、渦にはかからず詰められる。
-      gap: 0,
+      // 上の飾りとキッカーの間も詰める（顧客指定）。キッカーは幅が狭く、
+      // 中央の細い罫の下に収まるので両端の渦にはかからない。
+      gap: -20,
       gapBottom: -20,
     },
     // 金額を大きく見せるため「プレゼント」は次の行（highlightSub）へ送る。
