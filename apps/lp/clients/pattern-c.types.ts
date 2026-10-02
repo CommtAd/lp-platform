@@ -338,6 +338,8 @@ export interface PatternCConfig {
      * 金額を `title` に含めて `amount` を省く組み方のときに使う。
      */
     titleEmphasis?: string;
+    /** `title` の文字サイズ(px)。既定 17。 */
+    titleSize?: number;
     /**
      * 金額訴求、例 "最大180万円相当"。数字部分は自動で特大になる。
      * 省略すると菱形の罫ごと出ない（金額を `title` 側で言い切る場合）。
@@ -382,6 +384,19 @@ export interface PatternCConfig {
       image?: Slot;
       disclaimer?: string;
     };
+    /**
+     * 金額カードの上端に付ける帯（本文色の地＋シャンパンの明朝）。
+     * 特典の前提（"1日1組だけの貸切ウェディング" など）を、セクションのリードではなく
+     * カードと一体で読ませたいときに使う。`sub` は帯の中の2行目に小さく出る。
+     */
+    cardHeader?: { title: string; sub?: string };
+    /**
+     * 金額カードの下端に付ける帯（淡い金の地＋本文色）。特典の中身の補足
+     * （"挙式・衣裳などご優待価格にてご案内" など）を置く。`\n` で改行位置を指定できる。
+     * 1行で出すなら24文字程度まで（13pxで内寸いっぱい）。
+     * `note` はカードの外・小さな文字で出るので、読ませたい補足はこちらを使う。
+     */
+    cardFooter?: string;
     note?: string;
   };
 
