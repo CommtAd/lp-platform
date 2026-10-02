@@ -96,12 +96,13 @@ const config: PatternCConfig = {
   },
 
   // FVを離脱する前に特典だけ持ち帰ってもらうための要約。詳細は privilege 側。
+  // 写真版（顧客指定でベースから組み方を変えた）。写真は体験03と同じ料理のカット
+  //（同じ試食なので、別カットにすると別物に見える）。
   fvSummary: {
+    photo: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
     headline: "豪華来館特典付き",
     headlineEmphasis: "豪華来館特典",
-    headlineOrnament: `${ASSET}/fv-summary-ornament.png`,
-    label: "来館特典",
-    // 料理写真の支給がないので画像なしで組む。
+    label: "来館\n特典",
     items: [{ amount: "ハーフコース無料試食", name: "国産牛フィレ肉を含む" }],
     disclaimer: "※特典のお渡しには適用条件がございます",
   },
