@@ -113,6 +113,8 @@ const config: PatternCConfig = {
     headingSize: 29,
     // 上端のバッジは出さない（顧客指定）。金額はカード内で言い切る。
     title: "フェア成約特典",
+    // 既定17pxから一段上げる（顧客指定）。
+    titleSize: 21,
     // 金額だけを金の特大にし、「の特典を／プレゼント」は本文色で続ける（顧客指定の改行位置）。
     amount: "最大40万円相当の特典を\nプレゼント",
     amountInkAfter: true,
