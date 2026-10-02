@@ -160,16 +160,36 @@ function emphasize(
  * 字間はキッカーのまま揃えたいので tracking は触らない。
  */
 function kickerEmphasis(text: string, word?: string): ReactNode {
-  if (!word || !text.includes(word)) return text;
-  const [head, ...rest] = text.split(word);
+  const hit = Boolean(word && text.includes(word));
+  const [head, ...rest] = hit ? text.split(word as string) : [text];
   return (
     <>
-      {head}
-      <span className="not-italic" style={{ fontFamily: mincho }}>
-        {word}
-      </span>
-      {rest.join(word)}
+      {uprightSlashes(head)}
+      {hit && (
+        <span className="not-italic" style={{ fontFamily: mincho }}>
+          {word}
+        </span>
+      )}
+      {hit && uprightSlashes(rest.join(word as string))}
     </>
+  );
+}
+
+/**
+ * 和文キッカーの括り「＼…／」だけを立体に戻す。
+ * イタリックは全体を右に傾けるので、左の「＼」は立ち気味・右の「／」は寝気味になり、
+ * 左右で角度が違って見える（hotel-racine の「＼豪華来館特典付き／」で指摘あり）。
+ */
+function uprightSlashes(text: string): ReactNode {
+  if (!/[＼／]/.test(text)) return text;
+  return text.split(/([＼／])/).map((part, i) =>
+    part === "＼" || part === "／" ? (
+      <span key={i} className="not-italic">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
   );
 }
 
