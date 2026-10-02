@@ -78,12 +78,12 @@ function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
  * 金額が見つからなければ `amountEmphasis` と同じ結果を返す。
  */
 function amountThenInk(text: string, ink: string, numSize: number, sideSize: number): ReactNode {
-  const m = text.match(/^(.*?[0-9０-９][0-9０-９,，.．]*(?:万|千)?円(?:分|相当)?)(.+)$/);
+  const m = text.match(/^(.*?[0-9０-９][0-9０-９,，.．]*(?:万|千)?円(?:分|相当)?)([\s\S]+)$/);
   if (!m) return amountEmphasis(text, numSize, sideSize);
   return (
     <>
       {amountEmphasis(m[1], numSize, sideSize)}
-      <span style={{ fontSize: sideSize, color: ink }}>{m[2]}</span>
+      <span style={{ fontSize: sideSize, color: ink, whiteSpace: "pre-line" }}>{m[2]}</span>
     </>
   );
 }
@@ -149,16 +149,36 @@ function emphasize(
  * 字間はキッカーのまま揃えたいので tracking は触らない。
  */
 function kickerEmphasis(text: string, word?: string): ReactNode {
-  if (!word || !text.includes(word)) return text;
-  const [head, ...rest] = text.split(word);
+  const hit = Boolean(word && text.includes(word));
+  const [head, ...rest] = hit ? text.split(word as string) : [text];
   return (
     <>
-      {head}
-      <span className="not-italic" style={{ fontFamily: mincho }}>
-        {word}
-      </span>
-      {rest.join(word)}
+      {uprightSlashes(head)}
+      {hit && (
+        <span className="not-italic" style={{ fontFamily: mincho }}>
+          {word}
+        </span>
+      )}
+      {hit && uprightSlashes(rest.join(word as string))}
     </>
+  );
+}
+
+/**
+ * 和文キッカーの括り「＼…／」だけを立体に戻す。
+ * イタリックは全体を右に傾けるので、左の「＼」は立ち気味・右の「／」は寝気味になり、
+ * 左右で角度が違って見える（hotel-racine の「＼豪華来館特典付き／」で指摘あり）。
+ */
+function uprightSlashes(text: string): ReactNode {
+  if (!/[＼／]/.test(text)) return text;
+  return text.split(/([＼／])/).map((part, i) =>
+    part === "＼" || part === "／" ? (
+      <span key={i} className="not-italic">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
   );
 }
 
@@ -256,22 +276,28 @@ function Carousel({
 function AmountRow({
   items,
   ink,
+  columns,
 }: {
   items: { amount: string; label: string; image?: Slot }[];
   ink: string;
+  /** 1行に並べる数。既定は items の数（横1列）。折り返す場合は行間を空ける。 */
+  columns?: number;
 }) {
   // 写真を伴う場合は列同士が写真で分かれるので、縦罫は引かず溝で離す。
   const withImages = items.some((i) => i.image);
+  const cols = columns ?? items.length;
+  // 縦罫は同じ行の2列目以降にだけ引く（折り返した行の先頭には引かない）。
+  const ruled = (i: number) => !withImages && i % cols > 0;
   return (
     <div
-      className={`grid ${withImages ? "gap-2" : ""}`}
-      style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
+      className={`grid ${withImages ? "gap-x-2" : ""} ${cols < items.length ? "gap-y-6" : ""}`}
+      style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
     >
       {items.map((item, i) => (
         <div
           key={`${item.label}-${i}`}
-          className={`px-1.5 text-center ${!withImages && i > 0 ? "border-l" : ""}`}
-          style={!withImages && i > 0 ? { borderColor: `${ink}1F` } : undefined}
+          className={`px-1.5 text-center ${ruled(i) ? "border-l" : ""}`}
+          style={ruled(i) ? { borderColor: `${ink}1F` } : undefined}
         >
           {item.image && (
             <ImageSlot
@@ -633,7 +659,11 @@ export default function Page() {
           {c.fv.topBand && (
             <p
               className="px-4 py-2 text-center text-[13px] tracking-[0.12em]"
-              style={{ background: c.ink, color: c.paper, fontFamily: mincho }}
+              style={{
+                background: c.fv.topBandColors?.bg ?? c.ink,
+                color: c.fv.topBandColors?.text ?? c.paper,
+                fontFamily: mincho,
+              }}
             >
               {c.fv.topBand}
             </p>
@@ -741,8 +771,69 @@ export default function Page() {
             </section>
           )}
 
+          {/* ── FV直下の特典サマリー（写真版。fvSummary.photo があるときだけ） ── */}
+          {c.fvSummary?.photo && (
+            <div className="bg-[var(--paper)] px-5 pt-10">
+              {c.fvSummary.headline && (
+                <p
+                  className="mb-5 text-center text-[16px] leading-[1.6]"
+                  style={{ fontFamily: mincho }}
+                >
+                  {emphasize(c.fvSummary.headline, c.fvSummary.headlineEmphasis, goldOnWhite, 26)}
+                </p>
+              )}
+              <ImageSlot
+                src={c.fvSummary.photo.src}
+                placeholder={c.fvSummary.photo.placeholder}
+                objectPosition={c.fvSummary.photo.position ?? "center"}
+                radius={4}
+                style={{ width: "100%", aspectRatio: "4 / 3" }}
+              />
+              {/* 写真の下端に重ねる白プレート。二重罫で招待状のように見せる。 */}
+              <div
+                className="relative mx-3 -mt-8 bg-white p-1"
+                style={{
+                  border: `1px solid ${c.accent}`,
+                  boxShadow: "0 12px 28px rgba(59,55,48,0.14)",
+                }}
+              >
+                <div
+                  className="px-3 py-4 text-center"
+                  style={{ border: `1px solid ${c.accent}55` }}
+                >
+                  {c.fvSummary.items.map((item, i) => (
+                    <div key={`${item.name}-${i}`} className={i > 0 ? "mt-4" : undefined}>
+                      <p className="text-[12px] leading-[1.6]" style={{ color: `${c.ink}B3` }}>
+                        {nl(item.name)}
+                      </p>
+                      <p
+                        className="mt-1 text-[23px] font-bold leading-[1.3] tracking-[0.04em]"
+                        style={{ fontFamily: mincho, color: goldOnWhite }}
+                      >
+                        {item.amount}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {c.fvSummary.disclaimer && (
+                <p
+                  className="mt-3 text-right text-[10px] leading-[1.6]"
+                  style={{ color: `${c.ink}80` }}
+                >
+                  {c.fvSummary.disclaimer}
+                </p>
+              )}
+              {c.fvSummary.note && (
+                <p className="mt-7 text-center text-[12px] leading-[1.9]">
+                  {emphasize(c.fvSummary.note, c.fvSummary.noteEmphasis, goldOnWhite)}
+                </p>
+              )}
+            </div>
+          )}
+
           {/* ── FV直下の特典サマリー ── */}
-          {c.fvSummary && (
+          {c.fvSummary && !c.fvSummary.photo && (
             <div className="bg-[var(--paper)] px-5 pt-9">
               {c.fvSummary.headline &&
                 c.fvSummary.headlinePosition !== "afterLabel" &&
@@ -977,10 +1068,14 @@ export default function Page() {
                         /* text-[30px] は数字を含まない文字列（テンプレのダミー等）の
                            フォールバック。数字があれば amountEmphasis 側の span が上書きする。 */
                         <p
-                          className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
+                          className={`mt-5 text-[30px] font-bold tracking-[0.02em] ${
+                            c.grandOffer.amountInkAfter ? "leading-[1.35]" : "leading-none"
+                          }`}
                           style={{ fontFamily: mincho, color: goldOnWhite }}
                         >
-                          {amountEmphasis(c.grandOffer.amount)}
+                          {c.grandOffer.amountInkAfter
+                            ? amountThenInk(c.grandOffer.amount, c.ink, 50, 22)
+                            : amountEmphasis(c.grandOffer.amount)}
                         </p>
                       )}
                     </>
@@ -1162,6 +1257,50 @@ export default function Page() {
                   項目が奇数なら最後の1枚を横一杯に伸ばす。
                   テキスト幅は137px前後しか取れないので、`label` は10文字程度までなら1行に
                   収まる。それより長い項目は折り返す（2列と1行組みは両立しない）。 */}
+              {c.recommend.photo ? (
+                <div className="mt-8">
+                  <ImageSlot
+                    src={c.recommend.photo.src}
+                    placeholder={c.recommend.photo.placeholder}
+                    objectPosition={c.recommend.photo.position ?? "center"}
+                    radius={4}
+                    style={{ width: "100%", aspectRatio: "3 / 2" }}
+                  />
+                  {/* 写真の下端に重ねる白カード。二重罫は FV直下のサマリー（写真版）と揃える。 */}
+                  <div
+                    className="relative mx-3 -mt-10 bg-white p-1"
+                    style={{
+                      border: `1px solid ${c.accent}`,
+                      boxShadow: "0 12px 28px rgba(59,55,48,0.14)",
+                    }}
+                  >
+                    <ul className="px-4 py-2" style={{ border: `1px solid ${c.accent}55` }}>
+                      {recommendItems.map((item, i) => (
+                        <li
+                          key={`${item.label}-${i}`}
+                          className="flex items-start gap-3 py-3.5"
+                          style={
+                            i > 0 ? { borderTop: `1px dotted ${c.accent}80` } : undefined
+                          }
+                        >
+                          <span
+                            className="mt-[2px] flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-full text-[11px] font-bold leading-none text-white"
+                            style={{ background: goldOnWhite }}
+                          >
+                            ✓
+                          </span>
+                          <p
+                            className="text-[14px] leading-[1.65]"
+                            style={{ fontFamily: mincho }}
+                          >
+                            {nl(item.label)}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
               <ul className="mt-8 grid grid-cols-2 gap-2">
                 {recommendItems.map((item, i) => (
                   <li
@@ -1195,6 +1334,7 @@ export default function Page() {
                   </li>
                 ))}
               </ul>
+              )}
             </section>
           )}
 
@@ -1264,6 +1404,7 @@ export default function Page() {
                     image: p.image,
                   }))}
                   ink={c.ink}
+                  columns={c.privilege.columns}
                 />
                 {c.privilege.total && (
                   <>

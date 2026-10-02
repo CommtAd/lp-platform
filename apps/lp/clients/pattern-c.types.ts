@@ -222,6 +222,13 @@ export interface PatternCConfig {
      */
     topBand?: string;
     /**
+     * `topBand` の配色。未指定なら本文色（ink）の地＋生成り（paper）の文字。
+     * `bg` は CSS の background なのでグラデーションも渡せる。
+     * 金系の地に白文字を載せるときは、ブランドゴールド `#B99653` では 2.6:1 しか出ないので
+     * 深い金（`#8C6B2F` 前後）まで落とすこと。
+     */
+    topBandColors?: { bg: string; text: string };
+    /**
      * タイトルカードの左下に重ねる円形バッジ（当選枠など）。`framed` のときだけ効く。
      * `lines` は1行目が小さく、2行目以降が大きくなる（「抽選で」＋「10組様」の形）。
      * 円に収まる長さにすること（1行目5文字・2行目4文字程度が上限）。
@@ -285,6 +292,13 @@ export interface PatternCConfig {
    * 金額だけ持ち帰ってもらうための要約なので、詳細は `privilege` 側に置く。
    */
   fvSummary?: {
+    /**
+     * 写真版。渡すと罫＋金額の横並びの代わりに、
+     * 「`headline` → 特典の写真（横幅いっぱい）→ 写真の下端に重ねた白プレートに `items`」
+     * の組み方になる。特典が1〜2点で、中身の写真がある案件向け。
+     * このとき `label` / `headlineOrnament` / `headlinePosition` / `items[].image` は使わない。
+     */
+    photo?: Slot;
     /** FV写真の直下・`label` の上に置く訴求文。1行に収まる長さにする。 */
     headline?: string;
     /** `headline` の中で金額として強調する部分文字列（21pxの深い金になる）。 */
@@ -355,6 +369,12 @@ export interface PatternCConfig {
     amountProseEmphasis?: string;
     /** `amountProse` の基準文字サイズ(px)。既定 13（強調行はこれ +4）。 */
     amountProseSize?: number;
+    /**
+     * `amount` の金額部分（"最大40万円相当" まで）だけを金の特大にし、続く文言を
+     * 本文色で組む。`\n` で改行でき、2行目以降も本文色になる
+     * （"最大40万円相当の特典を\nプレゼント" の形）。`amountProse` とは併用しない。
+     */
+    amountInkAfter?: boolean;
     /**
      * 金額カードに重ねる四隅のフレーム装飾（中央が透明の横長PNG）。
      * カードの縦横比に合わせて伸縮するので、四隅の意匠が対称な素材を使うこと。
@@ -449,6 +469,13 @@ export interface PatternCConfig {
     heading: string;
     lead?: string;
     /**
+     * 写真版。渡すと2列のカードの代わりに「写真（横幅いっぱい・3:2）→ 写真の下端に重ねた
+     * 白カードに1列のチェックリスト」で組む。項目が多い・奇数のときに2列だと余りが出て
+     * 間延びするため。このとき `icon` は使わず、`label` は1行で書いて自然に折り返させる
+     * （`\n` を入れればその位置で折る）。
+     */
+    photo?: Slot;
+    /**
      * `label` は `\n` で改行位置を指定できる。文字サイズは最長行に合わせて自動で
      * 決まるので、長い項目は改行を入れたほうが大きく出る。
      */
@@ -474,6 +501,11 @@ export interface PatternCConfig {
      */
     /** `title` は `\n` で改行位置を指定できる。 */
     items: { title: string; amount: string; image?: Slot }[];
+    /**
+     * 1行に並べる数。既定は `items` の数（全部を横1列）。
+     * 4点を写真つきで並べると1列75px前後まで潰れるので、2 を渡して2×2で組む。
+     */
+    columns?: number;
     /** パネルに重ねる四隅のフレーム装飾（中央が透明のPNG）。`grandOffer.frame` と同じ扱い。 */
     frame?: string;
     /** セクションの地に散らす飾り（季節の葉など）。`SectionDecor` 参照。 */
