@@ -1233,6 +1233,50 @@ export default function Page() {
                   項目が奇数なら最後の1枚を横一杯に伸ばす。
                   テキスト幅は137px前後しか取れないので、`label` は10文字程度までなら1行に
                   収まる。それより長い項目は折り返す（2列と1行組みは両立しない）。 */}
+              {c.recommend.photo ? (
+                <div className="mt-8">
+                  <ImageSlot
+                    src={c.recommend.photo.src}
+                    placeholder={c.recommend.photo.placeholder}
+                    objectPosition={c.recommend.photo.position ?? "center"}
+                    radius={4}
+                    style={{ width: "100%", aspectRatio: "3 / 2" }}
+                  />
+                  {/* 写真の下端に重ねる白カード。二重罫は FV直下のサマリー（写真版）と揃える。 */}
+                  <div
+                    className="relative mx-3 -mt-10 bg-white p-1"
+                    style={{
+                      border: `1px solid ${c.accent}`,
+                      boxShadow: "0 12px 28px rgba(59,55,48,0.14)",
+                    }}
+                  >
+                    <ul className="px-4 py-2" style={{ border: `1px solid ${c.accent}55` }}>
+                      {recommendItems.map((item, i) => (
+                        <li
+                          key={`${item.label}-${i}`}
+                          className="flex items-start gap-3 py-3.5"
+                          style={
+                            i > 0 ? { borderTop: `1px dotted ${c.accent}80` } : undefined
+                          }
+                        >
+                          <span
+                            className="mt-[2px] flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-full text-[11px] font-bold leading-none text-white"
+                            style={{ background: goldOnWhite }}
+                          >
+                            ✓
+                          </span>
+                          <p
+                            className="text-[14px] leading-[1.65]"
+                            style={{ fontFamily: mincho }}
+                          >
+                            {nl(item.label)}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
               <ul className="mt-8 grid grid-cols-2 gap-2">
                 {recommendItems.map((item, i) => (
                   <li
@@ -1266,6 +1310,7 @@ export default function Page() {
                   </li>
                 ))}
               </ul>
+              )}
             </section>
           )}
 
