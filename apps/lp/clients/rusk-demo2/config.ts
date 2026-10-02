@@ -179,14 +179,14 @@ const img = (placeholder: string): Img => ({ src: null, placeholder });
 /**
  * WEBデザインスクール（無料個別相談会）LP。
  *
- * 仮環境: ダッシュボード未登録の仮slug。表示は LPShell の fallback で行う。
- * 本番化するときはダッシュボードで枠を作り、その slug でフォルダ名・`slug` を揃えること。
+ * 公開URL: https://fitness-lp.commitad.com/rusk-demo2
+ * slug はダッシュボードの枠（rusk-demo2）と一致させること。
  *
  * 未確定（デザイン上も空欄）: スクール名「〇〇〇〇〇」・ロゴ・LINE URL・FAQ・全写真。
  * 要確認（TODO）: 渡邊さんの肩書き、受講条件、税込表記、案件保証の条件。
  */
 const config: DesignSchoolConfig = {
-  slug: "design-school",
+  slug: "rusk-demo2",
   status: "draft",
   meta: {
     title: "広告代理店が本気で育てる 実践型WEBデザインスクール｜無料個別相談会",
