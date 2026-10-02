@@ -1,6 +1,6 @@
 import type { PatternCConfig } from "@/clients/pattern-c.types";
 
-const ASSET = "/clients/racine-shinmaebashi";
+const ASSET = "/clients/hotel-racine";
 
 /**
  * ホテル ラシーネ新前橋 — プレミアム ブライダルフェア（パターンC）。
@@ -11,7 +11,7 @@ const ASSET = "/clients/racine-shinmaebashi";
  * 金額・適用条件は顧客確認を取ってから変更すること。
  */
 const config: PatternCConfig = {
-  slug: "racine-shinmaebashi",
+  slug: "hotel-racine",
   status: "draft",
   meta: {
     title: "ホテル ラシーネ新前橋｜プレミアム ブライダルフェア",
@@ -294,8 +294,7 @@ const config: PatternCConfig = {
 };
 
 /*
- * TODO(racine-shinmaebashi): 差し替え・確認が残っている項目:
- *  - slug は仮。ダッシュボードで枠を作ったら、その slug にフォルダ名を合わせる
+ * TODO(hotel-racine): 差し替え・確認が残っている項目:
  *  - ロゴ / 料理写真（experience 03）の支給待ち
  *  - facility の説明文・flow は指示書に記載がなく、公式情報から起こした原稿
  *  - 特典の適用条件（※注記）・1名来館時の扱いは顧客確認
