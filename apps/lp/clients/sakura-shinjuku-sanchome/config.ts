@@ -8,10 +8,10 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
  * 写真: 人物・レッスン・ウェアは SAKURA ブランド共通の撮影素材を流用。
  * 店舗固有の写真（内観・キッズ対応・在籍インストラクター）は新宿3丁目店の素材待ちのためプレースホルダ。
  */
-const IMG = "/clients/sakura-shinjukusantyome";
+const IMG = "/clients/sakura-shinjuku-sanchome";
 
 const config: PatternAConfig = {
-  slug: "sakura-shinjukusantyome",
+  slug: "sakura-shinjuku-sanchome",
   status: "draft",
   meta: {
     title:
