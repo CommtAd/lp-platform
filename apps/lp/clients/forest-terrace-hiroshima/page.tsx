@@ -989,7 +989,7 @@ export default function Page() {
                 {/* カード下端の帯。特典の中身の補足を、カードの外の小さな注記ではなく読ませる位置に置く。 */}
                 {c.grandOffer.cardFooter && (
                   <p
-                    className="rounded-b-[3px] border border-t-0 px-4 py-3.5 text-center text-[13.5px] font-bold leading-[1.7] tracking-[0.04em]"
+                    className="rounded-b-[3px] border border-t-0 px-3 py-3.5 text-center text-[13px] font-bold leading-[1.7] tracking-[0.02em]"
                     style={{ background: "#F1E8D6", borderColor: c.accent, color: c.ink, fontFamily: mincho }}
                   >
                     {nl(c.grandOffer.cardFooter)}
