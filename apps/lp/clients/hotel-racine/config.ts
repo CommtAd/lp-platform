@@ -111,11 +111,11 @@ const config: PatternCConfig = {
     eyebrow: "プレミアムブライダルフェア",
     heading: "大聖堂 × 美食を体験",
     headingSize: 29,
-    badge: "最大40万円相当プレゼント",
+    // 上端のバッジは出さない（顧客指定）。金額はカード内で言い切る。
     title: "フェア成約特典",
-    amount: "最大40万円相当の特典をプレゼント",
-    amountProse: true,
-    amountProseEmphasis: "最大40万円相当",
+    // 金額だけを金の特大にし、「の特典を／プレゼント」は本文色で続ける（顧客指定の改行位置）。
+    amount: "最大40万円相当の特典を\nプレゼント",
+    amountInkAfter: true,
     frame: `${ASSET}/grand-offer-frame.png`,
   },
 

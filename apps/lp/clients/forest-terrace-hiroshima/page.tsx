@@ -78,12 +78,12 @@ function amountEmphasis(text: string, numSize = 46, sideSize = 20): ReactNode {
  * 金額が見つからなければ `amountEmphasis` と同じ結果を返す。
  */
 function amountThenInk(text: string, ink: string, numSize: number, sideSize: number): ReactNode {
-  const m = text.match(/^(.*?[0-9０-９][0-9０-９,，.．]*(?:万|千)?円(?:分|相当)?)(.+)$/);
+  const m = text.match(/^(.*?[0-9０-９][0-9０-９,，.．]*(?:万|千)?円(?:分|相当)?)([\s\S]+)$/);
   if (!m) return amountEmphasis(text, numSize, sideSize);
   return (
     <>
       {amountEmphasis(m[1], numSize, sideSize)}
-      <span style={{ fontSize: sideSize, color: ink }}>{m[2]}</span>
+      <span style={{ fontSize: sideSize, color: ink, whiteSpace: "pre-line" }}>{m[2]}</span>
     </>
   );
 }
@@ -1048,10 +1048,14 @@ export default function Page() {
                         /* text-[30px] は数字を含まない文字列（テンプレのダミー等）の
                            フォールバック。数字があれば amountEmphasis 側の span が上書きする。 */
                         <p
-                          className="mt-5 text-[30px] font-bold leading-none tracking-[0.02em]"
+                          className={`mt-5 text-[30px] font-bold tracking-[0.02em] ${
+                            c.grandOffer.amountInkAfter ? "leading-[1.35]" : "leading-none"
+                          }`}
                           style={{ fontFamily: mincho, color: goldOnWhite }}
                         >
-                          {amountEmphasis(c.grandOffer.amount)}
+                          {c.grandOffer.amountInkAfter
+                            ? amountThenInk(c.grandOffer.amount, c.ink, 50, 22)
+                            : amountEmphasis(c.grandOffer.amount)}
                         </p>
                       )}
                     </>
