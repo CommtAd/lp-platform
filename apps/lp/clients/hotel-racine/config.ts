@@ -102,9 +102,9 @@ const config: PatternCConfig = {
     photo: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
     headline: "豪華来館特典付き",
     headlineEmphasis: "豪華来館特典",
-    label: "来館\n特典",
+    // 写真版では label は表示されない（型の必須項目なので値だけ置く）。
+    label: "来館特典",
     items: [{ amount: "ハーフコース無料試食", name: "国産牛フィレ肉を含む" }],
-    disclaimer: "※特典のお渡しには適用条件がございます",
   },
 
   grandOffer: {

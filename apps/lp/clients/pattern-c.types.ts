@@ -293,11 +293,10 @@ export interface PatternCConfig {
    */
   fvSummary?: {
     /**
-     * 写真版。渡すと罫＋金額の横並びの代わりに、特典の写真を大きく敷いて
-     * 「左上に `label` のスタンプ・写真下部に `headline`（白抜き）・写真に重ねた白プレートに `items`」
+     * 写真版。渡すと罫＋金額の横並びの代わりに、
+     * 「`headline` → 特典の写真（横幅いっぱい）→ 写真の下端に重ねた白プレートに `items`」
      * の組み方になる。特典が1〜2点で、中身の写真がある案件向け。
-     * このとき `headlineOrnament` / `headlinePosition` / `items[].image` は使わない。
-     * `label` は `\n` で改行でき、スタンプが円なので2文字×2行（"来館\n特典"）が収まりよい。
+     * このとき `label` / `headlineOrnament` / `headlinePosition` / `items[].image` は使わない。
      */
     photo?: Slot;
     /** FV写真の直下・`label` の上に置く訴求文。1行に収まる長さにする。 */

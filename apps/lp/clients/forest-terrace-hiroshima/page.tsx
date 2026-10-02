@@ -748,57 +748,21 @@ export default function Page() {
           {/* ── FV直下の特典サマリー（写真版。fvSummary.photo があるときだけ） ── */}
           {c.fvSummary?.photo && (
             <div className="bg-[var(--paper)] px-5 pt-10">
-              <div className="relative">
-                <ImageSlot
-                  src={c.fvSummary.photo.src}
-                  placeholder={c.fvSummary.photo.placeholder}
-                  objectPosition={c.fvSummary.photo.position ?? "center"}
-                  radius={4}
-                  style={{ width: "100%", aspectRatio: "4 / 3" }}
-                />
-                {/* 下から暗くして、写真の上の白抜き見出しを読ませる。 */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    borderRadius: 4,
-                    background:
-                      "linear-gradient(to top, rgba(30,24,16,0.78) 0%, rgba(30,24,16,0.35) 34%, rgba(30,24,16,0) 58%)",
-                  }}
-                />
-                {/* 左上のスタンプ。写真の角にまたがらせて、ここが特典だと先に伝える。 */}
-                <span
-                  className="absolute z-10 flex items-center justify-center rounded-full text-center text-white"
-                  style={{
-                    top: -16,
-                    left: -8,
-                    width: 74,
-                    height: 74,
-                    background: goldOnWhite,
-                    boxShadow: "0 4px 14px rgba(0,0,0,0.22)",
-                    fontFamily: mincho,
-                    fontSize: 14,
-                    lineHeight: 1.3,
-                    letterSpacing: "0.08em",
-                    transform: "rotate(-10deg)",
-                  }}
+              {c.fvSummary.headline && (
+                <p
+                  className="mb-5 text-center text-[16px] leading-[1.6]"
+                  style={{ fontFamily: mincho }}
                 >
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute rounded-full"
-                    style={{ inset: 4, border: "1px solid rgba(255,255,255,0.8)" }}
-                  />
-                  <span className="relative">{nl(c.fvSummary.label)}</span>
-                </span>
-                {c.fvSummary.headline && (
-                  <p
-                    className="absolute bottom-12 left-0 right-0 px-4 text-center text-[15px] leading-[1.6] text-white"
-                    style={{ fontFamily: mincho, textShadow: "0 2px 10px rgba(0,0,0,0.45)" }}
-                  >
-                    {emphasize(c.fvSummary.headline, c.fvSummary.headlineEmphasis, "#FFFFFF", 26)}
-                  </p>
-                )}
-              </div>
+                  {emphasize(c.fvSummary.headline, c.fvSummary.headlineEmphasis, goldOnWhite, 26)}
+                </p>
+              )}
+              <ImageSlot
+                src={c.fvSummary.photo.src}
+                placeholder={c.fvSummary.photo.placeholder}
+                objectPosition={c.fvSummary.photo.position ?? "center"}
+                radius={4}
+                style={{ width: "100%", aspectRatio: "4 / 3" }}
+              />
               {/* 写真の下端に重ねる白プレート。二重罫で招待状のように見せる。 */}
               <div
                 className="relative mx-3 -mt-8 bg-white p-1"
