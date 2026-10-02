@@ -35,9 +35,9 @@ const config: PatternCConfig = {
   },
 
   header: {
-    // ロゴ素材の支給がないので、会場名テキストで出す。
-    venue: "Hotel Racine",
-    venueSub: "SHINMAEBASHI",
+    venue: "Hotel Racine Shinmaebashi",
+    // 横並びのロゴ（紋章 + ロゴタイプ、比率 4.16:1）。支給の透過PNGの余白を詰めてある。
+    logo: { src: `${ASSET}/logo.png`, height: 44 },
     ctaText: "予約する",
     sticky: false,
   },
@@ -114,8 +114,7 @@ const config: PatternCConfig = {
         tag: "03",
         title: "国産牛フィレ肉の無料試食",
         body: "婚礼料理の味を、実際に試食しておもてなしを確認。",
-        // 料理写真の支給待ち。届くまでプレースホルダで出る。
-        image: { placeholder: "国産牛フィレ肉のハーフコース" },
+        image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
       },
       {
         tag: "04",
@@ -295,7 +294,6 @@ const config: PatternCConfig = {
 
 /*
  * TODO(hotel-racine): 差し替え・確認が残っている項目:
- *  - ロゴ / 料理写真（experience 03）の支給待ち
  *  - facility の説明文・flow は指示書に記載がなく、公式情報から起こした原稿
  *  - 特典の適用条件（※注記）・1名来館時の扱いは顧客確認
  */
