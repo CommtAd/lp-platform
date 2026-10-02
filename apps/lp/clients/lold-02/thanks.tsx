@@ -23,7 +23,7 @@ const goldOnWhite = "#8C6B2F";
 const rose = "#B0475F";
 
 const LINE_URL =
-  "https://liff.line.me/1657086148-xQLqKbaD/landing?follow=%40324ersml&lp=WezHuq&liff_id=1657086148-xQLqKbaD";
+  "https://liff.line.me/1657086148-xQLqKbaD/landing?follow=%40324ersml&lp=nZFkUD&liff_id=1657086148-xQLqKbaD";
 
 export default function ThanksPage() {
   const c = config;
