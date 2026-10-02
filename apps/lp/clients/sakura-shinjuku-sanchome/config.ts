@@ -6,7 +6,7 @@ import type { PatternAConfig } from "@/clients/pattern-a.types";
  * 横幅ずれ防止ルール（CLAUDE.md §16〜20）の対象なので、page.tsx は <LPCanvas> で組んでいる。
  *
  * 写真: 人物・レッスン・ウェアは SAKURA ブランド共通の撮影素材を流用。
- * 店舗固有の写真（内観・キッズ対応・在籍インストラクター）は新宿3丁目店の素材待ちのためプレースホルダ。
+ * 店舗固有の写真（内観・キッズ対応）は新宿3丁目店の素材待ちのためプレースホルダ。インストラクター紹介は掲載しない。
  */
 const IMG = "/clients/sakura-shinjuku-sanchome";
 
@@ -119,7 +119,7 @@ const config: PatternAConfig = {
     ctaSub: "60分体験0円｜入会金0円",
   },
 
-  /* 新宿3丁目店の在籍インストラクター情報が未着のため非表示。素材が届いたら show を外して items を差し替える。 */
+  /* 新宿3丁目店はインストラクター紹介を載せない（顧客判断）。型上必須なので show: false で常に非表示。 */
   trainers: {
     show: false,
     heading: "インストラクター紹介",

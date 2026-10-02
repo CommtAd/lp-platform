@@ -676,7 +676,7 @@ export default function Page() {
             <GoldCta text={c.reasons.ctaText} sub={c.reasons.ctaSub} />
           </section>
 
-          {/* ── ④.5 trainers（新宿3丁目店は素材待ちのため show: false） ── */}
+          {/* ── ④.5 trainers（新宿3丁目店は掲載なし＝show: false） ── */}
           {c.trainers.show !== false && (
           <section style={{ background: navyGrad, padding: "40px 0 48px" }}>
             <div style={{ textAlign: "center", padding: "0 26px" }}>
