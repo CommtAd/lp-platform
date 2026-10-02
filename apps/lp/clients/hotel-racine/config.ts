@@ -55,19 +55,21 @@ const config: PatternCConfig = {
     highlight: "最大40万円相当プレゼント",
     highlightSize: 19,
     ctaText: "最短30秒で予約する",
-    // 支給写真はすべて横位置で、3:4 に切ると顔が高さの25〜45%に来る。
-    // 上にプレートを置くと顔が隠れるので、lold と逆にプレートを下へ置く。
-    catchPosition: "bottom",
-    // 3枚とも同じチャペルの寄りのカット（3:2 の素材を中央で 3:4 に切ったもの）。
+    // lold と同じくプレートを上に置く（顧客指定）。
+    catchPosition: "top",
+    // スライドはFV用に支給された 1008x1350（ほぼ 3:4）の5枚。いずれも顔が
+    // 高さの55%より下にあり、上53%を覆うプレートにかからない。順序は支給どおり。
     heroAspect: "3 / 4",
     hero: {
-      placeholder: "チャペル（ステンドグラスの前の新郎新婦）",
-      src: `${ASSET}/hero.jpg`,
+      placeholder: "チャペル（ステンドグラスの前で誓う新郎新婦）",
+      src: `${ASSET}/fv-01.jpg`,
       position: "center",
     },
     heroSlides: [
-      { placeholder: "チャペル（バージンロードの新郎新婦）", src: `${ASSET}/hero-2.jpg` },
-      { placeholder: "チャペル（カラードレスの新郎新婦）", src: `${ASSET}/hero-3.jpg` },
+      { placeholder: "シャンデリアの下のカラードレスの新郎新婦", src: `${ASSET}/fv-02.jpg` },
+      { placeholder: "チャペル（ステンドグラスの前の新郎新婦）", src: `${ASSET}/fv-03.jpg` },
+      { placeholder: "披露宴会場「銀河」の新郎新婦", src: `${ASSET}/fv-04.jpg` },
+      { placeholder: "チャペル（バージンロードの新郎新婦）", src: `${ASSET}/fv-05.jpg` },
     ],
   },
 
