@@ -43,8 +43,12 @@ export interface IvyBConfig {
    * 戻すときは page.tsx に元のブロックを書き戻すこと。
    */
   topImage: { img: Slot; imgAlt: string };
+  /** 最上部の帯。画像に文言が焼き込まれている（顧客支給、2026-10-02）。 */
+  topBand: { img: Slot; imgAlt: string };
   /**
    * ご入会特典バンドを置き換える体験レッスンの画像（同 AUN #2）。
+   * 2026-10-02 に「新規オープンキャンペーン」版（1086x1448）へ再差し替え
+   * （AUN 藤沢店指摘 #4）。ソックス特典の「藤沢店限定」は画像に入っている。
    * 2026-10-01 の差し替え画像にはCTAボタンが描かれていないため、
    * 画像はリンクにせず、page.tsx 側で実体の <Cta> を下に置いている。
    */
@@ -313,6 +317,10 @@ const config: IvyBConfig = {
     ogpImage: `${ASSET}/hero-poster.jpg`,
   },
 
+  topBand: {
+    img: { placeholder: "祝・藤沢店 NEW OPEN 藤沢店限定 無料体験レッスン受付中", src: `${ASSET}/band.jpg` },
+    imgAlt: "祝・藤沢店 NEW OPEN。藤沢店限定 無料体験レッスン受付中。",
+  },
   topImage: {
     img: {
       placeholder: "STUDIO IVY 藤沢店 もっと好きになれる、私の身体へ。",
