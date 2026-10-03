@@ -314,6 +314,38 @@ function PriceRow({
   );
 }
 
+/** 期限の帯。日付だけ大きくして「いつまでか」を一瞬で読ませる。 */
+function DeadlineStrip({ dark = false }: { dark?: boolean }) {
+  const d = c.deadline;
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 6,
+        background: dark ? accent : accentSoft,
+        color: dark ? "#FFFFFF" : accent,
+        borderRadius: 999,
+        padding: "6px 14px",
+        fontFamily: fontGothic,
+        fontWeight: 700,
+        fontSize: 12.5,
+        letterSpacing: "0.04em",
+        whiteSpace: "nowrap",
+      }}
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" strokeLinecap="round" />
+      </svg>
+      <span>
+        <span style={{ fontFamily: fontMincho, fontSize: 17 }}>{d.date}</span>（{d.dow}）までの期間限定
+      </span>
+    </div>
+  );
+}
+
 /** FV・最終CTAの価格カード（体験＋入会金の2行）。 */
 function OfferCard() {
   return (
@@ -326,6 +358,9 @@ function OfferCard() {
         border: `1px solid ${line}`,
       }}
     >
+      <div style={{ display: "flex", justifyContent: "center", margin: "0 0 14px" }}>
+        <DeadlineStrip dark />
+      </div>
       <PriceRow {...c.prices.trial} nowSize={44} />
       <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "14px 0 12px" }}>
         <span style={{ flex: 1, height: 1, background: line }} />
@@ -1217,6 +1252,9 @@ export default function Page() {
                 {nl(c.trial.closing)}
               </p>
               <div style={{ marginTop: 12 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+                  <DeadlineStrip />
+                </div>
                 <span style={{ fontSize: 13, fontWeight: 700, color: ink, marginRight: 6 }}>初回体験</span>
                 <Regular value={c.prices.trial.regular} size={14} />
                 <span style={{ margin: "0 6px", display: "inline-block", verticalAlign: "middle" }}>
@@ -1284,21 +1322,9 @@ export default function Page() {
               }}
             >
               <div style={{ textAlign: "center" }}>
-                <span
-                  style={{
-                    display: "inline-block",
-                    background: accent,
-                    color: "#FFFFFF",
-                    fontFamily: fontGothic,
-                    fontSize: 12.5,
-                    fontWeight: 700,
-                    letterSpacing: "0.1em",
-                    padding: "6px 14px",
-                    borderRadius: 4,
-                  }}
-                >
-                  {c.campaign.badge}
-                </span>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <DeadlineStrip dark />
+                </div>
                 <h2
                   style={{
                     fontFamily: fontMincho,
@@ -1502,6 +1528,7 @@ export default function Page() {
                 flexWrap: "wrap",
               }}
             >
+              <span style={{ fontSize: 12, fontWeight: 700, color: accent }}>{c.deadline.short}</span>
               <Regular value={c.prices.trial.regular} size={13} />
               <Arrow size={11} />
               <span style={{ fontSize: 12, fontWeight: 700, color: ink }}>初回体験</span>
@@ -1543,6 +1570,11 @@ export default function Page() {
         buttonGradient={ctaGrad}
         shadowColor="rgba(25,45,52,0.35)"
         borderColor={`${accent}59`}
+        note={
+          <span style={{ fontSize: 11.5, fontWeight: 700, color: accent, letterSpacing: "0.04em" }}>
+            {c.deadline.date}（{c.deadline.dow}）までの期間限定
+          </span>
+        }
         offers={[
           <span key="trial" style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
             <span style={{ fontSize: 11, color: inkSoft }}>初回体験</span>

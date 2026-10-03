@@ -62,6 +62,9 @@ export interface BaseBodyConfig {
     features: string[];
   };
 
+  /** キャンペーン期限。オファーバー・価格カード・キャンペーン・追従フッター・フォームで使う。 */
+  deadline: { short: string; date: string; dow: string };
+
   /** FV・キャンペーン・最終CTAで使い回す2本の価格。 */
   prices: { trial: PriceLine; admission: PriceLine };
 
@@ -133,7 +136,7 @@ export interface BaseBodyConfig {
     voice: string;
   };
 
-  campaign: { badge: string; heading: string; values: string[] };
+  campaign: { heading: string; values: string[] };
 
   store: {
     heading: string;
@@ -222,7 +225,7 @@ const config: BaseBodyConfig = {
   meta: {
     title: "【初回体験1,000円】鍛える前に、まず身体を知る。｜base BODY 赤坂見附のパーソナルマシンピラティス",
     description:
-      "7つの動きから身体のクセをチェック。理学療法の考え方を取り入れた身体分析で、あなたに合ったマンツーマンのマシンピラティスを。通常11,000円の体験が初回1,000円、体験当日のご入会で入会金0円。赤坂見附駅徒歩30秒。",
+      "7つの動きから身体のクセをチェック。理学療法の考え方を取り入れた身体分析で、あなたに合ったマンツーマンのマシンピラティスを。10月31日までの期間限定で、通常11,000円の体験が初回1,000円。体験当日のご入会で入会金0円。赤坂見附駅徒歩30秒。",
     /* 相対パスは metadataBase が別ドメインに解決されるため、本番の絶対URLで持つ。 */
     ogpImage: "https://fitness-lp.commitad.com/clients/base-body/ogp.jpg",
   },
@@ -236,7 +239,7 @@ const config: BaseBodyConfig = {
     walkPost: "秒",
   },
 
-  offerBar: { badge: "期間限定", pre: "初回体験", num: "1,000", post: "円" },
+  offerBar: { badge: "10/31まで", pre: "初回体験", num: "1,000", post: "円" },
 
   fv: {
     hero: {
@@ -248,6 +251,9 @@ const config: BaseBodyConfig = {
     sub: "[[7つ]]の動きから身体のクセをチェック。\n理学療法の考え方を取り入れた身体分析で、\nあなたに合ったピラティスを。",
     features: ["FMS評価", "身体分析", "パーソナル\nマシンピラティス"],
   },
+
+  /* 体験1,000円は 2026-10-31（土）までの期間限定（顧客指示 2026-10-03）。 */
+  deadline: { short: "10/31まで", date: "10月31日", dow: "土" },
 
   prices: {
     trial: { label: "初回体験", regular: "11,000", now: "1,000" },
@@ -458,7 +464,6 @@ const config: BaseBodyConfig = {
   },
 
   campaign: {
-    badge: "期間限定キャンペーン",
     heading: "初回限定",
     values: ["FMS評価", "身体分析", "マンツーマン", "90分"],
   },
