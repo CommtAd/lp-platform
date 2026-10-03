@@ -4,6 +4,7 @@ import type { ClientStatus } from "@shared/index";
  * BEAT PILATES 豊田店 — Meta広告用LP。
  *
  * コンセプトは「運動は苦手。でも、身体は変えたい。」の1本。
+ * FVのキャッチは「運動は続かなかった／でも、身体は変えたい」（2026-10-03 顧客指示で変更）。
  * 「もっと頑張らないと変わらない」→「続けたくなる運動を見つけることが大切」へ考え方を変え、
  * その答えとして「暗闇 × 音楽 × マシンピラティス」を出す。LP全体で次の言葉を繰り返す。
  *   楽しく身体を動かす／運動が苦手でも始めやすい／周りを気にしにくい／
@@ -53,7 +54,8 @@ export interface BeatToyotaMetaConfig {
   fv: {
     hero: Slot;
     eyebrow: string;
-    catchLines: [string, string];
+    /** 2行目は「でも、」を小さく、強調語をピンクで大きく置く。 */
+    catch: { line1: string; line2Lead: string; line2Em: string };
     sub: string;
     pillars: { en: string; label: string; img: Slot }[];
     chips: string[];
@@ -126,7 +128,7 @@ const config: BeatToyotaMetaConfig = {
   slug: "beat-pilates-toyota-meta",
   status: "draft",
   meta: {
-    title: "【初回体験1,000円】運動は苦手。でも、身体は変えたい。｜BEAT PILATES 豊田店",
+    title: "【初回体験1,000円】運動は続かなかった。でも、身体は変えたい。｜BEAT PILATES 豊田店",
     description:
       "音楽に合わせて楽しむ、女性専用の暗闇マシンピラティス。周りを気にしにくい暗闇と、動きをサポートするマシンで、運動が苦手でも始めやすい。初回体験1,000円・入会金0円。名鉄豊田市駅 徒歩3分・駐車場あり。",
     // 相対パスだと metadataBase 未設定のためブライダルのドメインで解決される。必ず絶対URL。
@@ -168,7 +170,7 @@ const config: BeatToyotaMetaConfig = {
       position: "center 30%",
     },
     eyebrow: "女性専用の暗闇マシンピラティス",
-    catchLines: ["運動は苦手。", "でも、身体は変えたい。"],
+    catch: { line1: "運動は続かなかった", line2Lead: "でも、", line2Em: "身体は変えたい" },
     sub: "音楽に合わせて楽しむ、\n暗闇マシンピラティス。",
     pillars: [
       { en: "DARK", label: "暗闇", img: { placeholder: "", src: `${IMG}/dark-purple.jpg`, position: "center 60%" } },

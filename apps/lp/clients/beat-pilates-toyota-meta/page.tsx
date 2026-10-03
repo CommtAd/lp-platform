@@ -389,11 +389,11 @@ export default function Page() {
                   textShadow: "0 2px 16px rgba(20,8,50,0.55)",
                 }}
               >
-                <span style={{ display: "block", fontSize: 28 }}>{c.fv.catchLines[0]}</span>
-                <span style={{ display: "block", fontSize: 33, letterSpacing: 0, whiteSpace: "nowrap" }}>
-                  <span style={{ fontSize: 24 }}>でも、</span>
+                <span style={{ display: "block", fontSize: 28 }}>{c.fv.catch.line1}</span>
+                <span style={{ display: "block", fontSize: 34, letterSpacing: 0, whiteSpace: "nowrap" }}>
+                  <span style={{ fontSize: 24 }}>{c.fv.catch.line2Lead}</span>
                   <span style={{ color: "#FF8CC5", textShadow: `0 0 18px ${pink}88, 0 2px 12px rgba(20,8,50,0.6)` }}>
-                    身体は変えたい。
+                    {c.fv.catch.line2Em}
                   </span>
                 </span>
               </h1>
