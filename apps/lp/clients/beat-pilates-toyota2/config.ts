@@ -122,10 +122,10 @@ export interface BeatToyotaMetaConfig {
   footer: { copyright: string };
 }
 
-const IMG = "/clients/beat-pilates-toyota-meta";
+const IMG = "/clients/beat-pilates-toyota2";
 
 const config: BeatToyotaMetaConfig = {
-  slug: "beat-pilates-toyota-meta",
+  slug: "beat-pilates-toyota2",
   status: "draft",
   meta: {
     title: "【初回体験1,000円】運動は続かなかった。でも、身体は変えたい。｜BEAT PILATES 豊田店",

@@ -1,8 +1,8 @@
 # BEAT PILATES 豊田店 Meta広告用LP 制作仕様書
 
-- slug: `beat-pilates-toyota-meta`（**仮slug**。ダッシュボード登録後に合わせて変更すること。CLAUDE.md §12〜13）
-- 実装: `apps/lp/clients/beat-pilates-toyota-meta/`（`config.ts` = コピー・価格・写真、`page.tsx` = レイアウト）
-- 画像: `apps/lp/public/clients/beat-pilates-toyota-meta/`
+- slug: `beat-pilates-toyota2`（ダッシュボード登録済みのslug。CLAUDE.md §12〜13）
+- 実装: `apps/lp/clients/beat-pilates-toyota2/`（`config.ts` = コピー・価格・写真、`page.tsx` = レイアウト）
+- 画像: `apps/lp/public/clients/beat-pilates-toyota2/`
 - 参照基準: 構成・文字サイズ・CTA頻度は `seren-pilates`（文章・内容は流用しない）
 - 情報の優先順位: 制作指示書 > 公式サイト（beat-pilates.com, /toyota/）> 既存LP（`beat-pilates-toyota`）
 - 予約導線: hacomono 豊田店の体験予約（新規タブ）。既存の豊田店LPと同じ方式のため LPForm は置かず、`FORM_EXEMPT` に登録
@@ -84,7 +84,7 @@ Drive「宣材写真2026」「宣材写真」と豊田店の外観写真を追�
 ## 5. 要確認だった項目
 
 2026-10-03 顧客確認済み。画面上の【要確認】表示と、体験の流れ・キャンペーン下の確認用注記は削除した。
-以下は確認した内容の記録（slug は引き続き仮）。
+以下は確認した内容の記録。
 
 - キャンペーン期間・入会金0円の適用条件（キャンペーンセクション）
 - 体験レッスン45分（ブランド公式の表記。豊田店の最新条件と照合）
