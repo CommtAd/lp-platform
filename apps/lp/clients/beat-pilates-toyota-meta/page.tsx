@@ -1014,7 +1014,7 @@ export default function Page() {
                   <dt style={{ color: inkMute, fontSize: 12.5 }}>駐車場</dt>
                   <dd style={{ margin: 0, color: ink, fontWeight: 700 }}>{c.store.parking}</dd>
                   <dt style={{ color: inkMute, fontSize: 12.5 }}>営業時間</dt>
-                  <dd style={{ margin: 0, color: inkSoft }}>{c.store.hours}</dd>
+                  <dd style={{ margin: 0, color: ink, fontWeight: 700, lineHeight: 1.7 }}>{nl(c.store.hours)}</dd>
                 </dl>
                 <iframe
                   src={c.store.mapEmbedSrc}

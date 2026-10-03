@@ -372,7 +372,7 @@ const config: BeatToyotaMetaConfig = {
     address: "〒471-0025\n愛知県豊田市西町5-5 VITS豊田タウン2階",
     access: ["名鉄 豊田市駅 西口から徒歩3分", "愛知環状鉄道 新豊田駅 東口から徒歩5分"],
     parking: "駐車場あり（3時間無料）",
-    hours: "予約サイトをご確認ください",
+    hours: "平日 9:00〜21:00\n土日祝 9:00〜18:00",
     mapEmbedSrc:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.865852692026!2d137.15456609999998!3d35.0850844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6004a15a18532229%3A0xc9c569e465580d50!2zQmVhdCBQaWxhdGVz6LGK55Sw5bqX!5e0!3m2!1sja!2sjp!4v1787730326689!5m2!1sja!2sjp",
   },
