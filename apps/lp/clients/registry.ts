@@ -38,7 +38,7 @@ export const clientRegistry: Record<
   "sakura-tokyo": () => import("./sakura-tokyo/page"),
   "seren-pilates": () => import("./seren-pilates/page"),
   "ivy-test": () => import("./ivy-test/page"),
-  "base-body": () => import("./base-body/page"),
+  "b-body-pilates": () => import("./b-body-pilates/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -102,5 +102,5 @@ export const clientMetaRegistry: Record<
   "sakura-tokyo": () => import("./sakura-tokyo/config"),
   "seren-pilates": () => import("./seren-pilates/config"),
   "ivy-test": () => import("./ivy-test/config"),
-  "base-body": () => import("./base-body/config"),
+  "b-body-pilates": () => import("./b-body-pilates/config"),
 };

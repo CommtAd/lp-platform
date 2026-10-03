@@ -172,7 +172,7 @@ export interface BaseBodyConfig {
   footer: { copyright: string };
 }
 
-const ASSET = "/clients/base-body";
+const ASSET = "/clients/b-body-pilates";
 
 /** 営業 10:00〜22:00、体験は90分なので最終の開始枠は20:00（既存ページの予約フォームと同じ）。 */
 const timeOptions = [
@@ -220,14 +220,14 @@ const formFields: LPFormField[] = [
 ];
 
 const config: BaseBodyConfig = {
-  slug: "base-body",
+  slug: "b-body-pilates",
   status: "draft",
   meta: {
     title: "【初回体験1,000円】鍛える前に、まず身体を知る。｜base BODY 赤坂見附のパーソナルマシンピラティス",
     description:
       "7つの動きから身体のクセをチェック。理学療法の考え方を取り入れた身体分析で、あなたに合ったマンツーマンのマシンピラティスを。10月31日までの期間限定で、通常11,000円の体験が初回1,000円。体験当日のご入会で入会金0円。赤坂見附駅徒歩30秒。",
     /* 相対パスは metadataBase が別ドメインに解決されるため、本番の絶対URLで持つ。 */
-    ogpImage: "https://fitness-lp.commitad.com/clients/base-body/ogp.jpg",
+    ogpImage: "https://fitness-lp.commitad.com/clients/b-body-pilates/ogp.jpg",
   },
 
   header: {

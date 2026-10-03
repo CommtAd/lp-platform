@@ -1,8 +1,8 @@
 # base BODY（ベースボディ）Meta広告用LP 制作仕様書
 
-- slug: `base-body`（**ダッシュボードで同じslugの枠を作成すること**。CLAUDE.md §12〜13）
-- 実装: `apps/lp/clients/base-body/`（`config.ts` = コピー・価格・写真、`page.tsx` = レイアウト）
-- 画像: `apps/lp/public/clients/base-body/`（Drive「ピラティス写真」53枚から選定・リサイズ）
+- slug: `b-body-pilates`（ダッシュボード登録済みのslug。CLAUDE.md §12〜13）
+- 実装: `apps/lp/clients/b-body-pilates/`（`config.ts` = コピー・価格・写真、`page.tsx` = レイアウト）
+- 画像: `apps/lp/public/clients/b-body-pilates/`（Drive「ピラティス写真」53枚から選定・リサイズ）
 - 2026-10-03 更新: 「お客様の声」「代表について」を削除、ヘッダー名を「base BODY ピラティス」に変更（顧客指示）
 - 2026-10-03 更新: 体験1,000円を「10月31日（土）までの期間限定」に（オファーバー・FV価格カード・体験・キャンペーン・最終CTA・フォーム・追従フッター）
 - 参照基準: 構成・文字サイズ・余白は `seren-pilates`（fitness-lp.commitad.com/seren-pilates）
