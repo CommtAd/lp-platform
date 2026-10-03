@@ -65,8 +65,6 @@ const gradText = (grad: string): CSSProperties => ({
   color: "transparent",
 });
 
-const Confirm = () => <span style={{ color: "#D4145A", fontWeight: 700 }}>【要確認】</span>;
-
 /** セクション見出し。`kicker` は英字。 */
 function SectionHeading({
   text,
@@ -854,7 +852,6 @@ export default function Page() {
                     <div style={{ padding: "12px 16px 14px" }}>
                     <h3 style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 16.5, margin: 0, color: ink }}>{s.title}</h3>
                     <p style={{ fontSize: 13.5, lineHeight: 1.8, color: inkSoft, margin: "6px 0 0" }}>
-                      {s.confirm && <Confirm />}
                       {s.body}
                     </p>
                     </div>
@@ -862,10 +859,6 @@ export default function Page() {
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: 11, lineHeight: 1.7, color: inkMute, margin: "14px 0 0" }}>
-              <Confirm />
-              {c.flow.note}
-            </p>
             <ReserveCta label={c.cta.reserve} marginTop={28} />
           </section>
 
@@ -958,10 +951,6 @@ export default function Page() {
               <div style={{ marginTop: 24 }}>
                 <OfferCard trialSize={78} admissionSize={46} />
               </div>
-              <p style={{ fontSize: 11, lineHeight: 1.7, color: "rgba(255,255,255,0.72)", margin: "12px 0 0" }}>
-                {c.campaign.confirm && <span style={{ color: priceOnDark, fontWeight: 700 }}>【要確認】</span>}
-                {c.campaign.note}
-              </p>
               <ReserveCta label={c.cta.reserve} onDark marginTop={22} />
             </div>
           </section>

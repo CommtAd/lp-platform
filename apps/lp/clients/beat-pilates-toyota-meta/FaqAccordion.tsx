@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 interface FaqAccordionProps {
-  items: { q: string; a: string; confirm?: boolean }[];
+  items: { q: string; a: string }[];
   accent: string;
   accentSoft: string;
   ink: string;
@@ -72,7 +72,6 @@ export default function FaqAccordion({ items, accent, accentSoft, ink, inkSoft }
                   A
                 </span>
                 <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.9, color: inkSoft }}>
-                  {item.confirm && <span style={{ color: "#D4145A", fontWeight: 700 }}>【要確認】</span>}
                   {item.a}
                 </p>
               </div>

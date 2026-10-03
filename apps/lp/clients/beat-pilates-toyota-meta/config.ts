@@ -17,8 +17,7 @@ import type { ClientStatus } from "@shared/index";
  *   「目指す」「整える」「意識する」「気になる方へ」で書く。
  *   豊田店のお客様の声・スタッフ資格は未提供のため掲載しない（架空の口コミは作らない）。
  *
- * **公開前に確認が必要な項目**は `confirm: true` を付けて画面上に【要確認】を出している。
- * 確認が取れたら外すこと。
+ * 体験45分・キャンペーン条件・体験後の案内・レンタル等の【要確認】項目は顧客確認済み（2026-10-03）。
  *
  * 予約導線は既存の豊田店LPと同じ hacomono（豊田店の体験予約）。LPForm は置かない
  * （scripts/check-rules.ts の FORM_EXEMPT に登録）。
@@ -91,13 +90,12 @@ export interface BeatToyotaMetaConfig {
 
   flow: {
     heading: string;
-    steps: { num: string; title: string; body: string; img?: Slot; confirm?: boolean }[];
-    note: string;
+    steps: { num: string; title: string; body: string; img?: Slot }[];
   };
 
   qa: { heading: string; img: Slot; items: { q: string; a: string }[] };
 
-  campaign: { kicker: string; value: string; heading: string; bg: Slot; note: string; confirm?: boolean };
+  campaign: { kicker: string; value: string; heading: string; bg: Slot };
 
   store: {
     heading: string;
@@ -111,7 +109,7 @@ export interface BeatToyotaMetaConfig {
     mapEmbedSrc: string;
   };
 
-  faq: { heading: string; items: { q: string; a: string; confirm?: boolean }[] };
+  faq: { heading: string; items: { q: string; a: string }[] };
 
   closing: { heading: string; lead: string; bg: Slot; chips: string[]; storeName: string };
 
@@ -329,9 +327,8 @@ const config: BeatToyotaMetaConfig = {
       { num: "01", title: "体験レッスンを予約", body: "スマホから、希望の日時を選ぶだけ。", img: { placeholder: "", src: `${IMG}/studio-purple.jpg`, position: "center 55%" } },
       { num: "02", title: "スタジオへ来店", body: "動きやすい服装でお越しください。靴下・タオル・飲み物があると安心です。", img: { placeholder: "", src: `${IMG}/entrance.jpg`, position: "center 40%" } },
       { num: "03", title: "マシンピラティスを体験", body: "音楽に合わせて、実際のレッスン（45分）を体験。最初に見本を見ながら練習します。", img: { placeholder: "", src: `${IMG}/group-lesson.jpg`, position: "center 30%" } },
-      { num: "04", title: "レッスン終了", body: "気になることがあれば、その場でお気軽にご相談ください。", img: { placeholder: "", src: `${IMG}/counseling.jpg`, position: "60% 40%" }, confirm: true },
+      { num: "04", title: "レッスン終了", body: "気になることがあれば、その場でお気軽にご相談ください。", img: { placeholder: "", src: `${IMG}/counseling.jpg`, position: "60% 40%" } },
     ],
-    note: "来店推奨時間・着替えスペース・体験後のご案内内容は店舗運用に合わせて記載します。",
   },
 
   qa: {
@@ -362,8 +359,6 @@ const config: BeatToyotaMetaConfig = {
     value: "暗闇 × 音楽 × マシンピラティスを、\n実際に体験してください。",
     heading: "まずは、気軽に体験。",
     bg: { placeholder: "BEAT PILATESロゴと照明", src: `${IMG}/brand-loop.mp4`, poster: `${IMG}/brand-poster.jpg`, position: "center 30%" },
-    note: "キャンペーン期間・入会金0円の適用条件は、店舗の最新情報をご確認ください。",
-    confirm: true,
   },
 
   store: {
@@ -397,12 +392,10 @@ const config: BeatToyotaMetaConfig = {
       {
         q: "どんな服装で行けばいいですか？",
         a: "動きやすい服装でお越しください。靴下・タオル・飲み物をお持ちいただくと安心です。ウェアやタオルのレンタルの有無は店舗にご確認ください。",
-        confirm: true,
       },
       {
         q: "体験レッスンでは何をしますか？",
         a: "暗闇の中、音楽に合わせてリフォーマーを使う実際のレッスン（45分）を体験していただきます。",
-        confirm: true,
       },
       { q: "駐車場はありますか？", a: "はい、駐車場があります（3時間無料）。" },
       {
