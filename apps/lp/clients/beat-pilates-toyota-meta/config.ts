@@ -56,11 +56,11 @@ export interface BeatToyotaMetaConfig {
     eyebrow: string;
     catchLines: [string, string];
     sub: string;
-    pillars: { en: string; label: string }[];
+    pillars: { en: string; label: string; img: Slot }[];
     chips: string[];
   };
 
-  worry: { heading: string; items: { icon: string; text: string }[]; closing: string };
+  worry: { heading: string; items: { img: Slot; text: string }[]; closing: string };
 
   reason: {
     kicker: string;
@@ -70,7 +70,7 @@ export interface BeatToyotaMetaConfig {
     lines: string[];
   };
 
-  mindset: { heading: string; emphasis: string; body: string; img: Slot; formula: string[] };
+  mindset: { heading: string; emphasis: string; body: string; img: Slot; formula: { label: string; img: Slot }[] };
 
   features: {
     kicker: string;
@@ -85,23 +85,24 @@ export interface BeatToyotaMetaConfig {
     items: { num: string; title: string; body: string; img?: Slot }[];
   };
 
-  body: { heading: string; lead: string; items: { icon: string; label: string; text: string }[]; note: string };
+  body: { heading: string; lead: string; items: { img: Slot; label: string; text: string }[]; note: string };
 
   instructors: { heading: string; lead: string; items: { name: string; img: Slot }[] };
 
   flow: {
     heading: string;
-    steps: { num: string; title: string; body: string; confirm?: boolean }[];
+    steps: { num: string; title: string; body: string; img?: Slot; confirm?: boolean }[];
     note: string;
   };
 
-  qa: { heading: string; items: { q: string; a: string }[] };
+  qa: { heading: string; img: Slot; items: { q: string; a: string }[] };
 
   campaign: { kicker: string; value: string; heading: string; bg: Slot; note: string; confirm?: boolean };
 
   store: {
     heading: string;
     img: Slot;
+    exterior: Slot;
     name: string;
     address: string;
     access: string[];
@@ -171,9 +172,9 @@ const config: BeatToyotaMetaConfig = {
     catchLines: ["運動は苦手。", "でも、身体は変えたい。"],
     sub: "音楽に合わせて楽しむ、\n暗闇マシンピラティス。",
     pillars: [
-      { en: "DARK", label: "暗闇" },
-      { en: "MUSIC", label: "音楽" },
-      { en: "MACHINE", label: "マシン\nピラティス" },
+      { en: "DARK", label: "暗闇", img: { placeholder: "", src: `${IMG}/dark-purple.jpg`, position: "center 60%" } },
+      { en: "MUSIC", label: "音楽", img: { placeholder: "", src: `${IMG}/music.jpg`, position: "center 30%" } },
+      { en: "MACHINE", label: "マシン\nピラティス", img: { placeholder: "", src: `${IMG}/machine-lesson.jpg`, position: "40% center" } },
     ],
     chips: ["女性専用", "運動初心者OK", "豊田市駅 徒歩3分"],
   },
@@ -181,12 +182,12 @@ const config: BeatToyotaMetaConfig = {
   worry: {
     heading: "こんなこと、\n気になっていませんか？",
     items: [
-      { icon: "hip", text: "最近、お尻のラインが\n気になる" },
-      { icon: "camera", text: "写真を見ると、\n姿勢が気になる" },
-      { icon: "waist", text: "下腹やお腹周りが\n気になる" },
-      { icon: "sofa", text: "運動しない日が\n増えてきた" },
-      { icon: "gym", text: "ジムに入っても\n続かなかった" },
-      { icon: "question", text: "何か始めたいけど、\n何をすればいいか\n分からない" },
+      { img: { placeholder: "", src: `${IMG}/worry-hip.jpg`, position: "62% 30%" }, text: "最近、お尻の\nラインが気になる" },
+      { img: { placeholder: "", src: `${IMG}/worry-camera.jpg`, position: "65% 40%" }, text: "写真を見ると、\n姿勢が気になる" },
+      { img: { placeholder: "", src: `${IMG}/worry-waist.jpg`, position: "68% 40%" }, text: "下腹やお腹周りが\n気になる" },
+      { img: { placeholder: "", src: `${IMG}/worry-sofa.jpg`, position: "62% 45%" }, text: "運動しない日が\n増えてきた" },
+      { img: { placeholder: "", src: `${IMG}/worry-gym.jpg`, position: "30% 40%" }, text: "ジムに入っても\n続かなかった" },
+      { img: { placeholder: "", src: `${IMG}/counseling.jpg`, position: "60% 40%" }, text: "何か始めたいけど、\n何をすれば\nいいか分からない" },
     ],
     closing: "ひとつでも当てはまったら、\nこの先を読んでみてください。",
   },
@@ -207,7 +208,11 @@ const config: BeatToyotaMetaConfig = {
     emphasis: "続けたくなる運動を\n見つけること。",
     body: "身体づくりは、1回だけ頑張るより\n無理なく身体を動かす時間を\nつくり続けることが大切。\nそのためにBEAT PILATESは、\n3つを組み合わせました。",
     img: { placeholder: "音楽に合わせて動くインストラクター", src: `${IMG}/instructor-move.jpg`, position: "center 35%" },
-    formula: ["暗闇", "音楽", "マシン"],
+    formula: [
+      { label: "暗闇", img: { placeholder: "", src: `${IMG}/dark-purple.jpg`, position: "center 60%" } },
+      { label: "音楽", img: { placeholder: "", src: `${IMG}/music.jpg`, position: "center 30%" } },
+      { label: "マシン", img: { placeholder: "", src: `${IMG}/machine-lesson.jpg`, position: "35% center" } },
+    ],
   },
 
   features: {
@@ -250,7 +255,7 @@ const config: BeatToyotaMetaConfig = {
       "運動することを、習慣にしたい",
       "身体を動かす時間を、楽しみにしたい",
     ],
-    img: { placeholder: "笑顔でマシンピラティスをする女性たち", src: `${IMG}/lesson-stretch.jpg`, position: "center 40%" },
+    img: { placeholder: "笑顔でマシンピラティスをする女性たち", src: `${IMG}/future-friends.jpg`, position: "center 35%" },
     closing: "こんな自分を、\nここから目指してみませんか。",
   },
 
@@ -279,11 +284,13 @@ const config: BeatToyotaMetaConfig = {
         num: "04",
         title: "女性専用スタジオ",
         body: "通っているのは女性だけ。運動が久しぶりの方も、気兼ねなく参加できます。",
+        img: { placeholder: "", src: `${IMG}/women-only.jpg`, position: "center 35%" },
       },
       {
         num: "05",
         title: "豊田市駅から徒歩3分",
         body: "名鉄豊田市駅 西口から徒歩3分。駐車場もあるので、仕事帰りや車でも通いやすい。",
+        img: { placeholder: "", src: `${IMG}/exterior.jpg`, position: "center 55%" },
       },
     ],
   },
@@ -292,12 +299,12 @@ const config: BeatToyotaMetaConfig = {
     heading: "気になるところから、\n身体を動かしていこう。",
     lead: "全身を使うマシンピラティスだから、\n気になるところを意識しながら動けます。",
     items: [
-      { icon: "hip", label: "お尻", text: "お尻のラインが\n気になる" },
-      { icon: "waist", label: "お腹", text: "下腹をすっきり\n見せたい" },
-      { icon: "leg", label: "脚", text: "脚のラインを\n整えたい" },
-      { icon: "posture", label: "姿勢", text: "猫背や巻き肩を\n意識したい" },
-      { icon: "sofa", label: "運動不足", text: "座りっぱなしの\n毎日を変えたい" },
-      { icon: "energy", label: "体力", text: "最近、体力が\n落ちた気がする" },
+      { img: { placeholder: "", src: `${IMG}/body-hip.jpg`, position: "45% center" }, label: "お尻", text: "お尻のラインが\n気になる" },
+      { img: { placeholder: "", src: `${IMG}/body-waist.jpg`, position: "40% center" }, label: "お腹", text: "下腹をすっきり\n見せたい" },
+      { img: { placeholder: "", src: `${IMG}/body-leg.jpg`, position: "55% center" }, label: "脚", text: "脚のラインを\n整えたい" },
+      { img: { placeholder: "", src: `${IMG}/body-posture.jpg`, position: "40% center" }, label: "姿勢", text: "猫背や巻き肩を\n意識したい" },
+      { img: { placeholder: "", src: `${IMG}/body-energy.jpg`, position: "40% center" }, label: "運動不足", text: "座りっぱなしの\n毎日を変えたい" },
+      { img: { placeholder: "", src: `${IMG}/worry-gym.jpg`, position: "25% center" }, label: "体力", text: "最近、体力が\n落ちた気がする" },
     ],
     note: "※効果には個人差があります。",
   },
@@ -319,16 +326,17 @@ const config: BeatToyotaMetaConfig = {
   flow: {
     heading: "初めてでも大丈夫。\n体験はかんたん4STEP。",
     steps: [
-      { num: "01", title: "体験レッスンを予約", body: "スマホから、希望の日時を選ぶだけ。" },
-      { num: "02", title: "スタジオへ来店", body: "動きやすい服装でお越しください。靴下・タオル・飲み物があると安心です。" },
-      { num: "03", title: "マシンピラティスを体験", body: "音楽に合わせて、実際のレッスン（45分）を体験。最初に見本を見ながら練習します。" },
-      { num: "04", title: "レッスン終了", body: "気になることがあれば、その場でお気軽にご相談ください。", confirm: true },
+      { num: "01", title: "体験レッスンを予約", body: "スマホから、希望の日時を選ぶだけ。", img: { placeholder: "", src: `${IMG}/studio-purple.jpg`, position: "center 55%" } },
+      { num: "02", title: "スタジオへ来店", body: "動きやすい服装でお越しください。靴下・タオル・飲み物があると安心です。", img: { placeholder: "", src: `${IMG}/entrance.jpg`, position: "center 40%" } },
+      { num: "03", title: "マシンピラティスを体験", body: "音楽に合わせて、実際のレッスン（45分）を体験。最初に見本を見ながら練習します。", img: { placeholder: "", src: `${IMG}/group-lesson.jpg`, position: "center 30%" } },
+      { num: "04", title: "レッスン終了", body: "気になることがあれば、その場でお気軽にご相談ください。", img: { placeholder: "", src: `${IMG}/counseling.jpg`, position: "60% 40%" }, confirm: true },
     ],
     note: "来店推奨時間・着替えスペース・体験後のご案内内容は店舗運用に合わせて記載します。",
   },
 
   qa: {
     heading: "ピラティスが初めてでも、\n運動が久しぶりでも。",
+    img: { placeholder: "", src: `${IMG}/beginner-support.jpg`, position: "center 35%" },
     items: [
       {
         q: "運動が苦手でも大丈夫？",
@@ -361,6 +369,7 @@ const config: BeatToyotaMetaConfig = {
   store: {
     heading: "店舗のご案内",
     img: { placeholder: "豊田店のスタジオ", src: `${IMG}/store.jpg`, position: "center 40%" },
+    exterior: { placeholder: "", src: `${IMG}/exterior.jpg`, position: "center 55%" },
     name: "BEAT PILATES 豊田店",
     address: "〒471-0025\n愛知県豊田市西町5-5 VITS豊田タウン2階",
     access: ["名鉄 豊田市駅 西口から徒歩3分", "愛知環状鉄道 新豊田駅 東口から徒歩5分"],

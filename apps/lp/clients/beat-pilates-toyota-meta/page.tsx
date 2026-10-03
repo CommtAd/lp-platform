@@ -255,99 +255,6 @@ function OfferCard({ trialSize = 64, admissionSize = 40 }: { trialSize?: number;
   );
 }
 
-/* ── アイコン（線画・24px基準） ─────────────────────────── */
-const iconPaths: Record<string, ReactNode> = {
-  hip: (
-    <>
-      <path d="M7 3c-.8 4-1.6 7-1.6 10.5C5.4 18 8 21 12 21s6.6-3 6.6-7.5C18.6 10 17.8 7 17 3" />
-      <path d="M12 13.5V21" />
-    </>
-  ),
-  camera: (
-    <>
-      <rect x="3" y="7" width="18" height="13" rx="2.5" />
-      <path d="M8.5 7l1.5-3h4l1.5 3" />
-      <circle cx="12" cy="13.5" r="3.5" />
-    </>
-  ),
-  waist: (
-    <>
-      <path d="M7 3c1.2 3 1.2 6 0 9s-1.2 6 0 9" />
-      <path d="M17 3c-1.2 3-1.2 6 0 9s1.2 6 0 9" />
-      <circle cx="12" cy="13" r="1" />
-    </>
-  ),
-  sofa: (
-    <>
-      <path d="M5 11V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v3" />
-      <path d="M3 12a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3z" />
-      <path d="M5 17v2M19 17v2" />
-    </>
-  ),
-  gym: (
-    <>
-      <path d="M6 8v8M3.5 10v4M18 8v8M20.5 10v4M6 12h12" />
-    </>
-  ),
-  question: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7" />
-      <path d="M12 17h.01" />
-    </>
-  ),
-  leg: (
-    <>
-      <path d="M9 3v8.5c0 2-1 4.5-1 6.5v3h3" />
-      <path d="M15 3v8.5c0 2 .5 4.5.5 6.5v3H18" />
-    </>
-  ),
-  posture: (
-    <>
-      <circle cx="12" cy="4.5" r="2" />
-      <path d="M12 7v8M8 10.5h8M12 15l-3 6M12 15l3 6" />
-    </>
-  ),
-  energy: <path d="M13 2L5 13.5h6L10 22l8-11.5h-6z" />,
-  dark: (
-    <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z" />
-  ),
-  music: (
-    <>
-      <path d="M9 18V5l11-2v13" />
-      <circle cx="6.5" cy="18" r="2.5" />
-      <circle cx="17.5" cy="16" r="2.5" />
-    </>
-  ),
-  machine: (
-    <>
-      <rect x="2.5" y="12" width="19" height="4" rx="1.5" />
-      <path d="M5 16v4M19 16v4M8 12V9h4v3M17 12V6" />
-    </>
-  ),
-};
-
-function Icon({ name, size = 26, color = purple, strokeWidth = 1.8 }: { name: string; size?: number; color?: string; strokeWidth?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={color}
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-      style={{ flex: "none" }}
-    >
-      {iconPaths[name]}
-    </svg>
-  );
-}
-
-const pillarIcon = ["dark", "music", "machine"];
-
 const Check = ({ color = pink }: { color?: string }) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden style={{ flex: "none" }}>
     <circle cx="12" cy="12" r="11" fill={color} />
@@ -491,25 +398,42 @@ export default function Page() {
                   {i > 0 && <span style={{ flex: "none", fontSize: 16, fontWeight: 800, color: priceOnDark }}>×</span>}
                   <div
                     style={{
+                      position: "relative",
                       flex: 1,
-                      height: 92,
+                      height: 104,
                       borderRadius: 14,
-                      background: "rgba(255,255,255,0.06)",
-                      border: `1px solid ${violet}88`,
-                      boxShadow: `inset 0 0 18px ${violet}33`,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 4,
-                      color: "#FFFFFF",
+                      overflow: "hidden",
+                      border: `1px solid ${violet}99`,
+                      boxShadow: `0 0 16px ${purple}55`,
                     }}
                   >
-                    <Icon name={pillarIcon[i]} size={22} color="#E7D6FF" />
-                    <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: i === 2 ? 12.5 : 16, lineHeight: 1.25, textAlign: "center" }}>
-                      {nl(p.label)}
-                    </span>
-                    <span style={{ fontSize: 8.5, letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)" }}>{p.en}</span>
+                    <ImageSlot
+                      src={p.img.src}
+                      placeholder={p.img.placeholder}
+                      objectPosition={p.img.position}
+                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#2C1A36" }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "linear-gradient(to bottom, rgba(21,12,38,0.05) 20%, rgba(21,12,38,0.82) 100%)",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        bottom: 8,
+                        textAlign: "center",
+                        color: "#FFFFFF",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      <span style={{ display: "block", fontFamily: fontGothic, fontWeight: 800, fontSize: i === 2 ? 13 : 17 }}>{nl(p.label)}</span>
+                      <span style={{ display: "block", fontSize: 8.5, letterSpacing: "0.2em", color: "rgba(255,255,255,0.75)", marginTop: 3 }}>{p.en}</span>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -547,33 +471,17 @@ export default function Page() {
             <SectionHeading text={c.worry.heading} kicker="CHECK" />
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 30 }}>
               {c.worry.items.map((item) => (
-                <div
-                  key={item.text}
-                  style={{
-                    background: lav,
-                    borderRadius: 14,
-                    padding: "16px 12px 14px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 8,
-                    textAlign: "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: "50%",
-                      background: "#FFFFFF",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Icon name={item.icon} size={24} />
-                  </span>
-                  <span style={{ fontSize: 13.5, fontWeight: 700, lineHeight: 1.55, color: ink }}>{nl(item.text)}</span>
+                <div key={item.text} style={{ borderRadius: 14, overflow: "hidden", background: lav }}>
+                  <ImageSlot
+                    src={item.img.src}
+                    placeholder={item.img.placeholder}
+                    objectPosition={item.img.position}
+                    style={{ width: "100%", height: 112 }}
+                  />
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 6, padding: "10px 10px 12px" }}>
+                    <Check />
+                    <span style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.55, color: ink }}>{nl(item.text)}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -680,28 +588,17 @@ export default function Page() {
             </p>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 20 }}>
               {c.mindset.formula.map((f, i) => (
-                <div key={f} style={{ display: "contents" }}>
+                <div key={f.label} style={{ display: "contents" }}>
                   {i > 0 && <span style={{ fontWeight: 800, color: pink, fontSize: 18 }}>×</span>}
-                  <span
-                    style={{
-                      width: 76,
-                      height: 76,
-                      borderRadius: "50%",
-                      background: lav,
-                      border: `1.5px solid ${purple}44`,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 2,
-                      fontFamily: fontGothic,
-                      fontWeight: 800,
-                      fontSize: 15,
-                      color: purple,
-                    }}
-                  >
-                    <Icon name={pillarIcon[i]} size={20} />
-                    {f}
+                  <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                    <ImageSlot
+                      src={f.img.src}
+                      placeholder={f.img.placeholder}
+                      objectPosition={f.img.position}
+                      radius={999}
+                      style={{ width: 84, height: 84, border: `3px solid ${lav}`, boxShadow: `0 0 0 1.5px ${purple}55` }}
+                    />
+                    <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 15, color: purple }}>{f.label}</span>
                   </span>
                 </div>
               ))}
@@ -861,26 +758,36 @@ export default function Page() {
                   style={{
                     background: "#FFFFFF",
                     borderRadius: 14,
-                    padding: "14px 6px 12px",
+                    overflow: "hidden",
                     textAlign: "center",
                     border: `1px solid ${line}`,
                   }}
                 >
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      width: 40,
-                      height: 40,
-                      borderRadius: "50%",
-                      background: lav,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Icon name={b.icon} size={22} />
-                  </span>
-                  <p style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 16, margin: "6px 0 0", color: purple }}>{b.label}</p>
-                  <p style={{ fontSize: 11.5, lineHeight: 1.55, color: inkSoft, margin: "4px 0 0" }}>{nl(b.text)}</p>
+                  <div style={{ position: "relative" }}>
+                    <ImageSlot
+                      src={b.img.src}
+                      placeholder={b.img.placeholder}
+                      objectPosition={b.img.position}
+                      style={{ width: "100%", height: 96 }}
+                    />
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: 6,
+                        bottom: 6,
+                        fontFamily: fontGothic,
+                        fontWeight: 800,
+                        fontSize: 13,
+                        color: "#FFFFFF",
+                        background: duoGrad,
+                        borderRadius: 999,
+                        padding: "3px 10px",
+                      }}
+                    >
+                      {b.label}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: 11.5, fontWeight: 700, lineHeight: 1.55, color: inkSoft, margin: 0, padding: "8px 4px 10px" }}>{nl(b.text)}</p>
                 </div>
               ))}
             </div>
@@ -940,12 +847,17 @@ export default function Page() {
                     <span style={{ fontSize: 8, letterSpacing: "0.1em", fontWeight: 700 }}>STEP</span>
                     <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 17, marginTop: 2 }}>{s.num}</span>
                   </span>
-                  <div style={{ flex: 1, background: "#FFFFFF", borderRadius: 14, padding: "14px 16px" }}>
+                  <div style={{ flex: 1, background: "#FFFFFF", borderRadius: 14, overflow: "hidden" }}>
+                    {s.img && (
+                      <ImageSlot src={s.img.src} placeholder={s.img.placeholder} objectPosition={s.img.position} style={{ width: "100%", height: 108 }} />
+                    )}
+                    <div style={{ padding: "12px 16px 14px" }}>
                     <h3 style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 16.5, margin: 0, color: ink }}>{s.title}</h3>
                     <p style={{ fontSize: 13.5, lineHeight: 1.8, color: inkSoft, margin: "6px 0 0" }}>
                       {s.confirm && <Confirm />}
                       {s.body}
                     </p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -960,7 +872,14 @@ export default function Page() {
           {/* ── 初めての方の不安（Q&Aカード） ── */}
           <section style={{ background: "#FFFFFF", padding: "60px 20px 58px" }}>
             <SectionHeading text={c.qa.heading} kicker="FOR BEGINNERS" fontSize={22} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 30 }}>
+            <ImageSlot
+              src={c.qa.img.src}
+              placeholder={c.qa.img.placeholder}
+              objectPosition={c.qa.img.position}
+              radius={18}
+              style={{ width: "100%", height: 210, marginTop: 28 }}
+            />
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 20 }}>
               {c.qa.items.map((q) => (
                 <div key={q.q} style={{ borderRadius: 16, overflow: "hidden", border: `1px solid ${line}` }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, background: purpleSoft, padding: "12px 16px" }}>
@@ -1052,11 +971,15 @@ export default function Page() {
             <SectionHeading text={c.store.heading} kicker="ACCESS" fontSize={24} />
             <div style={{ borderRadius: 18, overflow: "hidden", border: `1px solid ${line}`, marginTop: 30 }}>
               <ImageSlot
-                src={c.store.img.src}
-                placeholder={c.store.img.placeholder}
-                objectPosition={c.store.img.position}
-                style={{ width: "100%", height: 210 }}
+                src={c.store.exterior.src}
+                placeholder={c.store.exterior.placeholder}
+                objectPosition={c.store.exterior.position}
+                style={{ width: "100%", height: 200 }}
               />
+              <div style={{ display: "flex", gap: 2, marginTop: 2 }}>
+                <ImageSlot src={c.store.img.src} placeholder={c.store.img.placeholder} objectPosition={c.store.img.position} style={{ flex: 1, height: 120 }} />
+                <ImageSlot src={c.fv.hero.poster} placeholder={c.fv.hero.placeholder} objectPosition="center 45%" style={{ flex: 1, height: 120 }} />
+              </div>
               <div style={{ padding: "20px 18px 18px" }}>
                 <h3 style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 20, margin: 0, color: ink }}>{c.store.name}</h3>
                 <p style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 15, margin: "8px 0 0", color: ink }}>
