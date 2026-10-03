@@ -42,6 +42,7 @@ export const clientRegistry: Record<
   "seren-pilates": () => import("./seren-pilates/page"),
   "ivy-test": () => import("./ivy-test/page"),
   "rusk-demo2": () => import("./rusk-demo2/page"),
+  "b-body-pilates": () => import("./b-body-pilates/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -111,4 +112,5 @@ export const clientMetaRegistry: Record<
   "seren-pilates": () => import("./seren-pilates/config"),
   "ivy-test": () => import("./ivy-test/config"),
   "rusk-demo2": () => import("./rusk-demo2/config"),
+  "b-body-pilates": () => import("./b-body-pilates/config"),
 };
