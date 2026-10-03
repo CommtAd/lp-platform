@@ -284,14 +284,38 @@ export default function Page() {
             }}
           >
             <img src={c.header.logo} alt={c.header.logoAlt} style={{ height: 34, width: "auto", display: "block" }} />
-            <div style={{ textAlign: "right", lineHeight: 1.2, color: "#FFFFFF" }}>
-              <div style={{ fontSize: 10.5, letterSpacing: "0.04em", color: "rgba(255,255,255,0.75)" }}>
-                {c.header.station}
+            <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#FFFFFF" }}>
+              <div style={{ textAlign: "right", lineHeight: 1.2 }}>
+                <div style={{ fontSize: 10.5, letterSpacing: "0.04em", color: "rgba(255,255,255,0.75)" }}>
+                  {c.header.station}
+                </div>
+                <div style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 12 }}>
+                  {c.header.walkPre}
+                  <span style={{ fontSize: 20, color: priceOnDark, margin: "0 1px" }}>{c.header.walkNum}</span>
+                  {c.header.walkPost}
+                </div>
               </div>
-              <div style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 12 }}>
-                {c.header.walkPre}
-                <span style={{ fontSize: 20, color: priceOnDark, margin: "0 1px" }}>{c.header.walkNum}</span>
-                {c.header.walkPost}
+              <span style={{ width: 1, height: 30, background: "rgba(255,255,255,0.25)" }} />
+              <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <span
+                  style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: 5,
+                    background: "#FFFFFF",
+                    color: purple,
+                    fontFamily: fontGothic,
+                    fontWeight: 800,
+                    fontSize: 15,
+                    lineHeight: "22px",
+                    textAlign: "center",
+                  }}
+                >
+                  P
+                </span>
+                <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 12, lineHeight: 1.25 }}>
+                  {c.header.parking}
+                </span>
               </div>
             </div>
           </header>

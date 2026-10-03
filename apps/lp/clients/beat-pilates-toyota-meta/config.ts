@@ -36,7 +36,7 @@ export interface BeatToyotaMetaConfig {
   status?: ClientStatus;
   meta: { title: string; description: string; ogpImage?: string };
 
-  header: { logo: string; logoAlt: string; station: string; walkPre: string; walkNum: string; walkPost: string };
+  header: { logo: string; logoAlt: string; station: string; walkPre: string; walkNum: string; walkPost: string; parking: string };
   offerBar: { trialLabel: string; trial: string; admissionLabel: string; admission: string };
 
   /** 価格はここに1か所だけ。FV・キャンペーン・最終CTA・追従CTAで共有する。 */
@@ -140,6 +140,7 @@ const config: BeatToyotaMetaConfig = {
     walkPre: "徒歩",
     walkNum: "3",
     walkPost: "分",
+    parking: "駐車場完備",
   },
 
   offerBar: { trialLabel: "初回体験", trial: "1,000", admissionLabel: "入会金", admission: "0" },
