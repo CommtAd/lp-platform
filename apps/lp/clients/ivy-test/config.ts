@@ -43,10 +43,14 @@ export interface IvyBConfig {
    * 戻すときは page.tsx に元のブロックを書き戻すこと。
    */
   topImage: { img: Slot; imgAlt: string };
+  /** 最上部の帯。画像に文言が焼き込まれている（顧客支給、2026-10-02）。 */
+  topBand: { img: Slot; imgAlt: string };
   /**
    * ご入会特典バンドを置き換える体験レッスンの画像（同 AUN #2）。
-   * **画像の中にCTAボタンが描かれている**ので、画像全体をリンクにしている。
-   * そうしないとボタンが押せない見た目だけの絵になる。
+   * 2026-10-02 に「新規オープンキャンペーン」版（1086x1448）へ再差し替え
+   * （AUN 藤沢店指摘 #4）。ソックス特典の「藤沢店限定」は画像に入っている。
+   * 2026-10-01 の差し替え画像にはCTAボタンが描かれていないため、
+   * 画像はリンクにせず、page.tsx 側で実体の <Cta> を下に置いている。
    */
   trial: { img: Slot; imgAlt: string };
   /**
@@ -251,6 +255,14 @@ export interface IvyBConfig {
 
   faq: { kicker: string; heading: string; items: { q: string; a: string }[] };
 
+  /**
+   * ⑰クロージングを置き換える画像（顧客支給、2026-10-01）。
+   * 見出し・チップ・0円・ご入会特典がすべて画像に入っている。
+   * そのため下の `closing` / `BonusBlock` のデータは残っているが**表示には使われていない**。
+   * 画像にはCTAボタンが無いので、page.tsx 側で実体の <Cta> を下に置く。
+   */
+  closingImage: { img: Slot; imgAlt: string };
+
   closing: {
     kicker: string;
     heading: string;
@@ -305,6 +317,10 @@ const config: IvyBConfig = {
     ogpImage: `${ASSET}/hero-poster.jpg`,
   },
 
+  topBand: {
+    img: { placeholder: "祝・藤沢店 NEW OPEN 藤沢店限定 無料体験レッスン受付中", src: `${ASSET}/band.jpg` },
+    imgAlt: "祝・藤沢店 NEW OPEN。藤沢店限定 無料体験レッスン受付中。",
+  },
   topImage: {
     img: {
       placeholder: "STUDIO IVY 藤沢店 もっと好きになれる、私の身体へ。",
@@ -324,7 +340,7 @@ const config: IvyBConfig = {
     imgAlt:
       "初回限定 体験レッスン。完全個室×パーソナルマシンピラティス。" +
       "通常価格4,500円のところ初回体験0円。完全個室／マンツーマン／マシンピラティス／カウンセリング。" +
-      "藤沢店限定、ご入会でピラティスソックスプレゼント。無料体験を予約する。",
+      "藤沢店限定、ご入会でピラティスソックスプレゼント。",
   },
 
   access: {
@@ -723,6 +739,14 @@ const config: IvyBConfig = {
         a: "お着替えの時間がありますので、開始5分前を目安にご来店ください。到着が早すぎる場合は、前のお客様のレッスン中でスタジオに入れないことがあります。",
       },
     ],
+  },
+
+  closingImage: {
+    img: { placeholder: "完全個室のパーソナルピラティスを、もっと気軽に。", src: `${ASSET}/closing.jpg` },
+    imgAlt:
+      "完全個室のパーソナルピラティスを、もっと気軽に。周りを気にせず、あなたの身体に合わせたレッスンを。" +
+      "藤沢駅徒歩5分／完全個室／マンツーマン／1回7,000円〜。初回体験レッスン、通常4,500円のところ完全無料0円。" +
+      "ご入会特典：ピラティスソックスプレゼント（藤沢店限定）、入会金無料。体験後にご入会された方が対象です。",
   },
 
   closing: {

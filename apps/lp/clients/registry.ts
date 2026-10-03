@@ -16,10 +16,12 @@ export const clientRegistry: Record<
   "lold-02": () => import("./lold-02/page"),
   "lavantscene": () => import("./lavantscene/page"),
   "ashibinosato": () => import("./ashibinosato/page"),
+  "hotel-racine": () => import("./hotel-racine/page"),
   "kaigyo-support": () => import("./kaigyo-support/page"),
   "the-personal-pilates": () => import("./the-personal-pilates/page"),
   "the-personal-gym": () => import("./the-personal-gym/page"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/page"),
+  "beat-pilates-nagoyafushimi-test": () => import("./beat-pilates-nagoyafushimi-test/page"),
   "beat-pilates-toyota": () => import("./beat-pilates-toyota/page"),
   "days-pilates": () => import("./days-pilates/page"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/page"),
@@ -29,6 +31,7 @@ export const clientRegistry: Record<
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/page"),
   "bee-pilates-okusawa": () => import("./bee-pilates-okusawa/page"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/page"),
+  "sakura-shinjuku-sanchome": () => import("./sakura-shinjuku-sanchome/page"),
   "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/page"),
   "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/page"),
   "estudio": () => import("./estudio/page"),
@@ -38,6 +41,7 @@ export const clientRegistry: Record<
   "sakura-tokyo": () => import("./sakura-tokyo/page"),
   "seren-pilates": () => import("./seren-pilates/page"),
   "ivy-test": () => import("./ivy-test/page"),
+  "rusk-demo2": () => import("./rusk-demo2/page"),
   "b-body-pilates": () => import("./b-body-pilates/page"),
 };
 
@@ -52,9 +56,11 @@ export const clientThanksRegistry: Partial<
   Record<string, () => Promise<{ default: ComponentType }>>
 > = {
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/thanks"),
+  "beat-pilates-nagoyafushimi-test": () => import("./beat-pilates-nagoyafushimi-test/thanks"),
   "kaigyo-support": () => import("./kaigyo-support/thanks"),
   "lold-02": () => import("./lold-02/thanks"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/thanks"),
+  "sakura-shinjuku-sanchome": () => import("./sakura-shinjuku-sanchome/thanks"),
 };
 
 interface ClientMeta {
@@ -80,10 +86,12 @@ export const clientMetaRegistry: Record<
   "lold-02": () => import("./lold-02/config"),
   "lavantscene": () => import("./lavantscene/config"),
   "ashibinosato": () => import("./ashibinosato/config"),
+  "hotel-racine": () => import("./hotel-racine/config"),
   "kaigyo-support": () => import("./kaigyo-support/config"),
   "the-personal-pilates": () => import("./the-personal-pilates/config"),
   "the-personal-gym": () => import("./the-personal-gym/config"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/config"),
+  "beat-pilates-nagoyafushimi-test": () => import("./beat-pilates-nagoyafushimi-test/config"),
   "beat-pilates-toyota": () => import("./beat-pilates-toyota/config"),
   "days-pilates": () => import("./days-pilates/config"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/config"),
@@ -93,6 +101,7 @@ export const clientMetaRegistry: Record<
   "bee-pilates-ebisu": () => import("./bee-pilates-ebisu/config"),
   "bee-pilates-okusawa": () => import("./bee-pilates-okusawa/config"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/config"),
+  "sakura-shinjuku-sanchome": () => import("./sakura-shinjuku-sanchome/config"),
   "pilates-rinne-ebina": () => import("./pilates-rinne-ebina/config"),
   "pilates-rinne-tsujido": () => import("./pilates-rinne-tsujido/config"),
   "estudio": () => import("./estudio/config"),
@@ -102,5 +111,6 @@ export const clientMetaRegistry: Record<
   "sakura-tokyo": () => import("./sakura-tokyo/config"),
   "seren-pilates": () => import("./seren-pilates/config"),
   "ivy-test": () => import("./ivy-test/config"),
+  "rusk-demo2": () => import("./rusk-demo2/config"),
   "b-body-pilates": () => import("./b-body-pilates/config"),
 };
