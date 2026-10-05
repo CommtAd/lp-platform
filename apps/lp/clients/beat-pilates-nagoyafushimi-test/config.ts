@@ -351,7 +351,7 @@ const config: BeatPilatesConfig = {
   hero: {
     catchLines: ["ピラティスだけど、", "いい運動になる。"],
     catchHighlights: ["ピラティス", "運動"],
-    subCatch: "暗闇×音楽で\n楽しくて、少しきつい45分を。",
+    subCatch: "暗闇×音楽で\n楽しくて、少し頑張る45分。",
     subCatchHighlights: ["暗闇×音楽"],
     body: "",
     hero: {
