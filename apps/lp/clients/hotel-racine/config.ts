@@ -79,19 +79,17 @@ const config: PatternCConfig = {
     // lold と同じくプレートを上に置く（顧客指定）。
     catchPosition: "top",
     catchTopInset: 12,
-    // スライドはFV用に支給された 1008x1350（ほぼ 3:4）の5枚。いずれも顔が
-    // 高さの55%より下にあり、上53%を覆うプレートにかからない。順序は支給どおり。
+    // スライドはFV用に支給された 1008x1350（ほぼ 3:4）の3枚（2026-10-05 差し替え）。
+    // いずれも顔が高さの6割前後にあり、上を覆うプレートにかからない。順序は支給どおり。
     heroAspect: "3 / 4",
     hero: {
-      placeholder: "チャペル（ステンドグラスの前で誓う新郎新婦）",
-      src: `${ASSET}/fv-01.jpg`,
+      placeholder: "チャペル（ステンドグラスの前で祝福を受ける新郎新婦）",
+      src: `${ASSET}/fv-2026-10-05-01.jpg`,
       position: "center",
     },
     heroSlides: [
-      { placeholder: "シャンデリアの下のカラードレスの新郎新婦", src: `${ASSET}/fv-02.jpg` },
-      { placeholder: "チャペル（ステンドグラスの前の新郎新婦）", src: `${ASSET}/fv-03.jpg` },
-      { placeholder: "披露宴会場「銀河」の新郎新婦", src: `${ASSET}/fv-04.jpg` },
-      { placeholder: "チャペル（バージンロードの新郎新婦）", src: `${ASSET}/fv-05.jpg` },
+      { placeholder: "シャンデリアの下の新郎新婦", src: `${ASSET}/fv-2026-10-05-02.jpg` },
+      { placeholder: "披露宴会場の新郎新婦", src: `${ASSET}/fv-2026-10-05-03.jpg` },
     ],
   },
 
