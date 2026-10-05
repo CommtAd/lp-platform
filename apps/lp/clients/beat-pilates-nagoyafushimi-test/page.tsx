@@ -579,13 +579,13 @@ export default function Page() {
                 background: "linear-gradient(180deg, rgba(40,20,90,0) 58%, rgba(40,20,90,0.78) 100%)",
               }}
             />
-            <div style={{ position: "relative", zIndex: 2, padding: "40px 22px 24px" }}>
+            <div style={{ position: "relative", zIndex: 2, padding: "22px 22px 24px" }}>
               {/* キャッチ: 2行。強調語（ピラティス／運動）だけ一回り大きくして主従をつける */}
               <h1
                 style={{
                   fontFamily: fontMincho,
                   fontWeight: 700,
-                  fontSize: 29,
+                  fontSize: 26,
                   lineHeight: 1.4,
                   letterSpacing: "0.01em",
                   margin: 0,
@@ -597,7 +597,7 @@ export default function Page() {
                   <div key={i} style={{ whiteSpace: "nowrap" }}>
                     {highlightParts(line, c.hero.catchHighlights ?? []).map((part, j) =>
                       part.hl ? (
-                        <span key={j} style={{ fontSize: 38, fontWeight: 800 }}>
+                        <span key={j} style={{ fontSize: 34, fontWeight: 800 }}>
                           {part.t}
                         </span>
                       ) : (
@@ -610,10 +610,10 @@ export default function Page() {
               {/* サブコピー: 1行目の「暗闇×音楽」をピンクの特大で、2行目は白＋ピンクのグロー */}
               <div style={{ margin: "14px 0 0", fontFamily: fontMincho, fontWeight: 700, letterSpacing: "0.03em" }}>
                 {c.hero.subCatch.split("\n").map((line, i) => (
-                  <div key={i} style={{ lineHeight: 1.4, whiteSpace: "nowrap", fontSize: 21, color: "#FFFFFF", textShadow: `0 0 10px ${pink}, 0 0 4px ${pink}CC, 0 2px 10px rgba(20,8,50,0.75)` }}>
+                  <div key={i} style={{ lineHeight: 1.4, whiteSpace: "nowrap", fontSize: 19, color: "#FFFFFF", textShadow: `0 0 10px ${pink}, 0 0 4px ${pink}CC, 0 2px 10px rgba(20,8,50,0.75)` }}>
                     {highlightParts(line, c.hero.subCatchHighlights ?? []).map((part, j) =>
                       part.hl ? (
-                        <span key={j} style={{ color: "#FF6FB5", fontSize: 35, fontWeight: 800, textShadow: `0 0 12px ${pink}, 0 0 22px ${pink}99, 0 2px 10px rgba(20,8,50,0.75)` }}>
+                        <span key={j} style={{ color: "#FF6FB5", fontSize: 31, fontWeight: 800, textShadow: `0 0 12px ${pink}, 0 0 22px ${pink}99, 0 2px 10px rgba(20,8,50,0.75)` }}>
                           {part.t}
                         </span>
                       ) : (
