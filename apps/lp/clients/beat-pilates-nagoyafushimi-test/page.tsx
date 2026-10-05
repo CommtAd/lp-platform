@@ -410,16 +410,15 @@ function OfferSection({ topPad = 48 }: { topPad?: number }) {
           );
         })}
       </div>
-      {/* 初めての方限定／女性専用／初心者歓迎。アイコン付き・太字・ピンクの枠とグローで目立たせる */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 4, marginTop: 18, padding: "16px 14px", borderRadius: 999, border: `2px solid ${pink}`, background: "linear-gradient(90deg, #FFFFFF 0%, #FFF3F9 50%, #FFFFFF 100%)", boxShadow: `0 0 18px ${pink}55, 0 6px 18px ${purple}1F` }}>
+      {/* 初めての方限定／女性専用／初心者歓迎。太字・ピンクの枠とグローで目立たせる */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly", gap: 4, marginTop: 18, padding: "16px 8px", borderRadius: 999, border: `2px solid ${pink}`, background: "linear-gradient(90deg, #FFFFFF 0%, #FFF3F9 50%, #FFFFFF 100%)", boxShadow: `0 0 18px ${pink}55, 0 6px 18px ${purple}1F` }}>
         {o.badges.map((b, i) => {
           const accent = i === 0 ? purple : i === 1 ? pink : violet;
           return (
             <span key={i} style={{ display: "contents" }}>
               {i > 0 && <span style={{ width: 1, height: 24, background: `${pink}55`, flexShrink: 0 }} />}
-              <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
-                <Icon name={b.icon} size={19} color={accent} />
-                <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 14.5, color: accent, whiteSpace: "nowrap" }}>{b.label}</span>
+              <span style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 16, color: accent, whiteSpace: "nowrap" }}>{b.label}</span>
               </span>
             </span>
           );
