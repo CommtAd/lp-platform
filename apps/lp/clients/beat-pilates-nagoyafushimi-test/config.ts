@@ -191,6 +191,8 @@ export interface BeatPilatesConfig {
 
   hero: {
     catchLines: [string, string];
+    /** catchLines のうち一回り大きく見せる語。 */
+    catchHighlights?: string[];
     subCatch: string;
     /** subCatch のうちピンクで強調する語（文中の出現順は問わない）。 */
     subCatchHighlights?: string[];
@@ -221,11 +223,8 @@ export interface BeatPilatesConfig {
   };
 
   about: {
-    heading: string;
-    body1: string;
-    body2: string;
-    tags: { icon: string; label: string }[];
-    photo: Slot;
+    /** 顧客支給の画像1枚で見せる。文言とタグは画像に含まれる。 */
+    image: { src: string; alt: string };
   };
 
   offer: {
@@ -350,9 +349,10 @@ const config: BeatPilatesConfig = {
   },
 
   hero: {
-    catchLines: ["暗闇だから、周りを気にせず。", "音楽があるから、楽しく続く。"],
-    subCatch: "人目を気にせず、自分に集中\n音楽に合わせて楽しむ45分",
-    subCatchHighlights: ["人目", "自分に集中", "音楽", "合わせて"],
+    catchLines: ["ピラティスだけど、", "いい運動になる。"],
+    catchHighlights: ["ピラティス", "運動"],
+    subCatch: "暗闇×音楽で\n楽しくて、少しきつい45分を。",
+    subCatchHighlights: ["暗闇×音楽"],
     body: "",
     hero: {
       placeholder: "マシンピラティスレッスンの動画（全面）",
@@ -378,9 +378,9 @@ const config: BeatPilatesConfig = {
     headingSmall: "ありませんか？",
     items: [
       { parts: [{ t: "人目が気になり", hl: true }, { t: "運動に抵抗がある" }] },
-      { parts: [{ t: "ダンベルで" }, { t: "ムキムキになりそう", hl: true }, { t: "で不安" }] },
+      { parts: [{ t: "自分の身体の動きに", hl: true }, { t: "自信がない" }] },
       { parts: [{ t: "ジムで" }, { t: "何をしていいかわからない", hl: true }] },
-      { parts: [{ t: "ストレスで" }, { t: "食べ過ぎてしまう", hl: true }] },
+      { parts: [{ t: "なんとなく" }, { t: "身体がだらしなくなってきた", hl: true }] },
       { parts: [{ t: "そろそろ" }, { t: "運動しないと", hl: true }, { t: "いけないと感じている" }] },
     ],
   },
@@ -413,17 +413,10 @@ const config: BeatPilatesConfig = {
   },
 
   about: {
-    heading: "暗闇マシンピラティスとは？",
-    body1:
-      "暗闇空間で音楽に合わせながら、\nリフォーマーを使って全身を動かす\nグループレッスン。",
-    body2:
-      "周囲の目を気にせず集中でき、楽しみ\nながら姿勢改善・体幹強化・ボディ\nメイクを目指せます。",
-    tags: [
-      { icon: "moon", label: "暗闇" },
-      { icon: "musicNote", label: "音楽" },
-      { icon: "reformer", label: "リフォーマー" },
-    ],
-    photo: { placeholder: "レッスンの様子の写真", src: "/clients/beat-pilates-nagoyafushimi/about-lesson.jpg", position: "70% center" },
+    image: {
+      src: "/clients/beat-pilates-nagoyafushimi/about-intro.jpg",
+      alt: "暗闇マシンピラティスとは？暗闇空間で音楽に合わせながら、リフォーマーを使って全身を動かすグループレッスン。周囲の目を気にせず集中でき、楽しみながら姿勢改善・体幹強化・ボディメイクを目指せます。暗闇×音楽×リフォーマー",
+    },
   },
 
   offer: {
