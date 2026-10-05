@@ -519,7 +519,7 @@ export default function Page() {
       <div style={{ fontFamily: fontSans, background: bgAlt, minHeight: "100vh", color: ink }}>
         <LPCanvas background={bg} boxShadow="0 0 40px rgba(108,63,209,0.10)" style={{ position: "relative" }}>
           {/* ── header ── */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "14px 20px", background: headerGrad }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "14px 20px", background: "#000000" }}>
             {c.header.logo ? (
               <img src={c.header.logo} alt={c.header.logoAlt ?? c.header.brand} style={{ height: 40, width: "auto", display: "block" }} />
             ) : (
@@ -578,74 +578,41 @@ export default function Page() {
                 background: "linear-gradient(180deg, rgba(40,20,90,0) 58%, rgba(40,20,90,0.78) 100%)",
               }}
             />
-            <div style={{ position: "relative", zIndex: 2, padding: "48px 22px 24px" }}>
+            <div style={{ position: "relative", zIndex: 2, padding: "40px 22px 24px" }}>
+              {/* キャッチ: 2行。強調語（ピラティス／運動）だけ一回り大きくして主従をつける */}
               <h1
                 style={{
                   fontFamily: fontMincho,
                   fontWeight: 700,
-                  // 1行14文字。設計幅390pxに収まる上限から逆算している
-                  fontSize: DESIGN_WIDTH * 0.055,
-                  lineHeight: 1.45,
+                  fontSize: 29,
+                  lineHeight: 1.4,
                   letterSpacing: "0.01em",
                   margin: 0,
                   color: "#FFFFFF",
-                  textShadow: "0 2px 18px rgba(0,0,0,0.6)",
+                  textShadow: "0 0 14px rgba(255,255,255,0.35), 0 2px 18px rgba(0,0,0,0.6)",
                 }}
               >
-                {c.hero.catchLines[0]}
-                <br />
-                <span
-                  style={{
-                    display: "inline-block",
-                    // 同じく14文字。1行目よりわずかに大きくして主従を残す
-                    fontSize: DESIGN_WIDTH * 0.06,
-                    color: "#FFFFFF",
-                    textShadow: `0 0 10px ${pink}, 0 0 20px ${pink}CC, 0 0 4px ${pink}`,
-                  }}
-                >
-                  {c.hero.catchLines[1]}
-                </span>
+                {c.hero.catchLines.map((line, i) => (
+                  <div key={i} style={{ whiteSpace: "nowrap" }}>
+                    {highlightParts(line, c.hero.catchHighlights ?? []).map((part, j) =>
+                      part.hl ? (
+                        <span key={j} style={{ fontSize: 38, fontWeight: 800 }}>
+                          {part.t}
+                        </span>
+                      ) : (
+                        <span key={j}>{part.t}</span>
+                      )
+                    )}
+                  </div>
+                ))}
               </h1>
-              {/* サブコピー: 明朝・左に縦のアクセント線・行ごとに細い罫線。強調語だけピンクにする */}
-              <div
-                style={{
-                  position: "relative",
-                  display: "inline-block",
-                  margin: "16px 0 0",
-                  paddingLeft: 14,
-                  fontFamily: fontMincho,
-                  fontWeight: 700,
-                  fontSize: 17,
-                  letterSpacing: "0.06em",
-                  color: "#FFFFFF",
-                  textShadow: "0 2px 10px rgba(20,8,50,0.75)",
-                }}
-              >
-                <span
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    top: 4,
-                    bottom: 4,
-                    width: 3,
-                    borderRadius: 2,
-                    background: `linear-gradient(180deg, ${pink} 0%, #FFFFFF 100%)`,
-                    boxShadow: `0 0 8px ${pink}AA`,
-                  }}
-                />
+              {/* サブコピー: 1行目の「暗闇×音楽」をピンクの特大で、2行目は白＋ピンクのグロー */}
+              <div style={{ margin: "14px 0 0", fontFamily: fontMincho, fontWeight: 700, letterSpacing: "0.03em" }}>
                 {c.hero.subCatch.split("\n").map((line, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      padding: "5px 6px 5px 0",
-                      borderBottom: "1px solid rgba(255,255,255,0.45)",
-                      lineHeight: 1.45,
-                      whiteSpace: "nowrap",
-                    }}
-                  >
+                  <div key={i} style={{ lineHeight: 1.4, whiteSpace: "nowrap", fontSize: 21, color: "#FFFFFF", textShadow: `0 0 10px ${pink}, 0 0 4px ${pink}CC, 0 2px 10px rgba(20,8,50,0.75)` }}>
                     {highlightParts(line, c.hero.subCatchHighlights ?? []).map((part, j) =>
                       part.hl ? (
-                        <span key={j} style={{ color: "#FF6FB5", fontSize: 19, textShadow: `0 0 10px ${pink}99, 0 2px 10px rgba(20,8,50,0.75)` }}>
+                        <span key={j} style={{ color: "#FF6FB5", fontSize: 35, fontWeight: 800, textShadow: `0 0 12px ${pink}, 0 0 22px ${pink}99, 0 2px 10px rgba(20,8,50,0.75)` }}>
                           {part.t}
                         </span>
                       ) : (
@@ -924,61 +891,9 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── about (暗闇マシンピラティスとは) ── */}
-          <section style={{ position: "relative", minHeight: 420, overflow: "hidden", background: "#26162F" }}>
-            <ImageSlot
-              src={c.about.photo.src}
-              placeholder={c.about.photo.placeholder}
-              objectPosition={c.about.photo.position ?? "center"}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#2C1A36", transform: "scaleX(-1)" }}
-            />
-            <MoodTint />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(100deg, rgba(40,20,90,0.96) 0%, rgba(40,20,90,0.9) 34%, rgba(40,20,90,0.55) 58%, rgba(40,20,90,0.12) 78%, rgba(40,20,90,0) 92%)",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: "linear-gradient(180deg, rgba(40,20,90,0) 60%, rgba(40,20,90,0.85) 100%)",
-              }}
-            />
-            <div style={{ position: "relative", zIndex: 2, minHeight: 420, display: "flex", flexDirection: "column", padding: "10px 22px 44px" }}>
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 25, letterSpacing: "0.04em", lineHeight: 1.5, margin: 0, background: "linear-gradient(90deg, #FF8FC4 0%, #E7D6FF 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}66) drop-shadow(0 2px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 3px rgba(0,0,0,0.9))` }}>{nl(c.about.heading)}</h2>
-              <p style={{ maxWidth: 300, fontSize: 13, lineHeight: 1.7, color: "#FFFFFF", margin: "12px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body1)}</p>
-              <p style={{ maxWidth: 300, fontSize: 12.5, lineHeight: 1.7, color: "rgba(255,255,255,0.8)", margin: "8px 0 0", textShadow: "0 1px 10px rgba(0,0,0,0.7)" }}>{nl(c.about.body2)}</p>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", paddingTop: 32 }}>
-                {c.about.tags.map((t, i) => {
-                  const accent = i === 1 ? violet : i === 2 ? purple : pink;
-                  return (
-                    <span key={i} style={{ display: "contents" }}>
-                      {i > 0 && (
-                        <span style={{ fontSize: 18, fontWeight: 700, color: "#FFFFFF", flexShrink: 0 }}>×</span>
-                      )}
-                      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "18px 4px", borderRadius: 14, border: `1px solid ${accent}`, background: "rgba(40,20,90,0.5)", backdropFilter: "blur(4px)", boxShadow: `0 0 14px ${accent}66, inset 0 0 10px ${accent}22` }}>
-                        <span
-                          style={{
-                            fontFamily: fontMincho,
-                            fontWeight: 700,
-                            fontSize: t.label.length > 3 ? 15 : 20,
-                            color: "#FFFFFF",
-                            whiteSpace: "nowrap",
-                            textShadow: `0 0 10px ${accent}, 0 0 4px ${accent}CC`,
-                          }}
-                        >
-                          {t.label}
-                        </span>
-                      </div>
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
+          {/* ── about (暗闇マシンピラティスとは) ── 顧客支給の画像1枚（文言・タグ込み） ── */}
+          <section>
+            <img src={c.about.image.src} alt={c.about.image.alt} style={{ display: "block", width: "100%", height: "auto" }} />
           </section>
 
           {/* ── movie (スタジオ紹介ムービー) ── */}
