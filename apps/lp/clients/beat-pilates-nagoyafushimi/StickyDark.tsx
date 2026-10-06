@@ -37,11 +37,11 @@ export default function StickyDark({
   useEffect(() => {
     // The sticky footer bar needs bottom clearance so it doesn't cover the form.
     // Also override the global light body background (globals.css uses pattern A's
-    // cream #e4dfd5) so that padding doesn't show as a light strip under this dark LP.
+    // cream #e4dfd5) so the bottom padding matches this LP's white background.
     const prevPad = document.body.style.paddingBottom;
     const prevBg = document.body.style.background;
     document.body.style.paddingBottom = "104px";
-    document.body.style.background = "#0A0A10";
+    document.body.style.background = "#FFFFFF";
     return () => {
       document.body.style.paddingBottom = prevPad;
       document.body.style.background = prevBg;
@@ -70,11 +70,11 @@ export default function StickyDark({
           maxWidth: 480,
           margin: "0 12px 12px",
           padding: "12px 14px",
-          background: "rgba(10,10,16,0.9)",
+          background: "rgba(255,255,255,0.92)",
           backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255,61,147,0.35)",
+          border: "1px solid rgba(108,63,209,0.22)",
           borderRadius: 16,
-          boxShadow: "0 8px 30px rgba(0,0,0,0.5)",
+          boxShadow: "0 8px 30px rgba(45,33,69,0.18)",
           pointerEvents: "auto",
           display: "flex",
           flexDirection: "column",
@@ -84,7 +84,7 @@ export default function StickyDark({
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14 }}>
           {offers.map((offer, i) => (
             <span key={i} style={{ display: "contents" }}>
-              {i > 0 && <span style={{ width: 1, height: 14, background: "rgba(255,255,255,0.2)" }} />}
+              {i > 0 && <span style={{ width: 1, height: 14, background: "rgba(108,63,209,0.2)" }} />}
               {offer}
             </span>
           ))}
@@ -106,7 +106,7 @@ export default function StickyDark({
             fontWeight: 700,
             letterSpacing: "0.06em",
             borderRadius: 999,
-            boxShadow: "0 6px 18px rgba(255,61,147,0.35)",
+            boxShadow: "0 6px 18px rgba(255,46,139,0.35)",
           }}
         >
           <span style={{ position: "relative", zIndex: 1 }}>{buttonText}</span>
