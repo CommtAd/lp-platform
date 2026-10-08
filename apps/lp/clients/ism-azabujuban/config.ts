@@ -363,7 +363,7 @@ const config: IsmConfig = {
   method2: {
     eyebrow: "ONLINE",
     heading: "スタジオの外でも、\n美習慣がつづく",
-    img: { placeholder: "オンラインレッスンのイメージ写真（素材待ち）", src: null },
+    img: { placeholder: "ストレッチ種目のレッスン写真", src: `${ASSET}/online.jpg` },
     body: "月4回・月8回プランの会員さまは、オンラインレッスンを最大月12回受講可能。スタジオでのレッスンの合間も、ご自宅で体を動かす習慣をつくれるから、変化を実感しやすく、続けやすい。",
     badge: "会員特典 最大月12回",
     note: "※月4回・月8回プランの会員さまが対象です。",
