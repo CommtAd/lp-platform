@@ -16,12 +16,14 @@ export const clientRegistry: Record<
   "lold-02": () => import("./lold-02/page"),
   "lavantscene": () => import("./lavantscene/page"),
   "ashibinosato": () => import("./ashibinosato/page"),
+  "hotel-racine": () => import("./hotel-racine/page"),
   "kaigyo-support": () => import("./kaigyo-support/page"),
   "the-personal-pilates": () => import("./the-personal-pilates/page"),
   "the-personal-gym": () => import("./the-personal-gym/page"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/page"),
   "beat-pilates-nagoyafushimi-test": () => import("./beat-pilates-nagoyafushimi-test/page"),
   "beat-pilates-toyota": () => import("./beat-pilates-toyota/page"),
+  "beat-pilates-toyota2": () => import("./beat-pilates-toyota2/page"),
   "days-pilates": () => import("./days-pilates/page"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/page"),
   "soelu-test": () => import("./soelu-test/page"),
@@ -42,6 +44,7 @@ export const clientRegistry: Record<
   "ivy-test": () => import("./ivy-test/page"),
   "rusk-demo2": () => import("./rusk-demo2/page"),
   "ism-azabujuban": () => import("./ism-azabujuban/page"),
+  "b-body-pilates": () => import("./b-body-pilates/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -86,12 +89,14 @@ export const clientMetaRegistry: Record<
   "lold-02": () => import("./lold-02/config"),
   "lavantscene": () => import("./lavantscene/config"),
   "ashibinosato": () => import("./ashibinosato/config"),
+  "hotel-racine": () => import("./hotel-racine/config"),
   "kaigyo-support": () => import("./kaigyo-support/config"),
   "the-personal-pilates": () => import("./the-personal-pilates/config"),
   "the-personal-gym": () => import("./the-personal-gym/config"),
   "beat-pilates-nagoyafushimi": () => import("./beat-pilates-nagoyafushimi/config"),
   "beat-pilates-nagoyafushimi-test": () => import("./beat-pilates-nagoyafushimi-test/config"),
   "beat-pilates-toyota": () => import("./beat-pilates-toyota/config"),
+  "beat-pilates-toyota2": () => import("./beat-pilates-toyota2/config"),
   "days-pilates": () => import("./days-pilates/config"),
   "soelu-togoshiginza": () => import("./soelu-togoshiginza/config"),
   "soelu-test": () => import("./soelu-test/config"),
@@ -112,4 +117,5 @@ export const clientMetaRegistry: Record<
   "ivy-test": () => import("./ivy-test/config"),
   "rusk-demo2": () => import("./rusk-demo2/config"),
   "ism-azabujuban": () => import("./ism-azabujuban/config"),
+  "b-body-pilates": () => import("./b-body-pilates/config"),
 };
