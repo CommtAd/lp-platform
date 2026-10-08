@@ -79,7 +79,8 @@ const config: PatternCConfig = {
     // lold と同じくプレートを上に置く（顧客指定）。
     catchPosition: "top",
     catchTopInset: 12,
-    // スライドはFV用に支給された 1008x1350（ほぼ 3:4）の3枚（2026-10-05 差し替え）。
+    // スライドはFV用に支給された 1008x1350（ほぼ 3:4）の2枚（2026-10-05 差し替え。
+    // 3枚目の披露宴会場のカットは 2026-10-08 顧客指定で削除）。
     // いずれも顔が高さの6割前後にあり、上を覆うプレートにかからない。順序は支給どおり。
     heroAspect: "3 / 4",
     hero: {
@@ -89,7 +90,6 @@ const config: PatternCConfig = {
     },
     heroSlides: [
       { placeholder: "シャンデリアの下の新郎新婦", src: `${ASSET}/fv-2026-10-05-02.jpg` },
-      { placeholder: "披露宴会場の新郎新婦", src: `${ASSET}/fv-2026-10-05-03.jpg` },
     ],
   },
 
