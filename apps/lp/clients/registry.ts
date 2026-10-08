@@ -43,6 +43,7 @@ export const clientRegistry: Record<
   "seren-pilates": () => import("./seren-pilates/page"),
   "ivy-test": () => import("./ivy-test/page"),
   "rusk-demo2": () => import("./rusk-demo2/page"),
+  "ism-azabujuban": () => import("./ism-azabujuban/page"),
   "b-body-pilates": () => import("./b-body-pilates/page"),
 };
 
@@ -62,6 +63,7 @@ export const clientThanksRegistry: Partial<
   "lold-02": () => import("./lold-02/thanks"),
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/thanks"),
   "sakura-shinjuku-sanchome": () => import("./sakura-shinjuku-sanchome/thanks"),
+  "ism-azabujuban": () => import("./ism-azabujuban/thanks"),
 };
 
 interface ClientMeta {
@@ -114,5 +116,6 @@ export const clientMetaRegistry: Record<
   "seren-pilates": () => import("./seren-pilates/config"),
   "ivy-test": () => import("./ivy-test/config"),
   "rusk-demo2": () => import("./rusk-demo2/config"),
+  "ism-azabujuban": () => import("./ism-azabujuban/config"),
   "b-body-pilates": () => import("./b-body-pilates/config"),
 };
