@@ -346,7 +346,60 @@ function DeadlineStrip({ dark = false }: { dark?: boolean }) {
   );
 }
 
-/** FV・最終CTAの価格カード（体験＋入会金の2行）。 */
+/** 「＋さらに」の区切り線。価格カード内で特典を1つずつ足すときに使う。 */
+function PlusDivider() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "14px 0 12px" }}>
+      <span style={{ flex: 1, height: 1, background: line }} />
+      <span
+        style={{
+          fontSize: 11,
+          fontWeight: 700,
+          color: accent,
+          border: `1px solid ${accent}`,
+          borderRadius: 999,
+          padding: "2px 10px",
+          letterSpacing: "0.08em",
+        }}
+      >
+        ＋さらに
+      </span>
+      <span style={{ flex: 1, height: 1, background: line }} />
+    </div>
+  );
+}
+
+/** プレゼント特典の1行。淡い地のプレートに、ギフトアイコン＋品名を大きく置く。 */
+function GiftRow({ itemSize = 18 }: { itemSize?: number }) {
+  const g = c.gift;
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+        background: accentSoft,
+        borderRadius: 10,
+        padding: "12px 12px",
+      }}
+    >
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke={priceColor} strokeWidth="1.7" style={{ flex: "none" }} aria-hidden>
+        <rect x="3.5" y="9" width="17" height="11.5" rx="1.2" />
+        <path d="M2.5 9h19v-3h-19zM12 6v14.5" strokeLinejoin="round" />
+        <path d="M12 6c-1.5-3-5-3.6-5-1.4C7 6 10 6 12 6zM12 6c1.5-3 5-3.6 5-1.4C17 6 14 6 12 6z" strokeLinejoin="round" />
+      </svg>
+      <div style={{ minWidth: 0 }}>
+        <p style={{ margin: 0, lineHeight: 1.3, color: ink, fontWeight: 700, whiteSpace: "nowrap" }}>
+          <span style={{ fontFamily: fontMincho, fontSize: itemSize, color: priceColor }}>{g.item}</span>
+          <span style={{ fontSize: itemSize * 0.72, marginLeft: 3 }}>{g.post}</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** FV・最終CTAの価格カード（体験＋入会金＋プレゼントの3行）。 */
 function OfferCard() {
   return (
     <div
@@ -362,25 +415,10 @@ function OfferCard() {
         <DeadlineStrip dark />
       </div>
       <PriceRow {...c.prices.trial} nowSize={44} />
-      <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "14px 0 12px" }}>
-        <span style={{ flex: 1, height: 1, background: line }} />
-        <span
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            color: accent,
-            border: `1px solid ${accent}`,
-            borderRadius: 999,
-            padding: "2px 10px",
-            letterSpacing: "0.08em",
-          }}
-        >
-          ＋さらに
-        </span>
-        <span style={{ flex: 1, height: 1, background: line }} />
-      </div>
+      <PlusDivider />
       <PriceRow {...c.prices.admission} nowSize={40} />
-      <p style={{ fontSize: 10, color: inkMute, textAlign: "right", margin: "8px 0 0" }}>※価格はすべて税込です</p>
+      <PlusDivider />
+      <GiftRow />
     </div>
   );
 }
@@ -782,6 +820,22 @@ export default function Page() {
                 </div>
               ))}
             </div>
+
+            {/* 評価シート（書類なので切らずに全体を見せる） */}
+            <ImageSlot
+              src={c.reason.sheet.src}
+              alt={c.reason.sheet.alt}
+              objectFit="contain"
+              radius={8}
+              style={{
+                width: "100%",
+                aspectRatio: "842 / 595",
+                marginTop: 18,
+                background: "#FFFFFF",
+                border: `1px solid ${line}`,
+                boxShadow: "0 6px 16px rgba(25,45,52,0.08)",
+              }}
+            />
             <ReserveCta label={c.cta.sub} />
           </section>
 
@@ -1357,6 +1411,22 @@ export default function Page() {
                 <span style={{ flex: 1, height: 1, background: line }} />
               </div>
               <PriceStack {...c.prices.admission} />
+              <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "26px 0 16px" }}>
+                <span style={{ flex: 1, height: 1, background: line }} />
+                <span
+                  style={{
+                    fontFamily: fontMincho,
+                    fontWeight: 700,
+                    fontSize: 17,
+                    color: accent,
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  さらに
+                </span>
+                <span style={{ flex: 1, height: 1, background: line }} />
+              </div>
+              <GiftRow />
               <div
                 style={{
                   display: "flex",

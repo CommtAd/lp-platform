@@ -68,6 +68,9 @@ export interface BaseBodyConfig {
   /** FV・キャンペーン・最終CTAで使い回す2本の価格。 */
   prices: { trial: PriceLine; admission: PriceLine };
 
+  /** 価格2本の下に「＋さらに」で添えるプレゼント。`item` だけ大きくする。 */
+  gift: { item: string; post: string };
+
   worry: {
     heading: string;
     items: string[];
@@ -83,6 +86,8 @@ export interface BaseBodyConfig {
     example: { label: string; body: string };
     conclusion: string;
     compare: { label: string; steps: string[]; strong?: boolean }[];
+    /** 始め方の比較の下に置く評価シートの画像。書類なので切らずに全体を見せる。 */
+    sheet: { src: string; alt: string };
   };
 
   future: {
@@ -260,6 +265,8 @@ const config: BaseBodyConfig = {
     admission: { label: "入会金", condition: "体験当日のご入会で", regular: "22,000", now: "0" },
   },
 
+  gift: { item: "ピラティスソックス", post: "プレゼント" },
+
   worry: {
     heading: "こんなお悩み、\nありませんか？",
     items: [
@@ -293,6 +300,7 @@ const config: BaseBodyConfig = {
       { label: "よくある始め方", steps: ["運動する"] },
       { label: "base BODYの始め方", steps: ["身体を知る", "整える", "動かす"], strong: true },
     ],
+    sheet: { src: "/clients/b-body-pilates/assessment-sheet.png", alt: "オリジナル動作評価シート" },
   },
 
   future: {
@@ -465,7 +473,7 @@ const config: BaseBodyConfig = {
 
   campaign: {
     heading: "初回限定",
-    values: ["FMS評価", "身体分析", "マンツーマン", "90分"],
+    values: ["FMS評価", "身体分析", "マンツーマン", "マシンピラティス", "90分"],
   },
 
   store: {
