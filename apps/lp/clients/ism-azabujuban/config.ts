@@ -506,7 +506,7 @@ const config: IsmConfig = {
       img: { placeholder: "スタジオ内観の写真", src: `${ASSET}/studio.jpg` },
       name: "Pilates isM 麻布十番店",
       address: "〒106-0045 東京都港区麻布十番2丁目16-11 麻布十番2Aビル",
-      hours: "営業時間 8:00〜21:00",
+      hours: "営業時間 7:00〜23:00",
       holiday: "定休日 不定休",
       routes: [
         "東京メトロ南北線・都営大江戸線「麻布十番駅」徒歩3分",
@@ -541,9 +541,9 @@ const config: IsmConfig = {
         label: "ご希望の時間帯",
         optionalTag: "任意",
         options: [
-          { value: "8:00〜12:00", label: "午前" },
+          { value: "7:00〜12:00", label: "午前" },
           { value: "12:00〜17:00", label: "午後" },
-          { value: "17:00〜21:00", label: "夕方以降" },
+          { value: "17:00〜23:00", label: "夕方以降" },
         ],
         columns: 3,
       },
@@ -590,7 +590,7 @@ const config: IsmConfig = {
     lines: [
       "Pilates isM 麻布十番店",
       "〒106-0045 東京都港区麻布十番2丁目16-11 麻布十番2Aビル",
-      "営業時間 8:00〜21:00｜不定休",
+      "営業時間 7:00〜23:00｜不定休",
     ],
   },
 };
