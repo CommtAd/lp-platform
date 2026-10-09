@@ -90,6 +90,9 @@ const config: PatternCConfig = {
     },
     heroSlides: [
       { placeholder: "シャンデリアの下の新郎新婦", src: `${ASSET}/fv-2026-10-05-02.jpg` },
+      // 3・4枚目は 2026-10-09 追加支給。
+      { placeholder: "チャペル（花びらの舞うバージンロードの新郎新婦）", src: `${ASSET}/fv-2026-10-09-03.jpg` },
+      { placeholder: "披露宴会場（シャンデリアの下の新郎新婦）", src: `${ASSET}/fv-2026-10-09-04.jpg` },
     ],
   },
 
