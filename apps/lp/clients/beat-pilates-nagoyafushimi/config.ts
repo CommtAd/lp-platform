@@ -241,11 +241,11 @@ export interface BeatPilatesConfig {
   };
 
   benefits: {
+    headingLead: string;
     heading: string;
     headingHighlight: string;
     items: {
       title: string;
-      nowLabel: string;
       body: string;
       price?: { unit?: string; value: string; suffix: string; note?: string };
       gift?: boolean;
@@ -351,7 +351,7 @@ const config: BeatPilatesConfig = {
   hero: {
     catchLines: ["ピラティスだけど、", "いい運動になる。"],
     catchHighlights: ["ピラティス", "運動"],
-    subCatch: "暗闇×音楽で\n楽しくて、少し頑張る45分。",
+    subCatch: "暗闇×音楽\n楽しくて、少し頑張る45分。",
     subCatchHighlights: ["暗闇×音楽"],
     body: "",
     hero: {
@@ -451,18 +451,17 @@ const config: BeatPilatesConfig = {
   },
 
   benefits: {
-    heading: "うれしい",
+    headingLead: "今だけ",
+    heading: "嬉しい",
     headingHighlight: "入会特典",
     items: [
       {
         title: "通い放題プランが2ヶ月おトク！",
-        nowLabel: "今だけ",
         body: "通い放題プラン【スタンダード】or【プレミアム】の場合",
         price: { unit: "2ヶ月", value: "1,980", suffix: "円", note: "月額会費（税込）" },
       },
       {
         title: "入会された方限定プレゼント！",
-        nowLabel: "今だけ",
         body: "ピラティス専用ソックスプレゼント",
         gift: true,
         giftImage: "/clients/beat-pilates-nagoyafushimi/benefit-gift-socks.png",
