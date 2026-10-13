@@ -360,4 +360,17 @@ export const css = String.raw`
 .sbc .form-tel a { color: var(--brand-deep); font-weight: 700; }
 .sbc .form-box { background: #f7f4f5; border-top: 2px solid #8d8088; padding: 8px 16px 28px; }
 .sbc .form-box a { color: var(--brand-deep); text-decoration: underline; }
+.sbc .ph.has-img { padding: 0; border: 0; background: #f4ece9; }
+.sbc .ph.has-img::before { content: none; }
+.sbc .logo-img { display: block; height: 30px; width: auto; }
+/* ── 改行：文節（page.tsx の w() が入れる <wbr>）でだけ折り返す ── */
+.sbc { word-break: keep-all; overflow-wrap: anywhere; line-break: strict; }
+.sbc p, .sbc dd, .sbc li, .sbc td { text-wrap: pretty; }
+.sbc h2, .sbc h3, .sbc .sec-title .ja { text-wrap: balance; }
+.sbc .form-box { word-break: normal; }
+.sbc .form-box .lpform-note-body { white-space: pre-line; }
+
+/* ── 余白：セクション内CTAの下に二重の余白ができないようにする ── */
+.sbc .sec:has(> .cta-block) { padding-bottom: 0; }
+.sbc .cta-block { padding: 44px 16px 64px; }
 `;

@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import LPShell from "@/components/LPShell";
 import LPCanvas from "@/components/LPCanvas";
 import LPForm from "@/components/LPForm";
@@ -26,6 +27,26 @@ const c = config;
 
 const brand = "#b75a88";
 const ctaGrad = "linear-gradient(180deg, #d96a9f, #b2457c)";
+
+/**
+ * 文節区切り。"/" の位置にだけ改行を許す（`.sbc` は word-break: keep-all）。
+ * キャンバスは幅390px固定なので、ここで決めた改行位置はどの端末でも同じになる。
+ */
+function w(text: string) {
+  const parts = text.split("/");
+  return parts.map((p, i) => (
+    <Fragment key={i}>
+      {/* 文節の途中の「・」では折り返さない（U+2060 WORD JOINER） */}
+      {p.replace(/・(?=.)/g, "・\u2060")}
+      {i < parts.length - 1 && <wbr />}
+    </Fragment>
+  ));
+}
+
+/** public/clients/{slug}/ 配下の画像。症例以外は色味を統一済み（brief.md 参照）。 */
+function img(name: string) {
+  return `/clients/${c.slug}/${name}.webp`;
+}
 
 function mapSrc(q: string) {
   return `https://www.google.com/maps?q=${encodeURIComponent(q)}&output=embed`;
@@ -110,15 +131,15 @@ export default function Page() {
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">About</span><span className="ja">当院のイボ・ホクロ除去<br />について</span></h2>
                     <p className="about-lead">
-                      お顔の目立つところにある大きめのほくろやイボ、細かく点在するほくろなど、お悩みをお持ちの方は少なくありません。<br />
-                      ほくろやイボは<span className="mk">比較的短時間の施術で除去できるものも多く</span>、ひとつなくなるだけでお顔の印象が変わることもあります。<br />
-                      お顔だけでなく、全身のほくろ・イボの治療を行っています。
+                      {w("お顔の/目立つ/ところに/ある/大きめの/ほくろや/イボ、/細かく/点在する/ほくろなど、/お悩みを/お持ちの/方は/少なく/ありません。")}<br />
+                      {w("ほくろや/イボは")}<span className="mk">{w("比較的/短時間の/施術で/除去できる/ものも/多く")}</span>{w("、/ひとつ/なくなる/だけで/お顔の/印象が/変わる/ことも/あります。")}<br />
+                      {w("お顔だけでなく、/全身の/ほくろ・/イボの/治療を/行っています。")}
                     </p>
                     <div className="device">
-                      <div className="ph"><span>施術機器・施術風景<br />（差し替え）</span></div>
+                      <div className="ph has-img" style={{ aspectRatio: "337 / 551" }}><img src={img("about")} alt="施術機器" loading="lazy" decoding="async" /></div>
                       <div className="device-body">
                         <h3>電気メスによる除去<br /><span style={{ fontSize: "13px", fontWeight: "400" }}>（電気焼灼法）</span></h3>
-                        <p>一般的なメスとは異なり、イボやほくろを電気の熱で焼灼して取り除く方法です。縫合の必要はなく、局所麻酔を行ったうえで施術します。施術当日から洗顔や入浴が可能です。</p>
+                        <p>{w("一般的な/メスとは/異なり、/イボや/ほくろを/電気の/熱で/焼灼して/取り除く/方法です。/縫合の/必要はなく、/局所麻酔を/行った/うえで/施術します。/施術当日から/洗顔や/入浴が/可能です。")}</p>
                         <p><span className="tbc">本プランの施術方法 要確認</span></p>
                       </div>
                     </div>
@@ -129,24 +150,24 @@ export default function Page() {
                 <section className="sec bg-white diag" id="diagnosis" style={{ paddingTop: "0" }}>
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">Diagnosis</span><span className="ja">医師による診察と<br />施術方法のご提案</span></h2>
-                    <div className="ph"><span>カウンセリング・診察風景<br />（差し替え）</span></div>
-                    <p>カウンセリングでは医師がお悩みやご希望をうかがい、<span className="mk">ほくろ・イボの状態を確認したうえで、適した施術方法をご説明</span>します。</p>
-                    <p>ほくろやイボには、まれに悪性のものが含まれることもあります。自己判断せず、医師の診察を受けることをおすすめします。</p>
+                    <div className="ph has-img" style={{ aspectRatio: "479 / 278" }}><img src={img("diagnosis")} alt="当院の医師" loading="lazy" decoding="async" /></div>
+                    <p>{w("カウンセリングでは/医師が/お悩みや/ご希望を/うかがい、")}<span className="mk">{w("ほくろ・/イボの/状態を/確認した/うえで、/適した/施術方法を/ご説明")}</span>します。</p>
+                    <p>{w("ほくろや/イボには、/まれに/悪性の/ものが/含まれる/ことも/あります。/自己判断せず、/医師の/診察を/受ける/ことを/おすすめします。")}</p>
                     <div className="methods">
                       <div className="method">
                         <h3>電気メス治療</h3>
-                        <p>電気の熱で焼灼して除去します。縫合は不要です。</p>
+                        <p>{w("電気の/熱で/焼灼して/除去します。/縫合は/不要です。")}</p>
                       </div>
                       <div className="method">
                         <h3>切縫法</h3>
-                        <p>電気メスで除去できない大きなほくろ・イボに用いる方法です。皮膚を切開して縫合し、術後1週間前後で抜糸します。</p>
+                        <p>{w("電気メスで/除去できない/大きな/ほくろ・/イボに/用いる/方法です。/皮膚を/切開して/縫合し、/術後1週間前後で/抜糸します。")}</p>
                       </div>
                       <div className="method">
                         <h3>くり抜き法</h3>
-                        <p>色素が皮膚の深い部分まで及んでいる、直径6mm以内のほくろに用いる方法です。ほくろの形に沿ってくり抜き、縫合します。</p>
+                        <p>{w("色素が/皮膚の/深い/部分まで/及んでいる、/直径6mm以内の/ほくろに/用いる/方法です。/ほくろの形に沿って/くり抜き、/縫合します。")}</p>
                       </div>
                     </div>
-                    <p className="plan-note">※2mmを超えるもの、切縫法・くり抜き法となる場合の料金：<span className="tbc">要確認</span></p>
+                    <p className="plan-note">{w("※2mmを/超えるもの、/切縫法・/くり抜き法と/なる/場合の/料金：")}<span className="tbc">要確認</span></p>
                   </div>
                 </section>
 
@@ -168,7 +189,7 @@ export default function Page() {
                             <text x="70" y="30" textAnchor="middle" fontSize="12" fontWeight="700" fill="#4a3a42">ホクロ</text>
                           </g>
                         </svg>
-                        <div><p className="no">01.</p><p>ほくろ・イボは、色素をつくる細胞などが皮膚の中で増えることでできています。</p></div>
+                        <div><p className="no">01.</p><p>{w("ほくろ・/イボは、/色素をつくる/細胞などが/皮膚の/中で/増える/ことで/できています。")}</p></div>
                       </li>
                       <li>
                         <svg viewBox="0 0 140 140" role="img" aria-label="電気メスで焼灼">
@@ -185,7 +206,7 @@ export default function Page() {
                             <text x="36" y="40" textAnchor="middle" fontSize="11" fontWeight="700" fill="#9c4472">電気メス</text>
                           </g>
                         </svg>
-                        <div><p className="no">02.</p><p>局所麻酔を行ったうえで、電気メスでほくろ・イボを焼灼して取り除きます。</p></div>
+                        <div><p className="no">02.</p><p>{w("局所麻酔を/行った/うえで、/電気メスで/ほくろ・/イボを/焼灼して/取り除きます。")}</p></div>
                       </li>
                       <li>
                         <svg viewBox="0 0 140 140" role="img" aria-label="少しへこんだ状態">
@@ -199,7 +220,7 @@ export default function Page() {
                             <text x="70" y="44" textAnchor="middle" fontSize="11" fontWeight="700" fill="#4a3a42">少しへこんだ状態</text>
                           </g>
                         </svg>
-                        <div><p className="no">03.</p><p>除去後の患部は、一時的に少しへこんだ状態になります。</p></div>
+                        <div><p className="no">03.</p><p>{w("除去後の/患部は、/一時的に/少しへこんだ/状態になります。")}</p></div>
                       </li>
                       <li>
                         <svg viewBox="0 0 140 140" role="img" aria-label="皮膚が再生していく">
@@ -213,7 +234,7 @@ export default function Page() {
                             <text x="70" y="44" textAnchor="middle" fontSize="11" fontWeight="700" fill="#4a3a42">皮膚が再生</text>
                           </g>
                         </svg>
-                        <div><p className="no">04.</p><p>時間の経過とともに周囲から皮膚が再生し、へこみは徐々に目立ちにくくなっていきます。経過には個人差があります。</p></div>
+                        <div><p className="no">04.</p><p>{w("時間の/経過と/ともに/周囲から/皮膚が/再生し、/へこみは/徐々に/目立ちにくく/なっていきます。/経過には/個人差が/あります。")}</p></div>
                       </li>
                     </ol>
                   </div>
@@ -223,45 +244,45 @@ export default function Page() {
                 <section className="sec bg-pink" id="case">
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">Case Photo</span><span className="ja">症例写真</span></h2>
-                    {/* 症例写真：使用許可済みの当院症例のみ。images/case-01-before.jpg 等に差し替え */}
+                    {/* 症例写真：顧客支給（AUN 2026-10-13）。医療広告ガイドラインに配慮し、色補正はせず縮小のみ */}
                     <div className="case">
                       <figure className="case-photos" style={{ margin: "0" }}>
-                        <div className="ph"><span>症例1 施術前<br />（許可済み素材に差し替え）</span></div>
+                        <div className="ph has-img" style={{ aspectRatio: "664 / 375" }}><img src={img("case1-before")} alt="症例1 施術前" loading="lazy" decoding="async" /></div>
                         <i className="arrow" aria-hidden="true" />
-                        <div className="ph"><span>症例1 施術後<br />（許可済み素材に差し替え）</span></div>
+                        <div className="ph has-img" style={{ aspectRatio: "664 / 375" }}><img src={img("case1-after")} alt="症例1 施術後（3ヶ月後）" loading="lazy" decoding="async" /></div>
                         <figcaption><span>Before</span><span></span><span>After</span></figcaption>
                       </figure>
                       <dl className="case-info">
                         <dt>施術名</dt><dd>イボ・ホクロ除去</dd>
-                        <dt>治療回数・期間</dt><dd><span className="tbc">症例ごとに記載</span></dd>
+                        <dt>治療回数・経過</dt><dd>1回（施術から3ヶ月後）</dd>
                         <dt>副作用（リスク）</dt><dd>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</dd>
                         <dt>価格</dt><dd>3個 19,800円〜30個 99,000円（税込）</dd>
                       </dl>
                     </div>
                     <div className="case">
                       <figure className="case-photos" style={{ margin: "0" }}>
-                        <div className="ph"><span>症例2 施術前<br />（許可済み素材に差し替え）</span></div>
+                        <div className="ph has-img" style={{ aspectRatio: "1432 / 842" }}><img src={img("case2-before")} alt="症例2 施術前" loading="lazy" decoding="async" /></div>
                         <i className="arrow" aria-hidden="true" />
-                        <div className="ph"><span>症例2 施術後<br />（許可済み素材に差し替え）</span></div>
+                        <div className="ph has-img" style={{ aspectRatio: "1432 / 842" }}><img src={img("case2-after")} alt="症例2 施術後（3ヶ月後）" loading="lazy" decoding="async" /></div>
                         <figcaption><span>Before</span><span></span><span>After</span></figcaption>
                       </figure>
                       <dl className="case-info">
                         <dt>施術名</dt><dd>イボ・ホクロ除去</dd>
-                        <dt>治療回数・期間</dt><dd><span className="tbc">症例ごとに記載</span></dd>
+                        <dt>治療回数・経過</dt><dd>1回（施術から3ヶ月後）</dd>
                         <dt>副作用（リスク）</dt><dd>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</dd>
                         <dt>価格</dt><dd>3個 19,800円〜30個 99,000円（税込）</dd>
                       </dl>
                     </div>
                     <div className="case">
                       <figure className="case-photos" style={{ margin: "0" }}>
-                        <div className="ph"><span>症例3 施術前<br />（許可済み素材に差し替え）</span></div>
+                        <div className="ph has-img" style={{ aspectRatio: "753 / 475" }}><img src={img("case3-before")} alt="症例3 施術前" loading="lazy" decoding="async" /></div>
                         <i className="arrow" aria-hidden="true" />
-                        <div className="ph"><span>症例3 施術後<br />（許可済み素材に差し替え）</span></div>
+                        <div className="ph has-img" style={{ aspectRatio: "753 / 475" }}><img src={img("case3-after")} alt="症例3 施術後（3ヶ月後）" loading="lazy" decoding="async" /></div>
                         <figcaption><span>Before</span><span></span><span>After</span></figcaption>
                       </figure>
                       <dl className="case-info">
                         <dt>施術名</dt><dd>イボ・ホクロ除去</dd>
-                        <dt>治療回数・期間</dt><dd><span className="tbc">症例ごとに記載</span></dd>
+                        <dt>治療回数・経過</dt><dd>1回（施術から3ヶ月後）</dd>
                         <dt>副作用（リスク）</dt><dd>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</dd>
                         <dt>価格</dt><dd>3個 19,800円〜30個 99,000円（税込）</dd>
                       </dl>
@@ -302,7 +323,7 @@ export default function Page() {
                     <div className="risk">
                       <h3>主なリスク・副作用</h3>
                       <p>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</p>
-                      <p style={{ marginTop: "8px" }}>局所麻酔の注射時に痛みを感じる場合があります。術後は一時的に表皮がない状態になるため、日焼けによりシミの原因となることがあります。紫外線対策を行ってください。効果・経過には個人差があります。</p>
+                      <p style={{ marginTop: "8px" }}>{w("局所麻酔の/注射時に/痛みを/感じる/場合が/あります。/術後は/一時的に/表皮が/ない/状態に/なるため、/日焼けにより/シミの/原因と/なる/ことが/あります。/紫外線対策を/行ってください。/効果・経過には個人差があります。")}</p>
                     </div>
                   </div>
                 </section>
@@ -313,20 +334,20 @@ export default function Page() {
                     <h2 className="sec-title"><span className="en">Treatment Step</span><span className="ja">施術の流れ</span></h2>
                     <ol className="steps">
                       <li>
-                        <div className="ph"><span>STEP1 画像<br />（差し替え）</span></div>
-                        <div><p className="no">01.</p><h3>ご予約</h3><p>予約フォーム・お電話からご予約ください。</p></div>
+                        <div className="ph has-img"><img src={img("step1")} alt="ご予約" loading="lazy" decoding="async" /></div>
+                        <div><p className="no">01.</p><h3>ご予約</h3><p>{w("予約フォーム・/お電話から/ご予約ください。")}</p></div>
                       </li>
                       <li>
-                        <div className="ph"><span>STEP2 画像<br />（差し替え）</span></div>
-                        <div><p className="no">02.</p><h3>ご来院・<br />カウンセリング</h3><p>医師がお悩みをうかがい、肌の状態を確認して施術方法をご説明します。</p></div>
+                        <div className="ph has-img"><img src={img("step2")} alt="カウンセリング" loading="lazy" decoding="async" /></div>
+                        <div><p className="no">02.</p><h3>ご来院・<br />カウンセリング</h3><p>{w("医師が/お悩みを/うかがい、/肌の/状態を/確認して/施術方法を/ご説明します。")}</p></div>
                       </li>
                       <li>
-                        <div className="ph"><span>STEP3 画像<br />（差し替え）</span></div>
-                        <div><p className="no">03.</p><h3>施術</h3><p>局所麻酔を行ったうえで施術します。施術後はアイシングを行い、問題がなければそのままご帰宅いただけます。</p></div>
+                        <div className="ph has-img"><img src={img("step3")} alt="施術" loading="lazy" decoding="async" /></div>
+                        <div><p className="no">03.</p><h3>施術</h3><p>{w("局所麻酔を/行った/うえで/施術します。/施術後は/アイシングを/行い、/問題がなければ/そのまま/ご帰宅いただけます。")}</p></div>
                       </li>
                       <li>
-                        <div className="ph"><span>STEP4 画像<br />（差し替え）</span></div>
-                        <div><p className="no">04.</p><h3>アフターケア</h3><p>後日、術後経過を確認する検診を行います。不安なことはメールでもご相談いただけます。</p></div>
+                        <div className="ph has-img"><img src={img("step4")} alt="アフターケア" loading="lazy" decoding="async" /></div>
+                        <div><p className="no">04.</p><h3>アフターケア</h3><p>{w("後日、/術後経過を/確認する/検診を/行います。/不安なことは/メールでも/ご相談いただけます。")}</p></div>
                       </li>
                     </ol>
                   </div>
@@ -367,13 +388,13 @@ export default function Page() {
                       <li>※「2mmまで」は1個あたりのサイズです。</li>
                       <li>※金額は全て税込になります。</li>
                       <li>※追加費用（麻酔・薬代・術後検診等）：<span className="tbc">要確認</span></li>
-                      <li>※プランの適用条件（有効期限・部位・複数回来院の可否等）：<span className="tbc">要確認</span></li>
+                      <li>{w("※プランの/適用条件/（有効期限・/部位・/複数回来院の/可否等）：")}<span className="tbc">要確認</span></li>
                     </ul>
 
                     {/* お支払い方法：公式HP 料金一覧「ご利用可能な決済方法一覧」より */}
                     <div className="pay">
                       <h3 className="p-head">お支払い方法</h3>
-                      <p className="pay-lead">当日の現金でのお支払いのほか、クレジットカード・電子マネー・QRコード決済・お振込み・医療ローンがご利用いただけます。<br />お支払いについては、カウンセリング時に担当者へご相談ください。</p>
+                      <p className="pay-lead">{w("当日の/現金での/お支払いの/ほか、/クレジットカード・/電子マネー・/QRコード決済・/お振込み・/医療ローンが/ご利用いただけます。")}<br />{w("お支払いについては、/カウンセリング時に/担当者へ/ご相談ください。")}</p>
 
                       <h4 className="pay-h">現金</h4>
                       <p className="pay-txt">当日、現金でのお支払いが可能です。</p>
@@ -388,17 +409,17 @@ export default function Page() {
                       <h4 className="pay-h">電子マネー・QRコード決済</h4>
                       <dl className="pay-list">
                         <dt>電子マネー</dt><dd>Apple Pay／iD／QUICPay</dd>
-                        <dt>交通系電子マネー</dt><dd>Kitaca／Suica／PASMO／TOICA／manaca／ICOCA／SUGOCA／nimoca／はやかけん</dd>
-                        <dt>QRコード決済</dt><dd>PayPay／楽天ペイ（R Pay）／d払い／au PAY／COIN+／Smart Code／J-coin Pay／微信支付（WeChat Pay）／UnionPay（銀聯）QRコード／Alipay+（支付宝、AlipayHK、カカオペイ等）</dd>
+                        <dt>交通系電子マネー</dt><dd>{w("Kitaca／/Suica／/PASMO／/TOICA／/manaca／/ICOCA／/SUGOCA／/nimoca／/はやかけん")}</dd>
+                        <dt>QRコード決済</dt><dd>{w("PayPay／/楽天ペイ（R Pay）／/d払い／/au PAY／/COIN+／/Smart Code／/J-coin Pay／/微信支付（WeChat Pay）／/UnionPay（銀聯）QRコード／/Alipay+（支付宝、AlipayHK、カカオペイ等）")}</dd>
                       </dl>
 
                       <h4 className="pay-h">医療ローン</h4>
-                      <p className="pay-txt">医療ローン（分割）もご利用いただけます。詳細はお問い合わせください。<br /><span className="pay-sub">※未成年の方は分割をご利用いただけません。</span></p>
+                      <p className="pay-txt">{w("医療ローン（分割）も/ご利用いただけます。/詳細はお問い合わせください。")}<br /><span className="pay-sub">※未成年の方は分割をご利用いただけません。</span></p>
                       <p className="pay-txt" style={{ marginTop: "6px" }}><span className="tbc">本プランでの各決済・医療ローン利用可否 要確認</span></p>
                     </div>
                   </div>
                   <div className="cta-block">
-                    <p className="lead">ご自身に合うプランは医師にご相談ください</p>
+                    <p className="lead">プランは医師にご相談ください</p>
                     <a className="btn-cta" href="#reserve">カウンセリングを予約する</a>
                   </div>
                 </section>
@@ -407,10 +428,9 @@ export default function Page() {
                 <section className="sec bg-beige" id="doctor">
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">Doctor Introduction</span><span className="ja">医師紹介</span></h2>
-                    <p className="plan-note" style={{ textAlign: "center", margin: "-16px 0 28px" }}><span className="tbc">掲載医師・写真 要確認</span></p>
 
                     <div className="doctor">
-                      <div className="ph"><span>医師写真<br />（差し替え）</span></div>
+                      <div className="ph has-img" style={{ aspectRatio: "324 / 396" }}><img src={img("doctor-lee")} alt="新宿院 院長 リ ジンヨン" loading="lazy" decoding="async" /></div>
                       <p className="pos">新宿院　院長</p>
                       <p className="name">リ ジンヨン</p>
                       <p className="en">Dr. Jinyoung Lee</p>
@@ -432,14 +452,14 @@ export default function Page() {
                     </div>
 
                     <div className="doctor">
-                      <div className="ph"><span>医師写真<br />（差し替え）</span></div>
+                      <div className="ph has-img" style={{ aspectRatio: "324 / 396" }}><img src={img("doctor-toeda")} alt="立川院 院長 戸枝 幹夫" loading="lazy" decoding="async" /></div>
                       <p className="pos">立川院　院長</p>
                       <p className="name">戸枝 幹夫</p>
                       <p className="en">Dr. Mikio Toeda</p>
                       <div className="career">
                         <h4>経歴</h4>
                         <dl>
-                          <dt>1992年</dt><dd>愛知医科大学医学部医学科 卒業<br />聖マリアンナ医科大学医学部付属病院皮膚科 入職</dd>
+                          <dt>1992年</dt><dd>愛知医科大学医学部医学科 卒業<br />{w("聖マリアンナ医科大学/医学部付属病院/皮膚科 入職")}</dd>
                           <dt>2006年</dt><dd>大手美容外科 院長（〜2009年）</dd>
                           <dt>2012年</dt><dd>新宿美容外科クリニック新宿院院長就任</dd>
                           <dt>2014年</dt><dd>新宿美容外科クリニックMens新宿院就任</dd>
@@ -457,14 +477,14 @@ export default function Page() {
 
                     <div className="clinic">
                       <h3>新宿院</h3>
-                      <div className="ph"><span>新宿院 院内写真<br />（差し替え）</span></div>
+                      <div className="ph has-img" style={{ aspectRatio: "980 / 613" }}><img src={img("clinic-shinjuku")} alt="新宿院の外観と院内" loading="lazy" decoding="async" /></div>
                       <table className="info">
                         <tbody>
                         <tr><th>電話番号</th><td><TelLink clientSlug={c.slug} tel="03-6380-0131">03-6380-0131</TelLink></td></tr>
                         <tr><th>診療時間</th><td>10:00〜19:00（完全予約制）</td></tr>
                         <tr><th>休診日</th><td>年中無休</td></tr>
                         <tr><th>住所</th><td>東京都新宿区新宿3-2-4<br />M&amp;E SQUARE 8F</td></tr>
-                        <tr><th>アクセス</th><td>東京メトロ丸の内線・副都心線「新宿三丁目駅」C4出口出てすぐ左側<br />新宿駅東口より徒歩5分（マルイアネックス向かい側）</td></tr>
+                        <tr><th>アクセス</th><td>{w("東京メトロ/丸の内線・/副都心線/「新宿三丁目駅」/C4出口/出てすぐ/左側")}<br />{w("新宿駅東口より/徒歩5分/（マルイアネックス/向かい側）")}</td></tr>
                         </tbody>
                       </table>
                       <div className="map"><iframe src={mapSrc("東京都新宿区新宿3-2-4 M&E SQUARE")} loading="lazy" title="東京都新宿区新宿3-2-4 M&E SQUARE の地図" referrerPolicy="no-referrer-when-downgrade" /></div>
@@ -472,7 +492,7 @@ export default function Page() {
 
                     <div className="clinic">
                       <h3>立川院</h3>
-                      <div className="ph"><span>立川院 院内写真<br />（差し替え）</span></div>
+                      <div className="ph has-img" style={{ aspectRatio: "980 / 613" }}><img src={img("clinic-tachikawa")} alt="立川院の外観と院内" loading="lazy" decoding="async" /></div>
                       <table className="info">
                         <tbody>
                         <tr><th>電話番号</th><td><TelLink clientSlug={c.slug} tel="042-548-5803">042-548-5803</TelLink></td></tr>
@@ -494,27 +514,27 @@ export default function Page() {
                     <dl className="faq">
                       <div className="faq-item">
                         <dt><span className="qa">Q</span><span>施術は痛いですか？</span></dt>
-                        <dd><span className="qa">A</span><span>必要な場合は局所麻酔を行い、痛みを和らげます。麻酔の注射の際に痛みを感じる箇所もあり、感じ方には個人差があります。麻酔の効果は3時間程度で自然になくなります。</span></dd>
+                        <dd><span className="qa">A</span><span>{w("必要な/場合は/局所麻酔を/行い、/痛みを/和らげます。/麻酔の/注射の/際に/痛みを/感じる/箇所も/あり、/感じ方には/個人差が/あります。/麻酔の/効果は/3時間程度で/自然に/なくなります。")}</span></dd>
                       </div>
                       <div className="faq-item">
                         <dt><span className="qa">Q</span><span>施術時間はどのくらいですか？</span></dt>
-                        <dd><span className="qa">A</span><span>15〜20分程度です。個数や大きさ、施術方法によって異なります。</span></dd>
+                        <dd><span className="qa">A</span><span>{w("15〜20分程度です。/個数や/大きさ、/施術方法によって/異なります。")}</span></dd>
                       </div>
                       <div className="faq-item">
                         <dt><span className="qa">Q</span><span>施術後のケア方法について教えてください。</span></dt>
-                        <dd><span className="qa">A</span><span>一時的に表皮がない状態になりますので、新しい表皮ができるまでの間は、バイ菌が入らないよう綿棒で軟こうを塗り、保護用の肌色のテープを貼ることをおすすめしています。</span></dd>
+                        <dd><span className="qa">A</span><span>{w("一時的に/表皮が/ない/状態に/なりますので、/新しい/表皮が/できるまでの/間は、/バイ菌が/入らないよう/綿棒で/軟こうを/塗り、/保護用の/肌色の/テープを/貼る/ことを/おすすめしています。")}</span></dd>
                       </div>
                       <div className="faq-item">
                         <dt><span className="qa">Q</span><span>除去後は普段通りに生活できますか？</span></dt>
-                        <dd><span className="qa">A</span><span>当日から、お化粧・洗顔・入浴が可能です。術後は一時的に皮膚がない状態になるため、日焼けをするとシミの原因になります。紫外線対策を行ってください。</span></dd>
+                        <dd><span className="qa">A</span><span>{w("当日から、/お化粧・/洗顔・/入浴が/可能です。/術後は/一時的に/皮膚が/ない/状態に/なるため、/日焼けを/すると/シミの/原因に/なります。/紫外線対策を/行ってください。")}</span></dd>
                       </div>
                       <div className="faq-item">
                         <dt><span className="qa">Q</span><span>ダウンタイムはどのくらいですか？</span></dt>
-                        <dd><span className="qa">A</span><span>2〜3か月程度が目安です。経過には個人差があります。</span></dd>
+                        <dd><span className="qa">A</span><span>{w("2〜3か月程度が/目安です。/経過には個人差があります。")}</span></dd>
                       </div>
                       <div className="faq-item">
-                        <dt><span className="qa">Q</span><span>2mmより大きいほくろ・イボも相談できますか？</span></dt>
-                        <dd><span className="qa">A</span><span>はい。カウンセリングで医師が状態を確認し、適した施術方法をご説明します。プランの対象外となる場合の料金は <span className="tbc">要確認</span></span></dd>
+                        <dt><span className="qa">Q</span><span>{w("2mmより/大きい/ほくろ・/イボも/相談できますか？")}</span></dt>
+                        <dd><span className="qa">A</span><span>{w("はい。/カウンセリングで/医師が/状態を/確認し、/適した/施術方法を/ご説明します。/プランの対象外となる/場合の/料金は")} <span className="tbc">要確認</span></span></dd>
                       </div>
                     </dl>
                   </div>
@@ -524,7 +544,7 @@ export default function Page() {
                 <section className="sec bg-white" id="reserve">
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">Contact</span><span className="ja">カウンセリング予約</span></h2>
-                    <p className="form-lead">新宿美容外科クリニックでは、WEBからのカウンセリング予約を受け付けております。<br />お悩みやご相談に丁寧にお応えいたします。</p>
+                    <p className="form-lead">{w("新宿美容外科クリニックでは、/WEBからの/カウンセリング予約を/受け付けております。")}<br />{w("お悩みや/ご相談に/丁寧に/お応えいたします。")}</p>
                     <p className="form-tel">・お急ぎの方はお電話でご予約ください。<br />
                       　新宿院 <TelLink clientSlug={c.slug} tel="03-6380-0131">03-6380-0131</TelLink><br />
                       　立川院 <TelLink clientSlug={c.slug} tel="042-548-5803">042-548-5803</TelLink><br />
@@ -540,7 +560,7 @@ export default function Page() {
                         microcopy={c.form.microcopy}
                         disclaimer={
                           <>
-                            ご入力いただいた個人情報は、ご予約の確認・ご連絡のためにのみ使用します。
+                            {w("ご入力いただいた/個人情報は、/ご予約の/確認・/ご連絡の/ためにのみ/使用します。")}
                             <a href={c.privacyUrl} target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
                             をご確認ください。
                           </>
