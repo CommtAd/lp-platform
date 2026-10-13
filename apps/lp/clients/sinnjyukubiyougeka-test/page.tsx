@@ -13,7 +13,7 @@ import config from "./config";
  * 新宿美容外科クリニック｜イボ・ほくろ除去LP（テスト枠）。brief.md の13セクション構成。
  *
  *   ヘッダー → ①FV → ③施術について → ④診察・施術方法 → ⑤施術イメージ
- *   → ⑥症例写真 → ⑦施術時間・注意点 → ⑧施術の流れ → ⑨料金表（診察料・お支払い方法）
+ *   → ⑥症例写真 → ⑦施術時間・注意点 → ⑧治療のステップ → ⑨料金表（診察料・お支払い方法）
  *   → ⑩医師紹介 → ⑪クリニック案内 → ⑫FAQ → ⑬予約フォーム ＋ 追従フッターCTA
  *
  * 守っているルール:
@@ -292,26 +292,26 @@ export default function Page() {
                   </div>
                 </section>
 
-                {/* ================= 8. 施術の流れ ================= */}
+                {/* ================= 8. 治療のステップ ================= */}
                 <section className="sec bg-beige" id="step">
                   <div className="inner">
-                    <h2 className="sec-title"><span className="en">Treatment Step</span><span className="ja">施術の流れ</span></h2>
+                    <h2 className="sec-title"><span className="en">Treatment Step</span><span className="ja">治療のステップ</span></h2>
                     <ol className="steps">
                       <li>
-                        <div className="ph has-img"><img src={img("step1")} alt="ご予約" loading="lazy" decoding="async" /></div>
-                        <div><p className="no">01.</p><h3>ご予約</h3><p>{w("予約フォーム・/お電話から/ご予約ください。")}</p></div>
+                        <div className="ph has-img"><img src={img("step1")} alt="お問合せ・ご予約" loading="lazy" decoding="async" /></div>
+                        <div><p className="no">01.</p><h3>お問合せ・ご予約</h3><p>{w("お電話・/メールにて/お問い合わせ・/ご予約ください。")}</p></div>
                       </li>
                       <li>
                         <div className="ph has-img"><img src={img("step2")} alt="カウンセリング" loading="lazy" decoding="async" /></div>
-                        <div><p className="no">02.</p><h3>ご来院・<br />カウンセリング</h3><p>{w("医師が/お悩みを/うかがい、/肌の/状態を/確認して/施術方法を/ご説明します。")}</p></div>
+                        <div><p className="no">02.</p><h3>ご来院・<br />カウンセリング</h3><p>{w("医師が/患者様に/合った/適切な/治療法を/ご提案。")}</p></div>
                       </li>
                       <li>
                         <div className="ph has-img"><img src={img("step3")} alt="施術" loading="lazy" decoding="async" /></div>
-                        <div><p className="no">03.</p><h3>施術</h3><p>{w("局所麻酔を/行った/うえで/施術します。/施術後は/アイシングを/行い、/問題がなければ/そのまま/ご帰宅いただけます。")}</p></div>
+                        <div><p className="no">03.</p><h3>施術</h3><p>{w("医師・/スタッフが/対応します。/数分程度で/終了。")}</p></div>
                       </li>
                       <li>
                         <div className="ph has-img"><img src={img("step4")} alt="アフターケア" loading="lazy" decoding="async" /></div>
-                        <div><p className="no">04.</p><h3>アフターケア</h3><p>{w("後日、/術後経過を/確認する/検診を/行います。/不安なことは/メールでも/ご相談いただけます。")}</p></div>
+                        <div><p className="no">04.</p><h3>アフターケア</h3><p>{w("治療後も/きめ細かい/フォローを/心がけて/います。")}</p></div>
                       </li>
                     </ol>
                   </div>
@@ -383,13 +383,6 @@ export default function Page() {
                       <ul className="brands">
                         <li>VISA</li><li>Mastercard</li><li>JCB</li><li>American Express</li><li>Diners Club</li><li>DISCOVER</li><li>UnionPay（銀聯）</li>
                       </ul>
-
-                      <h4 className="pay-h">電子マネー・QRコード決済</h4>
-                      <dl className="pay-list">
-                        <dt>電子マネー</dt><dd>Apple Pay／iD／QUICPay</dd>
-                        <dt>交通系電子マネー</dt><dd>{w("Kitaca／/Suica／/PASMO／/TOICA／/manaca／/ICOCA／/SUGOCA／/nimoca／/はやかけん")}</dd>
-                        <dt>QRコード決済</dt><dd>{w("PayPay／/楽天ペイ（R Pay）／/d払い／/au PAY／/COIN+／/Smart Code／/J-coin Pay／/微信支付（WeChat Pay）／/UnionPay（銀聯）QRコード／/Alipay+（支付宝、AlipayHK、カカオペイ等）")}</dd>
-                      </dl>
 
                       <h4 className="pay-h">医療ローン</h4>
                       <p className="pay-txt">{w("頭金0円・/最長84回まで、/ご都合に/合わせて/ご利用/いただけます。")}<br />{w("お申込みの/際には/お手続き、/審査が/必要と/なりますが、/秘密厳守の/ため、/ご家族にも/気づかれません。/なお、/専業主婦の方、/年金受給者の方、/学生の方でも/ご利用/いただけます。")}</p>
