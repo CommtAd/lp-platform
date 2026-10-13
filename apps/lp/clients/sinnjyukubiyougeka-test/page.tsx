@@ -57,7 +57,7 @@ export default function Page() {
                       <div className="fv-row"><span className="n">3個</span><span className="t">19,800<small>円</small></span><span className="u">1個あたり<b>6,600</b><small>円</small></span></div>
                       <div className="fv-row"><span className="n">10個</span><span className="t">49,500<small>円</small></span><span className="u">1個あたり<b>4,950</b><small>円</small></span></div>
                       <div className="fv-row"><span className="n">30個</span><span className="t">99,000<small>円</small></span><span className="u">1個あたり<b>3,300</b><small>円</small></span></div>
-                      <p className="fv-note">※「2mmまで」は1個あたりのサイズです。 ※<span className="tbc">税込／税別 要確認</span></p>
+                      <p className="fv-note">※「2mmまで」は1個あたりのサイズです。<br />※金額は全て税込になります。</p>
                     </div>
                   </div>
                   <div className="fv-cta">
@@ -95,7 +95,8 @@ export default function Page() {
                     </div>
                     <p className="plan-note">
                       ※対象は1個あたり2mmまでのイボ・ホクロです。<br />
-                      ※<span className="tbc">税込／税別 要確認</span>　<span className="tbc">追加費用・適用条件 要確認</span>
+                      ※金額は全て税込になります。<br />
+                      ※<span className="tbc">追加費用・適用条件 要確認</span>
                     </p>
                   </div>
                   <div className="cta-block">
@@ -232,7 +233,7 @@ export default function Page() {
                         <dt>施術名</dt><dd>イボ・ホクロ除去</dd>
                         <dt>治療回数・期間</dt><dd><span className="tbc">症例ごとに記載</span></dd>
                         <dt>副作用（リスク）</dt><dd>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</dd>
-                        <dt>価格</dt><dd>3個 19,800円〜30個 99,000円 <span className="tbc">税込／税別 要確認</span></dd>
+                        <dt>価格</dt><dd>3個 19,800円〜30個 99,000円（税込）</dd>
                       </dl>
                     </div>
                     <div className="case">
@@ -246,7 +247,7 @@ export default function Page() {
                         <dt>施術名</dt><dd>イボ・ホクロ除去</dd>
                         <dt>治療回数・期間</dt><dd><span className="tbc">症例ごとに記載</span></dd>
                         <dt>副作用（リスク）</dt><dd>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</dd>
-                        <dt>価格</dt><dd>3個 19,800円〜30個 99,000円 <span className="tbc">税込／税別 要確認</span></dd>
+                        <dt>価格</dt><dd>3個 19,800円〜30個 99,000円（税込）</dd>
                       </dl>
                     </div>
                     <div className="case">
@@ -260,7 +261,7 @@ export default function Page() {
                         <dt>施術名</dt><dd>イボ・ホクロ除去</dd>
                         <dt>治療回数・期間</dt><dd><span className="tbc">症例ごとに記載</span></dd>
                         <dt>副作用（リスク）</dt><dd>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</dd>
-                        <dt>価格</dt><dd>3個 19,800円〜30個 99,000円 <span className="tbc">税込／税別 要確認</span></dd>
+                        <dt>価格</dt><dd>3個 19,800円〜30個 99,000円（税込）</dd>
                       </dl>
                     </div>
                   </div>
@@ -362,7 +363,7 @@ export default function Page() {
                     </table>
                     <ul className="p-notes">
                       <li>※「2mmまで」は1個あたりのサイズです。</li>
-                      <li>※表示料金：<span className="tbc">税込／税別 要確認</span></li>
+                      <li>※金額は全て税込になります。</li>
                       <li>※追加費用（麻酔・薬代・術後検診等）：<span className="tbc">要確認</span></li>
                       <li>※プランの適用条件（有効期限・部位・複数回来院の可否等）：<span className="tbc">要確認</span></li>
                     </ul>
