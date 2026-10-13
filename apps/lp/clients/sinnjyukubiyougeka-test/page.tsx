@@ -48,6 +48,9 @@ function img(name: string) {
   return `/clients/${c.slug}/${name}.webp`;
 }
 
+/** 症例写真ブロックの表示切替。一旦非表示（2026-10-13 依頼）。戻すときは true にする（MenuNav も連動）。 */
+const SHOW_CASE = false;
+
 function mapSrc(q: string) {
   return `https://www.google.com/maps?q=${encodeURIComponent(q)}&output=embed`;
 }
@@ -67,9 +70,8 @@ export default function Page() {
                   <div className="fv-photo"><img src={c.fvImage} alt="" width="1122" height="1402" fetchPriority="high" decoding="async" /></div>
                   <div className="fv-catch-area">
                   <h1 className="fv-catch">
-                    <span>気になる</span><br />
-                    <span><span className="em">イボ</span><span className="sm">・</span><span className="em">ホクロ</span>を</span><br />
-                    <span>まとめて除去</span>
+                    <span>気になる<span className="em">ほくろ</span>を</span><br />
+                    <span><span className="em">まとめて</span>キレイに除去</span>
                   </h1>
                   </div>
                   <div className="fv-price">
@@ -241,6 +243,7 @@ export default function Page() {
                 </section>
 
                 {/* ================= 6. 症例写真 ================= */}
+                {SHOW_CASE && (
                 <section className="sec bg-pink" id="case">
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">Case Photo</span><span className="ja">症例写真</span></h2>
@@ -293,6 +296,7 @@ export default function Page() {
                     <a className="btn-cta" href="#reserve">カウンセリングを予約する</a>
                   </div>
                 </section>
+                )}
 
                 {/* ================= 7. 施術時間・注意点・ダウンタイム ================= */}
                 <section className="sec bg-white" id="treatment">
@@ -323,7 +327,8 @@ export default function Page() {
                     <div className="risk">
                       <h3>主なリスク・副作用</h3>
                       <p>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</p>
-                      <p style={{ marginTop: "8px" }}>{w("局所麻酔の/注射時に/痛みを/感じる/場合が/あります。/術後は/一時的に/表皮が/ない/状態に/なるため、/日焼けにより/シミの/原因と/なる/ことが/あります。/紫外線対策を/行ってください。/効果・経過には個人差があります。")}</p>
+                      <p style={{ marginTop: "8px" }}>{w("局所麻酔の/注射時に/痛みを/感じる/場合が/あります。/術後は/一時的に/表皮が/ない/状態に/なるため、/日焼けにより/シミの/原因と/なる/ことが/あります。/紫外線対策を/行ってください。")}</p>
+                      <p className="risk-note">{w("※効果・/経過には/個人差が/あります。")}</p>
                     </div>
                   </div>
                 </section>
@@ -363,7 +368,6 @@ export default function Page() {
                       <div className="fee"><p className="fee-name">再診料</p><p className="fee-val">2,200<small>円</small></p><p className="fee-tax">（税込）</p></div>
                       <div className="fee is-free"><p className="fee-name">カウンセリング料</p><p className="fee-val">0<small>円</small></p><p className="fee-tax">&nbsp;</p></div>
                     </div>
-                    <p className="fee-note">※カウンセリングのみの場合の初診料の扱い：<span className="tbc">要確認</span></p>
 
                     <span className="p-label">イボ・ホクロ除去</span>
                     <h3 className="p-head">まとめて除去プラン</h3>
@@ -372,15 +376,15 @@ export default function Page() {
                       <tbody>
                         <tr>
                           <th>2mmまで<br /><b>3個プラン</b></th>
-                          <td><span className="yen">19,800<small>円</small></span><span className="per">1個あたり6,600円</span></td>
+                          <td><span className="yen">19,800<small>円</small></span><span className="per">1個あたり<b>6,600</b>円</span></td>
                         </tr>
                         <tr>
                           <th>2mmまで<br /><b>10個プラン</b></th>
-                          <td><span className="yen">49,500<small>円</small></span><span className="per">1個あたり4,950円</span></td>
+                          <td><span className="yen">49,500<small>円</small></span><span className="per">1個あたり<b>4,950</b>円</span></td>
                         </tr>
                         <tr className="is-best">
                           <th>2mmまで<br /><b>30個プラン</b><span className="tag">1個あたり最安</span></th>
-                          <td><span className="yen">99,000<small>円</small></span><span className="per">1個あたり3,300円</span></td>
+                          <td><span className="yen">99,000<small>円</small></span><span className="per">1個あたり<b>3,300</b>円</span></td>
                         </tr>
                       </tbody>
                     </table>
@@ -593,10 +597,9 @@ export default function Page() {
         borderColor="rgba(183,90,136,0.35)"
         offers={c.sticky.offers.map((o) => (
           <span key={o.label} style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-            <span style={{ fontSize: 11, color: "#666" }}>{o.label}</span>
-            <span style={{ fontFamily: "'Shippori Mincho', serif", fontWeight: 700, fontSize: 17, lineHeight: 1, color: "#ab0058" }}>
-              {o.value.replace("円", "")}
-              <span style={{ fontSize: 11 }}>円</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "#4a3a42" }}>{o.label}</span>
+            <span style={{ fontFamily: "'Shippori Mincho', serif", fontWeight: 700, fontSize: 24, lineHeight: 1, color: "#ab0058", background: "linear-gradient(transparent 62%, #fbd9e4 62%)", padding: "0 2px" }}>
+              {o.value}
             </span>
           </span>
         ))}
