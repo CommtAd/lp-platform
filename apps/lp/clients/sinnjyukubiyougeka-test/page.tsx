@@ -364,9 +364,9 @@ export default function Page() {
                     <h2 className="sec-title"><span className="en">Price</span><span className="ja">料金表</span></h2>
                     {/* 診察料：公式HP 料金一覧（初診料3,300円・再診料2,200円 税込）／カウンセリング無料は公式CTAの表記 */}
                     <div className="fees">
-                      <div className="fee"><p className="fee-name">初診料</p><p className="fee-val">3,300<small>円</small></p><p className="fee-tax">（税込）</p></div>
-                      <div className="fee"><p className="fee-name">再診料</p><p className="fee-val">2,200<small>円</small></p><p className="fee-tax">（税込）</p></div>
-                      <div className="fee is-free"><p className="fee-name">カウンセリング料</p><p className="fee-val">0<small>円</small></p><p className="fee-tax">&nbsp;</p></div>
+                      <div className="fee"><p className="fee-name">初診料</p><p className="fee-val">3,300<small>円</small></p></div>
+                      <div className="fee"><p className="fee-name">再診料</p><p className="fee-val">2,200<small>円</small></p></div>
+                      <div className="fee is-free"><p className="fee-name">カウンセリング料</p><p className="fee-val">0<small>円</small></p></div>
                     </div>
 
                     <span className="p-label">イボ・ホクロ除去</span>
@@ -383,7 +383,7 @@ export default function Page() {
                           <td><span className="yen">49,500<small>円</small></span><span className="per">1個あたり<b>4,950</b>円</span></td>
                         </tr>
                         <tr className="is-best">
-                          <th>2mmまで<br /><b>30個プラン</b><span className="tag">1個あたり最安</span></th>
+                          <th>2mmまで<br /><b>30個プラン</b><span className="tag">1個あたり最安級</span></th>
                           <td><span className="yen">99,000<small>円</small></span><span className="per">1個あたり<b>3,300</b>円</span></td>
                         </tr>
                       </tbody>

@@ -159,10 +159,10 @@ export const css = String.raw`
 .sbc .fv-row { display: grid; grid-template-columns: 4.4em 1fr auto; align-items: baseline; gap: 4px; padding: 4px 4px; border-bottom: 1px dashed var(--line); font-family: var(--serif); }
 .sbc .fv-row:last-of-type { border-bottom: 0; }
 .sbc .fv-row .n { font-size: 15px; font-weight: 700; color: #4a3a42; }
-.sbc .fv-row .t { font-size: 27px; font-weight: 700; color: #4a3a42; }
+.sbc .fv-row .t { font-size: 23px; font-weight: 700; color: #4a3a42; }
 .sbc .fv-row .t small, .sbc .fv-row .u small { font-size: 11px; }
 .sbc .fv-row .u { font-size: 11px; color: #4a3a42; text-align: right; white-space: nowrap; }
-.sbc .fv-row .u b { font-size: 29px; color: var(--accent); letter-spacing: 0; }
+.sbc .fv-row .u b { font-size: 31px; color: var(--accent); letter-spacing: 0; }
 .sbc .fv-note { font-size: 10.5px; line-height: 1.6; color: var(--text-sub); margin: 8px 2px 0; }
 .sbc .fv-cta { padding: 4px 16px 28px; position: relative; z-index: 1; }
 .sbc .btn-cta {
@@ -301,12 +301,11 @@ export const css = String.raw`
 .sbc .p-notes { font-size: 12px; color: var(--text-sub); line-height: 1.8; margin-top: 12px; padding-left: 1em; text-indent: -1em; }
 .sbc .p-notes li { list-style: none; }
 .sbc .fees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 36px; }
-.sbc .fee { background: #f6f1f3; border-radius: 6px; text-align: center; padding: 12px 2px 8px; font-family: var(--serif); color: #6d5a64; }
+.sbc .fee { display: flex; flex-direction: column; justify-content: center; background: #f6f1f3; border-radius: 6px; text-align: center; padding: 16px 2px; font-family: var(--serif); color: #6d5a64; }
 .sbc .fee-name { font-size: 14px; letter-spacing: .18em; line-height: 1.4; white-space: nowrap; }
 .sbc .fee .fee-name:only-child, .sbc .fee.is-free .fee-name { letter-spacing: 0; }
-.sbc .fee-val { font-size: 30px; font-weight: 700; line-height: 1.2; letter-spacing: 0; margin-top: 4px; }
+.sbc .fee-val { font-size: 30px; font-weight: 700; line-height: 1.2; letter-spacing: 0; margin-top: 6px; }
 .sbc .fee-val small { font-size: 14px; }
-.sbc .fee-tax { font-size: 10px; font-family: var(--sans); line-height: 1.4; }
 .sbc .fee.is-free { background: var(--pink-soft); color: var(--accent); }
 .sbc .fee.is-free .fee-name { font-size: 12.5px; }
 .sbc .fee.is-free .fee-val { font-size: 46px; line-height: 1; margin-top: 6px; }
