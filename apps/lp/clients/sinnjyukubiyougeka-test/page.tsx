@@ -302,12 +302,12 @@ export default function Page() {
                         <div><p className="no">01.</p><h3>お問合せ・ご予約</h3><p>{w("お電話・/メールにて/お問い合わせ・/ご予約ください。")}</p></div>
                       </li>
                       <li>
-                        <div className="ph has-img"><img src={img("step2")} alt="カウンセリング" loading="lazy" decoding="async" /></div>
+                        <div className="ph has-img"><img src={img("step2-counseling")} alt="カウンセリング" loading="lazy" decoding="async" /></div>
                         <div><p className="no">02.</p><h3>ご来院・<br />カウンセリング</h3><p>{w("医師が/患者様に/合った/適切な/治療法を/ご提案。")}</p></div>
                       </li>
                       <li>
-                        <div className="ph has-img"><img src={img("step3")} alt="施術" loading="lazy" decoding="async" /></div>
-                        <div><p className="no">03.</p><h3>施術</h3><p>{w("医師・/スタッフが/対応します。/数分程度で/終了。")}</p></div>
+                        <div className="ph has-img"><img src={img("step3-laser")} alt="施術" loading="lazy" decoding="async" /></div>
+                        <div><p className="no">03.</p><h3>施術</h3><p>{w("医師が/対応します。/数分程度で/終了。")}</p></div>
                       </li>
                       <li>
                         <div className="ph has-img"><img src={img("step4")} alt="アフターケア" loading="lazy" decoding="async" /></div>
