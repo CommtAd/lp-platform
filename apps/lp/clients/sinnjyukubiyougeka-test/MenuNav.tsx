@@ -15,16 +15,14 @@ const ITEMS = [
 
 /**
  * ヘッダー（ロゴ＋ハンバーガー）。参考LPと同じく、開くとページ内リンクの一覧が出る。
- * ロゴは顧客支給データが届くまで、クリニック名のテキストで出している。
+ * ロゴは顧客支給データ（public/clients/{slug}/logo.webp）。
  */
 export default function MenuNav() {
   const [open, setOpen] = useState(false);
   return (
     <header className="header">
       <a className="logo" href="#top" aria-label="新宿美容外科クリニック">
-        <span className="logo-text">
-          新宿美容外科クリニック<small>SHINJUKU BIYOU GEKA CLINIC</small>
-        </span>
+        <img className="logo-img" src="/clients/sinnjyukubiyougeka-test/logo.webp" alt="新宿美容外科クリニック" width={480} height={92} />
       </a>
       <button
         className="menu-btn"
