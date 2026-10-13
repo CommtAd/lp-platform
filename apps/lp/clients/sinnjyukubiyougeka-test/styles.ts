@@ -198,20 +198,24 @@ export const css = String.raw`
 .sbc .plan-cards { display: grid; gap: 14px; }
 .sbc .plan-card {
   position: relative;
-  display: grid; grid-template-columns: 96px 1fr; align-items: center;
+  display: grid; grid-template-columns: 92px 1fr;
+  min-height: 108px;
   background: #fff; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
 }
 .sbc .plan-card .num {
-  height: 100%; display: grid; place-content: center; text-align: center;
-  background: var(--brand); color: #fff; font-family: var(--serif); line-height: 1.1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  background: var(--brand); color: #fff; font-family: var(--serif); line-height: 1;
 }
 .sbc .plan-card .num b { font-size: 36px; }
 .sbc .plan-card .num small { font-size: 13px; }
 .sbc .plan-card.is-best .num { background: var(--accent); }
-.sbc .plan-card .body { padding: 14px 14px 12px; }
-.sbc .plan-card .total { font-family: var(--serif); font-size: 15px; font-weight: 700; }
-.sbc .plan-card .total b { font-size: 28px; color: var(--accent); letter-spacing: 0; }
-.sbc .plan-card .per { display: inline-block; font-size: 12px; background: var(--pink-soft); color: var(--brand-deep); padding: 0 10px; border-radius: 999px; font-weight: 700; }
+.sbc .plan-card .body {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 12px;
+}
+.sbc .plan-card .total { margin: 0; font-family: var(--serif); font-size: 16px; font-weight: 700; line-height: 1; color: #4a3a42; }
+.sbc .plan-card .total b { font-size: 34px; color: var(--accent); letter-spacing: 0; }
+.sbc .plan-card .per { display: inline-block; font-size: 12px; line-height: 1.8; background: var(--pink-soft); color: var(--brand-deep); padding: 1px 14px; border-radius: 999px; font-weight: 700; }
 .sbc .plan-card .per b { font-size: 15px; }
 .sbc .plan-note { font-size: 12px; color: var(--text-sub); margin-top: 14px; line-height: 1.7; }
 .sbc .about-lead { font-size: 15px; line-height: 2.1; }
