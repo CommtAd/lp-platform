@@ -97,12 +97,6 @@ const config: ShinjukubiyouConfig = {
         rows: 4,
         placeholder: "例）顔のほくろを5個ほど取りたい／大きさが2mmを超えるかもしれない など",
       },
-      {
-        type: "note",
-        name: "wish_note",
-        label: "ご希望の予約日時",
-        body: "第1希望は必須です。\n2日以内のご予約はお電話で承ります。",
-      },
       { type: "date", name: "date1", label: "第1希望日", required: true },
       { type: "select", name: "time1", label: "第1希望 時間帯", required: true, placeholder: "時間帯を選択", options: timeOptions },
       { type: "date", name: "date2", label: "第2希望日", optionalTag: "任意" },
