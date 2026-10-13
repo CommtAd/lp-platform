@@ -2,7 +2,7 @@ import type { ClientStatus } from "@shared/index";
 import type { LPFormField } from "@/components/LPForm";
 
 /**
- * 新宿美容外科クリニック｜イボ・ホクロ除去LP（テスト枠）— Meta広告用、カウンセリング予約の獲得。
+ * 新宿美容外科クリニック｜イボ・ほくろ除去LP（テスト枠）— Meta広告用、カウンセリング予約の獲得。
  *
  * 構成・見せ方は参考LP（nagoya-chuoh-hokuro.info）に寄せ、配色は公式HPのブランドカラー。
  * 指示書は `brief.md`。施術内容・料金以外のクリニック情報は公式HP（shinjukubiyou.com）から転記。
@@ -37,9 +37,9 @@ const config: ShinjukubiyouConfig = {
   slug: "sinnjyukubiyougeka-test",
   status: "draft",
   meta: {
-    title: "イボ・ホクロ除去｜新宿美容外科クリニック",
+    title: "イボ・ほくろ除去｜新宿美容外科クリニック",
     description:
-      "新宿美容外科クリニック（新宿院・立川院）のイボ・ホクロ除去。1個あたり2mmまで、3個・10個・30個のまとめて除去プラン。カウンセリング予約受付中。",
+      "新宿美容外科クリニック（新宿院・立川院）のイボ・ほくろ除去。1個あたり2mmまで、3個・10個・30個のまとめて除去プラン。カウンセリング予約受付中。",
   },
   fvImage: "/clients/sinnjyukubiyougeka-test/fv.webp",
   privacyUrl: "https://www.shinjukubiyou.com/privacy/",
@@ -47,7 +47,7 @@ const config: ShinjukubiyouConfig = {
     buttonText: "カウンセリングを予約する",
     showAfter: 620,
     offers: [
-      { label: "カウンセリング", value: "無料" },
+      { label: "初診料・再診料・カウンセリング", value: "無料" },
     ],
   },
   form: {

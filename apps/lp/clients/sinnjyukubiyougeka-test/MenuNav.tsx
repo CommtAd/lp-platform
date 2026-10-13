@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 const ITEMS = [
-  { href: "#plan", label: "イボ・ホクロ除去プラン" },
   { href: "#about", label: "施術について" },
   // { href: "#case", label: "症例写真" }, // 症例写真ブロック非表示中（page.tsx の SHOW_CASE）
   { href: "#treatment", label: "施術時間・注意点" },
