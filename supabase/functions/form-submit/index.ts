@@ -337,6 +337,13 @@ interface ConfirmationMeta {
    */
   confirmationLines?: string[];
   /**
+   * Override for the grey footer note of the generic fallback confirmation,
+   * replacing the default 「※このメールは送信専用です。…」. Set it when
+   * `confirmationLines` already carries its own closing note, so the mail
+   * doesn't end with two ※ lines.
+   */
+  confirmationFooter?: string;
+  /**
    * The LP form's own fields, in display order — mirrors `config.ts`'s
    * `form.fields`. Drives the 「お問い合わせ内容」 block of BOTH notification
    * emails:
@@ -349,6 +356,13 @@ interface ConfirmationMeta {
    * `extras` block as a raw `key: value` line.
    */
   formFields?: FormFieldMeta[];
+  /**
+   * Set to false to keep `formFields` out of the **submitter** confirmation —
+   * for clients whose confirmation wording is fixed by the customer and must
+   * not grow an 「お問い合わせ内容」 block. The admin notification still uses
+   * `formFields`. Defaults to true.
+   */
+  confirmationEcho?: boolean;
 }
 
 interface FormFieldMeta {
@@ -408,6 +422,9 @@ const DEFAULT_CONFIRMATION_LINES = [
   "{{clientName}} へのお申し込み・お問い合わせを受け付けました。",
   "担当より追ってご連絡いたしますので、今しばらくお待ちください。",
 ];
+
+/** Default `confirmationFooter` — the original wording, shared by every client until overridden. */
+const DEFAULT_CONFIRMATION_FOOTER = "※このメールは送信専用です。返信いただいてもご対応できません。";
 
 /** Default `adminGreeting` — the original wording, shared by every client until overridden. */
 const DEFAULT_ADMIN_GREETING = "{{name}}様から予約申し込みを承りました。担当者はご対応をお願いいたします。";
@@ -534,7 +551,7 @@ function buildConfirmationHtml(params: {
   // Echo the submission back to the sender so they keep a record of what they
   // sent — this fallback is the 問い合わせ-shaped path (no store/date/menu), so
   // without it the mail says nothing about the enquiry itself.
-  const echoFields = params.meta.formFields;
+  const echoFields = params.meta.confirmationEcho === false ? undefined : params.meta.formFields;
   const echoHtml =
     echoFields && echoFields.length > 0
       ? `<div style="margin-top:24px;">${linesToHtml([
@@ -566,7 +583,7 @@ function buildConfirmationHtml(params: {
       <p>${proseHtml}</p>
       ${echoHtml}
       <p style="color:#999; font-size:12px; margin-top:24px;">
-        ※このメールは送信専用です。返信いただいてもご対応できません。
+        ${escapeHtml(params.meta.confirmationFooter ?? DEFAULT_CONFIRMATION_FOOTER)}
       </p>
     </div>
   `;
