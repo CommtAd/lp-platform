@@ -34,14 +34,14 @@ export interface ShinjukubiyouConfig {
 }
 
 const config: ShinjukubiyouConfig = {
-  slug: "shinjukubiyou-test",
+  slug: "sinnjyukubiyougeka-test",
   status: "draft",
   meta: {
     title: "イボ・ホクロ除去｜新宿美容外科クリニック",
     description:
       "新宿美容外科クリニック（新宿院・立川院）のイボ・ホクロ除去。1個あたり2mmまで、3個・10個・30個のまとめて除去プラン。カウンセリング予約受付中。",
   },
-  fvImage: "/clients/shinjukubiyou-test/fv.webp",
+  fvImage: "/clients/sinnjyukubiyougeka-test/fv.webp",
   privacyUrl: "https://www.shinjukubiyou.com/privacy/",
   sticky: {
     buttonText: "カウンセリングを予約する",
