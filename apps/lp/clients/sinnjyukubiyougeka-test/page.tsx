@@ -150,7 +150,7 @@ export default function Page() {
                 <section className="sec bg-white diag" id="diagnosis" style={{ paddingTop: "0" }}>
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">Diagnosis</span><span className="ja">医師による診察と<br />施術方法のご提案</span></h2>
-                    <div className="ph has-img" style={{ aspectRatio: "479 / 278" }}><img src={img("diagnosis")} alt="当院の医師" loading="lazy" decoding="async" /></div>
+                    <div className="ph has-img" style={{ aspectRatio: "960 / 679" }}><img src={img("diagnosis")} alt="医師による診察の様子" loading="lazy" decoding="async" /></div>
                     <p>{w("カウンセリングでは/医師が/お悩みや/ご希望を/うかがい、")}<span className="mk">{w("ほくろ・/イボの/状態を/確認した/うえで、/適した/施術方法を/ご説明")}</span>します。</p>
                     <p>{w("ほくろや/イボには、/まれに/悪性の/ものが/含まれる/ことも/あります。/自己判断せず、/医師の/診察を/受ける/ことを/おすすめします。")}</p>
                     <div className="methods">
