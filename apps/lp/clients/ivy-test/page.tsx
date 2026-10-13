@@ -945,7 +945,31 @@ export default function Page() {
                 新規オープン記念　藤沢店限定
               </span>
             </div>
-            <FullBleed img={c.closingImage.img} ratio="1024 / 1530" alt={c.closingImage.imgAlt} />
+            {/* SPECIAL 01（ピラティスソックス）のカード内の下部に「藤沢店限定」を重ねる
+                （AUN 2026-10-13）。位置は画像（1024x1530）のカード座標に対する割合。 */}
+            <div style={{ position: "relative" }}>
+              <FullBleed img={c.closingImage.img} ratio="1024 / 1530" alt={c.closingImage.imgAlt} />
+              <span
+                style={{
+                  position: "absolute",
+                  left: "26.4%",
+                  top: "92%",
+                  transform: "translate(-50%, -50%)",
+                  background: ACCENT,
+                  color: "#FFFFFF",
+                  fontFamily: GOTHIC,
+                  fontWeight: 800,
+                  fontSize: 12,
+                  letterSpacing: "0.05em",
+                  lineHeight: 1,
+                  padding: "4px 10px",
+                  borderRadius: 3,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                藤沢店限定
+              </span>
+            </div>
             <div style={{ padding: "0 24px" }}>
               <Cta marginTop={8} />
             </div>
