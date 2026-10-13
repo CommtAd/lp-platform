@@ -372,7 +372,7 @@ export default function Page() {
                     {/* お支払い方法：公式HP 料金一覧「ご利用可能な決済方法一覧」より */}
                     <div className="pay">
                       <h3 className="p-head">お支払い方法</h3>
-                      <p className="pay-lead">{w("当日の/現金での/お支払いの/ほか、/クレジットカード・/電子マネー・/QRコード決済・/お振込み・/医療ローンが/ご利用いただけます。")}<br />{w("お支払いについては、/カウンセリング時に/担当者へ/ご相談ください。")}</p>
+                      <p className="pay-lead">{w("当院では、/下記3通りの/お支払い方法が/可能です。")}<br />{w("ご都合に/あわせて/お選び/ください。")}</p>
 
                       <h4 className="pay-h">現金</h4>
                       <p className="pay-txt">当日、現金でのお支払いが可能です。</p>
