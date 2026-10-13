@@ -122,8 +122,8 @@ export const css = String.raw`
 .sbc .fv-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
 .sbc .fv-catch-area {
   position: absolute; z-index: 1; left: 0; top: 0;
-  width: 50%; height: 430px; padding-bottom: 64px;
-  display: flex; align-items: center; justify-content: center;
+  width: 50%; height: 430px; padding-top: 32px;
+  display: flex; align-items: flex-start; justify-content: center;
 }
 .sbc .fv-catch {
   writing-mode: vertical-rl;
@@ -159,10 +159,10 @@ export const css = String.raw`
 .sbc .fv-row { display: grid; grid-template-columns: 4.4em 1fr auto; align-items: baseline; gap: 4px; padding: 4px 4px; border-bottom: 1px dashed var(--line); font-family: var(--serif); }
 .sbc .fv-row:last-of-type { border-bottom: 0; }
 .sbc .fv-row .n { font-size: 15px; font-weight: 700; color: #4a3a42; }
-.sbc .fv-row .t { font-size: 22px; font-weight: 700; color: #4a3a42; }
-.sbc .fv-row .t small, .sbc .fv-row .u small { font-size: 12px; }
-.sbc .fv-row .u { font-size: 12px; color: #4a3a42; text-align: right; white-space: nowrap; }
-.sbc .fv-row .u b { font-size: 25px; color: var(--accent); letter-spacing: 0; }
+.sbc .fv-row .t { font-size: 27px; font-weight: 700; color: #4a3a42; }
+.sbc .fv-row .t small, .sbc .fv-row .u small { font-size: 11px; }
+.sbc .fv-row .u { font-size: 11px; color: #4a3a42; text-align: right; white-space: nowrap; }
+.sbc .fv-row .u b { font-size: 29px; color: var(--accent); letter-spacing: 0; }
 .sbc .fv-note { font-size: 10.5px; line-height: 1.6; color: var(--text-sub); margin: 8px 2px 0; }
 .sbc .fv-cta { padding: 4px 16px 28px; position: relative; z-index: 1; }
 .sbc .btn-cta {
@@ -213,10 +213,10 @@ export const css = String.raw`
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
   padding: 14px 12px;
 }
-.sbc .plan-card .total { margin: 0; font-family: var(--serif); font-size: 16px; font-weight: 700; line-height: 1; color: #4a3a42; }
-.sbc .plan-card .total b { font-size: 34px; color: var(--accent); letter-spacing: 0; }
-.sbc .plan-card .per { display: inline-block; font-size: 12px; line-height: 1.8; background: var(--pink-soft); color: var(--brand-deep); padding: 1px 14px; border-radius: 999px; font-weight: 700; }
-.sbc .plan-card .per b { font-size: 15px; }
+.sbc .plan-card .total { margin: 0; font-family: var(--serif); font-size: 14px; font-weight: 700; line-height: 1; color: #4a3a42; }
+.sbc .plan-card .total b { font-size: 40px; color: var(--accent); letter-spacing: 0; }
+.sbc .plan-card .per { display: inline-block; font-size: 11px; line-height: 1.8; background: var(--pink-soft); color: var(--brand-deep); padding: 1px 14px; border-radius: 999px; font-weight: 700; }
+.sbc .plan-card .per b { font-size: 22px; font-family: var(--serif); color: var(--accent); letter-spacing: 0; margin: 0 1px; }
 .sbc .plan-note { font-size: 12px; color: var(--text-sub); margin-top: 14px; line-height: 1.7; }
 .sbc .about-lead { font-size: 15px; line-height: 2.1; }
 .sbc .device { margin-top: 32px; display: grid; grid-template-columns: 42% 1fr; gap: 16px; align-items: start; }
@@ -275,6 +275,7 @@ export const css = String.raw`
 .sbc .risk { margin-top: 28px; background: #fff; border: 1px solid var(--brand); padding: 16px 18px; }
 .sbc .risk h3 { font-size: 15px; color: var(--brand-deep); margin-bottom: 6px; }
 .sbc .risk p { font-size: 13px; line-height: 1.8; }
+.sbc .risk .risk-note { font-size: 11px; line-height: 1.6; color: var(--text-sub); margin-top: 8px; }
 .sbc .steps { list-style: none; margin: 0; padding: 0; }
 .sbc .steps li { display: grid; grid-template-columns: 44% 1fr; gap: 14px; }
 .sbc .steps li + li { margin-top: 40px; position: relative; }
@@ -291,14 +292,15 @@ export const css = String.raw`
 .sbc .p-table th { text-align: left; font-weight: 400; font-size: 13.5px; line-height: 1.6; }
 .sbc .p-table th b { font-size: 16px; }
 .sbc .p-table td { text-align: right; color: var(--accent); font-weight: 700; line-height: 1.5; white-space: nowrap; }
-.sbc .p-table td .yen { font-size: 22px; font-family: var(--serif); letter-spacing: 0; }
-.sbc .p-table td .yen small { font-size: 13px; }
-.sbc .p-table td .per { display: block; font-size: 12px; }
+.sbc .p-table td .yen { font-size: 27px; font-family: var(--serif); letter-spacing: 0; }
+.sbc .p-table td .yen small { font-size: 12px; }
+.sbc .p-table td .per { display: block; font-size: 11px; }
+.sbc .p-table td .per b { font-size: 18px; font-family: var(--serif); letter-spacing: 0; margin: 0 1px; }
 .sbc .p-table tr.is-best th { position: relative; }
 .sbc .p-table .tag { display: inline-block; font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 3px; padding: 0 6px; margin-left: 6px; vertical-align: 2px; }
 .sbc .p-notes { font-size: 12px; color: var(--text-sub); line-height: 1.8; margin-top: 12px; padding-left: 1em; text-indent: -1em; }
 .sbc .p-notes li { list-style: none; }
-.sbc .fees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
+.sbc .fees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 36px; }
 .sbc .fee { background: #f6f1f3; border-radius: 6px; text-align: center; padding: 12px 2px 8px; font-family: var(--serif); color: #6d5a64; }
 .sbc .fee-name { font-size: 14px; letter-spacing: .18em; line-height: 1.4; white-space: nowrap; }
 .sbc .fee .fee-name:only-child, .sbc .fee.is-free .fee-name { letter-spacing: 0; }
@@ -309,7 +311,6 @@ export const css = String.raw`
 .sbc .fee.is-free .fee-name { font-size: 12.5px; }
 .sbc .fee.is-free .fee-val { font-size: 46px; line-height: 1; margin-top: 6px; }
 .sbc .fee.is-free .fee-val small { font-size: 18px; }
-.sbc .fee-note { font-size: 11.5px; color: var(--text-sub); margin-bottom: 36px; }
 .sbc .pay { margin-top: 44px; }
 .sbc .pay-lead { font-size: 14px; line-height: 1.9; margin: 12px 0 0; }
 .sbc .pay-h { font-size: 15px; border-left: 4px solid #d6c7ce; padding-left: 10px; margin: 24px 0 8px; line-height: 1.5; }

@@ -47,9 +47,7 @@ const config: ShinjukubiyouConfig = {
     buttonText: "カウンセリングを予約する",
     showAfter: 620,
     offers: [
-      { label: "3個", value: "19,800円" },
-      { label: "10個", value: "49,500円" },
-      { label: "30個", value: "99,000円" },
+      { label: "カウンセリング", value: "無料" },
     ],
   },
   form: {
