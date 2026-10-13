@@ -434,6 +434,7 @@ function BenefitsSection() {
   return (
     <section style={{ padding: "6px 18px 48px", background: bg }}>
       <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 28, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: ink }}>
+        <span style={{ fontSize: 38, fontWeight: 800, marginRight: 8, background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", textShadow: "none", filter: `drop-shadow(0 2px 8px ${pink}55)` }}>{bene.headingLead}</span>
         {bene.heading}
         <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{bene.headingHighlight}</span>
       </h2>
@@ -474,7 +475,6 @@ function BenefitsSection() {
                   <span>{b.title}</span>
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
-                  <span style={{ flexShrink: 0, fontFamily: fontGothic, fontWeight: 800, fontSize: 11, color: accent }}>{b.nowLabel}</span>
                   <span style={{ fontSize: 11.5, lineHeight: 1.5, color: textDim }}>{b.body}</span>
                 </div>
                 {b.price && (
