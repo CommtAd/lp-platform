@@ -219,8 +219,8 @@ export const css = String.raw`
 .sbc .plan-card .per b { font-size: 15px; }
 .sbc .plan-note { font-size: 12px; color: var(--text-sub); margin-top: 14px; line-height: 1.7; }
 .sbc .about-lead { font-size: 15px; line-height: 2.1; }
-.sbc .device { margin-top: 32px; overflow: hidden; }
-.sbc .device .ph { float: left; width: 42%; margin: 4px 16px 8px 0; aspect-ratio: 250 / 320; }
+.sbc .device { margin-top: 32px; display: grid; grid-template-columns: 42% 1fr; gap: 16px; align-items: start; }
+.sbc .device .ph { margin-top: 4px; aspect-ratio: 250 / 320; }
 .sbc .device h3 { font-size: 16px; line-height: 1.6; margin-bottom: 10px; }
 .sbc .device p { font-size: 13.5px; line-height: 2; }
 .sbc .ph {

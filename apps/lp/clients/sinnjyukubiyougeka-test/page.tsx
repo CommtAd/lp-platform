@@ -116,9 +116,11 @@ export default function Page() {
                     </p>
                     <div className="device">
                       <div className="ph"><span>施術機器・施術風景<br />（差し替え）</span></div>
-                      <h3>電気メスによる除去<br /><span style={{ fontSize: "13px", fontWeight: "400" }}>（電気焼灼法）</span></h3>
-                      <p>一般的なメスとは異なり、イボやほくろを電気の熱で焼灼して取り除く方法です。縫合の必要はなく、局所麻酔を行ったうえで施術します。施術当日から洗顔や入浴が可能です。</p>
-                      <p><span className="tbc">本プランの施術方法 要確認</span></p>
+                      <div className="device-body">
+                        <h3>電気メスによる除去<br /><span style={{ fontSize: "13px", fontWeight: "400" }}>（電気焼灼法）</span></h3>
+                        <p>一般的なメスとは異なり、イボやほくろを電気の熱で焼灼して取り除く方法です。縫合の必要はなく、局所麻酔を行ったうえで施術します。施術当日から洗顔や入浴が可能です。</p>
+                        <p><span className="tbc">本プランの施術方法 要確認</span></p>
+                      </div>
                     </div>
                   </div>
                 </section>
