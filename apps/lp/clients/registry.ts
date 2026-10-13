@@ -45,6 +45,7 @@ export const clientRegistry: Record<
   "rusk-demo2": () => import("./rusk-demo2/page"),
   "ism-azabujuban": () => import("./ism-azabujuban/page"),
   "b-body-pilates": () => import("./b-body-pilates/page"),
+  "kasane-toyohashi": () => import("./kasane-toyohashi/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -118,4 +119,5 @@ export const clientMetaRegistry: Record<
   "rusk-demo2": () => import("./rusk-demo2/config"),
   "ism-azabujuban": () => import("./ism-azabujuban/config"),
   "b-body-pilates": () => import("./b-body-pilates/config"),
+  "kasane-toyohashi": () => import("./kasane-toyohashi/config"),
 };
