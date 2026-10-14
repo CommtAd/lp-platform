@@ -320,8 +320,8 @@ export const css = String.raw`
 .sbc .fee-val { font-size: 30px; font-weight: 700; line-height: 1.2; letter-spacing: 0; margin-top: 6px; }
 .sbc .fee-val small { font-size: 14px; }
 .sbc .fee.is-free { background: var(--pink-soft); color: var(--accent); }
-.sbc .fee.is-free .fee-name { font-size: 12.5px; }
-.sbc .fee.is-free .fee-val { font-size: 46px; line-height: 1; margin-top: 6px; }
+.sbc .fee.is-free .fee-name { font-size: 12.5px; margin: 0; }
+.sbc .fee.is-free .fee-val { font-size: 46px; line-height: 1; margin-top: 4px; }
 .sbc .fee.is-free .fee-val small { font-size: 18px; }
 .sbc .pay { margin-top: 44px; }
 .sbc .pay-lead { font-size: 14px; line-height: 1.9; margin: 12px 0 0; }
