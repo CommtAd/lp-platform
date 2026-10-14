@@ -495,7 +495,8 @@ export default function Page() {
                         <tr><th>アクセス</th><td>JR立川駅北口より徒歩1分</td></tr>
                         </tbody>
                       </table>
-                      <div className="map"><iframe src={mapSrc("東京都立川市曙町2-7-19")} loading="lazy" title="東京都立川市曙町2-7-19 の地図" referrerPolicy="no-referrer-when-downgrade" /></div>
+                      {/* 住所だけだとピンに名前が出ないので、医院名で検索させてGoogleの施設情報（名前ラベル付き）に当てる */}
+                      <div className="map"><iframe src={mapSrc("新宿美容外科クリニック 立川院 東京都立川市曙町2-7-19")} loading="lazy" title="東京都立川市曙町2-7-19 の地図" referrerPolicy="no-referrer-when-downgrade" /></div>
                     </div>
                   </div>
                 </section>
