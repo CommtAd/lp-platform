@@ -343,7 +343,7 @@ export default function Page() {
                     <table className="p-mini"><tbody><tr><th>1cm</th><td>55,000<small>円</small></td></tr></tbody></table>
                     <p className="p-tax">※表示の料金はすべて税込の価格です。</p>
 
-                    <p className="p-ribbon">“ほくろ”と同時に“気になるシミ”を除去</p>
+                    <p className="p-ribbon"><span className="hl">ほくろ</span>と同時に<span className="hl">気になるシミ</span>を除去</p>
                     <span className="p-label">シミ治療</span>
                     <h3 className="p-head">QスイッチYAGレーザー</h3>
                     <table className="p-mini"><tbody><tr><th>1mm</th><td>2,200<small>円</small></td></tr><tr><th>取り放題（10個まで）</th><td>9,900<small>円</small></td></tr></tbody></table>
