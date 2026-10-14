@@ -487,7 +487,7 @@ export default function Page() {
           <section style={{ padding: "44px 22px 44px", background: "#FFFFFF" }}>
             <Eyebrow text={c.method1.eyebrow} />
             <SectionHeading text={c.method1.heading} />
-            <ImageSlot src={c.method1.img.src} placeholder={c.method1.img.placeholder} objectPosition={c.method1.img.position ?? "center"} radius={16} style={{ width: "100%", height: 210, background: BLUSH, marginTop: 22 }} />
+            <ImageSlot src={c.method1.img.src} placeholder={c.method1.img.placeholder} objectPosition={c.method1.img.position ?? "center"} radius={16} style={{ width: "100%", height: c.method1.img.height ?? 210, background: BLUSH, marginTop: 22 }} />
             <p style={{ fontSize: 13, lineHeight: 2, color: INK, margin: "18px 0 0" }}>{c.method1.body}</p>
 
             {/* お悩みTOP3 */}
@@ -592,7 +592,7 @@ export default function Page() {
             {c.reasons.items.map((item) => (
               <div key={item.num} style={{ marginTop: 34 }}>
                 <div style={{ position: "relative" }}>
-                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} objectPosition={item.img.position ?? "center"} radius={16} style={{ width: "100%", height: 200, background: BLUSH }} />
+                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} objectPosition={item.img.position ?? "center"} radius={16} style={{ width: "100%", height: item.img.height ?? 200, background: BLUSH }} />
                   <span
                     style={{
                       position: "absolute",

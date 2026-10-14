@@ -8,6 +8,8 @@ export interface Slot {
   placeholder: string;
   src?: string | null;
   position?: string;
+  /** 枠の高さ(px)。縦長写真で全身を見せたいときだけ指定。省略時はセクション既定の高さ。 */
+  height?: number;
 }
 
 export interface IsmConfig {
@@ -325,7 +327,7 @@ const config: IsmConfig = {
   method1: {
     eyebrow: "METHOD",
     heading: "結果につながる\n韓国式マシンピラティス",
-    img: { placeholder: "リフォーマーでのレッスン写真", src: `${ASSET}/lesson-strap.jpg` },
+    img: { placeholder: "リフォーマーでのレッスン写真", src: `${ASSET}/lesson-strap.jpg`, height: 440, position: "center 30%" },
     body: "韓国式は「くびれ・美脚・ヒップアップ」といった、目に見えるボディメイクにフォーカスしたマシンピラティス。一般的なものより約2倍強いスプリングの重さ・圧を使い、一人ひとりの骨格やレベルに合わせて負荷を細かく調整。体幹を鍛え、姿勢を整えながら、しなやかで引き締まったボディラインへ効率よく導きます。",
     focusHeading: "ご相談の多いお悩み TOP3",
     focus: [
@@ -366,7 +368,7 @@ const config: IsmConfig = {
   method2: {
     eyebrow: "ONLINE",
     heading: "スタジオの外でも、\n美習慣がつづく",
-    img: { placeholder: "ストレッチ種目のレッスン写真", src: `${ASSET}/online.jpg` },
+    img: { placeholder: "ストレッチ種目のレッスン写真", src: `${ASSET}/online.jpg`, position: "center 15%" },
     body: "月4回・月8回プランの会員さまは、オンラインレッスンを最大月12回受講可能。スタジオでのレッスンの合間も、ご自宅で体を動かす習慣をつくれるから、変化を実感しやすく、続けやすい。",
     badge: "会員特典 最大月12回",
     note: "※月4回・月8回プランの会員さまが対象です。",
@@ -376,7 +378,7 @@ const config: IsmConfig = {
     heading: "手ぶらで、\nふらっと通える。",
     body: "ウェア・タオルのレンタルをご用意。荷物を持ち歩かなくていいから、毎日の予定にすっと組み込めます。",
     scenes: ["お仕事帰りに", "お出かけついでに", "自分時間に"],
-    img: { placeholder: "スタジオ内観の写真", src: `${ASSET}/studio-tools.jpg` },
+    img: { placeholder: "スタジオ内観の写真", src: `${ASSET}/studio-tools.jpg`, position: "center 75%" },
   },
 
   reasons: {
@@ -403,13 +405,13 @@ const config: IsmConfig = {
       },
       {
         num: "04",
-        img: { placeholder: "男性のレッスンシーン写真", src: `${ASSET}/men.jpg` },
+        img: { placeholder: "男性のレッスンシーン写真", src: `${ASSET}/men.jpg`, position: "center 10%" },
         title: "男性のお客さまも\n大歓迎",
         body: "体幹強化や姿勢改善を目指す男性にもご好評いただいています。完全個室だから、男性も気兼ねなく本格的なパーソナルピラティスを始められます。",
       },
       {
         num: "05",
-        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/lesson-ring.jpg` },
+        img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/lesson-ring.jpg`, height: 320, position: "center 30%" },
         title: "手ぶら＆オンライン特典で\n続けやすい",
         body: "ウェア・タオルのレンタルで手ぶら通いOK。月4回・月8回プランはオンラインレッスンが最大月12回つき、公式LINEでのフォローもあるから、無理なく習慣にできます。",
       },
