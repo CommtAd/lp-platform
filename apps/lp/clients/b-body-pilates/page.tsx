@@ -12,7 +12,7 @@ import config from "./config";
  *
  *   ヘッダー → FV → 悩み → 原因（なぜ身体を知るのか）→ 目指せる未来 → 選ばれる理由
  *   → FMS → 知る・整える・動かす → 体験レッスン → 初めてでも安心
- *   → キャンペーン → 店舗 → FAQ → 最終CTA → 予約フォーム
+ *   → キャンペーン → 料金プラン → 店舗 → FAQ → 最終CTA → 予約フォーム
  *
  * 「お客様の声」「代表について」は顧客指示（2026-10-03）により削除。
  *
@@ -1454,6 +1454,116 @@ export default function Page() {
               </div>
               <ReserveCta label={c.cta.campaign} marginTop={22} />
             </div>
+          </section>
+
+          {/* ── 料金プラン（入会後の月会費）──
+              キャンペーン価格を立てるため、ここの数字はテラコッタにしない。 */}
+          <section style={{ background: mist, padding: "56px 20px 58px" }}>
+            <SectionHeading text={c.plans.heading} kicker={c.plans.kicker} fontSize={24} />
+            <p
+              style={{
+                fontSize: 13.5,
+                lineHeight: 1.85,
+                color: inkSoft,
+                textAlign: "center",
+                margin: "20px 0 22px",
+              }}
+            >
+              {nl(c.plans.lead)}
+            </p>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "58px repeat(3, 1fr)",
+                background: "#FFFFFF",
+                borderRadius: 14,
+                overflow: "clip",
+                boxShadow: "0 8px 22px rgba(30,50,58,0.08)",
+              }}
+            >
+              <div style={{ background: accent }} />
+              {c.plans.courses.map((course) => (
+                <div
+                  key={course}
+                  style={{
+                    background: accent,
+                    color: "#FFFFFF",
+                    fontFamily: fontMincho,
+                    fontWeight: 700,
+                    fontSize: 16,
+                    letterSpacing: "0.06em",
+                    textAlign: "center",
+                    padding: "11px 0 10px",
+                    borderLeft: "1px solid rgba(255,255,255,0.18)",
+                  }}
+                >
+                  {course}
+                </div>
+              ))}
+              {c.plans.counts.map((count, r) => (
+                <div key={count} style={{ display: "contents" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: accentSoft,
+                      color: accent,
+                      fontWeight: 700,
+                      fontSize: 13,
+                      borderTop: r > 0 ? `1px solid ${line}` : undefined,
+                    }}
+                  >
+                    {count}
+                  </div>
+                  {c.plans.prices[r].map((p, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        textAlign: "center",
+                        padding: "14px 0 12px",
+                        borderTop: r > 0 ? `1px solid ${line}` : undefined,
+                        borderLeft: `1px solid ${line}`,
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontFamily: fontMincho,
+                          fontWeight: 700,
+                          fontSize: 16.5,
+                          lineHeight: 1.2,
+                          color: ink,
+                          margin: 0,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        <span style={{ fontSize: 11.5 }}>¥</span>
+                        {p.month}
+                      </p>
+                      <p style={{ fontSize: 10.5, color: inkMute, margin: "5px 0 0", whiteSpace: "nowrap" }}>
+                        1回 ¥{p.per}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <p style={{ fontSize: 11, color: inkMute, textAlign: "center", margin: "12px 0 0" }}>{c.plans.note}</p>
+            <p
+              style={{
+                fontSize: 12.5,
+                lineHeight: 1.8,
+                color: inkSoft,
+                textAlign: "center",
+                background: "#FFFFFF",
+                border: `1px solid ${line}`,
+                borderRadius: 10,
+                padding: "12px 14px",
+                margin: "18px 0 0",
+              }}
+            >
+              {nl(c.plans.extra)}
+            </p>
           </section>
 
           {/* ── 店舗情報 ── */}

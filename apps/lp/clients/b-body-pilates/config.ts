@@ -143,6 +143,19 @@ export interface BaseBodyConfig {
 
   campaign: { heading: string; values: string[] };
 
+  /** 入会後の月会費。列＝レッスン時間、行＝月の回数。`prices[行][列]` で対応する。 */
+  plans: {
+    heading: string;
+    kicker: string;
+    lead: string;
+    courses: string[];
+    counts: string[];
+    prices: { month: string; per: string }[][];
+    note: string;
+    /** 表の下に置く補足（回数券など）。 */
+    extra: string;
+  };
+
   store: {
     heading: string;
     name: string;
@@ -474,6 +487,33 @@ const config: BaseBodyConfig = {
   campaign: {
     heading: "初回限定",
     values: ["FMS評価", "身体分析", "マンツーマン", "マシンピラティス", "90分"],
+  },
+
+  plans: {
+    heading: "料金プラン",
+    kicker: "PRICE",
+    lead: "ご入会後は、通う回数と\nレッスン時間を選べる月会費制です。",
+    courses: ["30分", "50分", "75分"],
+    counts: ["月2回", "月4回", "月6回"],
+    prices: [
+      [
+        { month: "11,000", per: "5,500" },
+        { month: "22,000", per: "11,000" },
+        { month: "32,000", per: "16,000" },
+      ],
+      [
+        { month: "21,600", per: "5,400" },
+        { month: "43,200", per: "10,800" },
+        { month: "62,000", per: "15,500" },
+      ],
+      [
+        { month: "31,800", per: "5,300" },
+        { month: "63,600", per: "10,600" },
+        { month: "90,000", per: "15,000" },
+      ],
+    ],
+    note: "上段：月会費／下段：1回あたりの料金",
+    extra: "チケット制の回数券プランもございます。\n詳しくはスタッフまで。",
   },
 
   store: {
