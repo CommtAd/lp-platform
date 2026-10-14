@@ -47,6 +47,7 @@ export const clientRegistry: Record<
   "b-body-pilates": () => import("./b-body-pilates/page"),
   "kasane-toyohashi": () => import("./kasane-toyohashi/page"),
   "sinnjyukubiyougeka-test": () => import("./sinnjyukubiyougeka-test/page"),
+  "sakura-aobadai": () => import("./sakura-aobadai/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -122,4 +123,5 @@ export const clientMetaRegistry: Record<
   "b-body-pilates": () => import("./b-body-pilates/config"),
   "kasane-toyohashi": () => import("./kasane-toyohashi/config"),
   "sinnjyukubiyougeka-test": () => import("./sinnjyukubiyougeka-test/config"),
+  "sakura-aobadai": () => import("./sakura-aobadai/config"),
 };
