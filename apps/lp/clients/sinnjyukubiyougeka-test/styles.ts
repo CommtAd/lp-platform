@@ -313,7 +313,7 @@ export const css = String.raw`
   padding: 10px 16px;
   clip-path: polygon(0 0, 100% 0, 95% 50%, 100% 100%, 0 100%, 5% 50%);
 }
-.sbc .p-ribbon .hl { color: #fcff66; }
+.sbc .p-ribbon .hl { color: #fdffa0; }
 .sbc .fees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 36px; }
 .sbc .fee { display: flex; flex-direction: column; justify-content: center; background: #f6f1f3; border-radius: 6px; text-align: center; padding: 16px 2px; font-family: var(--serif); color: #6d5a64; }
 .sbc .fee-name { font-size: 14px; letter-spacing: .18em; line-height: 1.4; white-space: nowrap; }
