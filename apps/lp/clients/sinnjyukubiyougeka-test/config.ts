@@ -39,7 +39,7 @@ const config: ShinjukubiyouConfig = {
   meta: {
     title: "イボ・ほくろ除去｜新宿美容外科クリニック",
     description:
-      "新宿美容外科クリニック（新宿院・立川院）のイボ・ほくろ除去。1個あたり2mmまで、3個・10個・30個のまとめて除去プラン。カウンセリング予約受付中。",
+      "新宿美容外科クリニック（立川院）のイボ・ほくろ除去。1個あたり2mmまで、3個・10個・30個のまとめて除去プラン。カウンセリング予約受付中。",
   },
   fvImage: "/clients/sinnjyukubiyougeka-test/fv.webp",
   privacyUrl: "https://www.shinjukubiyou.com/privacy/",
@@ -54,17 +54,7 @@ const config: ShinjukubiyouConfig = {
     submitLabel: "この内容で予約する",
     microcopy: "ご予約日時は、担当者より改めてご連絡いたします。",
     fields: [
-      {
-        type: "toggle",
-        name: "clinic",
-        label: "ご希望の院",
-        required: true,
-        columns: 2,
-        options: [
-          { value: "新宿院", label: "新宿院" },
-          { value: "立川院", label: "立川院" },
-        ],
-      },
+      // 「ご希望の院」は削除（2026-10-14 顧客指示：立川院のみのため）
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "例）新宿　花子" },
       { type: "text", name: "kana", label: "フリガナ", optionalTag: "任意", placeholder: "例）シンジュク　ハナコ" },
       { type: "text", name: "age", label: "年齢", required: true, placeholder: "例）32" },

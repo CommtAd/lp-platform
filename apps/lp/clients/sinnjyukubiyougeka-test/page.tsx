@@ -109,22 +109,6 @@ export default function Page() {
                   </div>
                 </section>
 
-                {/* ================= 4. 診断・施術方法 ================= */}
-                <section className="sec bg-white diag" id="diagnosis" style={{ paddingTop: "0" }}>
-                  <div className="inner">
-                    <h2 className="sec-title"><span className="en">Diagnosis</span><span className="ja">ダーモスコピーによる<br />皮膚診断も行っております</span></h2>
-                    {/* 文面：顧客指定（AUN 2026-10-13、参考LPと同内容）。写真は顧客支給（ダーモスコピー）。写真上・本文下 */}
-                    <div className="dermo">
-                      <div className="ph has-img dermo-img"><img src={img("dermoscopy")} alt="ダーモスコピーによる皮膚診断" loading="lazy" decoding="async" /></div>
-                      <p className="dermo-txt">
-                        当院では<span className="mk-y">{w("ダーモスコピーに/よる/皮膚診断も/無料で/行って/おります。")}</span><br />
-                        {w("肉眼では/見えない/病変の/細かい/構造を/確認する/ことにより")}<span className="mk-y">{w("病変の/良性、/悪性の/鑑別の/補助として/役立って/います。")}</span><br />
-                        {w("ご希望の/方は/カウンセリング時に/お申し付け/ください。")}
-                      </p>
-                    </div>
-                  </div>
-                </section>
-
                 {/* ================= 5. 施術イメージ ================= */}
                 <section className="sec bg-beige" id="image">
                   <div className="inner">
@@ -268,7 +252,7 @@ export default function Page() {
                       </div>
                       <div className="spec">
                         <span className="ico"><svg viewBox="0 0 24 24"><path d="m14 4 6 6M4 20l3-1 11-11-2-2L5 17z"/></svg></span>
-                        <h3>痛み</h3><p>局所麻酔で<br />痛みを和らげます</p>
+                        <h3>痛み</h3><p>麻酔なしでも<br />痛みが少ない施術</p>
                       </div>
                       <div className="spec">
                         <span className="ico"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>
@@ -286,7 +270,7 @@ export default function Page() {
                     <div className="risk">
                       <h3>主なリスク・副作用</h3>
                       <p>へこみ、色素沈着、ひりつき、傷跡、痛み、赤み</p>
-                      <p style={{ marginTop: "8px" }}>{w("局所麻酔の/注射時に/痛みを/感じる/場合が/あります。/術後は/一時的に/表皮が/ない/状態に/なるため、/日焼けにより/シミの/原因と/なる/ことが/あります。/紫外線対策を/行ってください。")}</p>
+                      <p style={{ marginTop: "8px" }}>{w("施術中に/軽い/痛みを/感じる/場合が/あり、/感じ方には/個人差が/あります。/術後は/一時的に/表皮が/ない/状態に/なるため、/日焼けにより/シミの/原因と/なる/ことが/あります。/紫外線対策を/行ってください。")}</p>
                       <p className="risk-note">{w("※効果・/経過には/個人差が/あります。")}</p>
                     </div>
                   </div>
@@ -345,10 +329,6 @@ export default function Page() {
                           <th>2mmまで<br /><b>30個プラン</b></th>
                           <td><span className="yen">99,000<small>円</small></span><span className="per">1個あたり<b>3,300</b>円</span></td>
                         </tr>
-                        <tr>
-                          <th>2mm以下<br /><b>個数無制限</b><br /><span className="p-sub2">（全身取り放題）</span></th>
-                          <td><span className="yen">330,000<small>円</small></span></td>
-                        </tr>
                       </tbody>
                     </table>
                     <ul className="p-notes">
@@ -356,23 +336,23 @@ export default function Page() {
                       <li>※金額は全て税込になります。</li>
                     </ul>
 
-                    {/* 電気分解法・切除法・シミ治療：顧客指定（AUN 2026-10-13、参考LPと同内容・同額で確定） */}
+                    {/* 電気分解法・切除法・シミ治療：顧客指定（AUN 2026-10-13確定、2026-10-14 電気分解法・切除法を改定、シミ取り放題を追加） */}
                     <h3 className="p-head" style={{ marginTop: "36px" }}>電気分解法</h3>
-                    <table className="p-mini"><tbody><tr><th>1mm</th><td>4,400<small>円</small></td></tr></tbody></table>
+                    <table className="p-mini"><tbody><tr><th>1mm</th><td>5,500<small>円</small></td></tr></tbody></table>
                     <h3 className="p-head" style={{ marginTop: "28px" }}>切除法</h3>
-                    <table className="p-mini"><tbody><tr><th>1cm</th><td>44,000<small>円</small></td></tr></tbody></table>
+                    <table className="p-mini"><tbody><tr><th>1cm</th><td>55,000<small>円</small></td></tr></tbody></table>
                     <p className="p-tax">※表示の料金はすべて税込の価格です。</p>
 
                     <p className="p-ribbon">“ほくろ”と同時に“気になるシミ”を除去</p>
                     <span className="p-label">シミ治療</span>
                     <h3 className="p-head">QスイッチYAGレーザー</h3>
-                    <table className="p-mini"><tbody><tr><th>1mm</th><td>2,200<small>円</small></td></tr></tbody></table>
+                    <table className="p-mini"><tbody><tr><th>1mm</th><td>2,200<small>円</small></td></tr><tr><th>取り放題（10個まで）</th><td>9,900<small>円</small></td></tr></tbody></table>
                     <p className="p-tax">※表示の料金はすべて税込の価格です。</p>
 
                     {/* お支払い方法：公式HP 料金一覧「ご利用可能な決済方法一覧」より */}
                     <div className="pay">
                       <h3 className="p-head">お支払い方法</h3>
-                      <p className="pay-lead">{w("当院では、/下記3通りの/お支払い方法が/可能です。")}<br />{w("ご都合に/あわせて/お選び/ください。")}</p>
+                      <p className="pay-lead">{w("当院では、/下記の/お支払い方法が/可能です。")}<br />{w("ご都合に/あわせて/お選び/ください。")}</p>
 
                       <h4 className="pay-h">現金</h4>
                       <p className="pay-txt">当日、現金でのお支払いが可能です。</p>
@@ -382,6 +362,22 @@ export default function Page() {
                       {/* ブランドロゴ画像を使う場合は、各社の利用規約に沿った公式素材に差し替え */}
                       <ul className="brands">
                         <li>VISA</li><li>Mastercard</li><li>JCB</li><li>American Express</li><li>Diners Club</li><li>DISCOVER</li><li>UnionPay（銀聯）</li>
+                      </ul>
+
+                      {/* 電子マネー・交通系・QRコード決済：顧客指定（2026-10-14） */}
+                      <h4 className="pay-h">電子マネー</h4>
+                      <ul className="brands">
+                        <li>Apple Pay</li><li>iD</li><li>QUICPay</li>
+                      </ul>
+
+                      <h4 className="pay-h">交通系電子マネー</h4>
+                      <ul className="brands">
+                        <li>Kitaca</li><li>Suica</li><li>PASMO</li><li>TOICA</li><li>manaca</li><li>ICOCA</li><li>SUGOCA</li><li>nimoca</li><li>はやかけん</li>
+                      </ul>
+
+                      <h4 className="pay-h">QRコード決済（コード決済）</h4>
+                      <ul className="brands">
+                        <li>PayPay</li><li>楽天ペイ（R Pay）</li><li>d払い</li><li>au PAY</li><li>COIN+</li><li>Smart Code</li><li>J-coin Pay</li><li>微信支付（WeChat Pay）</li><li>UnionPay（銀聯）QRコード</li><li>Alipay+（支付宝、AlipayHK、カカオペイ等）</li>
                       </ul>
 
                       <h4 className="pay-h">医療ローン</h4>
@@ -401,6 +397,7 @@ export default function Page() {
 
                     {/* 医師カード：顧客支給のカード画像（AUN 2026-10-13 doctor1〜3.png）と同じ構成・文面。写真はカード画像から切り出し */}
                     <DoctorSlider>
+                      {/* 非表示（2026-10-14 顧客指示）：医師 リジンヨン。戻すときはこのコメントを外す
                       <article className="dr-card">
                         <div className="dr-photo"><img src={img("doctor-lee-card")} alt="医師 リジンヨン" loading="lazy" decoding="async" /></div>
                         <div className="dr-body">
@@ -420,6 +417,7 @@ export default function Page() {
                           <p className="dr-text">日本形成外科学会 専門医</p>
                         </div>
                       </article>
+                      */}
                       <article className="dr-card">
                         <div className="dr-photo"><img src={img("doctor-toeda-card")} alt="医師 戸枝 幹夫" loading="lazy" decoding="async" /></div>
                         <div className="dr-body">
@@ -468,6 +466,7 @@ export default function Page() {
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">Clinic Information</span><span className="ja">クリニック案内</span></h2>
 
+                    {/* 非表示（2026-10-14 顧客指示）：新宿院。戻すときはこのコメントを外す
                     <div className="clinic">
                       <h3>新宿院</h3>
                       <div className="ph has-img" style={{ aspectRatio: "980 / 613" }}><img src={img("clinic-shinjuku")} alt="新宿院の外観と院内" loading="lazy" decoding="async" /></div>
@@ -483,6 +482,7 @@ export default function Page() {
                       <div className="map"><iframe src={mapSrc("東京都新宿区新宿3-2-4 M&E SQUARE")} loading="lazy" title="東京都新宿区新宿3-2-4 M&E SQUARE の地図" referrerPolicy="no-referrer-when-downgrade" /></div>
                     </div>
 
+                    */}
                     <div className="clinic">
                       <h3>立川院</h3>
                       <div className="ph has-img" style={{ aspectRatio: "980 / 613" }}><img src={img("clinic-tachikawa")} alt="立川院の外観と院内" loading="lazy" decoding="async" /></div>
@@ -507,7 +507,7 @@ export default function Page() {
                     <dl className="faq">
                       <div className="faq-item">
                         <dt><span className="qa">Q</span><span>施術は痛いですか？</span></dt>
-                        <dd><span className="qa">A</span><span>{w("必要な/場合は/局所麻酔を/行い、/痛みを/和らげます。/麻酔の/注射の/際に/痛みを/感じる/箇所も/あり、/感じ方には/個人差が/あります。/麻酔の/効果は/3時間程度で/自然に/なくなります。")}</span></dd>
+                        <dd><span className="qa">A</span><span>{w("麻酔なしでも/痛みの/少ない/施術です。/痛みの/感じ方には/個人差が/ありますので、/ご不安な/方は/カウンセリング時に/医師へ/ご相談/ください。")}</span></dd>
                       </div>
                       <div className="faq-item">
                         <dt><span className="qa">Q</span><span>施術時間はどのくらいですか？</span></dt>
@@ -527,7 +527,7 @@ export default function Page() {
                       </div>
                       <div className="faq-item">
                         <dt><span className="qa">Q</span><span>{w("2mmより/大きい/ほくろ・/イボも/相談できますか？")}</span></dt>
-                        <dd><span className="qa">A</span><span>{w("はい。/カウンセリングで/医師が/状態を/確認し、/適した/施術方法を/ご説明します。/プランの対象外となる/場合の/料金は")} <span className="tbc">要確認</span></span></dd>
+                        <dd><span className="qa">A</span><span>{w("はい。/カウンセリングで/医師が/状態を/確認し、/適した/施術方法を/ご説明します。")}</span></dd>
                       </div>
                     </dl>
                   </div>
@@ -539,7 +539,6 @@ export default function Page() {
                     <h2 className="sec-title"><span className="en">Contact</span><span className="ja">カウンセリング予約</span></h2>
                     <p className="form-lead">{w("新宿美容外科クリニックでは、/WEBからの/カウンセリング予約を/受け付けております。")}<br />{w("お悩みや/ご相談に/丁寧に/お応えいたします。")}</p>
                     <p className="form-tel">・お急ぎの方はお電話でご予約ください。<br />
-                      　新宿院 <TelLink clientSlug={c.slug} tel="03-6380-0131">03-6380-0131</TelLink><br />
                       　立川院 <TelLink clientSlug={c.slug} tel="042-548-5803">042-548-5803</TelLink><br />
                       　（年中無休 10:00〜19:00）</p>
 
