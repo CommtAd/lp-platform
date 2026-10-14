@@ -524,6 +524,7 @@ export default function Page() {
           <section style={{ padding: "44px 22px 44px", background: MAIN }}>
             <Eyebrow text={c.message.eyebrow} color={BLUSH} />
             <p style={{ textAlign: "center", fontFamily: fontMincho, fontSize: 26, fontWeight: 600, letterSpacing: "0.1em", color: "#FFFFFF", margin: 0, lineHeight: 1.55 }}>{nl(c.message.quote)}</p>
+            <p style={{ textAlign: "center", fontFamily: fontMincho, fontSize: 13, fontWeight: 500, letterSpacing: "0.08em", color: BLUSH, margin: "10px 0 0" }}>{c.message.sub}</p>
             <p style={{ fontFamily: fontMincho, fontSize: 13.5, lineHeight: 2.1, color: "rgba(255,255,255,0.92)", margin: "18px 0 0" }}>{c.message.body}</p>
             <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.2)" }}>
               {c.message.titles.map((t) => (
