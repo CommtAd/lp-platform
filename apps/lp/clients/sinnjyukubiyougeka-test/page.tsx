@@ -548,6 +548,7 @@ export default function Page() {
                         clientSlug={c.slug}
                         accent={brand}
                         fields={c.form.fields}
+                        initialValues={{ clinic: "立川院" }}
                         submitLabel={c.form.submitLabel}
                         submitStyle={{ background: ctaGrad, boxShadow: "0 4px 0 #8f3563, 0 8px 18px rgba(143,53,99,.25)", borderRadius: 999 }}
                         microcopy={c.form.microcopy}

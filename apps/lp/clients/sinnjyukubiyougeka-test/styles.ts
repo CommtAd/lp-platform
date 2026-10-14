@@ -430,6 +430,22 @@ export const css = String.raw`
 .sbc h2, .sbc h3, .sbc .sec-title .ja { text-wrap: balance; }
 .sbc .form-box { word-break: normal; }
 .sbc .form-box .lpform-note-body { white-space: pre-line; }
+/* 「ご希望の院」（フォーム先頭のトグル）をチェックボックスの見た目にする（2026-10-14 顧客指示）。
+   LPForm のトグルは色はインライン指定なので !important で上書きする。プライバシー同意のボタンは対象外 */
+.sbc .form-box > div > div:first-child .lpform-toggle {
+  display: flex; align-items: center; justify-content: flex-start; gap: 12px;
+  height: auto !important; padding: 13px 16px !important; text-align: left;
+  background: #fff !important; border: 1.5px solid #DDD6C8 !important; color: #4C4E45 !important;
+  font-size: 15px !important;
+}
+.sbc .form-box > div > div:first-child .lpform-toggle::before {
+  content: ""; flex: none; width: 22px; height: 22px; box-sizing: border-box;
+  border: 2px solid #c9b9c1; border-radius: 4px; background: #fff;
+}
+.sbc .form-box > div > div:first-child .lpform-toggle[data-selected="true"]::before {
+  border-color: var(--brand);
+  background: var(--brand) center / 14px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 8.5 3.2 3L13 4.5'/%3E%3C/svg%3E");
+}
 
 /* ── 余白：セクション内CTAの下に二重の余白ができないようにする ── */
 .sbc .sec:has(> .cta-block) { padding-bottom: 0; }

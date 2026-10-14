@@ -54,7 +54,15 @@ const config: ShinjukubiyouConfig = {
     submitLabel: "この内容で予約する",
     microcopy: "ご予約日時は、担当者より改めてご連絡いたします。",
     fields: [
-      // 「ご希望の院」は削除（2026-10-14 顧客指示：立川院のみのため）
+      // 「ご希望の院」は立川院のみ・選択済みで表示（2026-10-14 顧客指示）。初期値は page.tsx の initialValues
+      {
+        type: "toggle",
+        name: "clinic",
+        label: "ご希望の院",
+        required: true,
+        columns: 1,
+        options: [{ value: "立川院", label: "立川院" }],
+      },
       { type: "text", name: "name", label: "お名前", required: true, placeholder: "例）新宿　花子" },
       { type: "text", name: "kana", label: "フリガナ", optionalTag: "任意", placeholder: "例）シンジュク　ハナコ" },
       { type: "text", name: "age", label: "年齢", required: true, placeholder: "例）32" },
