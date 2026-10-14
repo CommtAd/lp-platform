@@ -21,7 +21,7 @@ export default function MenuNav() {
   return (
     <header className="header">
       <a className="logo" href="#top" aria-label="新宿美容外科クリニック">
-        <img className="logo-img" src="/clients/sinnjyukubiyougeka-test/logo.webp" alt="新宿美容外科クリニック" width={480} height={92} />
+        <img className="logo-img" src="/clients/sinnjyukubiyougeka-test/logo.webp" alt="新宿美容外科クリニック 立川" width={592} height={114} />
       </a>
       <button
         className="menu-btn"
