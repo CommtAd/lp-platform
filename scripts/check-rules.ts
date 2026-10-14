@@ -58,6 +58,8 @@ const FORM_EXEMPT = new Set<string>([
   "beat-pilates-toyota",
   // 豊田店のMeta広告用LP。既存の豊田店LPと同じ hacomono 体験予約へ接続する（2026-10-03）。
   "beat-pilates-toyota2",
+  // SAKURA青葉台店のMeta広告用LP。CTAはハコモノの青葉台店・体験予約ページへ直接遷移（2026-10-14）。
+  "sakura-aobadai",
   // 予約導線を公式サイトと同じ hacomono（sanare-pilates.hacomono.jp）へ接続。
   // 店舗と日時は遷移先で選ぶため、LP側にフォームを持たない（2026-09-15）。
   "seren-pilates",
