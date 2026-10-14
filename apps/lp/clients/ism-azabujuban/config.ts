@@ -95,6 +95,8 @@ export interface IsmConfig {
   message: {
     eyebrow: string;
     quote: string;
+    /** 見出し直下の小さな一文 */
+    sub: string;
     body: string;
     name: string;
     titles: string[];
@@ -355,7 +357,8 @@ const config: IsmConfig = {
 
   message: {
     eyebrow: "MESSAGE",
-    quote: "美しさは、正義。",
+    quote: "Pilatesで\n人生をウェルネスに",
+    sub: "〜美は1日にしてならず、継続はチカラなり〜",
     body: "体だけでなく、心も整う特別な空間で、ご自身が本当に望む「理想の美しさ」を手に入れてほしい。心も体も美しくなれるよう、私たちが全力でお手伝いします。",
     name: "横幕 真理",
     titles: ["株式会社MAJOLI 代表取締役", "一般社団法人国際ピラティス協会 代表理事"],
