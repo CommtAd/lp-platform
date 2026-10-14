@@ -48,6 +48,7 @@ export const clientRegistry: Record<
   "kasane-toyohashi": () => import("./kasane-toyohashi/page"),
   "sinnjyukubiyougeka-test": () => import("./sinnjyukubiyougeka-test/page"),
   "sakura-aobadai": () => import("./sakura-aobadai/page"),
+  "sakura-shinjuku-sanchome2": () => import("./sakura-shinjuku-sanchome2/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -124,4 +125,5 @@ export const clientMetaRegistry: Record<
   "kasane-toyohashi": () => import("./kasane-toyohashi/config"),
   "sinnjyukubiyougeka-test": () => import("./sinnjyukubiyougeka-test/config"),
   "sakura-aobadai": () => import("./sakura-aobadai/config"),
+  "sakura-shinjuku-sanchome2": () => import("./sakura-shinjuku-sanchome2/config"),
 };
