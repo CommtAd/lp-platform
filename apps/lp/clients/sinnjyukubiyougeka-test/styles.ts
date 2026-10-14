@@ -237,12 +237,6 @@ export const css = String.raw`
 .sbc .ph::before { content: ""; position: absolute; inset: 0; background: center / 28px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9aebb' stroke-width='1.5'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Ccircle cx='9' cy='10' r='2'/%3E%3Cpath d='m21 16-5-5-8 8'/%3E%3C/svg%3E"); opacity: .9; transform: translateY(-18px); }
 .sbc .ph span { position: relative; margin-top: 30px; }
 .sbc .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.sbc .diag .ph { width: 100%; aspect-ratio: 3 / 2; margin-bottom: 20px; }
-.sbc .diag p { font-size: 13.5px; }
-.sbc .dermo { display: grid; gap: 20px; }
-.sbc .diag .dermo-img { aspect-ratio: 3 / 2; margin: 0; }
-.sbc .dermo-txt { font-size: 14px; line-height: 2; margin: 0; }
-.sbc .mk-y { font-weight: 700; background: linear-gradient(transparent 62%, #fff27a 62%); }
 .sbc .methods { display: grid; gap: 12px; margin-top: 24px; }
 .sbc .method { background: #fff; border-left: 4px solid var(--brand); padding: 14px 16px; box-shadow: 0 1px 0 var(--line); }
 .sbc .method h3 { font-size: 15px; color: var(--brand-deep); margin-bottom: 4px; }
@@ -306,7 +300,6 @@ export const css = String.raw`
 .sbc .p-table .tag { display: inline-block; font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 3px; padding: 0 6px; margin-left: 6px; vertical-align: 2px; }
 .sbc .p-notes { font-size: 12px; color: var(--text-sub); line-height: 1.8; margin-top: 12px; padding-left: 1em; text-indent: -1em; }
 .sbc .p-notes li { list-style: none; }
-.sbc .p-table .p-sub2 { font-size: 12px; color: var(--text-sub); }
 .sbc .p-mini { width: 100%; border-collapse: collapse; margin-top: 8px; }
 .sbc .p-mini th, .sbc .p-mini td { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 8px; }
 .sbc .p-mini th { text-align: left; font-weight: 400; font-size: 13.5px; }
