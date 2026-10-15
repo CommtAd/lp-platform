@@ -3,6 +3,14 @@ import type { LPFormField } from "@/components/LPForm";
 
 const ASSET = "/clients/ism-azabujuban";
 
+/**
+ * 予約システム（hacomono）の麻布十番店スケジュール。全CTAの共通遷移先。
+ * ページ内フォームは使わないため `scripts/check-rules.ts` の FORM_EXEMPT に登録している
+ * （2026-10-15 顧客判断）。`form` はデータごと残してあるので、フォームに戻すときは
+ * page.tsx にフォームのセクションを書き戻し、FORM_EXEMPT から外す。
+ */
+const CTA_URL = "https://pilates-ism.hacomono.jp/reserve/schedule/14/23";
+
 /** An image position in the layout. `src` empty → placeholder box. */
 export interface Slot {
   placeholder: string;
@@ -15,6 +23,8 @@ export interface Slot {
 export interface IsmConfig {
   slug: string;
   status?: ClientStatus;
+  /** 全CTAの共通遷移先（外部の予約システム）。 */
+  ctaUrl: string;
   meta: { title: string; description: string; ogpImage?: string };
 
   header: {
@@ -154,6 +164,15 @@ export interface IsmConfig {
     };
   };
 
+  /** 末尾の予約導線（予約システムへの誘導CTA）。 */
+  reserve: {
+    heading: string;
+    lead: string;
+    ctaText: string;
+    note: string;
+  };
+
+  /** ページ内フォーム（現在は非表示。hacomono へ切り替えたため）。 */
   form: {
     heading: string;
     lead: string;
@@ -167,7 +186,6 @@ export interface IsmConfig {
   sticky: {
     offers: { label: string; value: string }[];
     buttonText: string;
-    anchor: string;
   };
 
   footer: { lines: string[] };
@@ -176,6 +194,7 @@ export interface IsmConfig {
 const config: IsmConfig = {
   slug: "ism-azabujuban",
   status: "draft",
+  ctaUrl: CTA_URL,
   meta: {
     title: "Pilates isM 麻布十番店｜韓国式パーソナルマシンピラティス 50分体験0円",
     description:
@@ -520,6 +539,13 @@ const config: IsmConfig = {
     },
   },
 
+  reserve: {
+    heading: "無料体験のご予約",
+    lead: "予約ページで空き状況をご確認のうえ、\nご希望の日時をお選びください。",
+    ctaText: "予約ページで空き枠を見る",
+    note: "50分体験レッスン 通常5,000円 → 0円",
+  },
+
   form: {
     heading: "無料体験のご予約",
     lead: "下記フォームからお気軽にお申し込みください。\n担当より順次ご連絡いたします。",
@@ -588,7 +614,6 @@ const config: IsmConfig = {
       { label: "入会金", value: "50%OFF" },
     ],
     buttonText: "無料体験を予約する",
-    anchor: "#form",
   },
 
   footer: {
