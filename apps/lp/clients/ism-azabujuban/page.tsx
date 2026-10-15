@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import LPCanvas from "@/components/LPCanvas";
-import LPForm from "@/components/LPForm";
 import ImageSlot from "@/components/ImageSlot";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import FaqAccordion from "./FaqAccordion";
@@ -16,7 +15,8 @@ import config from "./config";
  * 設計ルール:
  *   1. 幅390pxの1枚のキャンバス（<LPCanvas>）。vw/vh は使わない（CLAUDE.md §16-17）。
  *      キャンバス外の地色を敷く `minHeight: "100vh"` だけが例外。
- *   2. CVはページ内の LPForm（#form）。CTAはすべて #form へのアンカー。
+ *   2. CVは外部の予約システム（hacomono / config の `ctaUrl`）。CTAはすべて別タブで遷移する。
+ *      ページ内フォームは非表示（config の `form` はデータごと残してある）。
  *   3. NGワード: 「ダイエット」「痩せる」など体重重視の表現は使わない（ヒアリングQ28）。
  */
 
@@ -162,7 +162,9 @@ function CtaButton({ text, sub }: { text: string; sub?: string }) {
   return (
     <>
       <a
-        href="#form"
+        href={config.ctaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           display: "flex",
           alignItems: "center",
@@ -708,11 +710,14 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── 予約フォーム ── */}
-          <section id="form" style={{ padding: "44px 22px 50px", background: "#FFFFFF" }}>
+          {/* ── 予約導線（hacomono の予約ページへ誘導） ──
+              ページ内フォームはやめ、CTAはすべて外部の予約システムへ送る（2026-10-15 顧客判断）。
+              config の `form` はデータごと残してあるので、戻すときはここに LPForm を書き戻し、
+              `check-rules.ts` の FORM_EXEMPT から `ism-azabujuban` を外す。 */}
+          <section id="reserve" style={{ padding: "44px 22px 50px", background: "#FFFFFF" }}>
             <Eyebrow text="RESERVATION" />
-            <SectionHeading text={c.form.heading} />
-            <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 2, color: DIM, margin: "16px 0 0" }}>{nl(c.form.lead)}</p>
+            <SectionHeading text={c.reserve.heading} />
+            <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 2, color: DIM, margin: "16px 0 0" }}>{nl(c.reserve.lead)}</p>
             <div style={{ display: "flex", justifyContent: "center", gap: 10, margin: "18px 0 0" }}>
               {c.sticky.offers.map((o) => (
                 <span key={o.label} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 16px", borderRadius: 12, border: `1.5px solid ${ROSE_SOFT}88`, background: PALE }}>
@@ -721,17 +726,7 @@ export default function Page() {
                 </span>
               ))}
             </div>
-            <LPForm
-              clientSlug={c.slug}
-              accent={ROSE}
-              fields={c.form.fields}
-              submitLabel={c.form.submitLabel}
-              submitStyle={{ background: CTA_GRAD, boxShadow: `0 10px 22px ${CTA_SHADOW}` }}
-              microcopy={c.form.microcopy}
-              errorMessage={c.form.errorMessage}
-              disclaimer={c.form.disclaimer}
-              thanksHref={`/${c.slug}/thanks`}
-            />
+            <CtaButton text={c.reserve.ctaText} sub={c.reserve.note} />
           </section>
 
           {/* ── footer ── */}
@@ -756,7 +751,7 @@ export default function Page() {
       </div>
 
       <StickyFooterCTA
-        anchor={c.sticky.anchor}
+        href={c.ctaUrl}
         buttonText={c.sticky.buttonText}
         showAfter={560}
         buttonGradient={CTA_GRAD}
