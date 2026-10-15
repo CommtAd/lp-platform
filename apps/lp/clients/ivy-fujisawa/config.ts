@@ -304,10 +304,10 @@ export interface IvyBConfig {
   footer: { brandSub: string };
 }
 
-const ASSET = "/clients/ivy-test";
+const ASSET = "/clients/ivy-fujisawa";
 
 const config: IvyBConfig = {
-  slug: "ivy-test",
+  slug: "ivy-fujisawa",
   status: "draft",
   meta: {
     title:

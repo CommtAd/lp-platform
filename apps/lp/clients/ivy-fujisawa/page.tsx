@@ -980,7 +980,7 @@ export default function Page() {
               （config の `cta.url`）へ送る（2026-09-29 顧客判断）。
               config の `form` はデータごと残してあるので、戻すときは
               ここにセクションを書き戻し、`check-rules.ts` の FORM_EXEMPT から
-              `ivy-test` を外す。 */}
+              `ivy-fujisawa` を外す。 */}
 
           {/* ─ フッター ───────────────────────────────────── */}
           <footer
