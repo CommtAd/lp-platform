@@ -305,10 +305,9 @@ export default function Page() {
                 <section className="sec bg-white" id="price">
                   <div className="inner">
                     <h2 className="sec-title"><span className="en">Price</span><span className="ja">料金表</span></h2>
-                    {/* 診察料：顧客指定（AUN 2026-10-13）で初診料・再診料とも0円／カウンセリング無料は公式CTAの表記 */}
+                    {/* 診察料：顧客指定（AUN 2026-10-13）で初診料0円／カウンセリング無料は公式CTAの表記。再診料は2026-10-15 顧客指示で削除 */}
                     <div className="fees">
                       <div className="fee is-free"><p className="fee-name">初診料</p><p className="fee-val">0<small>円</small></p></div>
-                      <div className="fee is-free"><p className="fee-name">再診料</p><p className="fee-val">0<small>円</small></p></div>
                       <div className="fee is-free"><p className="fee-name">カウンセリング料</p><p className="fee-val">0<small>円</small></p></div>
                     </div>
 

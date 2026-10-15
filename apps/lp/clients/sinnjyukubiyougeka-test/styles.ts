@@ -314,16 +314,16 @@ export const css = String.raw`
   clip-path: polygon(0 0, 100% 0, 95% 50%, 100% 100%, 0 100%, 5% 50%);
 }
 .sbc .p-ribbon .hl { color: #fdffa0; }
-.sbc .fees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 36px; }
+.sbc .fees { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 36px; }
 .sbc .fee { display: flex; flex-direction: column; justify-content: center; background: #f6f1f3; border-radius: 6px; text-align: center; padding: 16px 2px; font-family: var(--serif); color: #6d5a64; }
 .sbc .fee-name { font-size: 14px; letter-spacing: .18em; line-height: 1.4; white-space: nowrap; }
 .sbc .fee .fee-name:only-child, .sbc .fee.is-free .fee-name { letter-spacing: 0; }
 .sbc .fee-val { font-size: 30px; font-weight: 700; line-height: 1.2; letter-spacing: 0; margin-top: 6px; }
 .sbc .fee-val small { font-size: 14px; }
-.sbc .fee.is-free { background: var(--pink-soft); color: var(--accent); }
-.sbc .fee.is-free .fee-name { font-size: 12.5px; margin: 0; }
-.sbc .fee.is-free .fee-val { font-size: 46px; line-height: 1; margin-top: 4px; }
-.sbc .fee.is-free .fee-val small { font-size: 18px; }
+.sbc .fee.is-free { background: var(--pink-soft); color: var(--accent); padding: 11px 8px 16px; }
+.sbc .fee.is-free .fee-name { font-size: 15px; letter-spacing: .08em; line-height: 1.2; margin: 0; }
+.sbc .fee.is-free .fee-val { font-size: 52px; line-height: .9; margin-top: -2px; }
+.sbc .fee.is-free .fee-val small { font-size: 20px; }
 .sbc .pay { margin-top: 44px; }
 .sbc .pay-lead { font-size: 14px; line-height: 1.9; margin: 12px 0 0; }
 .sbc .pay-h { font-size: 15px; border-left: 4px solid #d6c7ce; padding-left: 10px; margin: 24px 0 8px; line-height: 1.5; }

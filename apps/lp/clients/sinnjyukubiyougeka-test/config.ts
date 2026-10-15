@@ -47,7 +47,7 @@ const config: ShinjukubiyouConfig = {
     buttonText: "カウンセリングを予約する",
     showAfter: 620,
     offers: [
-      { label: "初診料・再診料・カウンセリング", value: "無料" },
+      { label: "初診料・カウンセリング", value: "無料" },
     ],
   },
   form: {
