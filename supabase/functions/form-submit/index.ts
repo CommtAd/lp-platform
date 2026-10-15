@@ -242,7 +242,7 @@ function buildAdminNotificationHtml(params: {
         `お名前: ${name} 様`,
         `メールアドレス: ${email}`,
         `電話番号: ${tel}`,
-        `店舗名: ${storeLabel}`,
+        ...(params.meta.adminHideStore ? [] : [`店舗名: ${storeLabel}`]),
         `体験希望日 第一希望: ${dt1}`,
         `体験希望日 第ニ希望: ${dt2}`,
         `ご質問・ご相談内容: ${note}`,
@@ -311,6 +311,12 @@ interface ConfirmationMeta {
   /** Use a pared-down admin notification (no store line, single date, no UTM block) — for single-location clients where that info is always empty noise. */
   adminSimple?: boolean;
   /**
+   * Drop the 「店舗名」 row from the full admin format (the default one, with
+   * both 希望日 rows and the UTM block). For single-location LPs whose form has
+   * no store field, where that row is always blank. Defaults to false.
+   */
+  adminHideStore?: boolean;
+  /**
    * Override for the admin notification's greeting line (used by every
    * format). Supports the {{name}} placeholder. Defaults to the original
    * wording if omitted — set this per-client to use different wording without
@@ -363,6 +369,14 @@ interface ConfirmationMeta {
    * `formFields`. Defaults to true.
    */
   confirmationEcho?: boolean;
+  /**
+   * Fields echoed back in the **submitter** confirmation only, in place of
+   * `formFields`. Unlike `formFields` it does not switch the admin notification
+   * to the field-list format, so the admin mail keeps its 希望日/UTM layout.
+   */
+  echoFields?: FormFieldMeta[];
+  /** Heading of the submitter's echo block. Defaults to 「お問い合わせ内容」. */
+  echoHeading?: string;
 }
 
 interface FormFieldMeta {
@@ -376,6 +390,12 @@ interface FormFieldMeta {
    * fall through unchanged.
    */
   valueLabels?: Record<string, string>;
+  /**
+   * For date fields: the `name` of the time field that goes with it. The row
+   * then renders as one 「2026年11月3日(火) 10:00」 value, and the time field
+   * needs no row of its own.
+   */
+  time?: string;
 }
 
 /**
@@ -389,6 +409,9 @@ function renderFormFieldRows(
 ): string[] {
   return fields.map((f) => {
     const raw = formData[f.name] ?? "";
+    if (f.time) {
+      return `${f.label}：${raw ? formatJaDateTime(raw, formData[f.time]) ?? raw : ""}`;
+    }
     return `${f.label}：${raw ? f.valueLabels?.[raw] ?? raw : ""}`;
   });
 }
@@ -402,7 +425,7 @@ function undeclaredFormEntries(
   fields: FormFieldMeta[],
   formData: Record<string, string>,
 ): [string, string][] {
-  const declared = new Set(fields.map((f) => f.name));
+  const declared = new Set(fields.flatMap((f) => (f.time ? [f.name, f.time] : [f.name])));
   return Object.entries(formData).filter(([k, v]) => !declared.has(k) && v);
 }
 
@@ -551,12 +574,15 @@ function buildConfirmationHtml(params: {
   // Echo the submission back to the sender so they keep a record of what they
   // sent — this fallback is the 問い合わせ-shaped path (no store/date/menu), so
   // without it the mail says nothing about the enquiry itself.
-  const echoFields = params.meta.confirmationEcho === false ? undefined : params.meta.formFields;
+  const echoFields =
+    params.meta.confirmationEcho === false
+      ? undefined
+      : params.meta.echoFields ?? params.meta.formFields;
   const echoHtml =
     echoFields && echoFields.length > 0
       ? `<div style="margin-top:24px;">${linesToHtml([
           "===========",
-          "お問い合わせ内容",
+          params.meta.echoHeading ?? "お問い合わせ内容",
           ...renderFormFieldRows(echoFields, params.formData),
           ...undeclaredFormEntries(echoFields, params.formData).map(
             ([k, v]) => `${k}: ${v}`,

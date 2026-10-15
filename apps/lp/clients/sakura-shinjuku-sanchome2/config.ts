@@ -6,17 +6,19 @@ import type { LPFormField } from "@/components/LPForm";
  *
  * 指示書: 「Pilates SAKURA 新宿三丁目店｜LP制作指示書」（2026-10-14）
  * 参照: 成果良好のMeta広告バナー（新宿三丁目駅 徒歩3分／11月1日 NEW OPEN!／先着30名様限定／3大特典）
+ * 先着人数はバナーの30名から、顧客修正（AUN 2026-10-15）で20名に変更済み。
  *
  * 長尺の店舗LP `sakura-shinjuku-sanchome` とは別物。こちらは広告バナーの続きとして
  * 「① FV（特典） → ② お悩み → ③ 最終CTA → ④ 予約フォーム」だけで予約へ送る、OPEN記念のキャンペーンページ。
  * 広告との一貫性が最優先なので、FVの文言・並び・配色はバナーに揃えている。
  *
  * CVはページ下部の LPForm（体験予約フォーム）で受ける。CTAはすべて #form へスクロールする。
+ * 送信成功後はサンクスページ（thanks.tsx・/sakura-shinjuku-sanchome2/thanks）へ遷移する。
  * 送信時に LPForm が Meta Pixel の CVイベント（フィットネスは既定で Lead）を撃つ。
  *
  * 公開前に必ず確認すること（指示書 §7）:
  *   - store      … 徒歩分数（既存LPは2分、バナーは3分）と住所・営業時間。
- *   - notes      … 特典の適用条件・先着30名の管理方法。顧客確認後に差し替える。
+ *   - notes      … 特典の適用条件・先着20名の管理方法。顧客確認後に差し替える。
  *   - fv.status  … 「体験予約受付スタート！」は実際に予約可能になってから出す。
  *   - 通常価格（体験5,500円・入会金33,000円）はバナー記載どおり。
  */
@@ -27,6 +29,8 @@ export interface Slot {
   src?: string | null;
   /** 切り抜き位置（object-position）。既定は "center"。 */
   position?: string;
+  /** `src` が動画のとき、再生開始までに出す静止画。 */
+  poster?: string;
 }
 
 /** 3大特典の1枚。`was` があれば二重価格、無ければ `gift` を出す。 */
@@ -112,17 +116,24 @@ const TIME_SLOTS = Array.from({ length: 26 }, (_, i) => {
 });
 
 /**
- * 写真の出典: lesson.jpg（MV）／worry.jpg（お悩み）は SAKURA の撮影素材（それぞれ sakura-aobadai/hero-a.jpg・future-2.jpg と同一。
+ * 写真の出典: worry.jpg（お悩み）は SAKURA の撮影素材（sakura-aobadai/future-2.jpg と同一。
  * 原本はドライブ「★広告用撮影素材」）。新宿三丁目店はOPEN前で店舗写真が無いため、
  * ブランド共通のレッスン風景としてのみ使う。店舗写真が届いたら差し替える。
+ *
+ * MV動画 mv.mp4（20秒ループ・780x940・無音）は同ドライブ「★レッスン風景」フォルダの4本から5.5秒ずつ切り出し、
+ * 0.5秒のクロスフェードでつないだもの（顧客修正 2026-10-15「MVを動画に」）。順に
+ * チェア-レッスン動画② → タワーレッスン動画② → リフォーマー-レッスン動画② → リフォーマー-レッスン動画⑩。
+ * 顔のアップのカット（タワー-レッスン動画④⑤）は使わない（顧客指示）。人物は下端の白グラデーションに
+ * 被らないよう、どのカットも枠の上78%に収まる位置で切り出している。
+ * 末尾は先頭カットへフェードして戻るので、ループの継ぎ目は見えない。mv-poster.jpg はその先頭フレーム。
  */
 const config: ShinjukuOpenConfig = {
   slug: "sakura-shinjuku-sanchome2",
   status: "draft",
   meta: {
-    title: "Pilates SAKURA 新宿三丁目店｜11月1日NEW OPEN・先着30名様限定 豪華3大特典",
+    title: "Pilates SAKURA 新宿三丁目店｜11月1日NEW OPEN・先着20名様限定 豪華3大特典",
     description:
-      "新宿三丁目駅徒歩3分、女性専用マシンピラティススタジオSAKURAが11月1日NEW OPEN。OPEN記念・先着30名様限定で、体験レッスン（通常5,500円）0円・入会金（通常33,000円）0円・ピラティスソックスプレゼント。",
+      "新宿三丁目駅徒歩3分、女性専用マシンピラティススタジオSAKURAが11月1日NEW OPEN。OPEN記念・先着20名様限定で、体験レッスン（通常5,500円）0円・入会金（通常33,000円）0円・ピラティスソックスプレゼント。",
     // 相対パスだと metadataBase が別ドメインに解決されるため絶対URLで固定する。
     ogpImage: "https://fitness-lp.commitad.com/clients/sakura-shinjuku-sanchome2/ogp.jpg",
   },
@@ -131,12 +142,17 @@ const config: ShinjukuOpenConfig = {
     access: "新宿三丁目駅 徒歩3分",
     brand: "SAKURA",
     tagline: "女性専用マシンピラティススタジオ",
-    photo: { placeholder: "MV：マシンピラティスのレッスン風景", src: `${IMG}/lesson.jpg`, position: "47% center" },
+    // 20秒のループ動画（無音・自動再生）。枠と同じ 390:470 で書き出し済みなので切り抜き位置の調整は不要。
+    photo: {
+      placeholder: "MV：マシンピラティスのレッスン風景",
+      src: `${IMG}/mv.mp4`,
+      poster: `${IMG}/mv-poster.jpg`,
+    },
     openDate: { month: "11", day: "1" },
     status: "新宿三丁目店 体験予約受付スタート！",
     catch: { pre: "マシンピラティスで", emphasis: "理想のカラダづくり", post: "を。" },
     ribbon: "OPEN記念",
-    limit: { pre: "先着", num: "30", post: "名様限定" },
+    limit: { pre: "先着", num: "20", post: "名様限定" },
     perksHeading: { pre: "今だけの", emphasis: "豪華3大特典！" },
   },
 
@@ -162,7 +178,7 @@ const config: ShinjukuOpenConfig = {
 
   closing: {
     eyebrow: "11月1日 NEW OPEN！",
-    limit: "OPEN記念・先着30名様限定",
+    limit: "OPEN記念・先着20名様限定",
     heading: "今なら豪華3大特典！",
     rows: [
       { label: "体験レッスン", value: "0", unit: "円" },
@@ -196,12 +212,12 @@ const config: ShinjukuOpenConfig = {
       },
     ],
     submitLabel: "無料体験を予約する",
-    microcopy: "＼ OPEN記念・先着30名様限定 ／",
+    microcopy: "＼ OPEN記念・先着20名様限定 ／",
     disclaimer: "ご入力いただいた内容は体験予約のご連絡のみに利用します。\nしつこい勧誘はいたしません。",
     errorMessage: "未入力の必須項目があります。",
     thanks: {
       heading: "ご予約ありがとうございます",
-      body: "内容を確認のうえ、担当より日程確定のご連絡をいたします。\n11月1日のOPENを楽しみにお待ちください。",
+      body: "内容を確認のうえ、担当より\n日程確定のご連絡をいたします。\n11月1日のOPENを楽しみにお待ちください。",
     },
   },
 
@@ -228,11 +244,11 @@ const config: ShinjukuOpenConfig = {
 
   /* TODO(公開前): 適用条件は顧客確認待ちの仮文言（指示書 §4①「確認のうえ注記」）。 */
   notes: [
-    "※特典はOPEN記念キャンペーン期間中に体験レッスンを受講された、先着30名様が対象です。",
+    "※特典はOPEN記念キャンペーン期間中に体験レッスンを受講された、先着20名様が対象です。",
     "※金額はすべて税込です。特典の詳しい適用条件は体験時にご案内します。",
   ],
 
-  sticky: { note: "＼ OPEN記念・先着30名様限定 ／", offers: ["体験 0円", "入会金 0円", "ソックス進呈"] },
+  sticky: { note: "＼ OPEN記念・先着20名様限定 ／", offers: ["体験 0円", "入会金 0円", "ソックス進呈"] },
 };
 
 export default config;
