@@ -15,8 +15,8 @@ import type { CtaSpot, Slot } from "./config";
  *   悩みに共感 → 理想の未来 → 選ぶ理由 → 安心 → 予約
  * の順で、指示書 §6 のセクション順をそのまま守っている:
  *   ヘッダー → オファーバー → ① FV（キャッチ・体験0円・CTA）→ ② お悩み → ③ 目指せる未来
- *   → ④ 選ばれる4つの理由 → ⑤ 体験レッスン（中間CTA）→ ⑥ パーソナルとは → ⑦ お客様の声
- *   → ⑧ 体験の流れ（CTA）→ ⑨ 店舗・アクセス → ⑩ FAQ → ⑪ 最終CTA
+ *   → ④ 選ばれる4つの理由 → ⑤ 体験レッスン（中間CTA）→ ⑥ パーソナルとは
+ *   → ⑦ 体験の流れ（CTA）→ ⑧ 店舗・アクセス → ⑨ FAQ → ⑩ 最終CTA
  *   ＋ 追従フッターCTA
  *
  * CTAはすべてハコモノの青葉台店・体験予約ページへ直接遷移（config.reserve.url）。
@@ -853,63 +853,8 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── ⑦ お客様の声 ── 出典: 公式 /studios/aobadai/ */}
+          {/* ── ⑦ 体験レッスンの流れ ＋ CTA ── */}
           <section style={section(CREAM)}>
-            <Kicker>{c.voices.kicker}</Kicker>
-            <Heading text={c.voices.heading} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 28 }}>
-              {c.voices.items.map((v) => (
-                <div
-                  key={v.who}
-                  style={{
-                    position: "relative",
-                    background: "#FFFFFF",
-                    borderRadius: 16,
-                    padding: "22px 20px 18px",
-                    boxShadow: "0 6px 16px rgba(120,80,92,0.08)",
-                  }}
-                >
-                  <span
-                    aria-hidden
-                    style={{
-                      position: "absolute",
-                      top: 6,
-                      right: 16,
-                      fontFamily: MINCHO,
-                      fontSize: 56,
-                      lineHeight: 1,
-                      color: PALE2,
-                    }}
-                  >
-                    ”
-                  </span>
-                  <div style={{ display: "flex", gap: 2 }} aria-label="評価">
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <SakuraMark key={i} size={14} />
-                    ))}
-                  </div>
-                  <h3
-                    style={{
-                      margin: "10px 0 0",
-                      fontFamily: MINCHO,
-                      fontSize: 18,
-                      fontWeight: 700,
-                      lineHeight: 1.5,
-                      color: PINK_INK,
-                    }}
-                  >
-                    {v.theme}
-                  </h3>
-                  <p style={{ ...bodyText, marginTop: 8, color: INK }}>{v.body}</p>
-                  <p style={{ margin: "10px 0 0", fontSize: 13.5, color: BODY, textAlign: "right" }}>{v.who}</p>
-                </div>
-              ))}
-            </div>
-            <p style={{ margin: "14px 0 0", fontSize: 11.5, lineHeight: 1.7, color: MUTED }}>{c.voices.note}</p>
-          </section>
-
-          {/* ── ⑧ 体験レッスンの流れ ＋ CTA ── */}
-          <section style={section(PALE_GRAD)}>
             <Kicker>{c.flow.kicker}</Kicker>
             <Heading text={c.flow.heading} />
             <div style={{ marginTop: 30, position: "relative" }}>
@@ -978,8 +923,8 @@ export default function Page() {
             <Cta spot="flow" />
           </section>
 
-          {/* ── ⑨ 店舗・アクセス ── 写真はすべて青葉台店の実写真 */}
-          <section id="access" style={section(CREAM)}>
+          {/* ── ⑧ 店舗・アクセス ── 写真はすべて青葉台店の実写真 */}
+          <section id="access" style={section(PALE_GRAD)}>
             <Kicker>{c.access.kicker}</Kicker>
             <Heading text={c.access.heading} size={22} />
             <Photo
@@ -1087,7 +1032,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── ⑩ FAQ ── */}
+          {/* ── ⑨ FAQ ── */}
           <section style={section(BAND)}>
             <Kicker color="#FFFFFF">{c.faq.kicker}</Kicker>
             <Heading text={c.faq.heading} color="#FFFFFF" />
@@ -1096,7 +1041,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── ⑪ 最終CTA ── */}
+          {/* ── ⑩ 最終CTA ── */}
           <section id="reserve" style={section(CREAM, "60px")}>
             <Heading text={c.closing.heading} size={21} />
             <p

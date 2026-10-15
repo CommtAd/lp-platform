@@ -109,13 +109,6 @@ export interface AobadaiConfig {
     approaches: string[];
   };
 
-  voices: {
-    kicker: string;
-    heading: string;
-    items: { theme: string; body: string; who: string }[];
-    note: string;
-  };
-
   flow: {
     kicker: string;
     heading: string;
@@ -342,30 +335,6 @@ const config: AobadaiConfig = {
       "身体の柔軟性や動かしやすさ",
       "運動不足や身体づくり",
     ],
-  },
-
-  /* 出典: 公式 /studios/aobadai/ 掲載の口コミ（原文ママ）。テーマ見出しのみLP側で付与。 */
-  voices: {
-    kicker: "VOICE",
-    heading: "SAKURAに通う\nお客様の声",
-    items: [
-      {
-        theme: "自分では気づかないクセまで",
-        body: "1対1でフォームを丁寧に確認してもらえるので、自分では気づかなかった体の癖も改善できています。",
-        who: "Y様（47歳）",
-      },
-      {
-        theme: "周りを気にせず、自分のペースで",
-        body: "完全個室なので回りを気にせず、自分のペースで取り組めるところが気に入っています",
-        who: "H様（38歳）",
-      },
-      {
-        theme: "その日の体に合わせてくれる",
-        body: "その日の体の状態に合わせてレッスン内容を調整してもらえるため、効果をしっかり実感できるのが嬉しいです。",
-        who: "A様（32歳）",
-      },
-    ],
-    note: "※公式サイト掲載のお客様の声より。個人の感想であり、効果を保証するものではありません。",
   },
 
   /* 出典: 指示書 ⑧、公式店舗LP「体験予約の流れ」 */
