@@ -62,14 +62,13 @@ export interface AobadaiConfig {
     support: string;
     /** 目立たせる4要素（指示書 ①）。 */
     points: { top: string; bottom: string }[];
-    price: { label: string; was: string; now: string; unit: string; note: string };
+    price: { label: string; was: string; now: string; unit: string };
   };
 
   /** CTA文言。spot ごとの既定（mixed 時）と、AB用の統一文言。 */
   cta: {
     variants: Record<Variant, string>;
     spots: Record<CtaSpot, string>;
-    sub: string;
   };
 
   worry: { heading: string; items: string[]; closing: string };
@@ -84,7 +83,7 @@ export interface AobadaiConfig {
   reasons: {
     kicker: string;
     heading: string;
-    items: { num: string; title: string; body: string; img: Slot; note?: string }[];
+    items: { num: string; title: string; body: string; img: Slot }[];
   };
 
   offer: {
@@ -108,7 +107,6 @@ export interface AobadaiConfig {
     photo: Slot;
     approachLabel: string;
     approaches: string[];
-    versus: { label: string; group: string; sakura: string }[];
   };
 
   voices: {
@@ -122,17 +120,6 @@ export interface AobadaiConfig {
     kicker: string;
     heading: string;
     steps: { num: string; title: string; body: string; img?: Slot }[];
-    total: string;
-  };
-
-  beginner: {
-    kicker: string;
-    heading: string;
-    stat: { pre: string; num: string; unit: string; post: string };
-    lead: string;
-    photo: Slot;
-    items: string[];
-    note: string;
   };
 
   access: {
@@ -224,7 +211,6 @@ const config: AobadaiConfig = {
       was: "5,500円",
       now: "0",
       unit: "円",
-      note: "お着替え・プラン説明を含む約60分",
     },
   },
 
@@ -238,7 +224,6 @@ const config: AobadaiConfig = {
       closing: "青葉台店の体験予約はこちら",
       sticky: "体験レッスンの空き状況を見る",
     },
-    sub: "青葉台店の予約ページへ移動します",
   },
 
   worry: {
@@ -302,7 +287,6 @@ const config: AobadaiConfig = {
         title: "女性専用・完全個室の\nプライベート空間",
         body: "スタッフもインストラクターも全員女性。周囲の目を気にすることなく、姿勢やボディラインなどの悩みも気軽に相談できます。お子様連れでのご来店もOKです。",
         img: { placeholder: "青葉台店の個室", src: `${IMG}/studio-room.jpg` },
-        note: "写真は青葉台店のレッスンルーム",
       },
       {
         num: "03",
@@ -338,6 +322,7 @@ const config: AobadaiConfig = {
         now: "2ヶ月目半額",
         note: "他スタジオからの乗り換えが対象。3ヶ月の月額プラン加入が条件・回数券は対象外",
       },
+      { label: "ピラティスソックス", now: "プレゼント" },
     ],
   },
 
@@ -356,12 +341,6 @@ const config: AobadaiConfig = {
       "お腹・お尻・背中などのボディライン",
       "身体の柔軟性や動かしやすさ",
       "運動不足や身体づくり",
-    ],
-    versus: [
-      { label: "内容", group: "全員同じメニュー", sakura: "あなたの身体に合わせて毎回組み立て" },
-      { label: "フォーム", group: "自己流になりやすい", sakura: "その場で1つずつ確認・修正" },
-      { label: "ペース", group: "クラスの進行に合わせる", sakura: "その日の体調に合わせる" },
-      { label: "周りの目", group: "ほかの参加者と一緒", sakura: "完全個室で1対1" },
     ],
   },
 
@@ -416,30 +395,11 @@ const config: AobadaiConfig = {
       },
       {
         num: "06",
-        title: "プランのご案内",
+        title: "体験フィードバック",
         body: "体験後、ご希望に合わせて料金プランや通い方をご説明します。",
         img: { placeholder: "青葉台店のカウンセリングスペース", src: `${IMG}/studio-counseling.jpg` },
       },
     ],
-    total: "お着替え・プランのご説明を含めて約60分",
-  },
-
-  /* 出典: 公式店舗LP・ヒアリング Q18「会員様の80%がピラティス未経験者」（ブランド全体の数値） */
-  beginner: {
-    kicker: "FOR BEGINNERS",
-    heading: "初めてでも、\n大丈夫です。",
-    stat: { pre: "SAKURA会員の約", num: "80", unit: "%", post: "ピラティス未経験からのスタート。" },
-    lead: "身体が硬い方も、運動が苦手な方も安心。一人ひとりのペースに合わせたマンツーマン指導だから、無理なく始められます。",
-    photo: { placeholder: "インストラクター", src: `${IMG}/beginner.jpg` },
-    items: [
-      "ピラティス\n未経験OK",
-      "身体が硬い方も\nOK",
-      "完全\nマンツーマン",
-      "女性専用",
-      "完全個室",
-      "体験時ウェア\nレンタル無料",
-    ],
-    note: "※80%はSAKURA全店の会員データ（公式サイト掲載）",
   },
 
   /* 出典: 公式 /studios/aobadai/（2026-10-14 確認）・ヒアリング Q4 */
