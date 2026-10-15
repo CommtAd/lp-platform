@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import LPShell from "@/components/LPShell";
 import LPForm from "@/components/LPForm";
 import ImageSlot from "@/components/ImageSlot";
@@ -390,19 +390,19 @@ function OfferSection({ topPad = 48 }: { topPad?: number }) {
       </h2>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 26 }}>
         {o.cards.map((card, i) => {
-          const accent = i === 1 ? purple : pink;
+          // 写真を明るく見せ、白文字は濃い影で、0 は白フチのピンクで立たせる（顧客参考画像準拠）
+          const textShadow = "0 0 2px rgba(40,16,90,0.9), 0 2px 10px rgba(40,16,90,0.75)";
           return (
-            <div key={i} style={{ position: "relative", borderRadius: 18, overflow: "hidden", border: `1px solid ${accent}66`, boxShadow: `0 0 22px ${accent}33` }}>
-              <ImageSlot src={card.img.src} placeholder={card.img.placeholder} objectPosition={card.img.position ?? "center"} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#26162F" }} />
-              <MoodTint />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(58,28,120,0.35) 0%, rgba(44,20,96,0.72) 100%)" }} />
-              <div style={{ position: "relative", zIndex: 2, padding: "22px 14px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <p style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 20, lineHeight: 1.35, textAlign: "center", color: "#FFFFFF", margin: 0, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>{nl(card.label)}</p>
-                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", marginTop: 4 }}>
-                  <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 56, lineHeight: 1, background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 0 10px ${pink}88)` }}>{card.price}</span>
-                  <span style={{ position: "relative", marginLeft: 3 }}>
-                    <span style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)", whiteSpace: "nowrap", fontSize: 10, color: "rgba(255,255,255,0.7)" }}>{card.note}</span>
-                    <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 28, lineHeight: 1, color: "#FFFFFF" }}>{card.unit}</span>
+            <div key={i} style={{ position: "relative", borderRadius: 18, overflow: "hidden", border: "2px solid #FFFFFF", boxShadow: `0 0 0 1px ${pink}55, 0 6px 22px ${pink}40` }}>
+              <ImageSlot src={card.img.src} placeholder={card.img.placeholder} objectPosition={card.img.position ?? "center"} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#8E78C8", filter: card.photoFilter }} />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(40,20,80,0.06) 0%, rgba(40,20,80,0.24) 100%)" }} />
+              <div style={{ position: "relative", zIndex: 2, padding: "22px 14px 18px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <p style={{ fontFamily: fontMincho, fontWeight: 800, fontSize: 21, lineHeight: 1.35, textAlign: "center", color: "#FFFFFF", margin: 0, textShadow }}>{nl(card.label)}</p>
+                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", marginTop: 2 }}>
+                  <span style={{ fontFamily: fontGothic, fontWeight: 900, fontSize: 64, lineHeight: 1, color: pink, WebkitTextStroke: "2px #FFFFFF", paintOrder: "stroke fill", textShadow: "0 2px 12px rgba(40,16,90,0.55)" }}>{card.price}</span>
+                  <span style={{ position: "relative", marginLeft: 3, marginBottom: 4 }}>
+                    <span style={{ position: "absolute", top: -15, left: "50%", transform: "translateX(-50%)", whiteSpace: "nowrap", fontSize: 11, fontWeight: 700, color: "#FFFFFF", textShadow }}>{card.note}</span>
+                    <span style={{ fontFamily: fontGothic, fontWeight: 900, fontSize: 32, lineHeight: 1, color: "#FFFFFF", textShadow }}>{card.unit}</span>
                   </span>
                 </div>
               </div>
@@ -429,79 +429,124 @@ function OfferSection({ topPad = 48 }: { topPad?: number }) {
   );
 }
 
+/** 4方向に尖ったキラ。入会特典カードの見出しアイコン。 */
+function Sparkle({ color, size = 20 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" style={{ flexShrink: 0, display: "block", filter: `drop-shadow(0 1px 3px ${color}66)` }}>
+      <path d="M12 1.5C12.9 8 16 11.1 22.5 12 16 12.9 12.9 16 12 22.5 11.1 16 8 12.9 1.5 12 8 11.1 11.1 8 12 1.5Z" fill={color} />
+      <path d="M12 6.5C12.5 10 14 11.5 17.5 12 14 12.5 12.5 14 12 17.5 11.5 14 10 12.5 6.5 12 10 11.5 11.5 10 12 6.5Z" fill="#FFFFFF" opacity={0.45} />
+    </svg>
+  );
+}
+
+/** 3本の短い放射線。見出しやギフト写真の「パッ」と目を引く飾り。 */
+function Burst({ color, rotate = 0, style }: { color: string; rotate?: number; style?: CSSProperties }) {
+  return (
+    <svg width="22" height="18" viewBox="0 0 22 18" style={{ position: "absolute", transform: `rotate(${rotate}deg)`, ...style }}>
+      <path d="M2 14 7 11M7 4l3 5M16 1.5l-1.5 6.5" stroke={color} strokeWidth={1.8} strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function BenefitsSection() {
   const bene = config.benefits;
   return (
-    <section style={{ padding: "6px 18px 48px", background: bg }}>
-      <h2 style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 28, letterSpacing: "0.04em", textAlign: "center", margin: 0, color: ink }}>
-        {bene.heading}
-        <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{bene.headingHighlight}</span>
-      </h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 24 }}>
+    <section style={{ position: "relative", padding: "14px 18px 48px", background: "linear-gradient(180deg, #FFFFFF 0%, #FFF6FB 38%, #FFFFFF 100%)", overflowX: "clip" }}>
+      {/* 見出し: 「今だけ」の放射線と下のスウッシュ、右肩の小さな光の粒 */}
+      <div style={{ position: "relative", width: "fit-content", margin: "0 auto", padding: "8px 6px 14px" }}>
+        <Burst color={pink} rotate={-20} style={{ left: -6, top: -2 }} />
+        <h2 style={{ position: "relative", fontFamily: fontMincho, fontWeight: 800, fontSize: 30, letterSpacing: "0.02em", lineHeight: 1.2, textAlign: "center", margin: 0, color: ink, whiteSpace: "nowrap" }}>
+          <span style={{ fontSize: 40, fontStyle: "italic", marginRight: 6, background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: `drop-shadow(0 2px 6px ${pink}44)` }}>{bene.headingLead}</span>
+          {bene.heading}
+          <span style={{ background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{bene.headingHighlight}</span>
+        </h2>
+        <svg width="190" height="14" viewBox="0 0 190 14" style={{ position: "absolute", left: 8, bottom: 2 }}>
+          {/* 同じセクションが2回出るので gradient の id 重複を避け、太さ違いの線を重ねて先細りを出す */}
+          <path d="M2 12C50 3 120 1 188 5" stroke={pink} strokeOpacity={0.18} strokeWidth={2} strokeLinecap="round" fill="none" />
+          <path d="M2 12C40 5 80 3 120 2.5" stroke={pink} strokeOpacity={0.55} strokeWidth={3} strokeLinecap="round" fill="none" />
+        </svg>
+        <span style={{ position: "absolute", right: -4, bottom: 6, width: 5, height: 5, borderRadius: "50%", background: `${pink}55` }} />
+        <span style={{ position: "absolute", right: -12, bottom: 14, width: 3, height: 3, borderRadius: "50%", background: `${pink}40` }} />
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 18 }}>
         {bene.items.map((b, i) => {
           const accent = i === 0 ? pink : purple;
+          const tint = i === 0 ? "#FFE3F0" : "#ECE4FF";
           return (
             <div
               key={i}
               style={{
                 position: "relative",
-                display: "flex",
-                alignItems: "center",
-                gap: 14,
-                borderRadius: 16,
-                border: `1px solid ${accent}55`,
-                background: "#FFFFFF",
-                boxShadow: `0 8px 22px ${accent}1A`,
-                padding: "18px 16px 18px 22px",
-                overflow: "hidden",
+                borderRadius: 20,
+                border: `2px solid ${accent}88`,
+                background: `linear-gradient(160deg, #FFFFFF 0%, #FFFFFF 45%, ${tint} 100%)`,
+                boxShadow: `0 0 0 4px ${accent}12, 0 10px 26px ${accent}26`,
+                padding: b.price ? "20px 14px 14px 16px" : "24px 14px 24px 16px",
+                // ギフト写真をタイトル行の下に収めるため、ボックスに高さを持たせる（タイトルの「！」と重ねない）
+                minHeight: b.gift ? 168 : undefined,
               }}
             >
-              {/* left neon accent bar */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: 5,
-                  background: `linear-gradient(180deg, ${accent} 0%, ${accent}AA 100%)`,
-                  boxShadow: "none",
-                }}
-              />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ display: "flex", alignItems: "flex-start", gap: 7, fontFamily: fontGothic, fontWeight: 800, fontSize: 15, lineHeight: 1.45, color: ink, margin: 0 }}>
-                  <span style={{ flexShrink: 0, color: accent, fontSize: 13, lineHeight: 1.6 }}>◆</span>
-                  <span>{b.title}</span>
-                </p>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
-                  <span style={{ flexShrink: 0, fontFamily: fontGothic, fontWeight: 800, fontSize: 11, color: accent }}>{b.nowLabel}</span>
-                  <span style={{ fontSize: 11.5, lineHeight: 1.5, color: textDim }}>{b.body}</span>
-                </div>
-                {b.price && (
-                  <div style={{ display: "flex", alignItems: "flex-end", gap: 8, marginTop: 8 }}>
-                    {b.price.unit && (
-                      <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "4px 10px", borderRadius: 999, background: accent, fontFamily: fontGothic, fontWeight: 800, fontSize: 12, color: "#FFFFFF", boxShadow: "none" }}>{b.price.unit}</span>
-                    )}
-                    <span style={{ display: "flex", alignItems: "flex-end" }}>
-                      {b.price.note && <span style={{ fontSize: 10, color: textDim2, marginRight: 6, marginBottom: 6 }}>{b.price.note}</span>}
-                      <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 40, lineHeight: 1.15, fontVariantNumeric: "lining-nums", padding: "0 3px", background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{b.price.value}</span>
-                      <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 18, lineHeight: 1, color: ink, marginLeft: 1, marginBottom: 4 }}>{b.price.suffix}</span>
-                    </span>
-                  </div>
-                )}
-              </div>
-              {b.gift && (
-                <div style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 54, height: 54, borderRadius: 14, background: `${accent}18`, border: `1px solid ${accent}55`, boxShadow: "none", overflow: "hidden" }}>
-                  {b.giftImage ? (
-                    <img src={b.giftImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  ) : (
-                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="8" width="18" height="13" rx="1.5" stroke={accent} strokeWidth="1.6" />
-                      <path d="M3 12h18" stroke={accent} strokeWidth="1.6" />
-                      <path d="M12 8v13" stroke={accent} strokeWidth="1.6" />
-                      <path d="M12 8S9.5 3.5 7 5C5 6.2 6.5 8 8 8h4Zm0 0s2.5-4.5 5-3c2 1.2.5 3-1 3h-4Z" stroke={accent} strokeWidth="1.6" strokeLinejoin="round" />
-                    </svg>
+              <p style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: fontMincho, fontWeight: 800, fontSize: b.gift ? 19 : 18, lineHeight: 1.4, color: ink, margin: 0, whiteSpace: "nowrap" }}>
+                <Sparkle color={accent} />
+                <span>
+                  {highlightParts(b.title, b.titleHighlight ? [b.titleHighlight] : []).map((part, j) =>
+                    part.hl ? (
+                      <span key={j} style={{ color: accent, fontSize: b.gift ? 19 : 20 }}>{part.t}</span>
+                    ) : (
+                      <span key={j}>{part.t}</span>
+                    )
                   )}
+                </span>
+              </p>
+              <p style={{ fontSize: 11.5, lineHeight: 1.6, color: textDim, margin: "8px 0 0", paddingRight: b.gift ? 96 : 0 }}>{b.body}</p>
+
+              {b.price && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    marginTop: 12,
+                    padding: "10px 12px",
+                    borderRadius: 14,
+                    border: `1px solid ${accent}33`,
+                    background: `linear-gradient(180deg, #FFF5FA 0%, #FFFFFF 100%)`,
+                    boxShadow: `inset 0 1px 6px ${accent}14`,
+                  }}
+                >
+                  {b.price.unit && (
+                    <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "7px 14px", borderRadius: 999, background: ctaGrad, fontFamily: fontGothic, fontWeight: 800, fontSize: 15, color: "#FFFFFF", boxShadow: `0 4px 10px ${accent}44` }}>{b.price.unit}</span>
+                  )}
+                  {b.price.note && (
+                    <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, lineHeight: 1.35, color: inkSoft, textAlign: "center" }}>
+                      {/* 「月額会費（税込）」→ 2行。括弧書きは細字で添える */}
+                      {b.price.note.split(/(?=（)/).map((t, j) => <span key={j} style={{ display: "block", fontWeight: j ? 400 : 700 }}>{t}</span>)}
+                    </span>
+                  )}
+                  <span style={{ position: "relative", display: "flex", alignItems: "flex-end", marginLeft: "auto" }}>
+                    <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 800, fontSize: 42, lineHeight: 1.05, fontVariantNumeric: "lining-nums", padding: "0 3px", background: pinkTextGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{b.price.value}</span>
+                    <span style={{ fontFamily: fontMincho, fontWeight: 800, fontSize: 20, lineHeight: 1, color: ink, marginLeft: 1, marginBottom: 5 }}>{b.price.suffix}</span>
+                    <Burst color={pink} rotate={30} style={{ right: 4, top: -12 }} />
+                  </span>
+                </div>
+              )}
+
+              {b.gift && (
+                <div style={{ position: "absolute", right: 14, bottom: 14, width: 88, height: 88 }}>
+                  <Burst color={accent} rotate={20} style={{ right: -6, top: -10 }} />
+                  <div style={{ width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", border: `3px solid #FFFFFF`, background: `${accent}18`, boxShadow: `0 0 0 1.5px ${accent}55, 0 6px 16px ${accent}33`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {b.giftImage ? (
+                      <img src={b.giftImage} alt="ピラティス専用ソックス" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="8" width="18" height="13" rx="1.5" stroke={accent} strokeWidth="1.6" />
+                        <path d="M3 12h18" stroke={accent} strokeWidth="1.6" />
+                        <path d="M12 8v13" stroke={accent} strokeWidth="1.6" />
+                        <path d="M12 8S9.5 3.5 7 5C5 6.2 6.5 8 8 8h4Zm0 0s2.5-4.5 5-3c2 1.2.5 3-1 3h-4Z" stroke={accent} strokeWidth="1.6" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -519,6 +564,20 @@ export default function Page() {
       {/* キャンバスの外側。地色を画面いっぱいに敷くビューポート高さはルール上の唯一の例外（CLAUDE.md §17）。 */}
       <div style={{ fontFamily: fontSans, background: bgAlt, minHeight: "100vh", color: ink }}>
         <LPCanvas background={bg} boxShadow="0 0 40px rgba(108,63,209,0.10)" style={{ position: "relative" }}>
+          {/* ── header + FV を顧客支給の画像1枚で置き換える（ロゴ・アクセス・キャッチは画像内） ── */}
+          {c.hero.image ? (
+            <h1 style={{ margin: 0, lineHeight: 0, aspectRatio: `${c.hero.image.width} / ${c.hero.image.visibleHeight ?? c.hero.image.height}`, minHeight: 0, overflowY: "clip" }}>
+              <img
+                src={c.hero.image.src}
+                alt={c.hero.image.alt}
+                width={c.hero.image.width}
+                height={c.hero.image.height}
+                fetchPriority="high"
+                style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }}
+              />
+            </h1>
+          ) : (
+          <>
           {/* ── header ── */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "14px 20px", background: "#000000" }}>
             {c.header.logo ? (
@@ -708,6 +767,8 @@ export default function Page() {
               )}
             </div>
           </section>
+          </>
+          )}
 
           {/* ── offer (初回体験オファー・FV下) ── */}
           <OfferSection topPad={20} />
@@ -716,7 +777,7 @@ export default function Page() {
           <BenefitsSection />
 
           {/* ── worry ── */}
-          <section style={{ padding: "34px 22px 12px" }}>
+          <section style={{ padding: "34px 14px 12px" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <span
                 style={{
@@ -750,7 +811,7 @@ export default function Page() {
                 border: `1px solid ${purple}33`,
                 background: "#FFFFFF",
                 boxShadow: `0 10px 28px ${purple}1A`,
-                padding: "26px 14px",
+                padding: "26px 12px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -759,12 +820,12 @@ export default function Page() {
             >
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 20 }}>
               {c.worry.items.map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span
                     style={{
                       flexShrink: 0,
-                      width: 26,
-                      height: 26,
+                      width: 24,
+                      height: 24,
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
@@ -775,7 +836,7 @@ export default function Page() {
                   >
                     <Icon name="check" size={16} color={purple} />
                   </span>
-                  <span style={{ fontFamily: fontGothic, fontSize: 13, fontWeight: 700, lineHeight: 1.5, whiteSpace: "nowrap", color: ink }}>
+                  <span style={{ fontFamily: fontGothic, fontSize: 15, fontWeight: 700, lineHeight: 1.5, whiteSpace: "nowrap", color: ink }}>
                     {item.parts.map((p, j) =>
                       p.hl ? (
                         <span

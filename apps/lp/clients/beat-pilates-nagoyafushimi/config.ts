@@ -232,6 +232,15 @@ export interface BeatPilatesConfig {
     trialBadge: { label: string; price: string; unit: string };
     joinBadge: { label: string; value: string };
     tags: string[];
+    /** 顧客支給の画像1枚でヘッダー＋FVを置き換える。文言・ロゴ・アクセスは画像に含まれる。 */
+    image?: {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      /** 画像の上から何pxまで見せるか（元画像のpx）。下端を切って次のセクションを上げたいときに使う。 */
+      visibleHeight?: number;
+    };
     /** false でFV内の「初回体験0円」バッジとタグを丸ごと隠す（オファーはFV下に出る）。 */
     showOffer?: boolean;
     access: { station: string; walk: string }[];
@@ -267,6 +276,8 @@ export interface BeatPilatesConfig {
       price: string;
       unit: string;
       note: string;
+      /** 写真の色味補正（CSS filter）。暗い写真だけ明るくする。 */
+      photoFilter?: string;
     }[];
     badges: { icon: string; label: string }[];
   };
@@ -277,6 +288,8 @@ export interface BeatPilatesConfig {
     headingHighlight: string;
     items: {
       title: string;
+      /** title のうち色を付けて強調する語。 */
+      titleHighlight?: string;
       body: string;
       price?: { unit?: string; value: string; suffix: string; note?: string };
       gift?: boolean;
@@ -391,6 +404,14 @@ const config: BeatPilatesConfig = {
       poster: "/clients/beat-pilates-nagoyafushimi/fv-hero-poster.jpg",
       position: "center 40%",
     },
+    image: {
+      src: "/clients/beat-pilates-nagoyafushimi/fv-image.jpg",
+      alt: "BEAT PILATES 伏見駅徒歩8分・大須観音駅徒歩10分・MEGAドン・キホーテ納屋橋店徒歩3分。女性専用マシンピラティス。楽しいだけじゃない。ちゃんと効く、ピラティス。暗闇×音楽 楽しく、少し頑張る45分。",
+      width: 941,
+      height: 1672,
+      // 下端に写り込む手前の人のズボンの裾（y=1644〜）を隠す
+      visibleHeight: 1630,
+    },
     showOffer: false,
     trialBadge: { label: "初回体験", price: "0", unit: "円" },
     joinBadge: { label: "今なら入会金", value: "0円" },
@@ -460,6 +481,7 @@ const config: BeatPilatesConfig = {
       {
         num: "01",
         img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates-nagoyafushimi/reason-01-studio.jpg", position: "center" },
+        photoFilter: "hue-rotate(-22deg) brightness(1.3)",
         label: "45分\n体験レッスン",
         price: "0",
         unit: "円",
@@ -467,7 +489,7 @@ const config: BeatPilatesConfig = {
       },
       {
         num: "02",
-        img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates-nagoyafushimi/why-01-dark-studio.jpg", position: "center" },
+        img: { placeholder: "スタジオの写真", src: "/clients/beat-pilates-nagoyafushimi/offer-join-bg.jpg", position: "center 45%" },
         label: "今なら\n入会金",
         price: "0",
         unit: "円",
@@ -488,11 +510,13 @@ const config: BeatPilatesConfig = {
     items: [
       {
         title: "通い放題プランが2ヶ月おトク！",
+        titleHighlight: "2ヶ月おトク！",
         body: "通い放題プラン【スタンダード】or【プレミアム】の場合",
         price: { unit: "2ヶ月", value: "1,980", suffix: "円", note: "月額会費（税込）" },
       },
       {
         title: "入会された方限定プレゼント！",
+        titleHighlight: "プレゼント",
         body: "ピラティス専用ソックスプレゼント",
         gift: true,
         giftImage: "/clients/beat-pilates-nagoyafushimi/benefit-gift-socks.png",
