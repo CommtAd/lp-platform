@@ -68,6 +68,7 @@ export const clientThanksRegistry: Partial<
   "sakura-yoyogiuehara": () => import("./sakura-yoyogiuehara/thanks"),
   "sakura-shinjuku-sanchome": () => import("./sakura-shinjuku-sanchome/thanks"),
   "ism-azabujuban": () => import("./ism-azabujuban/thanks"),
+  "sakura-shinjuku-sanchome2": () => import("./sakura-shinjuku-sanchome2/thanks"),
 };
 
 interface ClientMeta {

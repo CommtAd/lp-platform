@@ -11,13 +11,14 @@ import type { Perk, WorryIconKind } from "./config";
  * Pilates SAKURA 新宿三丁目店 — 11/1 NEW OPEN 記念のMeta広告用・短尺LP。
  *
  * 指示書 §4 の3ブロックだけで構成する（スマホで2〜3スクロール）:
- *   ① FV（NEW OPEN・先着30名・3大特典・CTA）→ ② お悩み（こんな方におすすめ）→ ③ 最終CTA
+ *   ① FV（NEW OPEN・先着20名・3大特典・CTA）→ ② お悩み（こんな方におすすめ）→ ③ 最終CTA
  *   → ④ 予約フォーム（LPForm）＋ 追従フッターCTA（§5）
  *
  * 広告バナーとの一貫性が最優先（§3「印象が大きく変わらないように」）:
  *   - FVはMV写真（ロゴ帯の下に全幅）＋文字。文言・並び順はバナーのまま
  *   - 特典以降は淡いピンクの地に白いカード
- *   - 日付・数字・NEW OPEN は Playfair Display のイタリック、和文見出しは明朝
+ *   - 日付・数字・NEW OPEN は Montserrat の極太イタリック、和文見出しは明朝
+ *     （当初は Playfair Display。顧客修正 AUN 2026-10-15「キリッと」「数字が見づらい」で変更）
  *   - 特典は横並び3枚のカード。0円の「0」を最大の要素にする
  *   - アニメーション・装飾は入れない（§3）
  *
@@ -28,32 +29,37 @@ import type { Perk, WorryIconKind } from "./config";
 
 /* ── palette（バナーから採色） ─────────────────────────────── */
 const BG = "#F3D3DD";
-const PALE = "#FBEFF2";
+export const PALE = "#FBEFF2";
 const PALE2 = "#F8E5EB";
-const LINE = "#EED6DE";
+export const LINE = "#EED6DE";
 const GOLD_LINE = "#D8C09C";
-const PINK = "#E58BA4";
-const PINK_DEEP = "#C2557A";
-const PINK_INK = "#A8416A";
-const INK = "#2F2B2C";
-const BODY = "#5E5659";
-const MUTED = "#8E8286";
-const BTN = "linear-gradient(135deg, #D4628A 0%, #A8416A 100%)";
-const BTN_SHADOW = "0 10px 22px rgba(168,65,106,0.34)";
+export const PINK = "#E58BA4";
+export const PINK_DEEP = "#C2557A";
+export const PINK_INK = "#A8416A";
+export const INK = "#2F2B2C";
+export const BODY = "#5E5659";
+export const MUTED = "#8E8286";
+export const BTN = "linear-gradient(135deg, #D4628A 0%, #A8416A 100%)";
+export const BTN_SHADOW = "0 10px 22px rgba(168,65,106,0.34)";
 /** キャンバス地。バナー背景のにじんだピンクを放射グラデーションで再現する。 */
-const BG_FILL = [
+export const BG_FILL = [
   "radial-gradient(circle at 12% 8%, rgba(255,255,255,0.55) 0, transparent 34%)",
   "radial-gradient(circle at 92% 30%, rgba(255,255,255,0.4) 0, transparent 30%)",
   "radial-gradient(circle at 8% 78%, rgba(255,255,255,0.35) 0, transparent 32%)",
   `linear-gradient(180deg, #F6DCE4 0%, ${BG} 55%, #EFC6D3 100%)`,
 ].join(", ");
 
-const MINCHO = "'Shippori Mincho', 'Hiragino Mincho ProN', serif";
-const GOTHIC = "'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif";
-const SERIF_IT = "'Playfair Display', 'Times New Roman', serif";
+export const MINCHO = "'Shippori Mincho', 'Hiragino Mincho ProN', serif";
+export const GOTHIC = "'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif";
+export const SERIF_IT = "'Montserrat', 'Helvetica Neue', Arial, sans-serif";
+/**
+ * Montserrat はこのLPだけで使うので layout.tsx には足さず、ページ内の <link> で読む（React 19 が <head> へ巻き上げる）。
+ * next/font は registry の動的import経由だとCSSが拾われず効かない（2026-10-15 確認）。
+ */
+export const MONTSERRAT_CSS = "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,800&display=swap";
 
 /** "\n" を <br /> に開く。 */
-function nl(text: string): ReactNode {
+export function nl(text: string): ReactNode {
   const parts = text.split("\n");
   return parts.map((p, i) => (
     <span key={i}>
@@ -66,7 +72,7 @@ function nl(text: string): ReactNode {
 /* ── shared pieces ─────────────────────────────────────────── */
 
 /** 桜のマーク（ロゴの花）。 */
-function SakuraMark({ size = 14, color = PINK }: { size?: number; color?: string }) {
+export function SakuraMark({ size = 14, color = PINK }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color} aria-hidden>
       {[0, 72, 144, 216, 288].map((deg) => (
@@ -78,7 +84,7 @@ function SakuraMark({ size = 14, color = PINK }: { size?: number; color?: string
 }
 
 /** 白いカード。FVと最終CTAで同じ器を使い、バナーと同じ見え方にする。 */
-function Card({ children, style }: { children: ReactNode; style?: CSSProperties }) {
+export function Card({ children, style }: { children: ReactNode; style?: CSSProperties }) {
   return (
     <div
       style={{
@@ -335,6 +341,7 @@ export default function Page() {
 
   return (
     <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
+      <link rel="stylesheet" href={MONTSERRAT_CSS} precedence="default" />
       <div
         style={{
           fontFamily: GOTHIC,
@@ -374,13 +381,15 @@ export default function Page() {
               </div>
             </div>
 
-            {/* MV写真。下端の白グラデーションに「11月1日 NEW OPEN!」を重ねる。 */}
+            {/* MV動画。下端の白グラデーションに「11月1日 NEW OPEN!」を重ねる。
+                グラデーションは下30%だけ（動画は人物が上78%に収まるよう切り出し済み。顧客修正 2026-10-15）。 */}
             <div style={{ position: "relative" }}>
               <ImageSlot
                 src={fv.photo.src}
                 placeholder={fv.photo.placeholder}
                 alt={fv.photo.placeholder}
                 objectPosition={fv.photo.position ?? "center"}
+                poster={fv.photo.poster}
                 style={{ width: "100%", aspectRatio: "390 / 470" }}
               />
               <div
@@ -389,14 +398,14 @@ export default function Page() {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  height: "42%",
+                  height: "30%",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "flex-end",
                   alignItems: "center",
                   paddingBottom: 6,
                   background:
-                    "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.82) 42%, #FFFFFF 78%)",
+                    "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 30%, #FFFFFF 60%)",
                 }}
               >
                 <div style={{ color: PINK_INK, fontWeight: 700, lineHeight: 1 }}>
@@ -473,7 +482,7 @@ export default function Page() {
                 {fv.ribbon}
               </div>
 
-              {/* ＼ 先着30名様限定 ／ */}
+              {/* ＼ 先着20名様限定 ／ */}
               <div
                 style={{
                   display: "flex",
@@ -730,19 +739,8 @@ export default function Page() {
                   microcopy={<span style={{ color: PINK_INK }}>{c.form.microcopy}</span>}
                   disclaimer={nl(c.form.disclaimer)}
                   errorMessage={c.form.errorMessage}
-                  thanks={
-                    <div style={{ textAlign: "center", padding: "12px 0" }}>
-                      <SakuraMark size={30} color={PINK} />
-                      <div
-                        style={{ marginTop: 10, fontFamily: MINCHO, fontSize: 21, fontWeight: 700, color: PINK_INK }}
-                      >
-                        {c.form.thanks.heading}
-                      </div>
-                      <p style={{ margin: "12px 0 0", fontSize: 14, lineHeight: 1.85, color: BODY }}>
-                        {nl(c.form.thanks.body)}
-                      </p>
-                    </div>
-                  }
+                  // 送信完了はサンクスページ（thanks.tsx）で見せる。
+                  thanksHref={`/${c.slug}/thanks`}
                 />
               </div>
             </Card>
