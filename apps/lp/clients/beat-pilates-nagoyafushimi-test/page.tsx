@@ -484,15 +484,15 @@ function BenefitsSection() {
                 boxShadow: `0 0 0 4px ${accent}12, 0 10px 26px ${accent}26`,
                 padding: b.price ? "20px 14px 14px 16px" : "24px 14px 24px 16px",
                 // ギフト写真をタイトル行の下に収めるため、ボックスに高さを持たせる（タイトルの「！」と重ねない）
-                minHeight: b.gift ? 166 : undefined,
+                minHeight: b.gift ? 168 : undefined,
               }}
             >
-              <p style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: fontMincho, fontWeight: 800, fontSize: b.gift ? 16.5 : 18, lineHeight: 1.4, color: ink, margin: 0, whiteSpace: "nowrap" }}>
+              <p style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: fontMincho, fontWeight: 800, fontSize: b.gift ? 19 : 18, lineHeight: 1.4, color: ink, margin: 0, whiteSpace: "nowrap" }}>
                 <Sparkle color={accent} />
                 <span>
                   {highlightParts(b.title, b.titleHighlight ? [b.titleHighlight] : []).map((part, j) =>
                     part.hl ? (
-                      <span key={j} style={{ color: accent, fontSize: b.gift ? 16.5 : 20 }}>{part.t}</span>
+                      <span key={j} style={{ color: accent, fontSize: b.gift ? 19 : 20 }}>{part.t}</span>
                     ) : (
                       <span key={j}>{part.t}</span>
                     )
@@ -777,7 +777,7 @@ export default function Page() {
           <BenefitsSection />
 
           {/* ── worry ── */}
-          <section style={{ padding: "34px 22px 12px" }}>
+          <section style={{ padding: "34px 14px 12px" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <span
                 style={{
@@ -811,7 +811,7 @@ export default function Page() {
                 border: `1px solid ${purple}33`,
                 background: "#FFFFFF",
                 boxShadow: `0 10px 28px ${purple}1A`,
-                padding: "26px 14px",
+                padding: "26px 12px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -820,12 +820,12 @@ export default function Page() {
             >
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 20 }}>
               {c.worry.items.map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span
                     style={{
                       flexShrink: 0,
-                      width: 26,
-                      height: 26,
+                      width: 24,
+                      height: 24,
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
@@ -836,7 +836,7 @@ export default function Page() {
                   >
                     <Icon name="check" size={16} color={purple} />
                   </span>
-                  <span style={{ fontFamily: fontGothic, fontSize: 13, fontWeight: 700, lineHeight: 1.5, whiteSpace: "nowrap", color: ink }}>
+                  <span style={{ fontFamily: fontGothic, fontSize: 15, fontWeight: 700, lineHeight: 1.5, whiteSpace: "nowrap", color: ink }}>
                     {item.parts.map((p, j) =>
                       p.hl ? (
                         <span
