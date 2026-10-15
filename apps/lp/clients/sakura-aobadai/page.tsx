@@ -15,8 +15,8 @@ import type { CtaSpot, Slot } from "./config";
  *   悩みに共感 → 理想の未来 → 選ぶ理由 → 安心 → 予約
  * の順で、指示書 §6 のセクション順をそのまま守っている:
  *   ヘッダー → オファーバー → ① FV（キャッチ・体験0円・CTA）→ ② お悩み → ③ 目指せる未来
- *   → ④ 選ばれる4つの理由 → ⑤ 体験レッスン（中間CTA）→ ⑥ パーソナルとは → ⑦ お客様の声
- *   → ⑧ 体験の流れ（CTA）→ ⑨ 初めてでも大丈夫 → ⑩ 店舗・アクセス → ⑪ FAQ → ⑫ 最終CTA
+ *   → ④ 選ばれる4つの理由 → ⑤ 体験レッスン（中間CTA）→ ⑥ パーソナルとは
+ *   → ⑦ 体験の流れ（CTA）→ ⑧ 店舗・アクセス → ⑨ FAQ → ⑩ 最終CTA
  *   ＋ 追従フッターCTA
  *
  * CTAはすべてハコモノの青葉台店・体験予約ページへ直接遷移（config.reserve.url）。
@@ -209,17 +209,6 @@ function Cta({ spot, top = 28, dark = false }: { spot: CtaSpot; top?: number; da
           →
         </span>
       </a>
-      <p
-        style={{
-          margin: "11px 0 0",
-          textAlign: "center",
-          fontSize: 13,
-          letterSpacing: "0.04em",
-          color: dark ? "rgba(255,255,255,0.88)" : MUTED,
-        }}
-      >
-        {config.cta.sub}
-      </p>
     </div>
   );
 }
@@ -269,60 +258,6 @@ function PriceLine({ label, size = 88 }: { label: string; size?: number }) {
         </span>
       </div>
     </div>
-  );
-}
-
-/* 安心材料のアイコン。並び順は config.beginner.items と一致させること。 */
-const beginnerIcons: ReactNode[] = [
-  /* 未経験OK — 若葉 */
-  <>
-    <path d="M12 21v-8" />
-    <path d="M12 13c0-4 2.6-7 7-7 0 4.4-3 7-7 7z" />
-    <path d="M12 15c0-3.4-2.2-6-6-6 0 3.8 2.6 6 6 6z" />
-  </>,
-  /* 身体が硬い方もOK — 伸びをする人 */
-  <>
-    <circle cx="12" cy="4.6" r="1.9" />
-    <path d="M12 7v7.4M12 14.4l-3.4 6M12 14.4l3.4 6M5.4 3.6L12 9l6.6-5.4" />
-  </>,
-  /* 完全マンツーマン — 2人 */
-  <>
-    <circle cx="8.4" cy="8" r="2.3" />
-    <path d="M5 18.5v-1.2a3.4 3.4 0 016.8 0v1.2" />
-    <circle cx="15.6" cy="8" r="2.3" />
-    <path d="M12.2 18.5v-1.2a3.4 3.4 0 016.8 0v1.2" />
-  </>,
-  /* 女性専用 — 女性記号 */
-  <>
-    <circle cx="12" cy="9" r="5" />
-    <path d="M12 14v7M9 18h6" />
-  </>,
-  /* 完全個室 — ドア */
-  <>
-    <path d="M6 21V4.5a1 1 0 011-1h10a1 1 0 011 1V21M4 21h16" />
-    <circle cx="14.6" cy="12.5" r="0.9" />
-  </>,
-  /* ウェアレンタル無料 — Tシャツ */
-  <>
-    <path d="M8.8 4L4 6.7l1.9 3.1L8 8.5V20h8V8.5l2.1 1.3L20 6.7 15.2 4a3.3 3.3 0 01-6.4 0z" />
-  </>,
-];
-
-function LineIcon({ children, size = 30 }: { children: ReactNode; size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={PINK_DEEP}
-      strokeWidth="1.4"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      {children}
-    </svg>
   );
 }
 
@@ -585,10 +520,7 @@ export default function Page() {
           {/* FV内の体験オファー＋CTA 1 */}
           <section style={section(CREAM, "28px")}>
             <PriceLine label={c.fv.price.label} />
-            <p style={{ margin: "12px 0 0", textAlign: "center", fontSize: 14, color: BODY }}>
-              {c.fv.price.note}
-            </p>
-            <Cta spot="fv" top={20} />
+            <Cta spot="fv" top={22} />
           </section>
 
           {/* ── ② お悩み ── */}
@@ -733,11 +665,6 @@ export default function Page() {
                     </span>
                   </div>
                   <Photo slot={it.img} radius={14} style={{ width: "100%", aspectRatio: "3 / 2" }} />
-                  {it.note && (
-                    <p style={{ margin: "6px 0 0", fontSize: 11.5, color: MUTED, textAlign: "right" }}>
-                      {it.note}
-                    </p>
-                  )}
                   <h3
                     style={{
                       margin: "16px 0 0",
@@ -924,134 +851,10 @@ export default function Page() {
                 ))}
               </div>
             </div>
-
-            {/* グループレッスンとの違い */}
-            <p
-              style={{
-                margin: "30px 0 0",
-                textAlign: "center",
-                fontFamily: MINCHO,
-                fontSize: 18,
-                fontWeight: 700,
-                color: INK,
-              }}
-            >
-              グループレッスンとの違い
-            </p>
-            <div
-              style={{
-                marginTop: 14,
-                borderRadius: 14,
-                overflow: "hidden",
-                background: "#FFFFFF",
-                border: `1px solid ${LINE}`,
-              }}
-            >
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "76px minmax(0, 1fr) minmax(0, 1.25fr)",
-                  fontSize: 12.5,
-                  fontWeight: 700,
-                  textAlign: "center",
-                }}
-              >
-                <div style={{ background: BEIGE }} />
-                <div style={{ background: BEIGE, color: BODY, padding: "10px 4px" }}>グループ</div>
-                <div style={{ background: PINK_DEEP, color: "#FFFFFF", padding: "10px 4px" }}>SAKURA</div>
-              </div>
-              {c.personal.versus.map((v) => (
-                <div
-                  key={v.label}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "76px minmax(0, 1fr) minmax(0, 1.25fr)",
-                    borderTop: `1px solid ${LINE}`,
-                    fontSize: 13.5,
-                    lineHeight: 1.5,
-                  }}
-                >
-                  <div
-                    style={{
-                      background: BEIGE,
-                      padding: "12px 6px",
-                      fontSize: 12.5,
-                      fontWeight: 700,
-                      color: INK,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    {v.label}
-                  </div>
-                  <div style={{ padding: "12px 8px", color: MUTED }}>{v.group}</div>
-                  <div style={{ padding: "12px 8px", color: PINK_INK, fontWeight: 700, background: "#FFF7F9" }}>
-                    {v.sakura}
-                  </div>
-                </div>
-              ))}
-            </div>
           </section>
 
-          {/* ── ⑦ お客様の声 ── 出典: 公式 /studios/aobadai/ */}
+          {/* ── ⑦ 体験レッスンの流れ ＋ CTA ── */}
           <section style={section(CREAM)}>
-            <Kicker>{c.voices.kicker}</Kicker>
-            <Heading text={c.voices.heading} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 28 }}>
-              {c.voices.items.map((v) => (
-                <div
-                  key={v.who}
-                  style={{
-                    position: "relative",
-                    background: "#FFFFFF",
-                    borderRadius: 16,
-                    padding: "22px 20px 18px",
-                    boxShadow: "0 6px 16px rgba(120,80,92,0.08)",
-                  }}
-                >
-                  <span
-                    aria-hidden
-                    style={{
-                      position: "absolute",
-                      top: 6,
-                      right: 16,
-                      fontFamily: MINCHO,
-                      fontSize: 56,
-                      lineHeight: 1,
-                      color: PALE2,
-                    }}
-                  >
-                    ”
-                  </span>
-                  <div style={{ display: "flex", gap: 2 }} aria-label="評価">
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <SakuraMark key={i} size={14} />
-                    ))}
-                  </div>
-                  <h3
-                    style={{
-                      margin: "10px 0 0",
-                      fontFamily: MINCHO,
-                      fontSize: 18,
-                      fontWeight: 700,
-                      lineHeight: 1.5,
-                      color: PINK_INK,
-                    }}
-                  >
-                    {v.theme}
-                  </h3>
-                  <p style={{ ...bodyText, marginTop: 8, color: INK }}>{v.body}</p>
-                  <p style={{ margin: "10px 0 0", fontSize: 13.5, color: BODY, textAlign: "right" }}>{v.who}</p>
-                </div>
-              ))}
-            </div>
-            <p style={{ margin: "14px 0 0", fontSize: 11.5, lineHeight: 1.7, color: MUTED }}>{c.voices.note}</p>
-          </section>
-
-          {/* ── ⑧ 体験レッスンの流れ ＋ CTA ── */}
-          <section style={section(PALE_GRAD)}>
             <Kicker>{c.flow.kicker}</Kicker>
             <Heading text={c.flow.heading} />
             <div style={{ marginTop: 30, position: "relative" }}>
@@ -1117,120 +920,10 @@ export default function Page() {
                 ))}
               </div>
             </div>
-            <div
-              style={{
-                marginTop: 22,
-                textAlign: "center",
-              }}
-            >
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 7,
-                  background: "#FFFFFF",
-                  border: `1px solid ${PINK}`,
-                  borderRadius: 999,
-                  padding: "9px 18px",
-                  fontSize: 14.5,
-                  fontWeight: 700,
-                  color: PINK_INK,
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={PINK_DEEP} strokeWidth="2" aria-hidden>
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M12 7v5l3 2" strokeLinecap="round" />
-                </svg>
-                {c.flow.total}
-              </span>
-            </div>
             <Cta spot="flow" />
           </section>
 
-          {/* ── ⑨ 初めてでも、大丈夫です ── */}
-          <section style={section(CREAM)}>
-            <Kicker>{c.beginner.kicker}</Kicker>
-            <Heading text={c.beginner.heading} />
-            <div
-              style={{
-                marginTop: 26,
-                textAlign: "center",
-                background: "#FFFFFF",
-                borderRadius: 16,
-                padding: "22px 14px 20px",
-                boxShadow: "0 6px 16px rgba(120,80,92,0.08)",
-              }}
-            >
-              <p style={{ margin: 0, fontSize: 16, fontWeight: 700, color: INK }}>{c.beginner.stat.pre}</p>
-              <div style={{ color: PINK_INK, fontFamily: MINCHO, fontWeight: 700, lineHeight: 1, marginTop: 4 }}>
-                <span style={{ fontSize: 76, letterSpacing: "-0.02em" }}>{c.beginner.stat.num}</span>
-                <span style={{ fontSize: 32 }}>{c.beginner.stat.unit}</span>
-                <span style={{ fontSize: 20, marginLeft: 4, color: INK }}>が</span>
-              </div>
-              <p
-                style={{
-                  margin: "8px 0 0",
-                  fontFamily: MINCHO,
-                  fontSize: 18,
-                  fontWeight: 700,
-                  lineHeight: 1.6,
-                  color: INK,
-                }}
-              >
-                {nl(c.beginner.stat.post)}
-              </p>
-            </div>
-            <p style={{ ...bodyText, marginTop: 18 }}>{c.beginner.lead}</p>
-            <Photo
-              slot={c.beginner.photo}
-              radius={14}
-              style={{ width: "100%", aspectRatio: "1500 / 911", marginTop: 20 }}
-            />
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-                gap: 8,
-                marginTop: 18,
-              }}
-            >
-              {c.beginner.items.map((item, i) => (
-                <div
-                  key={item}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 8,
-                    background: PALE,
-                    borderRadius: 12,
-                    padding: "14px 4px 12px",
-                    textAlign: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 50,
-                      height: 50,
-                      borderRadius: 999,
-                      background: "#FFFFFF",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <LineIcon size={28}>{beginnerIcons[i]}</LineIcon>
-                  </div>
-                  <p style={{ margin: 0, fontSize: 13, fontWeight: 700, lineHeight: 1.45, color: INK }}>
-                    {nl(item)}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <p style={{ margin: "12px 0 0", fontSize: 11.5, color: MUTED }}>{c.beginner.note}</p>
-          </section>
-
-          {/* ── ⑩ 店舗・アクセス ── 写真はすべて青葉台店の実写真 */}
+          {/* ── ⑧ 店舗・アクセス ── 写真はすべて青葉台店の実写真 */}
           <section id="access" style={section(PALE_GRAD)}>
             <Kicker>{c.access.kicker}</Kicker>
             <Heading text={c.access.heading} size={22} />
@@ -1339,7 +1032,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── ⑪ FAQ ── */}
+          {/* ── ⑨ FAQ ── */}
           <section style={section(BAND)}>
             <Kicker color="#FFFFFF">{c.faq.kicker}</Kicker>
             <Heading text={c.faq.heading} color="#FFFFFF" />
@@ -1348,7 +1041,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ── ⑫ 最終CTA ── */}
+          {/* ── ⑩ 最終CTA ── */}
           <section id="reserve" style={section(CREAM, "60px")}>
             <Heading text={c.closing.heading} size={21} />
             <p
