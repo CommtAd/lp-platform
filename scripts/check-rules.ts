@@ -67,7 +67,7 @@ const FORM_EXEMPT = new Set<string>([
   // ページ内フォームは非表示にし、CTAはすべて藤沢店の予約ページへ送る
   // （2026-09-29、顧客判断）。config の `form` はデータごと残してあるので、
   // フォームに戻すときはこの行を消すこと。
-  "ivy-test",
+  "ivy-fujisawa",
   // 予約導線を hacomono（pilates-ism.hacomono.jp）の麻布十番店スケジュールへ接続
   // （2026-10-15、顧客判断）。config の `form` はデータごと残してあるので、
   // フォームに戻すときはこの行を消すこと。
