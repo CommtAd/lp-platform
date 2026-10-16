@@ -101,16 +101,13 @@ export interface IsmConfig {
     note: string;
   };
 
-  /** 代表メッセージ */
+  /** メッセージ（代表プロフィールは顧客指示で削除）*/
   message: {
     eyebrow: string;
     quote: string;
     /** 見出し直下の小さな一文 */
     sub: string;
     body: string;
-    name: string;
-    titles: string[];
-    license: string;
   };
 
   method2: {
@@ -379,9 +376,6 @@ const config: IsmConfig = {
     quote: "Pilatesで\n人生をウェルネスに",
     sub: "〜美は1日にしてならず、継続はチカラなり〜",
     body: "体だけでなく、心も整う特別な空間で、ご自身が本当に望む「理想の美しさ」を手に入れてほしい。心も体も美しくなれるよう、私たちが全力でお手伝いします。",
-    name: "横幕 真理",
-    titles: ["株式会社MAJOLI 代表取締役", "一般社団法人国際ピラティス協会 代表理事"],
-    license: "ネバダ州立大学公認 DKピラティス指導者（マット／リフォーマー／キャデラック／チェアー）",
   },
 
   method2: {

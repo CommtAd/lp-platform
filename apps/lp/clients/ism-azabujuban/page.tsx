@@ -522,21 +522,12 @@ export default function Page() {
             <Notes items={[c.method1.note]} />
           </section>
 
-          {/* ── 代表メッセージ ── */}
+          {/* ── メッセージ（代表プロフィールは顧客指示で削除 2026-10-16） ── */}
           <section style={{ padding: "44px 22px 44px", background: MAIN }}>
             <Eyebrow text={c.message.eyebrow} color={BLUSH} />
             <p style={{ textAlign: "center", fontFamily: fontMincho, fontSize: 26, fontWeight: 600, letterSpacing: "0.1em", color: "#FFFFFF", margin: 0, lineHeight: 1.55 }}>{nl(c.message.quote)}</p>
             <p style={{ textAlign: "center", fontFamily: fontMincho, fontSize: 13, fontWeight: 500, letterSpacing: "0.08em", color: BLUSH, margin: "10px 0 0" }}>{c.message.sub}</p>
             <p style={{ fontFamily: fontMincho, fontSize: 13.5, lineHeight: 2.1, color: "rgba(255,255,255,0.92)", margin: "18px 0 0" }}>{c.message.body}</p>
-            <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.2)" }}>
-              {c.message.titles.map((t) => (
-                <p key={t} style={{ fontSize: 11, lineHeight: 1.7, color: "rgba(255,255,255,0.75)", margin: 0 }}>
-                  {t}
-                </p>
-              ))}
-              <p style={{ fontFamily: fontMincho, fontSize: 18, fontWeight: 600, letterSpacing: "0.16em", color: "#FFFFFF", margin: "6px 0 0" }}>{c.message.name}</p>
-              <p style={{ fontSize: 11, lineHeight: 1.7, color: BLUSH, margin: "8px 0 0" }}>{c.message.license}</p>
-            </div>
           </section>
 
           {/* ── オンライン特典 ── */}
