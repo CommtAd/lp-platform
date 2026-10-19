@@ -34,6 +34,8 @@ interface Slot {
   placeholder: string;
   src?: string | null;
   position?: string;
+  /** 動画スロットの再生開始までに出す静止画。 */
+  poster?: string;
 }
 
 /** キャンペーン1項目。`value` を特大で置く。`regular` は通常料金が確定したら入れる（打ち消し線で併記）。 */
@@ -223,7 +225,12 @@ const config: KasaneConfig = {
   offerBar: ["体験 0円", "入会金 0円", "初月会費 0円"],
 
   fv: {
-    hero: { placeholder: "マシンピラティスのレッスン風景", src: "/clients/kasane-toyohashi/studio-reformer.jpg", position: "48% center" },
+    hero: {
+      placeholder: "マシンピラティスのレッスン風景",
+      src: "/clients/kasane-toyohashi/fv-hero.mp4",
+      poster: "/clients/kasane-toyohashi/fv-hero-poster.jpg",
+      position: "center",
+    },
     catchLines: ["気になる下腹も、姿勢も。", "私らしく、", "しなやかな身体へ。"],
     sub: "少人数制で、初心者にも丁寧な\nマシンピラティス。",
     features: ["少人数制の\n丁寧な指導", "無料駐車場\n完備", "50分の\n体験レッスン"],
@@ -401,7 +408,7 @@ const config: KasaneConfig = {
         num: "01",
         title: "WEBから予約",
         body: "ご希望の日時を選んで、体験レッスンをご予約ください。",
-        img: { placeholder: "予約画面" },
+        img: { placeholder: "予約画面", src: "/clients/kasane-toyohashi/flow-web-reserve.webp", position: "50% 40%" },
       },
       {
         num: "02",
@@ -470,7 +477,7 @@ const config: KasaneConfig = {
     kicker: "ACCESS",
     heading: "車でも通いやすい！",
     name: "Pilates KASANE バロー豊橋店",
-    img: { placeholder: "店舗外観" },
+    img: { placeholder: "店舗外観", src: "/clients/kasane-toyohashi/access-entrance.jpg", position: "45% 50%" },
     rows: [
       { label: "住所", value: "〒440-0851\n愛知県豊橋市前田南町2-17-2\nバロー豊橋 2F" },
       { label: "営業時間", value: "10:00〜21:00", strong: true },
