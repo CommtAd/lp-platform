@@ -408,61 +408,16 @@ export default function Page() {
             </p>
           </div>
 
-          {/* ── 4. FV（AUN #1 バッジ削除 / #2 キャッチ変更） ─────── */}
-          {/* AUN2 #11: 下部の余った床面をカットするため 520 → 430 に詰めている。 */}
-          <section style={{ position: "relative", height: 430, background: MAIN }}>
+          {/* ── 4. FV（顧客支給の完成画像 1枚 / 2026-10-19 差し替え） ─── */}
+          {/* キャッチ・特徴アイコンは画像内に入っているため、文字の重ね合わせはしない。
+              画像の比率（941×1672）のまま全幅で置き、トリミングしない。 */}
+          <section style={{ background: MAIN }}>
             <ImageSlot
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
-              alt="スタジオ内観"
-              // AUN2 #11: 既定の center だと上下が均等に切れて床が残るため、
-              // 表示位置を上寄せして下側（床面）を落とす。
-              objectPosition="center 30%"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+              alt={c.fv.alt}
+              style={{ display: "block", width: "100%", aspectRatio: "941 / 1672" }}
             />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(180deg, rgba(20,50,74,0.30) 0%, rgba(20,50,74,0.05) 34%, rgba(20,50,74,0.62) 100%)",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: 28,
-                left: 16,
-                display: "flex",
-                flexDirection: "row-reverse",
-                // 既定の stretch だと短いほうの札が相手の高さに引き伸ばされ、
-                // 「。」の後ろに余白が出る（AUN2 #1）。各札を中身の高さに合わせる。
-                alignItems: "flex-start",
-                gap: 10,
-              }}
-            >
-              {c.fv.catchLines.map((lineText, i) => (
-                <span
-                  key={i}
-                  style={{
-                    writingMode: "vertical-rl",
-                    textOrientation: "upright",
-                    background: "rgba(255,255,255,0.93)",
-                    color: MAIN,
-                    fontFamily: MINCHO,
-                    fontSize: i === 0 ? 27 : 24,
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    lineHeight: 1,
-                    padding: "20px 12px",
-                    borderRadius: 4,
-                    boxShadow: "0 4px 14px rgba(20,50,74,0.22)",
-                  }}
-                >
-                  {lineText}
-                </span>
-              ))}
-            </div>
           </section>
 
           {/* ── 5. FV下のメインカラー帯（AUN #5 / #6） ───────────── */}
