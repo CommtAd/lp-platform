@@ -130,7 +130,6 @@ export interface KasaneConfig {
     heading: string;
     /** 月会費プラン。確定した公式情報だけを入れる。空なら「確定後に掲載」の枠を出す。 */
     plans: { name: string; price: string; note?: string }[];
-    emptyNote: string;
   };
 
   faq: { kicker: string; heading: string; items: { q: string; a: string; confirm?: boolean }[] };
@@ -245,7 +244,6 @@ const config: KasaneConfig = {
   /* 文言はKASANE表記ガイドライン「固定表記・クレジット／キャンペーン」の指定どおり。改行位置だけこちらで決めている。 */
   offerNote: {
     text: "※店舗により適用条件が異なります。\n※割引の適用タイミングは店舗により\n異なる場合がございます。\n詳細は各店へお問い合わせください。",
-    confirm: true,
   },
 
   campaign: { kicker: "CAMPAIGN", heading: "今なら、お得に\nピラティスをスタート！" },
@@ -356,9 +354,8 @@ const config: KasaneConfig = {
       {
         en: "Posture",
         name: "美姿勢",
-        body: "美しい姿勢づくりにフォーカスしたプログラム。（正式名称・内容を店舗に確認して差し替え）",
+        body: "美しい姿勢づくりにフォーカスしたプログラム。",
         img: { placeholder: "美姿勢プログラムのレッスン", src: "/clients/kasane-toyohashi/posture-check.jpg", position: "65% 35%" },
-        confirm: true,
       },
     ],
   },
@@ -382,7 +379,6 @@ const config: KasaneConfig = {
       },
     ],
     closing: "自分に合うかどうか、\nじっくり確かめてから始められる。",
-    confirm: "2回体験の予約方法・受講の流れ・無料の範囲は店舗確認後に記載します。",
   },
 
   studio: {
@@ -438,7 +434,6 @@ const config: KasaneConfig = {
     kicker: "PRICE",
     heading: "今なら、\nお得に始められる！",
     plans: [],
-    emptyNote: "月会費プランは、確定した公式情報を確認後に掲載します。",
   },
 
   faq: {
@@ -464,11 +459,6 @@ const config: KasaneConfig = {
       {
         q: "体験に必要な持ち物はありますか？",
         a: "レンタルウェア・レンタルソックス・ミネラルウォーターを無料でご用意しています。手ぶらでお越しいただけます。",
-      },
-      {
-        q: "2回体験はどのように受けられますか？",
-        a: "キャンペーンのご利用方法は、店舗確認後に正式なご案内を掲載します。",
-        confirm: true,
       },
     ],
   },
