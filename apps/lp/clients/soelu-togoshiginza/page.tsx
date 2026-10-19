@@ -1,157 +1,150 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import LPShell from "@/components/LPShell";
+import LPCanvas from "@/components/LPCanvas";
 import ImageSlot from "@/components/ImageSlot";
-import FaqLight from "./FaqLight";
-import StickyLight from "./StickyLight";
-import config from "./config";
+import StickyFooterCTA from "@/components/StickyFooterCTA";
+import FaqAccordion from "./FaqAccordion";
+import config, { CTA_URL } from "./config";
 
-/* ── design tokens（白×青ベース、温活のベージュ／グリーンをアクセント） ── */
-const blue = "#4E96C8";
-const deep = "#23506E";
-const ink = "#2E4552";
-const dim = "#5D7180";
-const tint = "#EFF6FA";
-const line = "#DCE7EE";
-const gold = "#B58A3C";
-const beigeBg = "#FAF6EE";
-const beigeLine = "#E7DCC4";
-const green = "#6E9E85";
-const greenBg = "#F2F7F3";
-const pageBg = "#E8EFF4";
-const ctaGrad = "linear-gradient(135deg, #D9B569 0%, #B5852F 100%)";
+/**
+ * ソエルスタジオ戸越銀座店（テスト枠）— 18セクション構成。
+ *
+ * 設計ルール:
+ *   1. 幅390pxの1枚のキャンバス（<LPCanvas>）。vw/vh は使わない（CLAUDE.md §16-17）。
+ *      キャンバス外の地色を敷く `minHeight: "100vh"` だけが例外。
+ *   2. 予約ボタンは4箇所だけ（§6・§9・§13・§17の各末尾）。
+ *      §11（入会特典）は §6 の再掲枠なのでボタンを置かない。
+ *   3. CTAはゴールド。AUNレビュー #8・#18・#22・#23 の指示による。
+ *      初稿ブリーフの「ゴールド禁止」はこのレビューで上書きされている。
+ */
 
-const fontMincho = "'Shippori Mincho', serif";
-const fontGothic = "'Zen Kaku Gothic New', sans-serif";
-const fontSans = "'Noto Sans JP', sans-serif";
-const fontDisplay = "'Playfair Display', serif";
+/* ── design tokens ─────────────────────────────────────────────────────
+   MAIN   紺: 見出し・濃色セクションの地
+   ACCENT 明るい青: 価格・チェックアイコンの強調
+   PALE   淡青: セクションの区切り
+   GOLD_* CTA・特典まわり（AUNレビューで追加） */
+const MAIN = "#23506E";
+const ACCENT = "#4E96C8";
+const PALE = "#EFF6FA";
+const WHITE = "#FFFFFF";
+const INK = "#2E4552";
+const DIM = "#5D7180";
+const LINE = "#DCE7EE";
+const PAGE_BG = "#E8EFF4";
 
-/** Render "\n"-separated text as line breaks. */
+/** CTAはゴールド（本番 soelu-togoshiginza と同じグラデーション）。 */
+const CTA_GRAD = "linear-gradient(135deg, #D9B569 0%, #B5852F 100%)";
+const CTA_SHADOW = "rgba(180,135,60,0.35)";
+const GOLD = "#B58A3C";
+/** 白地に載せる金は 2.6:1 しか出ないので、文字はこの深い金を使う。 */
+const GOLD_DEEP = "#8C6B2F";
+const CREAM = "#FAF6EE";
+const CREAM_LINE = "#E7DCC4";
+
+/**
+ * FV下の特徴カードの色味。参考画像では「よもぎ蒸し」だけ緑系で、
+ * 4枚を同じ青で塗ると単調・重く見える（顧客指摘 2026-09-17）。
+ * 各カードに地色・ラベル色・右上の光を割り当てて変化をつける。
+ */
+const FEATURE_TONES = {
+  blue: { from: "#FFFFFF", to: "#D6EAF8", pill: "#23506E", text: "#1F4A66", glow: "rgba(78,150,200,0.30)" },
+  green: { from: "#FFFFFF", to: "#D9EFE2", pill: "#3C7A5E", text: "#2C5A45", glow: "rgba(96,164,130,0.32)" },
+  sky: { from: "#FFFFFF", to: "#CFE8F5", pill: "#1F6A8C", text: "#1B5570", glow: "rgba(64,166,206,0.30)" },
+  indigo: { from: "#FFFFFF", to: "#DEE4F7", pill: "#3B5591", text: "#2F4577", glow: "rgba(96,120,200,0.30)" },
+} as const;
+
+const MINCHO = "'Shippori Mincho', serif";
+const GOTHIC = "'Zen Kaku Gothic New', sans-serif";
+const SANS = "'Noto Sans JP', sans-serif";
+
+const PAD = 18;
+
+const c = config;
+
+/** "\n" 区切りのテキストを改行として描画する。 */
 function nl(text: string): ReactNode {
-  return text.split("\n").map((p, i, arr) => (
+  return text.split("\n").map((part, i, arr) => (
     <span key={i}>
-      {p}
+      {part}
       {i < arr.length - 1 && <br />}
     </span>
   ));
 }
 
-/* ── icon library (line icons, 24x24, stroke-only) ────────────────────── */
-const iconPaths: Record<string, ReactNode> = {
-  check: <path d="M5 12.5l4.2 4.2L19 6.8" />,
-  reformer: (
-    <>
-      <rect x="3" y="14" width="18" height="3" rx="1" />
-      <path d="M5 17v3M19 17v3" />
-      <path d="M6 14V9a1 1 0 011-1h4" />
-    </>
-  ),
-  hanger: (
-    <>
-      <path d="M12 3.5a2.2 2.2 0 112.4 2.2c-1.2.3-2.4 1-2.4 2.3v.7" />
-      <path d="M12 8.7l8.6 6.1c.9.6.4 2-.7 2H4.1c-1.1 0-1.6-1.4-.7-2z" />
-    </>
-  ),
-  staff: (
-    <>
-      <circle cx="9" cy="5.5" r="2.2" />
-      <path d="M9 7.7v6M6 10.5l3 1.5 3-1.5M9 13.7l-2 6M9 13.7l2 6" />
-      <path d="M17.5 8.5c-1.3 0-2 .9-2 1.9 0 1.5 2 3.1 2 3.1s2-1.6 2-3.1c0-1-.7-1.9-2-1.9z" />
-    </>
-  ),
-  monitor: (
-    <>
-      <rect x="3.5" y="4.5" width="17" height="11.5" rx="1.5" />
-      <path d="M12 16v3.5M8.5 19.5h7" />
-      <path d="M10.5 8l4 2.2-4 2.2z" />
-    </>
-  ),
-  mirror: (
-    <>
-      <rect x="4" y="3.5" width="16" height="3.5" rx="1" />
-      <path d="M8 9.5l-1 2M16 9.5l1 2" strokeDasharray="1.6 1.6" />
-      <circle cx="12" cy="14" r="2" />
-      <path d="M8.5 20.5a3.5 3.5 0 017 0" />
-    </>
-  ),
-  yen: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M8.5 7l3.5 5 3.5-5M12 12v5M9.5 13.5h5M9.5 16h5" />
-    </>
-  ),
-  document: (
-    <>
-      <path d="M6 3.5h9l3 3v14H6z" />
-      <path d="M15 3.5v3h3" />
-      <path d="M9 11h6M9 14h6M9 17h4" />
-    </>
-  ),
-  book: (
-    <>
-      <path d="M4 5.5c2-1 5-1 8 0v13c-3-1-6-1-8 0z" />
-      <path d="M20 5.5c-2-1-5-1-8 0v13c3-1 6-1 8 0z" />
-    </>
-  ),
-  steam: (
-    <>
-      <path d="M8.5 3c-1 1.4.9 2.6 0 4M12 3c-1 1.4.9 2.6 0 4M15.5 3c-1 1.4.9 2.6 0 4" />
-      <path d="M5 11h14l-1.6 7.4a2 2 0 01-2 1.6H8.6a2 2 0 01-2-1.6z" />
-      <path d="M5 11h14" />
-    </>
-  ),
-  clock: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7v5l3.5 2" />
-    </>
-  ),
-  phone: (
-    <>
-      <rect x="7" y="3" width="10" height="18" rx="2" />
-      <path d="M9.5 12l2 2 3-4" />
-    </>
-  ),
-  sparkle: <path d="M12 3l1.2 4.8L18 9l-4.8 1.2L12 15l-1.2-4.8L6 9l4.8-1.2z" />,
-  bag: (
-    <>
-      <path d="M5.5 8h13l-1 12h-11z" />
-      <path d="M9 8V6.5a3 3 0 016 0V8" />
-    </>
-  ),
-};
-
-function Icon({ name, size = 24, color = blue }: { name: string; size?: number; color?: string }) {
+/** `text` のうち `term` 部分だけ色付き太字にする。 */
+function highlight(text: string, term: string, color: string): ReactNode {
+  const i = text.indexOf(term);
+  if (i < 0) return text;
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-      {iconPaths[name]}
+    <>
+      {text.slice(0, i)}
+      <b style={{ color, fontWeight: 700 }}>{term}</b>
+      {text.slice(i + term.length)}
+    </>
+  );
+}
+
+function CheckIcon({ size = 16, color = ACCENT }: { size?: number; color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ flexShrink: 0 }}
+      aria-hidden="true"
+    >
+      <path d="M5 12.5l4.2 4.2L19 6.8" />
     </svg>
   );
 }
 
-/* ── shared building blocks ────────────────────────────────────────── */
-
-function Eyebrow({ text, color = blue }: { text: string; color?: string }) {
+/** 丸地に白チェック。お悩み訴求で使う。 */
+function CheckDot({ size = 26 }: { size?: number }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 10 }}>
-      <span style={{ width: 22, height: 1, background: color }} />
-      <span style={{ fontFamily: fontGothic, fontSize: 11, fontWeight: 700, letterSpacing: "0.22em", color }}>{text}</span>
-      <span style={{ width: 22, height: 1, background: color }} />
-    </div>
+    <span
+      style={{
+        flexShrink: 0,
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        background: ACCENT,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CheckIcon size={size * 0.58} color={WHITE} />
+    </span>
   );
 }
 
-function SectionHeading({ text, color = deep, fontSize = 23 }: { text: string; color?: string; fontSize?: number }) {
+function Heading({
+  text,
+  color = MAIN,
+  size = 24,
+  align = "center",
+}: {
+  text: string;
+  color?: string;
+  size?: number;
+  align?: CSSProperties["textAlign"];
+}) {
   return (
     <h2
       style={{
-        fontFamily: fontMincho,
-        fontWeight: 600,
-        fontSize,
-        letterSpacing: "0.05em",
-        color,
-        lineHeight: 1.5,
         margin: 0,
-        textAlign: "center",
+        fontFamily: MINCHO,
+        fontSize: size,
+        fontWeight: 700,
+        lineHeight: 1.55,
+        letterSpacing: "0.04em",
+        color,
+        textAlign: align,
       }}
     >
       {nl(text)}
@@ -159,51 +152,18 @@ function SectionHeading({ text, color = deep, fontSize = 23 }: { text: string; c
   );
 }
 
-/** 必須注釈文リスト（最低24px/1080px幅 ≒ 11px/480px幅 を満たすサイズ） */
-function Notes({ items, align = "left" }: { items: string[]; align?: "left" | "center" }) {
+/**
+ * 予約CTA（ゴールド）。ボタンの上に小見出しは置かず、下に注記を置く。
+ * ページ内で4回のみ使用する。
+ *
+ * `trialNote` は無料体験の適用条件。予約セクションのCTA①は同じ注記が
+ * すぐ上にあるため付けず、それ以外のCTA②〜④に付ける（AUN e5kw59 #2〜#4）。
+ */
+function Cta({ trialNote = false }: { trialNote?: boolean }) {
   return (
-    <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 4 }}>
-      {items.map((n, i) => (
-        <p key={i} style={{ fontSize: 11, lineHeight: 1.7, color: dim, margin: 0, textAlign: align }}>
-          {n}
-        </p>
-      ))}
-    </div>
-  );
-}
-
-/** CTA直上の1周年リマインダー（今すぐ申し込む理由づけ） */
-function CtaUrgency() {
-  return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: 26 }}>
-      <span
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          padding: "6px 16px",
-          borderRadius: 999,
-          background: "#FFFFFF",
-          border: `1px solid ${gold}66`,
-          fontFamily: fontGothic,
-          fontSize: 11.5,
-          fontWeight: 700,
-          color: gold,
-          letterSpacing: "0.02em",
-        }}
-      >
-        ＼ 1周年キャンペーンは9月30日まで ／
-      </span>
-    </div>
-  );
-}
-
-function CtaButton({ text, withUrgency = true }: { text: string; withUrgency?: boolean }) {
-  return (
-    <>
-      {withUrgency && <CtaUrgency />}
+    <div style={{ marginTop: 22 }}>
       <a
-        href={config.ctaUrl}
+        href={CTA_URL}
         target="_blank"
         rel="noopener noreferrer"
         style={{
@@ -212,25 +172,25 @@ function CtaButton({ text, withUrgency = true }: { text: string; withUrgency?: b
           justifyContent: "center",
           gap: 8,
           height: 58,
-          marginTop: 10,
-          background: ctaGrad,
-          color: "#FFFFFF",
+          background: CTA_GRAD,
+          color: WHITE,
           textDecoration: "none",
-          fontSize: 15.5,
+          fontFamily: GOTHIC,
+          fontSize: 16,
           fontWeight: 700,
-          letterSpacing: "0.04em",
+          letterSpacing: "0.06em",
           borderRadius: 999,
-          boxShadow: "0 10px 22px rgba(180,135,60,0.35)",
+          boxShadow: `0 10px 22px ${CTA_SHADOW}`,
         }}
       >
-        {text}
+        {c.cta.text}
         <span
           style={{
             display: "inline-flex",
             width: 22,
             height: 22,
             borderRadius: "50%",
-            background: "rgba(255,255,255,0.25)",
+            background: "rgba(255,255,255,0.28)",
             alignItems: "center",
             justifyContent: "center",
             fontSize: 13,
@@ -239,573 +199,1877 @@ function CtaButton({ text, withUrgency = true }: { text: string; withUrgency?: b
           →
         </span>
       </a>
-    </>
+      <p
+        style={{
+          margin: "9px 0 0",
+          fontFamily: SANS,
+          fontSize: 11,
+          lineHeight: 1.7,
+          color: DIM,
+          textAlign: "center",
+        }}
+      >
+        {c.cta.note}
+      </p>
+      {trialNote && (
+        <p
+          style={{
+            margin: "6px 0 0",
+            fontFamily: SANS,
+            fontSize: 11,
+            lineHeight: 1.7,
+            color: DIM,
+            textAlign: "center",
+          }}
+        >
+          {c.cta.trialNote}
+        </p>
+      )}
+    </div>
   );
 }
 
-/** 1周年記念バッジ（FV・キャンペーンで使用） */
-function AnniversaryBadge({ size = 92 }: { size?: number }) {
-  const b = config.fv.anniversaryBadge;
+/** 「初月 月額会費 0円」形式の金額行。予約セクションと特典セクションで共有。 */
+function MoneyRow({
+  tag,
+  label,
+  value,
+  note,
+  round = false,
+}: {
+  tag: string;
+  label: string;
+  value: string;
+  note?: string;
+  round?: boolean;
+}) {
   return (
     <div
       style={{
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        background: "#FFFFFF",
-        border: `2px solid ${gold}`,
-        boxShadow: "0 4px 14px rgba(180,135,60,0.3)",
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
-        gap: 1,
-        position: "relative",
+        gap: 12,
+        padding: round ? "12px 16px" : "13px 16px",
+        background: WHITE,
+        border: `1px solid ${CREAM_LINE}`,
+        borderRadius: 12,
       }}
     >
-      <div
+      <span
         style={{
-          position: "absolute",
-          inset: 4,
-          borderRadius: "50%",
-          border: `1px solid ${gold}55`,
+          flexShrink: 0,
+          width: round ? 44 : 40,
+          height: round ? 44 : 26,
+          borderRadius: round ? "50%" : 6,
+          background: round ? CTA_GRAD : CREAM,
+          color: round ? WHITE : GOLD_DEEP,
+          fontFamily: MINCHO,
+          fontSize: 13,
+          fontWeight: 700,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-      />
-      <span style={{ fontFamily: fontMincho, fontSize: size * 0.12, color: gold, letterSpacing: "0.2em" }}>{b.small}</span>
-      <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: size * 0.3, lineHeight: 1, color: gold }}>
-        {b.big}
+      >
+        {tag}
       </span>
-      <span style={{ fontFamily: fontGothic, fontSize: size * 0.085, fontWeight: 700, letterSpacing: "0.14em", color: gold }}>{b.en}</span>
+      <span
+        style={{
+          fontFamily: GOTHIC,
+          fontSize: 15,
+          fontWeight: 800,
+          color: MAIN,
+          letterSpacing: "0.02em",
+        }}
+      >
+        {label}
+      </span>
+      <span
+        style={{
+          fontFamily: GOTHIC,
+          fontSize: 19,
+          fontWeight: 800,
+          color: GOLD_DEEP,
+          letterSpacing: "0.01em",
+        }}
+      >
+        {value}
+      </span>
+      {note && (
+        <span style={{ fontFamily: SANS, fontSize: 10.5, color: DIM }}>{note}</span>
+      )}
     </div>
   );
 }
 
 export default function Page() {
-  const c = config;
   return (
-    <LPShell clientSlug={c.slug} fallback={{ name: c.meta.title, status: c.status }}>
-      <div style={{ fontFamily: fontSans, background: pageBg, minHeight: "100vh", color: ink }}>
-        <div style={{ maxWidth: 480, margin: "0 auto", background: "#FFFFFF", overflow: "hidden", position: "relative", boxShadow: "0 0 30px rgba(35,80,110,0.08)" }}>
-          {/* ── header ── */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "13px 18px", background: "#FFFFFF", borderBottom: `1px solid ${line}` }}>
-            <div style={{ lineHeight: 1.2 }}>
-              <div style={{ fontFamily: fontMincho, fontSize: 17, fontWeight: 600, letterSpacing: "0.1em", color: deep }}>{c.header.brand}</div>
-              <div style={{ fontSize: 9, letterSpacing: "0.08em", color: dim, marginTop: 2 }}>{c.header.brandSub}</div>
+    <LPShell
+      clientSlug="soelu-togoshiginza"
+      fallback={{ name: c.meta.title, status: "draft" }}
+    >
+      <div style={{ fontFamily: SANS, color: INK, background: PAGE_BG, minHeight: "100vh" }}>
+        <LPCanvas style={{ background: WHITE }} boxShadow="0 0 60px rgba(35,80,110,0.16)">
+          {/* ── 1. ヘッダー（AUN #4） ─────────────────────────────── */}
+          <header
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 10,
+              padding: "11px 14px",
+              background: WHITE,
+            }}
+          >
+            <div style={{ minWidth: 0 }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: MINCHO,
+                  fontSize: 17,
+                  fontWeight: 700,
+                  letterSpacing: "0.03em",
+                  color: MAIN,
+                  lineHeight: 1.3,
+                }}
+              >
+                {c.header.brand}
+              </p>
+              <p
+                style={{
+                  margin: "2px 0 0",
+                  fontFamily: SANS,
+                  fontSize: 9.5,
+                  letterSpacing: "0.02em",
+                  color: DIM,
+                  lineHeight: 1.4,
+                }}
+              >
+                {c.header.sub}
+              </p>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2, fontSize: 10.5, color: dim, whiteSpace: "nowrap" }}>
-              {c.header.access.map((a) => (
-                <span key={a.station}>
-                  {a.station}
-                  <b style={{ color: deep, marginLeft: 4 }}>{a.walk}</b>
+            <div style={{ flexShrink: 0, textAlign: "right" }}>
+              {c.header.routes.map((r) => {
+                const m = r.match(/^(.*?)(徒歩\S+)$/);
+                return (
+                  <p
+                    key={r}
+                    style={{
+                      margin: 0,
+                      fontFamily: GOTHIC,
+                      fontSize: 10.5,
+                      lineHeight: 1.6,
+                      color: INK,
+                    }}
+                  >
+                    {m ? (
+                      <>
+                        {m[1]}
+                        <b style={{ fontWeight: 800, color: MAIN }}>{m[2]}</b>
+                      </>
+                    ) : (
+                      r
+                    )}
+                  </p>
+                );
+              })}
+            </div>
+          </header>
+
+          {/* ── 2. オファーバー（AUN #3） ─────────────────────────── */}
+          <div style={{ background: MAIN, padding: "13px 14px", textAlign: "center" }}>
+            <p
+              style={{
+                margin: 0,
+                fontFamily: GOTHIC,
+                // 15px。ref03（実寸 約13.8px相当）より大きく、かつ閉じの「／」が
+                // 折り返さずに1行へ収まるサイズ（設計幅390 − 左右14 = 362pxに対して約340px）。
+                fontSize: 15,
+                fontWeight: 800,
+                letterSpacing: "0.01em",
+                color: "#E8CD8A",
+                lineHeight: 1.4,
+                whiteSpace: "nowrap",
+              }}
+            >
+              ＼{c.offerBar.main}／
+            </p>
+            <p
+              style={{
+                margin: "6px 0 0",
+                fontFamily: GOTHIC,
+                fontSize: 13.5,
+                fontWeight: 500,
+                letterSpacing: "0.04em",
+                color: WHITE,
+              }}
+            >
+              {c.offerBar.sub}
+            </p>
+          </div>
+
+          {/* ── 4. FV（AUN #1 バッジ削除 / #2 キャッチ変更） ─────── */}
+          {/* AUN2 #11: 下部の余った床面をカットするため 520 → 430 に詰めている。 */}
+          <section style={{ position: "relative", height: 430, background: MAIN }}>
+            <ImageSlot
+              src={c.fv.hero.src}
+              placeholder={c.fv.hero.placeholder}
+              alt="スタジオ内観"
+              // AUN2 #11: 既定の center だと上下が均等に切れて床が残るため、
+              // 表示位置を上寄せして下側（床面）を落とす。
+              objectPosition="center 30%"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(180deg, rgba(20,50,74,0.30) 0%, rgba(20,50,74,0.05) 34%, rgba(20,50,74,0.62) 100%)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: 28,
+                left: 16,
+                display: "flex",
+                flexDirection: "row-reverse",
+                // 既定の stretch だと短いほうの札が相手の高さに引き伸ばされ、
+                // 「。」の後ろに余白が出る（AUN2 #1）。各札を中身の高さに合わせる。
+                alignItems: "flex-start",
+                gap: 10,
+              }}
+            >
+              {c.fv.catchLines.map((lineText, i) => (
+                <span
+                  key={i}
+                  style={{
+                    writingMode: "vertical-rl",
+                    textOrientation: "upright",
+                    background: "rgba(255,255,255,0.93)",
+                    color: MAIN,
+                    fontFamily: MINCHO,
+                    fontSize: i === 0 ? 27 : 24,
+                    fontWeight: 700,
+                    letterSpacing: "0.12em",
+                    lineHeight: 1,
+                    padding: "20px 12px",
+                    borderRadius: 4,
+                    boxShadow: "0 4px 14px rgba(20,50,74,0.22)",
+                  }}
+                >
+                  {lineText}
                 </span>
               ))}
             </div>
-          </div>
+          </section>
 
-          {/* ── 1周年キャンペーン帯 ── */}
-          <div style={{ background: deep, textAlign: "center", padding: "10px 16px" }}>
-            <p style={{ fontFamily: fontGothic, fontSize: 13, fontWeight: 700, letterSpacing: "0.04em", color: "#F3D89A", margin: 0 }}>{c.offerBar.text}</p>
-            <p style={{ fontSize: 10.5, letterSpacing: "0.06em", color: "rgba(255,255,255,0.85)", margin: "3px 0 0" }}>{c.offerBar.sub}</p>
-          </div>
-
-          {/* ── FV ── */}
-          <section style={{ position: "relative", overflow: "hidden", background: tint }}>
-            <div style={{ position: "relative", height: 300 }}>
-              <ImageSlot
-                src={c.fv.hero.src}
-                placeholder={c.fv.hero.placeholder}
-                objectPosition={c.fv.hero.position ?? "center"}
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", background: "#DDE9F1" }}
-              />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(239,246,250,0) 55%, rgba(239,246,250,0.9) 88%, #EFF6FA 100%)" }} />
-              <div style={{ position: "absolute", top: 14, right: 14 }}>
-                <AnniversaryBadge size={88} />
-              </div>
-            </div>
-            <div style={{ position: "relative", padding: "0 22px 30px", marginTop: -34 }}>
+          {/* ── 5. FV下のメインカラー帯（AUN #5 / #6） ───────────── */}
+          <section
+            style={{
+              // 単色の紺だと重く沈むので、下に向けて少し明るいブルーへ送る。
+              background: "linear-gradient(180deg, #1E4863 0%, #2A6489 100%)",
+              padding: `20px ${PAD}px 24px`,
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "center" }}>
               <span
                 style={{
-                  display: "inline-flex",
-                  padding: "5px 14px",
+                  display: "inline-block",
+                  padding: "11px 22px",
                   borderRadius: 999,
-                  background: deep,
-                  color: "#FFFFFF",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
+                  background: WHITE,
+                  color: MAIN,
+                  fontFamily: GOTHIC,
+                  fontSize: 16,
+                  fontWeight: 800,
+                  letterSpacing: "0.04em",
+                  boxShadow: "0 4px 14px rgba(10,35,55,0.28)",
                 }}
               >
-                {c.fv.catchTop}
+                {c.fvBand.pill}
               </span>
-              <h1 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 22.5, lineHeight: 1.55, letterSpacing: "0.02em", color: deep, margin: "12px 0 0", whiteSpace: "nowrap" }}>
-                {c.fv.catchLines[0]}
-                <br />
-                <span style={{ fontSize: 28, color: blue }}>{c.fv.catchLines[1]}</span>
-              </h1>
-
-              {/* 体験0円カード */}
-              <div
-                style={{
-                  marginTop: 18,
-                  background: "#FFFFFF",
-                  border: `1.5px solid ${blue}55`,
-                  borderRadius: 16,
-                  boxShadow: "0 8px 22px rgba(35,80,110,0.1)",
-                  padding: "16px 18px 14px",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
-                  <span style={{ padding: "4px 12px", borderRadius: 999, background: `${blue}18`, color: deep, fontSize: 12, fontWeight: 700 }}>{c.fv.trial.label}</span>
-                  <span style={{ padding: "4px 12px", borderRadius: 999, background: `${green}20`, color: "#48705C", fontSize: 12, fontWeight: 700 }}>{c.fv.trial.time}</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 6, marginTop: 8 }}>
-                  <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 72, lineHeight: 1, color: blue }}>{c.fv.trial.price}</span>
-                  <span style={{ fontFamily: fontMincho, fontSize: 26, fontWeight: 600, color: deep, marginBottom: 6 }}>
-                    {c.fv.trial.unit}
-                    <span style={{ fontSize: 11, color: dim, marginLeft: 4 }}>（税込）</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* よもぎ蒸しフック */}
-              <div
-                style={{
-                  marginTop: 12,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  background: beigeBg,
-                  border: `1px solid ${beigeLine}`,
-                  borderRadius: 14,
-                  padding: "12px 14px",
-                }}
-              >
-                <span
+            </div>
+            {/* AUN2 #10: 添付デザインを参考にした特徴カード4枚（2×2）。 */}
+            <div
+              style={{
+                marginTop: 14,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 8,
+              }}
+            >
+              {c.fvBand.features.map((f) => {
+                const t = FEATURE_TONES[f.tone];
+                return (
+                <div
+                  key={f.label}
                   style={{
-                    flexShrink: 0,
+                    background: `radial-gradient(circle at 112% 8%, ${t.glow} 0%, transparent 58%), linear-gradient(150deg, ${t.from} 0%, ${t.to} 100%)`,
+                    borderRadius: 14,
+                    padding: "11px 10px 12px",
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: 44,
-                    height: 44,
-                    borderRadius: "50%",
-                    background: "#FFFFFF",
-                    border: `1px solid ${beigeLine}`,
+                    flexDirection: "column",
+                    gap: 7,
+                    boxShadow: "0 4px 14px rgba(10,35,55,0.18)",
                   }}
                 >
-                  <Icon name="steam" size={24} color={gold} />
-                </span>
-                <div>
-                  <span style={{ display: "inline-flex", padding: "2px 10px", borderRadius: 999, background: gold, color: "#FFFFFF", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em" }}>
-                    {c.fv.yomogiBadge.label}
-                  </span>
-                  <p style={{ fontFamily: fontGothic, fontSize: 13, fontWeight: 700, lineHeight: 1.55, color: "#7A5E28", margin: "5px 0 0" }}>{nl(c.fv.yomogiBadge.text)}</p>
-                </div>
-              </div>
-
-              {/* tags */}
-              <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-                {c.fv.tags.map((t) => (
                   <span
-                    key={t}
                     style={{
-                      flex: 1,
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "8px 4px",
+                      alignSelf: "flex-start",
+                      background: t.pill,
+                      color: WHITE,
                       borderRadius: 999,
-                      border: `1px solid ${blue}55`,
-                      background: "#FFFFFF",
-                      color: deep,
-                      fontSize: 11.5,
-                      fontWeight: 700,
+                      padding: "5px 10px",
+                      fontFamily: GOTHIC,
+                      // 最長の「スタジオレッスン受け放題」(12字) が
+                      // カード内側153pxに1行で収まるサイズ。
+                      fontSize: 10.5,
+                      fontWeight: 800,
+                      letterSpacing: "0.01em",
+                      lineHeight: 1.25,
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {t}
+                    {f.label}
                   </span>
-                ))}
-              </div>
-
-              <CtaButton text={c.fv.ctaText} withUrgency={false} />
-              <Notes items={c.fv.notes} />
+                  <span
+                    style={{
+                      fontFamily: GOTHIC,
+                      fontSize: 11,
+                      fontWeight: 700,
+                      lineHeight: 1.65,
+                      color: t.text,
+                    }}
+                  >
+                    {f.lines.map((ln, i) => (
+                      <span key={i}>
+                        {ln}
+                        {i < f.lines.length - 1 && <br />}
+                      </span>
+                    ))}
+                  </span>
+                  {f.badge && (
+                    <span
+                      style={{
+                        marginTop: "auto",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        background: t.pill,
+                        borderRadius: 8,
+                        padding: "5px 8px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: GOTHIC,
+                          fontSize: 12,
+                          fontWeight: 800,
+                          color: WHITE,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {f.badge.main}
+                      </span>
+                      <span style={{ width: 1, height: 14, background: "rgba(255,255,255,0.4)" }} />
+                      <span
+                        style={{
+                          fontFamily: SANS,
+                          fontSize: 8.5,
+                          lineHeight: 1.4,
+                          color: "rgba(255,255,255,0.9)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {nl(f.badge.sub)}
+                      </span>
+                    </span>
+                  )}
+                </div>
+                );
+              })}
             </div>
+            {c.fvBand.featuresNotes?.map((note, i) => (
+              <p
+                key={note}
+                style={{
+                  margin: `${i === 0 ? 10 : 3}px 0 0`,
+                  fontFamily: SANS,
+                  fontSize: 9.5,
+                  lineHeight: 1.6,
+                  color: "rgba(255,255,255,0.72)",
+                }}
+              >
+                {note}
+              </p>
+            ))}
           </section>
 
-          {/* ── 実績 ── */}
-          <section style={{ background: deep, padding: "26px 22px 20px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-              {c.stats.items.map((s) => (
-                <div key={s.num} style={{ textAlign: "center", padding: "14px 6px", borderRadius: 14, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.14)" }}>
-                  <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.85)" }}>{s.pre}</div>
-                  <div style={{ marginTop: 2 }}>
-                    <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 36, lineHeight: 1, color: "#F3D89A" }}>{s.num}</span>
-                    <span style={{ fontFamily: fontMincho, fontSize: 16, color: "#FFFFFF", marginLeft: 3 }}>{s.unit}</span>
-                    <span style={{ fontFamily: fontMincho, fontSize: 13, color: "rgba(255,255,255,0.9)", marginLeft: 2 }}>{s.post}</span>
+          {/* ── 6. 無料体験のご予約（AUN #7）＋ CTA① ─────────────── */}
+          <section style={{ background: WHITE, padding: `32px ${PAD}px 36px` }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <span
+                style={{
+                  display: "inline-block",
+                  padding: "13px 22px",
+                  borderRadius: 999,
+                  background: CTA_GRAD,
+                  color: WHITE,
+                  fontFamily: GOTHIC,
+                  fontSize: 15.5,
+                  fontWeight: 800,
+                  letterSpacing: "0.02em",
+                  boxShadow: `0 6px 16px ${CTA_SHADOW}`,
+                }}
+              >
+                ＼ {c.reservation.badge} ／
+              </span>
+            </div>
+
+            <div
+              style={{
+                marginTop: 20,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+              }}
+            >
+              <span style={{ width: 26, height: 1, background: ACCENT }} />
+              <span
+                style={{
+                  fontFamily: GOTHIC,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: "0.22em",
+                  color: ACCENT,
+                }}
+              >
+                {c.reservation.eyebrow}
+              </span>
+              <span style={{ width: 26, height: 1, background: ACCENT }} />
+            </div>
+
+            <div style={{ marginTop: 12 }}>
+              <Heading text={c.reservation.heading} size={28} />
+            </div>
+
+            <p
+              style={{
+                margin: "16px 0 0",
+                fontFamily: SANS,
+                fontSize: 13,
+                lineHeight: 1.95,
+                color: INK,
+                textAlign: "center",
+              }}
+            >
+              {c.reservation.lead.map((ln, i) => (
+                <span key={i}>
+                  {ln}
+                  {i < c.reservation.lead.length - 1 && <br />}
+                </span>
+              ))}
+            </p>
+
+            <div
+              style={{
+                marginTop: 18,
+                display: "flex",
+                justifyContent: "center",
+                gap: 12,
+              }}
+            >
+              {c.reservation.chips.map((chip) => (
+                <span
+                  key={chip.label}
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: 8,
+                    padding: "16px 20px",
+                    borderRadius: 14,
+                    background: PALE,
+                    border: `2px solid ${ACCENT}`,
+                  }}
+                >
+                  <span style={{ fontFamily: GOTHIC, fontSize: 12.5, fontWeight: 700, color: MAIN }}>
+                    {chip.label}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: GOTHIC,
+                      fontSize: 27,
+                      fontWeight: 800,
+                      color: MAIN,
+                    }}
+                  >
+                    {chip.value}
+                  </span>
+                </span>
+              ))}
+            </div>
+
+            <div
+              style={{
+                marginTop: 18,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+                background: CREAM,
+                border: `2px solid ${GOLD}`,
+                borderRadius: 14,
+                padding: 12,
+              }}
+            >
+              {c.reservation.rows.map((row) => (
+                <MoneyRow key={row.tag} {...row} />
+              ))}
+            </div>
+
+            <div style={{ marginTop: 14 }}>
+              {c.reservation.notes.map((note, i) => (
+                <p
+                  key={i}
+                  style={{
+                    margin: i === 0 ? 0 : "4px 0 0",
+                    fontFamily: SANS,
+                    fontSize: 11,
+                    lineHeight: 1.75,
+                    color: DIM,
+                  }}
+                >
+                  {note}
+                </p>
+              ))}
+            </div>
+
+            <Cta />
+          </section>
+
+          {/* ── 7. お悩み訴求（AUN #9） ───────────────────────────── */}
+          <section style={{ background: WHITE, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.worry.heading} size={24} />
+            <div
+              style={{
+                marginTop: 20,
+                display: "flex",
+                flexDirection: "column",
+                gap: 11,
+              }}
+            >
+              {c.worry.items.map((item) => (
+                <div
+                  key={item.text}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "15px 16px",
+                    background: PALE,
+                    borderRadius: 12,
+                  }}
+                >
+                  <CheckDot />
+                  <span
+                    style={{
+                      fontFamily: SANS,
+                      fontSize: 13.5,
+                      lineHeight: 1.6,
+                      color: INK,
+                    }}
+                  >
+                    {highlight(item.text, item.highlight, ACCENT)}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <p
+              style={{
+                margin: "26px 0 0",
+                fontFamily: MINCHO,
+                fontSize: 20,
+                fontWeight: 700,
+                lineHeight: 1.75,
+                letterSpacing: "0.03em",
+                color: MAIN,
+                textAlign: "center",
+              }}
+            >
+              {c.worry.closingPre}
+              <br />
+              {c.worry.closingHighlight.split("\n").map((ln) => (
+                <span key={ln} style={{ display: "block" }}>
+                  <span
+                    style={{
+                      background: `linear-gradient(transparent 62%, ${PALE} 62%)`,
+                      paddingBottom: 2,
+                    }}
+                  >
+                    {ln}
+                  </span>
+                </span>
+              ))}
+            </p>
+          </section>
+
+          {/* ── 8. 目指せる未来（AUN #10-13 / #14 / #15） ─────────── */}
+          <section style={{ background: PALE, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.future.heading} size={22} />
+            <div
+              style={{
+                marginTop: 20,
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+              }}
+            >
+              {c.future.items.map((item) => (
+                <div
+                  key={item.num}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 13,
+                    background: WHITE,
+                    borderRadius: 12,
+                    padding: 10,
+                    boxShadow: "0 2px 8px rgba(35,80,110,0.06)",
+                  }}
+                >
+                  {/* 写真は縦長(480x600)・横長(900x675)・正方形が混在しているため、
+                      cover だと人物の頭や足が切れる。contain で全体を見せ、地色は
+                      カードと同じ白にして余白が目立たないようにしている。
+                      スロットは縦長写真の比率(0.8)に合わせてあるので、
+                      縦位置の写真は余白なしでぴったり収まる。 */}
+                  <ImageSlot
+                    src={item.img.src}
+                    placeholder={item.img.placeholder}
+                    alt={item.title}
+                    radius={10}
+                    objectFit="contain"
+                    style={{ flexShrink: 0, width: 112, height: 140, background: WHITE }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        marginBottom: 6,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: GOTHIC,
+                          fontSize: 14,
+                          fontWeight: 800,
+                          color: ACCENT,
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        {item.num}
+                      </span>
+                      <span style={{ width: 1, height: 14, background: LINE }} />
+                      <span
+                        style={{
+                          fontFamily: GOTHIC,
+                          fontSize: 16,
+                          fontWeight: 800,
+                          color: MAIN,
+                          letterSpacing: "0.01em",
+                          lineHeight: 1.35,
+                        }}
+                      >
+                        {item.title}
+                      </span>
+                    </div>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontFamily: SANS,
+                        fontSize: 13,
+                        lineHeight: 1.8,
+                        color: INK,
+                      }}
+                    >
+                      {nl(item.body)}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 3 }}>
-              {c.stats.items.map((s) => (
-                <p key={s.note} style={{ fontSize: 11, lineHeight: 1.6, color: "rgba(255,255,255,0.65)", margin: 0 }}>
-                  {s.note}
+
+            <p
+              style={{
+                margin: "24px 0 0",
+                fontFamily: MINCHO,
+                fontSize: 19,
+                fontWeight: 700,
+                lineHeight: 1.7,
+                letterSpacing: "0.04em",
+                color: MAIN,
+                textAlign: "center",
+              }}
+            >
+              {c.future.closing}
+            </p>
+          </section>
+
+          {/* ── 9. 選ばれる理由（AUN #16 / #17 / #19）＋ CTA② ────── */}
+          <section style={{ background: WHITE, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.reasons.heading} size={30} />
+            <div
+              style={{
+                width: 48,
+                height: 3,
+                background: GOLD,
+                margin: "12px auto 0",
+                borderRadius: 2,
+              }}
+            />
+
+            {/* 画像ありの理由（01〜03） */}
+            <div
+              style={{
+                marginTop: 22,
+                display: "flex",
+                flexDirection: "column",
+                gap: 26,
+              }}
+            >
+              {c.reasons.items
+                .filter((item) => item.img)
+                .map((item) => (
+                  <div key={item.num}>
+                    <div style={{ position: "relative" }}>
+                      <ImageSlot
+                        src={item.img!.src}
+                        placeholder={item.img!.placeholder}
+                        alt={item.title.replace("\n", "")}
+                        radius={12}
+                        style={{ width: "100%", height: 186 }}
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: -12,
+                          right: 8,
+                          width: 46,
+                          height: 46,
+                          background: MAIN,
+                          transform: "rotate(45deg)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 4,
+                          boxShadow: "0 4px 12px rgba(35,80,110,0.28)",
+                        }}
+                      >
+                        <span
+                          style={{
+                            transform: "rotate(-45deg)",
+                            fontFamily: GOTHIC,
+                            fontSize: 15,
+                            fontWeight: 800,
+                            color: WHITE,
+                          }}
+                        >
+                          {item.num}
+                        </span>
+                      </div>
+                    </div>
+
+                    <h3
+                      style={{
+                        margin: "16px 0 0",
+                        fontFamily: MINCHO,
+                        fontSize: 19,
+                        fontWeight: 700,
+                        lineHeight: 1.6,
+                        letterSpacing: "0.03em",
+                        color: MAIN,
+                        textAlign: "center",
+                      }}
+                    >
+                      {nl(item.title)}
+                    </h3>
+                    <div
+                      style={{ width: 42, height: 2, background: ACCENT, margin: "11px auto 0" }}
+                    />
+                    <p
+                      style={{
+                        margin: "13px 0 0",
+                        fontFamily: SANS,
+                        fontSize: 13,
+                        lineHeight: 1.95,
+                        color: INK,
+                      }}
+                    >
+                      {item.body}
+                    </p>
+                    {item.note && (
+                      <p
+                        style={{
+                          margin: "8px 0 0",
+                          fontFamily: SANS,
+                          fontSize: 11,
+                          lineHeight: 1.75,
+                          color: DIM,
+                        }}
+                      >
+                        {item.note}
+                      </p>
+                    )}
+                  </div>
+                ))}
+            </div>
+
+            {/* AUN #17: 04・05は画像なし。2列でコンパクトにまとめる。 */}
+            <div
+              style={{
+                marginTop: 20,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+              }}
+            >
+              {c.reasons.items
+                .filter((item) => !item.img)
+                .map((item) => (
+                  <div
+                    key={item.num}
+                    style={{
+                      background: PALE,
+                      borderRadius: 12,
+                      padding: "16px 13px 15px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        width: 30,
+                        height: 30,
+                        background: MAIN,
+                        transform: "rotate(45deg)",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 3,
+                      }}
+                    >
+                      <span
+                        style={{
+                          transform: "rotate(-45deg)",
+                          fontFamily: GOTHIC,
+                          fontSize: 11.5,
+                          fontWeight: 800,
+                          color: WHITE,
+                        }}
+                      >
+                        {item.num}
+                      </span>
+                    </span>
+                    <h3
+                      style={{
+                        margin: "11px 0 0",
+                        fontFamily: MINCHO,
+                        fontSize: 15,
+                        fontWeight: 700,
+                        lineHeight: 1.55,
+                        letterSpacing: "0.02em",
+                        color: MAIN,
+                      }}
+                    >
+                      {nl(item.title)}
+                    </h3>
+                    <p
+                      style={{
+                        margin: "8px 0 0",
+                        fontFamily: SANS,
+                        fontSize: 11.5,
+                        lineHeight: 1.75,
+                        color: DIM,
+                      }}
+                    >
+                      {item.body}
+                    </p>
+                  </div>
+                ))}
+            </div>
+
+            <Cta trialNote />
+          </section>
+
+          {/* ── 10. 料金プラン（AUN #20 / #24 / #25） ─────────────── */}
+          <section style={{ background: MAIN, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.plans.heading} size={30} color={WHITE} />
+            <div
+              style={{
+                width: 48,
+                height: 3,
+                background: GOLD,
+                margin: "12px auto 0",
+                borderRadius: 2,
+              }}
+            />
+            <p
+              style={{
+                margin: "14px 0 0",
+                fontFamily: GOTHIC,
+                fontSize: 15,
+                fontWeight: 700,
+                lineHeight: 1.7,
+                color: WHITE,
+                textAlign: "center",
+              }}
+            >
+              {c.plans.lead}
+            </p>
+
+            {/* AUN #25: 1回あたりの目安価格を大きく打ち出す見せ方 */}
+            <div
+              style={{
+                marginTop: 18,
+                background: WHITE,
+                borderRadius: 14,
+                padding: "18px 16px 20px",
+                textAlign: "center",
+              }}
+            >
+              <p style={{ margin: 0, lineHeight: 1.1 }}>
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 15,
+                    fontWeight: 800,
+                    color: MAIN,
+                  }}
+                >
+                  {c.plans.highlight.pre}
+                </span>
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 46,
+                    fontWeight: 800,
+                    color: GOLD_DEEP,
+                    letterSpacing: "0.01em",
+                    padding: "0 2px",
+                  }}
+                >
+                  {c.plans.highlight.amount}
+                </span>
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 15,
+                    fontWeight: 800,
+                    color: MAIN,
+                  }}
+                >
+                  円{c.plans.highlight.post.replace("円", "")}
+                </span>
+                <sup style={{ fontFamily: SANS, fontSize: 9, color: DIM }}>※1</sup>
+              </p>
+              <p
+                style={{
+                  margin: "10px 0 0",
+                  fontFamily: MINCHO,
+                  fontSize: 21,
+                  fontWeight: 700,
+                  lineHeight: 1.55,
+                  letterSpacing: "0.03em",
+                  color: MAIN,
+                }}
+              >
+                {c.plans.highlight.lines[0]}
+                <br />
+                {c.plans.highlight.lines[1]}
+              </p>
+
+              <div
+                style={{
+                  marginTop: 16,
+                  paddingTop: 16,
+                  borderTop: `1px solid ${LINE}`,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                  }}
+                >
+                  {[c.plans.cross.a, c.plans.cross.b].map((name, i) => (
+                    <span key={name} style={{ display: "contents" }}>
+                      {i > 0 && (
+                        <span style={{ fontFamily: GOTHIC, fontSize: 13, color: DIM }}>×</span>
+                      )}
+                      <span
+                        style={{
+                          padding: "6px 13px",
+                          borderRadius: 8,
+                          background: MAIN,
+                          color: WHITE,
+                          fontFamily: GOTHIC,
+                          fontSize: 13,
+                          fontWeight: 800,
+                        }}
+                      >
+                        {name}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+                <p
+                  style={{
+                    margin: "10px 0 0",
+                    fontFamily: GOTHIC,
+                    fontSize: 24,
+                    fontWeight: 800,
+                    color: GOLD_DEEP,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {c.plans.cross.title}
+                </p>
+                <p
+                  style={{
+                    margin: "6px 0 0",
+                    fontFamily: GOTHIC,
+                    fontSize: 14,
+                    fontWeight: 700,
+                    lineHeight: 1.6,
+                    color: MAIN,
+                  }}
+                >
+                  {c.plans.cross.lines[0]}
+                  <br />
+                  {c.plans.cross.lines[1]}
+                </p>
+              </div>
+            </div>
+
+            {/* AUN2 #13: 公式 studio.soelu.com/plans の3プラン構成で作り直し。
+                390px幅では3列比較表が潰れるため、プランごとのカードを縦に積んでいる。 */}
+            <div
+              style={{
+                marginTop: 16,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+              }}
+            >
+              {c.plans.items.map((plan) => (
+                <div
+                  key={plan.name}
+                  style={{
+                    background: WHITE,
+                    borderRadius: 12,
+                    border: plan.badge ? `2px solid ${GOLD}` : `1px solid ${LINE}`,
+                    padding: "14px 15px 15px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 10,
+                    }}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                      <span
+                        style={{
+                          fontFamily: GOTHIC,
+                          fontSize: 15,
+                          fontWeight: 800,
+                          color: MAIN,
+                        }}
+                      >
+                        {plan.name}
+                      </span>
+                      {plan.badge && (
+                        <span
+                          style={{
+                            flexShrink: 0,
+                            background: CTA_GRAD,
+                            color: WHITE,
+                            borderRadius: 999,
+                            padding: "3px 9px",
+                            fontFamily: GOTHIC,
+                            fontSize: 10,
+                            fontWeight: 800,
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {plan.badge}
+                        </span>
+                      )}
+                    </span>
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        fontFamily: MINCHO,
+                        fontSize: 21,
+                        fontWeight: 700,
+                        color: GOLD_DEEP,
+                      }}
+                    >
+                      {plan.price}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 10,
+                      paddingTop: 10,
+                      borderTop: `1px solid ${LINE}`,
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: 8,
+                    }}
+                  >
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        fontFamily: SANS,
+                        fontSize: 10.5,
+                        color: DIM,
+                      }}
+                    >
+                      {c.plans.machineLabel}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: GOTHIC,
+                        fontSize: 12.5,
+                        fontWeight: 700,
+                        lineHeight: 1.5,
+                        color: MAIN,
+                      }}
+                    >
+                      {plan.machine}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 全プラン共通 */}
+            <div
+              style={{
+                marginTop: 12,
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.35)",
+                borderRadius: 12,
+                padding: "13px 15px 14px",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: GOTHIC,
+                  fontSize: 12.5,
+                  fontWeight: 800,
+                  letterSpacing: "0.04em",
+                  color: WHITE,
+                }}
+              >
+                {c.plans.common.heading}
+              </p>
+              <div
+                style={{
+                  marginTop: 9,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 7,
+                }}
+              >
+                {c.plans.common.items.map((item) => (
+                  <span
+                    key={item}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 5,
+                      background: "rgba(255,255,255,0.14)",
+                      borderRadius: 999,
+                      padding: "5px 11px",
+                      fontFamily: GOTHIC,
+                      fontSize: 11.5,
+                      fontWeight: 700,
+                      color: WHITE,
+                    }}
+                  >
+                    <CheckIcon size={12} color="#BFE0F2" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* 初期費用 */}
+            <div
+              style={{
+                marginTop: 12,
+                background: WHITE,
+                borderRadius: 12,
+                padding: "13px 15px 15px",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: GOTHIC,
+                  fontSize: 12.5,
+                  fontWeight: 800,
+                  letterSpacing: "0.04em",
+                  color: MAIN,
+                }}
+              >
+                {c.plans.initial.heading}
+              </p>
+              <div style={{ marginTop: 9, display: "flex", flexDirection: "column", gap: 6 }}>
+                {c.plans.initial.rows.map((row) => (
+                  <div
+                    key={row.label}
+                    style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}
+                  >
+                    <span style={{ fontFamily: SANS, fontSize: 12, color: INK }}>{row.label}</span>
+                    <span style={{ fontFamily: GOTHIC, fontSize: 13.5, fontWeight: 700, color: INK }}>
+                      {row.value}
+                    </span>
+                  </div>
+                ))}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    paddingTop: 8,
+                    borderTop: `1px solid ${LINE}`,
+                  }}
+                >
+                  <span style={{ fontFamily: GOTHIC, fontSize: 12.5, fontWeight: 800, color: MAIN }}>
+                    {c.plans.initial.total.label}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: GOTHIC,
+                      fontSize: 16,
+                      fontWeight: 800,
+                      color: DIM,
+                      textDecoration: "line-through",
+                      textDecorationThickness: 1.5,
+                    }}
+                  >
+                    {c.plans.initial.total.value}
+                  </span>
+                </div>
+              </div>
+              <p
+                style={{
+                  margin: "11px 0 0",
+                  background: CREAM,
+                  border: `1px solid ${GOLD}`,
+                  borderRadius: 8,
+                  padding: "9px 10px",
+                  fontFamily: GOTHIC,
+                  fontSize: 14,
+                  fontWeight: 800,
+                  color: GOLD_DEEP,
+                  textAlign: "center",
+                }}
+              >
+                {c.plans.initial.campaign}
+              </p>
+            </div>
+
+            <p
+              style={{
+                margin: "12px 0 0",
+                fontFamily: SANS,
+                fontSize: 11.5,
+                lineHeight: 1.7,
+                color: "rgba(255,255,255,0.86)",
+                textAlign: "right",
+              }}
+            >
+              {c.plans.taxNote}
+            </p>
+
+            <div style={{ marginTop: 10 }}>
+              {c.plans.notes.map((note, i) => (
+                <p
+                  key={i}
+                  style={{
+                    margin: i === 0 ? 0 : "5px 0 0",
+                    fontFamily: SANS,
+                    fontSize: 10.5,
+                    lineHeight: 1.8,
+                    color: "rgba(255,255,255,0.8)",
+                  }}
+                >
+                  {note}
                 </p>
               ))}
             </div>
           </section>
 
-          {/* ── worry ── */}
-          <section style={{ padding: "44px 22px 40px", background: "#FFFFFF" }}>
-            <SectionHeading text={c.worry.heading} />
-            <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 10 }}>
-              {c.worry.items.map((w) => (
-                <div key={w} style={{ display: "flex", alignItems: "center", gap: 12, background: tint, borderRadius: 12, padding: "13px 16px" }}>
-                  <span style={{ flexShrink: 0, width: 24, height: 24, borderRadius: "50%", background: blue, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <Icon name="check" size={14} color="#FFFFFF" />
-                  </span>
-                  <span style={{ fontSize: 13.5, fontWeight: 500, lineHeight: 1.6, color: ink }}>{w}</span>
-                </div>
+          {/* ── 11. 入会特典（AUN #21・CTAは置かない） ────────────── */}
+          <section style={{ background: CREAM, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.benefits.heading} size={24} />
+
+            <div
+              style={{
+                marginTop: 20,
+                display: "flex",
+                flexDirection: "column",
+                gap: 11,
+              }}
+            >
+              {c.benefits.monthly.map((row) => (
+                <MoneyRow key={row.tag} {...row} round />
               ))}
             </div>
-            <p style={{ textAlign: "center", fontFamily: fontMincho, fontSize: 19, fontWeight: 600, lineHeight: 1.7, color: deep, margin: "26px 0 0" }}>
-              {c.worry.closingPre}
-              <br />
-              <span style={{ fontSize: 18, whiteSpace: "nowrap", color: blue, background: `linear-gradient(transparent 62%, ${blue}22 62%)` }}>{c.worry.closingHighlight}</span>
+
+            <p
+              style={{
+                margin: "26px 0 0",
+                fontFamily: MINCHO,
+                fontSize: 17,
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                color: MAIN,
+                textAlign: "center",
+              }}
+            >
+              {c.benefits.subHeading}
             </p>
-          </section>
 
-          {/* ── 体験オファー ── */}
-          <section style={{ padding: "44px 22px 46px", background: tint }}>
-            <Eyebrow text={c.trial.eyebrow} />
-            <h2 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 23, letterSpacing: "0.04em", lineHeight: 1.5, color: deep, margin: 0, textAlign: "center" }}>
-              {c.trial.headingPre}
-              <br />
-              <span style={{ fontSize: 30, color: blue }}>{c.trial.headingHighlight}</span>
-            </h2>
-            <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 1.95, color: dim, margin: "16px 0 0" }}>{nl(c.trial.lead)}</p>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 22 }}>
-              {c.trial.photos.map((p, i) => (
-                <ImageSlot key={i} src={p.src} placeholder={p.placeholder} objectPosition={p.position ?? "center"} radius={14} style={{ width: "100%", height: 130, background: "#DDE9F1" }} />
-              ))}
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 18 }}>
-              {c.trial.items.map((item) => (
-                <div key={item.title} style={{ display: "flex", gap: 14, background: "#FFFFFF", borderRadius: 14, border: `1px solid ${line}`, padding: "16px 16px" }}>
-                  <span style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: "50%", background: `${blue}14`, border: `1px solid ${blue}33` }}>
-                    <Icon name={item.icon} size={24} color={blue} />
-                  </span>
-                  <div>
-                    <h3 style={{ fontFamily: fontGothic, fontSize: 14.5, fontWeight: 700, color: deep, margin: 0 }}>{item.title}</h3>
-                    <p style={{ fontSize: 12.5, lineHeight: 1.8, color: dim, margin: "5px 0 0" }}>{item.body}</p>
-                  </div>
+            <div
+              style={{
+                marginTop: 14,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+              }}
+            >
+              {c.benefits.items.map((item) => (
+                <div
+                  key={item.title}
+                  style={{
+                    background: WHITE,
+                    border: `1px solid ${CREAM_LINE}`,
+                    borderRadius: 12,
+                    padding: "14px 16px",
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      fontFamily: GOTHIC,
+                      fontSize: 14.5,
+                      fontWeight: 800,
+                      color: GOLD_DEEP,
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {item.title}
+                  </p>
+                  <p
+                    style={{
+                      margin: "5px 0 0",
+                      fontFamily: SANS,
+                      fontSize: 12.5,
+                      lineHeight: 1.8,
+                      color: INK,
+                    }}
+                  >
+                    {item.body}
+                  </p>
                 </div>
               ))}
             </div>
 
-            <Notes items={c.trial.notes} />
-            <CtaButton text={c.trial.ctaText} />
+            <div style={{ marginTop: 16 }}>
+              {c.benefits.notes.map((note, i) => (
+                <p
+                  key={i}
+                  style={{
+                    margin: i === 0 ? 0 : "5px 0 0",
+                    fontFamily: SANS,
+                    fontSize: 10.5,
+                    lineHeight: 1.8,
+                    color: DIM,
+                  }}
+                >
+                  {note}
+                </p>
+              ))}
+            </div>
           </section>
 
-          {/* ── 1周年キャンペーン ── */}
-          <section style={{ padding: "0 0 46px", background: beigeBg }}>
-            {/* リボン */}
-            <div style={{ background: `linear-gradient(135deg, #C9A254 0%, ${gold} 100%)`, textAlign: "center", padding: "16px 20px 14px" }}>
-              <div style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 26, color: "#FFFFFF", lineHeight: 1.1 }}>{c.campaign.ribbonEn}</div>
-              <div style={{ fontFamily: fontMincho, fontSize: 14, fontWeight: 600, letterSpacing: "0.14em", color: "#FFF7E6", marginTop: 5 }}>{c.campaign.ribbonJa}</div>
+          {/* ── 12. 設備のご案内（AUN #26 見出し削除 / #27 大きく） ── */}
+          <section style={{ background: PALE, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.facility.heading} size={24} />
+            <ImageSlot
+              src={c.facility.img.src}
+              placeholder={c.facility.img.placeholder}
+              alt={c.facility.heading}
+              radius={12}
+              style={{ width: "100%", height: 190, marginTop: 18 }}
+            />
+            <p
+              style={{
+                margin: "16px 0 0",
+                fontFamily: SANS,
+                fontSize: 13,
+                lineHeight: 1.95,
+                color: INK,
+              }}
+            >
+              {c.facility.body}
+            </p>
+
+            <div
+              style={{
+                marginTop: 18,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+              }}
+            >
+              {c.facility.checks.map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    background: WHITE,
+                    border: `1px solid ${LINE}`,
+                    borderRadius: 12,
+                    padding: "15px 16px",
+                    boxShadow: "0 2px 8px rgba(35,80,110,0.06)",
+                  }}
+                >
+                  <CheckDot size={24} />
+                  <span
+                    style={{
+                      fontFamily: GOTHIC,
+                      fontSize: 14.5,
+                      fontWeight: 700,
+                      lineHeight: 1.55,
+                      color: MAIN,
+                    }}
+                  >
+                    {item}
+                  </span>
+                </div>
+              ))}
             </div>
+          </section>
 
-            <div style={{ padding: "26px 22px 0" }}>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "7px 18px", borderRadius: 999, background: "#FFFFFF", border: `1px solid ${beigeLine}` }}>
-                  <Icon name="clock" size={15} color={gold} />
-                  <span style={{ fontSize: 12.5, fontWeight: 700, color: "#7A5E28" }}>{c.campaign.period}</span>
-                </span>
-              </div>
-              <p style={{ textAlign: "center", fontSize: 11.5, color: "#9B824F", margin: "8px 0 0" }}>{c.campaign.periodNote}</p>
-
-              <h2 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 22, letterSpacing: "0.04em", lineHeight: 1.55, color: "#6B4F1D", margin: "20px 0 0", textAlign: "center" }}>
-                {nl(c.campaign.heading)}
-              </h2>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 }}>
-                {c.campaign.mains.map((m) => (
-                  <div key={m.label} style={{ display: "flex", alignItems: "center", gap: 14, background: "#FFFFFF", border: `1.5px solid ${gold}66`, borderRadius: 14, padding: "16px 18px", boxShadow: "0 4px 14px rgba(180,135,60,0.12)" }}>
-                    <span style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 52, height: 52, borderRadius: "50%", background: `linear-gradient(135deg, #C9A254 0%, ${gold} 100%)`, color: "#FFFFFF", fontFamily: fontMincho, fontSize: 15, fontWeight: 600 }}>
-                      {m.label}
+          {/* ── 13. 体験レッスンの流れ ＋ CTA③ ───────────────────── */}
+          <section style={{ background: WHITE, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.flow.heading} size={24} />
+            <div style={{ marginTop: 22, position: "relative" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  left: 16,
+                  top: 14,
+                  bottom: 14,
+                  width: 2,
+                  background: LINE,
+                }}
+              />
+              <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                {c.flow.steps.map((step, i) => (
+                  <div key={step.title} style={{ display: "flex", gap: 14, position: "relative" }}>
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        width: 34,
+                        height: 34,
+                        borderRadius: "50%",
+                        background: MAIN,
+                        color: WHITE,
+                        fontFamily: GOTHIC,
+                        fontSize: 15,
+                        fontWeight: 800,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {i + 1}
                     </span>
-                    <span style={{ fontFamily: fontGothic, fontSize: 21, fontWeight: 800, color: "#6B4F1D", letterSpacing: "0.01em" }}>
-                      {m.value}
-                      {m.suffix && <span style={{ fontSize: 11, fontWeight: 500, color: "#9B824F", marginLeft: 4 }}>{m.suffix}</span>}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <p style={{ textAlign: "center", fontFamily: fontMincho, fontSize: 15, fontWeight: 600, color: "#6B4F1D", margin: "26px 0 0" }}>{c.campaign.benefitsHeading}</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
-                {c.campaign.benefits.map((b) => (
-                  <div key={b.title} style={{ display: "flex", gap: 12, alignItems: "flex-start", background: "#FFFFFF", borderRadius: 12, border: `1px solid ${beigeLine}`, padding: "13px 14px" }}>
-                    <span style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, borderRadius: 10, background: beigeBg, border: `1px solid ${beigeLine}` }}>
-                      <Icon name={b.icon} size={20} color={gold} />
-                    </span>
-                    <div>
-                      <h3 style={{ fontFamily: fontGothic, fontSize: 13.5, fontWeight: 700, color: "#6B4F1D", margin: 0 }}>{b.title}</h3>
-                      <p style={{ fontSize: 11.5, lineHeight: 1.7, color: "#8A754C", margin: "3px 0 0" }}>{b.body}</p>
+                    <div style={{ flex: 1, minWidth: 0, paddingTop: 3 }}>
+                      <p
+                        style={{
+                          margin: 0,
+                          fontFamily: GOTHIC,
+                          fontSize: 14.5,
+                          fontWeight: 800,
+                          color: MAIN,
+                          letterSpacing: "0.03em",
+                        }}
+                      >
+                        {step.title}
+                      </p>
+                      <p
+                        style={{
+                          margin: "4px 0 0",
+                          fontFamily: SANS,
+                          fontSize: 12.5,
+                          lineHeight: 1.85,
+                          color: DIM,
+                        }}
+                      >
+                        {step.body}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
-
-              <Notes items={c.campaign.notes} />
-              <CtaButton text={c.campaign.ctaText} withUrgency={false} />
             </div>
+
+            <Cta trialNote />
           </section>
 
-          {/* ── メソッド1: 動画×スタッフサポート ── */}
-          <section style={{ padding: "44px 22px 44px", background: "#FFFFFF" }}>
-            <Eyebrow text={c.method1.eyebrow} />
-            <SectionHeading text={c.method1.heading} />
-            <ImageSlot src={c.method1.img.src} placeholder={c.method1.img.placeholder} objectPosition={c.method1.img.position ?? "center"} radius={16} style={{ width: "100%", height: 200, background: "#DDE9F1", marginTop: 22 }} />
-            <p style={{ fontSize: 13, lineHeight: 2, color: ink, margin: "18px 0 0" }}>{c.method1.body}</p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 18 }}>
-              {c.method1.points.map((p) => (
-                <div key={p.label} style={{ display: "flex", gap: 12, alignItems: "flex-start", background: tint, borderRadius: 12, padding: "13px 14px" }}>
-                  <span style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: "50%", background: "#FFFFFF", border: `1px solid ${blue}44` }}>
-                    <Icon name={p.icon} size={21} color={blue} />
-                  </span>
-                  <div>
-                    <h3 style={{ fontFamily: fontGothic, fontSize: 13.5, fontWeight: 700, color: deep, margin: 0 }}>{p.label}</h3>
-                    <p style={{ fontSize: 11.5, lineHeight: 1.7, color: dim, margin: "3px 0 0" }}>{p.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* スタッフメッセージ */}
-            <div style={{ marginTop: 18, borderRadius: 14, border: `1px solid ${line}`, background: "#FFFFFF", boxShadow: "0 4px 14px rgba(35,80,110,0.06)", padding: "18px 18px 16px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Icon name="sparkle" size={16} color={blue} />
-                <span style={{ fontFamily: fontGothic, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", color: blue }}>{c.method1.message.title}</span>
-              </div>
-              <p style={{ fontFamily: fontMincho, fontSize: 13.5, fontWeight: 500, lineHeight: 2, color: ink, margin: "10px 0 0" }}>{c.method1.message.body}</p>
-              <p style={{ fontSize: 11, lineHeight: 1.7, color: dim, margin: "10px 0 0" }}>{c.method1.message.from}</p>
-            </div>
-
-            <Notes items={[c.method1.note]} />
-          </section>
-
-          {/* ── メソッド2: よもぎ蒸し ── */}
-          <section style={{ padding: "44px 22px 44px", background: greenBg }}>
-            <Eyebrow text={c.method2.eyebrow} color={green} />
-            <SectionHeading text={c.method2.heading} color="#3F6350" />
-            <div style={{ position: "relative", marginTop: 22 }}>
-              <ImageSlot src={c.method2.img.src} placeholder={c.method2.img.placeholder} objectPosition={c.method2.img.position ?? "center"} radius={16} style={{ width: "100%", height: 200, background: "#E2ECE4" }} />
-              <span
-                style={{
-                  position: "absolute",
-                  top: -12,
-                  left: 14,
-                  display: "inline-flex",
-                  padding: "6px 14px",
-                  borderRadius: 999,
-                  background: gold,
-                  color: "#FFFFFF",
-                  fontSize: 11.5,
-                  fontWeight: 700,
-                  letterSpacing: "0.04em",
-                  boxShadow: "0 4px 10px rgba(180,135,60,0.35)",
-                }}
-              >
-                {c.method2.badge}
-              </span>
-            </div>
-            <p style={{ fontSize: 13, lineHeight: 2, color: "#42584C", margin: "18px 0 0" }}>{c.method2.body}</p>
-            <Notes items={[c.method2.note]} />
-          </section>
-
-          {/* ── 手ぶら訴求 ── */}
-          <section style={{ padding: "44px 22px 44px", background: "#FFFFFF" }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
-              <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 56, height: 56, borderRadius: "50%", background: `${green}1A`, border: `1px solid ${green}55` }}>
-                <Icon name="bag" size={26} color={green} />
-              </span>
-            </div>
-            <SectionHeading text={c.tebura.heading} />
-            <p style={{ fontSize: 13, lineHeight: 2, color: ink, margin: "16px 0 0", textAlign: "center" }}>{c.tebura.body}</p>
-            <div style={{ display: "flex", gap: 8, marginTop: 16, justifyContent: "center" }}>
-              {c.tebura.scenes.map((s) => (
-                <span key={s} style={{ padding: "8px 14px", borderRadius: 999, background: greenBg, border: `1px solid ${green}44`, color: "#48705C", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>
-                  {s}
-                </span>
-              ))}
-            </div>
-            <ImageSlot src={c.tebura.img.src} placeholder={c.tebura.img.placeholder} objectPosition={c.tebura.img.position ?? "center"} radius={16} style={{ width: "100%", height: 170, background: "#E2ECE4", marginTop: 18 }} />
-          </section>
-
-          {/* ── 選ばれる5つの理由 ── */}
-          <section style={{ padding: "44px 22px 50px", background: tint }}>
-            <Eyebrow text="REASON" />
-            <SectionHeading text={c.reasons.heading} />
-            {c.reasons.items.map((item) => (
-              <div key={item.num} style={{ marginTop: 34 }}>
-                <div style={{ position: "relative" }}>
-                  <ImageSlot src={item.img.src} placeholder={item.img.placeholder} objectPosition={item.img.position ?? "center"} radius={16} style={{ width: "100%", height: 190, background: "#DDE9F1" }} />
+          {/* ── 14. 初めてでも大丈夫 ──────────────────────────────── */}
+          <section style={{ background: PALE, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.beginner.heading} size={24} />
+            <p
+              style={{
+                margin: "14px 0 0",
+                fontFamily: SANS,
+                fontSize: 13,
+                lineHeight: 1.95,
+                color: INK,
+              }}
+            >
+              {c.beginner.body}
+            </p>
+            <div
+              style={{
+                marginTop: 18,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 9,
+              }}
+            >
+              {c.beginner.checks.map((item, i) => (
+                <div
+                  key={item}
+                  style={{
+                    // 項目数が奇数のとき、最後の1枚が片側に取り残されて見えるので
+                    // 2列ぶん使わせる（AUN3 #2 で1項目削除して5個になったため）。
+                    gridColumn:
+                      c.beginner.checks.length % 2 === 1 && i === c.beginner.checks.length - 1
+                        ? "1 / -1"
+                        : undefined,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 7,
+                    padding: "11px",
+                    background: WHITE,
+                    borderRadius: 9,
+                    boxShadow: "0 2px 8px rgba(35,80,110,0.06)",
+                  }}
+                >
+                  <CheckIcon size={14} />
                   <span
                     style={{
-                      position: "absolute",
-                      top: -12,
-                      left: 14,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 44,
-                      height: 44,
-                      borderRadius: "50%",
-                      background: deep,
-                      border: "2px solid #FFFFFF",
-                      boxShadow: "0 4px 10px rgba(35,80,110,0.3)",
+                      fontFamily: GOTHIC,
+                      fontSize: 12,
+                      fontWeight: 700,
+                      lineHeight: 1.45,
+                      color: INK,
                     }}
                   >
-                    <span style={{ fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 16, color: "#F3D89A" }}>{item.num}</span>
+                    {item}
                   </span>
                 </div>
-                <h3 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 18, lineHeight: 1.65, letterSpacing: "0.02em", margin: "16px 0 0", color: deep, textAlign: "center" }}>
-                  {nl(item.title)}
-                </h3>
-                <div style={{ width: 36, height: 2, background: blue, margin: "12px auto 0", borderRadius: 2 }} />
-                <p style={{ fontSize: 12.5, lineHeight: 1.95, color: ink, margin: "14px 0 0" }}>{item.body}</p>
-                {item.note && (
-                  <p style={{ fontSize: 11, lineHeight: 1.7, color: dim, margin: "8px 0 0" }}>{item.note}</p>
-                )}
-              </div>
-            ))}
-            <CtaButton text={c.reasons.ctaText} />
-            <p style={{ textAlign: "center", fontSize: 11.5, color: dim, margin: "10px 0 0" }}>{c.reasons.ctaSub}</p>
-          </section>
-
-          {/* ── お客様の声 ── */}
-          <section style={{ padding: "44px 22px 44px", background: "#FFFFFF" }}>
-            <Eyebrow text="VOICE" />
-            <SectionHeading text={c.voices.heading} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 24 }}>
-              {c.voices.items.map((v) => (
-                <div key={v.meta} style={{ background: tint, borderRadius: 16, padding: "20px 18px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                    <span style={{ padding: "4px 12px", borderRadius: 999, background: deep, color: "#FFFFFF", fontSize: 11, fontWeight: 700 }}>{v.meta}</span>
-                    <span style={{ fontSize: 11.5, color: dim }}>お悩み：{v.worry}</span>
-                  </div>
-                  <p style={{ fontSize: 13, lineHeight: 2, color: ink, margin: "12px 0 0" }}>{v.comment}</p>
-                </div>
               ))}
             </div>
-            <p style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: deep, margin: "22px 0 0" }}>{c.voices.chipsHeading}</p>
-            <div style={{ display: "flex", gap: 8, marginTop: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              {c.voices.chips.map((chip) => (
-                <span key={chip} style={{ padding: "7px 13px", borderRadius: 999, background: "#FFFFFF", border: `1px solid ${blue}44`, color: deep, fontSize: 11.5, fontWeight: 500 }}>
-                  「{chip}」
+          </section>
+
+          {/* ── 15. 店舗情報 ──────────────────────────────────────── */}
+          <section style={{ background: WHITE, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.access.heading} size={24} />
+            <ImageSlot
+              src={c.access.img.src}
+              placeholder={c.access.img.placeholder}
+              alt={c.access.name}
+              radius={12}
+              style={{ width: "100%", height: 190, marginTop: 18 }}
+            />
+
+            <p
+              style={{
+                margin: "16px 0 0",
+                fontFamily: GOTHIC,
+                fontSize: 15,
+                fontWeight: 800,
+                letterSpacing: "0.03em",
+                color: MAIN,
+              }}
+            >
+              {c.access.name}
+            </p>
+
+            <dl style={{ margin: "12px 0 0", display: "flex", flexDirection: "column", gap: 9 }}>
+              {[
+                { k: "住所", v: [c.access.address] },
+                { k: "営業時間", v: [c.access.hours] },
+                { k: "定休日", v: [c.access.closed] },
+                { k: "アクセス", v: c.access.routes },
+              ].map((row) => (
+                <div key={row.k} style={{ display: "flex", gap: 11 }}>
+                  <dt
+                    style={{
+                      flexShrink: 0,
+                      width: 58,
+                      fontFamily: GOTHIC,
+                      fontSize: 11.5,
+                      fontWeight: 700,
+                      color: MAIN,
+                      paddingTop: 1,
+                    }}
+                  >
+                    {row.k}
+                  </dt>
+                  <dd style={{ margin: 0, flex: 1, minWidth: 0 }}>
+                    {row.v.map((line) => (
+                      <p
+                        key={line}
+                        style={{
+                          margin: 0,
+                          fontFamily: SANS,
+                          fontSize: 12.5,
+                          lineHeight: 1.8,
+                          color: INK,
+                        }}
+                      >
+                        {line}
+                      </p>
+                    ))}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <iframe
+              src={c.access.mapEmbed}
+              title={`${c.access.name}の地図`}
+              loading="lazy"
+              style={{
+                width: "100%",
+                height: 180,
+                marginTop: 16,
+                border: 0,
+                borderRadius: 12,
+                display: "block",
+              }}
+            />
+            <a
+              href={c.access.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "block",
+                marginTop: 10,
+                fontFamily: GOTHIC,
+                fontSize: 12,
+                fontWeight: 700,
+                color: ACCENT,
+                textAlign: "center",
+                textDecoration: "underline",
+              }}
+            >
+              Googleマップで見る
+            </a>
+          </section>
+
+          {/* ── 16. FAQ ───────────────────────────────────────────── */}
+          <section style={{ background: MAIN, padding: `32px ${PAD}px 36px` }}>
+            <Heading text={c.faq.heading} size={24} color={WHITE} />
+            <div style={{ marginTop: 20 }}>
+              <FaqAccordion items={c.faq.items} accent={MAIN} />
+            </div>
+          </section>
+
+          {/* ── 17. クロージング ＋ CTA④ ─────────────────────────── */}
+          <section style={{ background: WHITE, padding: `36px ${PAD}px 40px` }}>
+            <Heading text={c.closing.heading} size={23} />
+            <p
+              style={{
+                margin: "14px 0 0",
+                fontFamily: SANS,
+                fontSize: 13.5,
+                lineHeight: 1.95,
+                color: INK,
+                textAlign: "center",
+              }}
+            >
+              {nl(c.closing.lead)}
+            </p>
+
+            <div
+              style={{
+                marginTop: 18,
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 8,
+              }}
+            >
+              {c.closing.chips.map((chip) => (
+                <span
+                  key={chip}
+                  style={{
+                    padding: "6px 13px",
+                    borderRadius: 999,
+                    background: CREAM,
+                    border: `1px solid ${CREAM_LINE}`,
+                    color: GOLD_DEEP,
+                    fontFamily: GOTHIC,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: "0.03em",
+                  }}
+                >
+                  {chip}
                 </span>
               ))}
             </div>
-            <Notes items={c.voices.notes} align="center" />
-          </section>
 
-          {/* ── 体験の流れ ── */}
-          <section style={{ padding: "44px 22px 44px", background: tint }}>
-            <Eyebrow text="FLOW" />
-            <SectionHeading text={c.flow.heading} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 0, marginTop: 26 }}>
-              {c.flow.steps.map((s, i) => (
-                <div key={s.num} style={{ display: "flex", gap: 16 }}>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <span style={{ flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: "50%", background: deep, color: "#FFFFFF", fontFamily: fontDisplay, fontStyle: "italic", fontWeight: 700, fontSize: 17 }}>
-                      {s.num}
-                    </span>
-                    {i < c.flow.steps.length - 1 && <span style={{ width: 2, flex: 1, background: `${blue}44`, margin: "6px 0" }} />}
-                  </div>
-                  <div style={{ paddingBottom: i < c.flow.steps.length - 1 ? 24 : 0 }}>
-                    <h3 style={{ fontFamily: fontGothic, fontSize: 15, fontWeight: 700, color: deep, margin: "8px 0 0" }}>{s.title}</h3>
-                    <p style={{ fontSize: 12.5, lineHeight: 1.85, color: dim, margin: "6px 0 0" }}>{s.body}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <Notes items={[c.flow.note]} />
-          </section>
-
-          {/* ── FAQ ── */}
-          <section style={{ padding: "44px 22px 44px", background: "#FFFFFF" }}>
-            <Eyebrow text="FAQ" />
-            <SectionHeading text={c.faq.heading} />
-            <div style={{ marginTop: 24 }}>
-              <FaqLight items={c.faq.items} accent={blue} />
-            </div>
-          </section>
-
-          {/* ── 店舗案内 ── */}
-          <section id="access" style={{ padding: "44px 22px 46px", background: tint }}>
-            <Eyebrow text="ACCESS" />
-            <SectionHeading text={c.access.heading} />
-            <div style={{ marginTop: 24, borderRadius: 16, overflow: "hidden", background: "#FFFFFF", border: `1px solid ${line}`, boxShadow: "0 4px 16px rgba(35,80,110,0.08)" }}>
-              <ImageSlot src={c.access.store.img.src} placeholder={c.access.store.img.placeholder} style={{ width: "100%", height: 180, background: "#DDE9F1" }} />
-              <div style={{ padding: "20px 20px 22px" }}>
-                <h3 style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 18, letterSpacing: "0.06em", margin: 0, color: deep }}>{c.access.store.name}</h3>
-                <p style={{ fontSize: 12.5, lineHeight: 2, color: ink, margin: "10px 0 0" }}>
-                  {c.access.store.address}
-                  <br />
-                  <b style={{ color: deep }}>{c.access.store.hours}</b>｜{c.access.store.holiday}
-                  <br />
-                  {c.access.store.route}
-                </p>
-                <p style={{ fontSize: 11, lineHeight: 1.7, color: dim, margin: "8px 0 0" }}>{c.access.store.lessonNote}</p>
-              </div>
-            </div>
-          </section>
-
-          {/* ── 予約導線（予約ウィジェットへの誘導CTA） ── */}
-          <section id="reserve" style={{ padding: "44px 22px 50px", background: "#FFFFFF" }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 18px", borderRadius: 999, background: `${gold}14`, border: `1px solid ${gold}55`, color: gold, fontSize: 12, fontWeight: 700, letterSpacing: "0.02em" }}>
-                ＼ 1周年キャンペーンは9月30日まで ／
-              </span>
-            </div>
-            <Eyebrow text="RESERVATION" />
-            <SectionHeading text={c.form.heading} />
-            <p style={{ textAlign: "center", fontSize: 12.5, lineHeight: 2, color: dim, margin: "16px 0 0" }}>{nl(c.form.lead)}</p>
-            <div style={{ display: "flex", justifyContent: "center", gap: 10, margin: "18px 0 0" }}>
-              {c.sticky.offers.map((o) => (
-                <span key={o.label} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 18px", borderRadius: 12, border: `1.5px solid ${blue}66`, background: tint }}>
-                  <span style={{ fontSize: 11, color: dim }}>{o.label}</span>
-                  <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 18, color: deep }}>{o.value}</span>
+            <div
+              style={{
+                marginTop: 20,
+                padding: "20px 16px 22px",
+                borderRadius: 16,
+                background: PALE,
+                border: `1px solid ${LINE}`,
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 10,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    color: MAIN,
+                    background: WHITE,
+                    border: `1px solid ${LINE}`,
+                    borderRadius: 6,
+                    padding: "5px 11px",
+                  }}
+                >
+                  {c.closing.label}
                 </span>
-              ))}
-            </div>
-            <CtaButton text={c.form.ctaText} withUrgency={false} />
-            <Notes items={[c.form.disclaimer]} align="center" />
-          </section>
-
-          {/* ── footer ── */}
-          <footer style={{ background: deep, padding: "26px 22px 30px", textAlign: "center" }}>
-            {c.footer.lines.map((l, i) => (
-              <p key={l} style={{ fontSize: i === 0 ? 14 : 11, fontFamily: i === 0 ? fontMincho : fontSans, letterSpacing: i === 0 ? "0.12em" : "0.03em", color: i === 0 ? "#FFFFFF" : "rgba(255,255,255,0.7)", lineHeight: 1.8, margin: i === 0 ? 0 : "4px 0 0" }}>
-                {l}
+                <span
+                  style={{
+                    fontFamily: GOTHIC,
+                    fontSize: 17,
+                    fontWeight: 500,
+                    color: DIM,
+                    textDecoration: "line-through",
+                    textDecorationThickness: 1.5,
+                  }}
+                >
+                  {c.closing.listPrice}
+                </span>
+              </div>
+              <div style={{ fontSize: 19, color: ACCENT, lineHeight: 1, margin: "12px 0 6px" }}>
+                ↓
+              </div>
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: MINCHO,
+                  fontSize: 58,
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: "0.02em",
+                  color: MAIN,
+                }}
+              >
+                {c.closing.freeText}
               </p>
-            ))}
+            </div>
+
+            <Cta trialNote />
+          </section>
+
+          {/* ── フッター ──────────────────────────────────────────── */}
+          <footer style={{ background: MAIN, padding: "20px 18px 26px", textAlign: "center" }}>
+            <p
+              style={{
+                margin: 0,
+                fontFamily: MINCHO,
+                fontSize: 15,
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                color: WHITE,
+              }}
+            >
+              {c.header.brand}
+            </p>
+            <p
+              style={{
+                margin: "6px 0 0",
+                fontFamily: SANS,
+                fontSize: 11,
+                color: "rgba(255,255,255,0.72)",
+              }}
+            >
+              {c.header.sub}
+            </p>
           </footer>
-        </div>
+        </LPCanvas>
       </div>
 
-      <StickyLight
-        offers={c.sticky.offers}
+      {/* ── 18. 追従フッターCTA ─────────────────────────────────── */}
+      <StickyFooterCTA
+        href={CTA_URL}
         buttonText={c.sticky.buttonText}
-        anchor={c.sticky.anchor}
-        accent={deep}
-        gradient={ctaGrad}
-        showAfter={0}
+        showAfter={560}
+        buttonGradient={CTA_GRAD}
+        shadowColor={CTA_SHADOW}
+        borderColor="rgba(190,150,70,0.4)"
+        offers={[
+          <span
+            key="label"
+            style={{ fontFamily: GOTHIC, fontSize: 12.5, fontWeight: 700, color: MAIN }}
+          >
+            {c.sticky.label}
+          </span>,
+          <span
+            key="value"
+            style={{ fontFamily: GOTHIC, fontSize: 14, fontWeight: 800, color: GOLD_DEEP }}
+          >
+            {c.sticky.value}
+          </span>,
+        ]}
       />
     </LPShell>
   );
