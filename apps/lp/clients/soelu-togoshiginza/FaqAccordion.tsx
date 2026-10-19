@@ -2,17 +2,18 @@
 
 import { useState } from "react";
 
-interface FaqLightProps {
+interface FaqAccordionProps {
   items: { q: string; a: string }[];
+  /** メインカラー。Qバッジと開閉記号に使う。 */
   accent: string;
 }
 
-/** Light-theme FAQ accordion for the soelu clean white/blue template. */
-export default function FaqLight({ items, accent }: FaqLightProps) {
+/** 濃色セクションの上に置く白いアコーディオン（ブリーフ §16）。 */
+export default function FaqAccordion({ items, accent }: FaqAccordionProps) {
   const [open, setOpen] = useState<number>(0);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
@@ -20,21 +21,21 @@ export default function FaqLight({ items, accent }: FaqLightProps) {
             key={i}
             style={{
               background: "#FFFFFF",
-              border: "1px solid #DCE7EE",
-              borderRadius: 14,
+              borderRadius: 12,
               overflow: "hidden",
-              boxShadow: "0 2px 10px rgba(35,80,110,0.05)",
+              boxShadow: "0 2px 10px rgba(16,42,62,0.10)",
             }}
           >
             <button
               type="button"
               onClick={() => setOpen(isOpen ? -1 : i)}
+              aria-expanded={isOpen}
               style={{
                 width: "100%",
                 display: "flex",
                 alignItems: "center",
-                gap: 12,
-                padding: "16px 18px",
+                gap: 11,
+                padding: "15px 16px",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -44,20 +45,30 @@ export default function FaqLight({ items, accent }: FaqLightProps) {
               <span
                 style={{
                   flexShrink: 0,
-                  width: 24,
-                  height: 24,
+                  width: 23,
+                  height: 23,
                   borderRadius: "50%",
                   background: accent,
                   color: "#FFFFFF",
+                  fontFamily: "'Zen Kaku Gothic New', sans-serif",
                   fontSize: 12,
                   fontWeight: 700,
-                  lineHeight: "24px",
+                  lineHeight: "23px",
                   textAlign: "center",
                 }}
               >
                 Q
               </span>
-              <span style={{ flex: 1, fontSize: 13.5, fontWeight: 700, color: "#22415A", lineHeight: 1.5 }}>
+              <span
+                style={{
+                  flex: 1,
+                  fontFamily: "'Zen Kaku Gothic New', sans-serif",
+                  fontSize: 13.5,
+                  fontWeight: 700,
+                  color: accent,
+                  lineHeight: 1.55,
+                }}
+              >
                 {item.q}
               </span>
               <span style={{ flexShrink: 0, fontSize: 18, color: accent, lineHeight: 1 }}>
@@ -68,7 +79,8 @@ export default function FaqLight({ items, accent }: FaqLightProps) {
               <p
                 style={{
                   margin: 0,
-                  padding: "0 20px 18px 54px",
+                  padding: "0 18px 16px 50px",
+                  fontFamily: "'Noto Sans JP', sans-serif",
                   fontSize: 12.5,
                   lineHeight: 1.9,
                   color: "#5D7180",
