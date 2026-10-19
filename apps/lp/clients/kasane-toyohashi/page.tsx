@@ -342,7 +342,7 @@ export default function Page() {
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
               objectPosition={c.fv.hero.position}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", alignItems: "flex-start", paddingTop: 70 }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", alignItems: "flex-start", paddingTop: c.fv.hero.src ? 0 : 70 }}
             />
             <div
               style={{
