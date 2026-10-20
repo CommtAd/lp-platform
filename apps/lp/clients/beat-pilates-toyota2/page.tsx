@@ -17,7 +17,7 @@ import config from "./config";
  *   1. 幅390pxの1枚のキャンバス（`<LPCanvas>`）。`vw` / `vh` は使わない（CLAUDE.md §16-17）。
  *   2. 地は白・淡いラベンダーが基本。暗い地＋ネオン紫は「特徴」「キャンペーン」「最終CTA」の
  *      3か所だけ（指示書 §25：全体を黒にしない）。
- *   3. 文字の強弱: 価格「1,000」が最大 → FVコピー → 見出し(23〜25) → 強調 → 本文(13.5〜15) → 注記(11)。
+ *   3. 文字の強弱: 価格「0円」が最大 → FVコピー → 見出し(23〜25) → 強調 → 本文(13.5〜15) → 注記(11)。
  *   4. ピンクは価格の数字とCTAに寄せる。見出しの地の色には使わない。
  *   5. CTAは6か所（FV・特徴・理由・体験の流れ・キャンペーン・最終）＋追従フッター。
  *      すべて hacomono の体験予約（新規タブ）。
@@ -189,7 +189,7 @@ function Price({ value, size, onDark = false }: { value: string; size: number; o
   );
 }
 
-/** 価格カード（FV・キャンペーン・最終CTA）。体験 1,000円を最大に、入会金 0円をその下に。 */
+/** 価格カード（FV・キャンペーン・最終CTA）。体験 0円を最大に、特典（月3回プラン2ヶ月無料・入会金0円）をその下に並べる。 */
 function OfferCard({ trialSize = 64, admissionSize = 40 }: { trialSize?: number; admissionSize?: number }) {
   const p = c.prices;
   return (
@@ -223,31 +223,43 @@ function OfferCard({ trialSize = 64, admissionSize = 40 }: { trialSize?: number;
       <div style={{ marginTop: 6 }}>
         <Price value={p.trial} size={trialSize} />
       </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 12,
-          marginTop: 10,
-          paddingTop: 12,
-          borderTop: `1px dashed ${line}`,
-        }}
-      >
+      <div style={{ marginTop: 10, paddingTop: 12, borderTop: `1px dashed ${line}` }}>
         <span
           style={{
+            display: "inline-block",
             fontFamily: fontGothic,
             fontWeight: 800,
-            fontSize: 14,
+            fontSize: 13,
             color: purple,
             border: `1.5px solid ${purple}`,
             borderRadius: 999,
-            padding: "3px 12px",
+            padding: "2px 14px",
+            letterSpacing: "0.06em",
           }}
         >
-          さらに{p.admissionLabel}
+          さらに特典
         </span>
-        <Price value={p.admission} size={admissionSize} />
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${p.perks.length}, 1fr)`, gap: 8, marginTop: 10 }}>
+          {p.perks.map((perk) => (
+            <div key={perk.label} style={{ background: lav, borderRadius: 12, padding: "9px 4px 10px" }}>
+              <p style={{ margin: 0, fontFamily: fontGothic, fontWeight: 800, fontSize: 13, color: purple, letterSpacing: "0.04em" }}>
+                {perk.label}
+              </p>
+              <p
+                style={{
+                  margin: "4px 0 0",
+                  fontFamily: fontGothic,
+                  fontWeight: 800,
+                  color: priceColor,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <span style={{ fontSize: admissionSize, lineHeight: 1 }}>{perk.num}</span>
+                <span style={{ fontSize: Math.round(admissionSize * 0.4) }}>{perk.unit}</span>
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -326,23 +338,24 @@ export default function Page() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 14,
+              gap: 10,
               background: duoGrad,
               color: "#FFFFFF",
-              padding: "8px 16px",
+              padding: "8px 12px",
               fontFamily: fontGothic,
               fontWeight: 800,
             }}
           >
-            <span style={{ fontSize: 13, display: "flex", alignItems: "baseline", gap: 4 }}>
-              {c.offerBar.trialLabel}
-              <span style={{ fontSize: 22, lineHeight: 1 }}>{c.offerBar.trial}</span>円
-            </span>
-            <span style={{ width: 1, height: 18, background: "rgba(255,255,255,0.5)" }} />
-            <span style={{ fontSize: 13, display: "flex", alignItems: "baseline", gap: 4 }}>
-              {c.offerBar.admissionLabel}
-              <span style={{ fontSize: 22, lineHeight: 1 }}>{c.offerBar.admission}</span>円
-            </span>
+            {c.offerBar.map((item, i) => (
+              <span key={item.label} style={{ display: "contents" }}>
+                {i > 0 && <span style={{ width: 1, height: 18, background: "rgba(255,255,255,0.5)" }} />}
+                <span style={{ fontSize: 12, display: "flex", alignItems: "baseline", gap: 3, whiteSpace: "nowrap" }}>
+                  {item.label}
+                  <span style={{ fontSize: 21, lineHeight: 1 }}>{item.num}</span>
+                  {item.unit}
+                </span>
+              </span>
+            ))}
           </div>
 
           {/* ── FV：レッスン動画＋メインコピー ── */}
@@ -1126,22 +1139,15 @@ export default function Page() {
         buttonGradient={ctaGrad}
         shadowColor="rgba(224,24,111,0.35)"
         borderColor={`${purple}40`}
-        offers={[
-          <span key="trial" style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-            <span style={{ fontSize: 11, color: inkSoft }}>初回体験</span>
-            <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 18, lineHeight: 1, color: priceColor }}>
-              {c.prices.trial}
-              <span style={{ fontSize: 11 }}>円</span>
+        offers={c.offerBar.map((item) => (
+          <span key={item.label} style={{ display: "flex", alignItems: "baseline", gap: 3, whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: 11, color: inkSoft }}>{item.label}</span>
+            <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 17, lineHeight: 1, color: priceColor }}>
+              {item.num}
+              <span style={{ fontSize: 11 }}>{item.unit}</span>
             </span>
-          </span>,
-          <span key="adm" style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-            <span style={{ fontSize: 11, color: inkSoft }}>入会金</span>
-            <span style={{ fontFamily: fontGothic, fontWeight: 800, fontSize: 18, lineHeight: 1, color: priceColor }}>
-              {c.prices.admission}
-              <span style={{ fontSize: 11 }}>円</span>
-            </span>
-          </span>,
-        ]}
+          </span>
+        ))}
       />
     </LPShell>
   );
