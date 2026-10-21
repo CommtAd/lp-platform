@@ -112,13 +112,17 @@ const config: PatternCConfig = {
     eyebrow: "プレミアムブライダルフェア",
     heading: "大聖堂 × 美食を体験",
     headingSize: 29,
-    // 上端のバッジは出さない（顧客指定）。金額はカード内で言い切る。
+    // バッジを戻す（2026-10-21 AUN指示）。ここは指示書どおり「分」。
+    badge: "最大40万円分プレゼント",
     title: "フェア成約特典",
     // 既定17pxから一段上げる（顧客指定）。
     titleSize: 21,
-    // 金額だけを金の特大にし、「の特典を／プレゼント」は本文色で続ける（顧客指定の改行位置）。
-    amount: "最大40万円相当の特典を\nプレゼント",
-    amountInkAfter: true,
+    // lold の「衣装2着・装花…／結婚式に必要な…」と同じ2段の組み方（2026-10-21 AUN指示）。
+    amount: "衣装20%OFF、新郎新婦当日ご宿泊など\nお得な特典がたくさん！",
+    amountProse: true,
+    amountProseEmphasis: "衣装20%OFF",
+    // 1行目が20字あり、既定（強調17px）だと「ど」だけ次の行に落ちる。15pxで1行に収める。
+    amountProseSize: 11,
     frame: `${ASSET}/grand-offer-frame.png`,
   },
 
@@ -154,63 +158,66 @@ const config: PatternCConfig = {
   },
 
   recommend: {
-    heading: "こんなおふたりにおすすめ",
-    // 写真＋1列のチェックリスト（顧客指定でベースから組み方を変えた）。
-    // 7項目と奇数なので、2列のカードだと最後の1枚が余って間延びする。
-    // 1行に収まらない項目は、自然に折ると語の途中で割れるので意味の切れ目で改行する。
-    // 写真は支給のおすすめ用カット（花のウォールの前の新郎新婦）。
-    photo: { placeholder: "花のウォールの前の新郎新婦", src: `${ASSET}/recommend-couple.jpg` },
+    // lold と同じイラストつき2列カード（2026-10-21 AUN指示で写真版から戻した。項目も添付どおり4つ）。
+    heading: "このフェアがおすすめな方",
     items: [
-      { label: "初めての式場見学で\n何から見ればいいかわからない" },
-      { label: "ホテルウェディングを\n実際に見てみたい" },
-      { label: "料理を試食してから式場を決めたい" },
-      { label: "結婚式の費用が気になる" },
-      { label: "遠方ゲストの宿泊も考えている" },
-      { label: "家族・親族にも安心してもらえる\n会場を探している" },
-      { label: "少人数での結婚式について相談したい" },
+      { label: "初めて式場見学をする", icon: `${ASSET}/rec-planner.png` },
+      { label: "何から始めればいいか分からない", icon: `${ASSET}/rec-question.png` },
+      { label: "費用が気になる", icon: `${ASSET}/rec-cost.png` },
+      { label: "少人数婚も相談したい", icon: `${ASSET}/rec-couple.png` },
     ],
   },
+
 
   privilege: {
     heading: "来館特典・フェア成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
-    headline: "最大40万円相当の特典をプレゼント",
-    headlineEmphasis: "最大40万円相当",
-    // 4点を写真つきで並べるので2×2で組む（横4列だと1列75px前後まで潰れる）。
-    // 客室写真は支給素材が小さく（392px / 450px）、高精細端末では少し甘く出る。
-    columns: 2,
+    // パネルは来館特典の試食1点だけ（2026-10-21 AUN指示）。成約特典は下の contract に並べる。
+    headline: "ご来館特典",
+    headlineEmphasis: "ご来館特典",
     items: [
       {
-        title: "国産牛フィレ肉を\n含むハーフコース",
-        amount: "無料試食",
-        image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/priv-tasting.jpg` },
-      },
-      {
-        title: "大聖堂チャペル\n「ガブリエル」",
-        amount: "チャペル見学",
-        image: { placeholder: "大聖堂チャペル", src: `${ASSET}/priv-chapel.jpg` },
-      },
-      {
-        title: "新郎新婦様の\n挙式当日",
-        amount: "宿泊ご招待",
-        image: { placeholder: "デラックスツイン", src: `${ASSET}/priv-suite.jpg` },
-      },
-      {
-        title: "ご列席の\nゲスト様",
-        amount: "宿泊特別優待",
-        image: { placeholder: "ツインルーム", src: `${ASSET}/priv-twin.jpg` },
+        title: "国産牛フィレ肉を含む",
+        amount: "豪華ハーフコース試食",
+        image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
       },
     ],
     frame: `${ASSET}/privilege-frame.png`,
     disclaimer: "※特典のお渡しには適用条件がございます",
     contract: {
       label: "さらに、ご成約で",
-      // 1行に収まらず「プレゼ/ント」で割れるので、締めの語は footer に送る。
-      amount: "40万円相当の特典を",
+      // 指示書どおりここだけ「分」（FV・追従バーは「相当」のまま。2026-10-21 ユーザー判断）。
+      amount: "最大40万円分プレゼント",
       inkAfterAmount: true,
-      footer: "プレゼント",
+      // 成約特典の中身を写真つきで2×2に並べる。金額欄は2列で約145pxしか取れないので、
+      // 長い名称は title 側（小さい説明）に回している。
+      // 客室写真は支給素材が小さく（392px / 450px）、高精細端末では少し甘く出る。
+      columns: 2,
+      items: [
+        {
+          title: "衣装",
+          amount: "20%OFF",
+          image: { placeholder: "ドレスサロン", src: `${ASSET}/priv-dress.jpg` },
+        },
+        {
+          title: "スパークリングワイン＆\nウェルカムドリンク",
+          amount: "人数分",
+          image: { placeholder: "スパークリングワイン", src: `${ASSET}/priv-drink.jpg` },
+        },
+        {
+          title: "新郎新婦様",
+          amount: "当日宿泊",
+          image: { placeholder: "デラックスツイン", src: `${ASSET}/priv-suite.jpg` },
+        },
+        {
+          title: "ご列席者様",
+          amount: "宿泊ご優待",
+          image: { placeholder: "ツインルーム", src: `${ASSET}/priv-twin.jpg` },
+        },
+      ],
     },
   },
+
 
   facility: {
     heading: "会場のご紹介",

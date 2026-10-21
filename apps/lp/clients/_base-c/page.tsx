@@ -316,7 +316,8 @@ function AmountRow({
               placeholder={item.image.placeholder}
               objectPosition={item.image.position ?? "center"}
               radius={2}
-              style={{ width: "100%", aspectRatio: "1 / 1", marginBottom: 12 }}
+              // 1列（1点だけ）のときに正方形だと縦に長すぎるので、横長で受ける。
+              style={{ width: "100%", aspectRatio: cols === 1 ? "4 / 3" : "1 / 1", marginBottom: 12 }}
             />
           )}
           <p
@@ -1648,6 +1649,20 @@ export default function Page() {
                       >
                         {c.privilege.contract.footer}
                       </p>
+                    )}
+                    {/* 成約特典の中身。来館特典と同じ AmountRow で揃える。 */}
+                    {c.privilege.contract.items && c.privilege.contract.items.length > 0 && (
+                      <div className="mt-7">
+                        <AmountRow
+                          items={c.privilege.contract.items.map((p) => ({
+                            amount: p.amount,
+                            label: p.title,
+                            image: p.image,
+                          }))}
+                          ink={c.ink}
+                          columns={c.privilege.contract.columns}
+                        />
+                      </div>
                     )}
                   </div>
                 </div>
