@@ -299,6 +299,11 @@ export interface PatternCConfig {
      * このとき `label` / `headlineOrnament` / `headlinePosition` / `items[].image` は使わない。
      */
     photo?: Slot;
+    /**
+     * 写真版でも `label`（「─ 来館特典 ─」の罫）を写真の上に出す。既定 false。
+     * `headline` を置かない案件で、写真が何の特典かを先に示すために使う。
+     */
+    photoLabel?: boolean;
     /** FV写真の直下・`label` の上に置く訴求文。1行に収まる長さにする。 */
     headline?: string;
     /** `headline` の中で金額として強調する部分文字列（21pxの深い金になる）。 */

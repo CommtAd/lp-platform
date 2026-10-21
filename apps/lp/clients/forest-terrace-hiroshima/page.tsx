@@ -774,6 +774,18 @@ export default function Page() {
           {/* ── FV直下の特典サマリー（写真版。fvSummary.photo があるときだけ） ── */}
           {c.fvSummary?.photo && (
             <div className="bg-[var(--paper)] px-5 pt-10">
+              {c.fvSummary.photoLabel && (
+                <div className="mb-6 flex items-center gap-4">
+                  <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
+                  <span
+                    className="text-[12px] tracking-[0.3em]"
+                    style={{ fontFamily: mincho }}
+                  >
+                    {c.fvSummary.label}
+                  </span>
+                  <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
+                </div>
+              )}
               {c.fvSummary.headline && (
                 <p
                   className="mb-5 text-center text-[16px] leading-[1.6]"

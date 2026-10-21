@@ -85,26 +85,13 @@ const config: PatternCConfig = {
 
   // FVを離脱する前に来館特典だけ持ち帰ってもらうための要約。詳細は privilege 側。
   // 試食会は「5万円相当」で出す（2026-09-30 顧客指定）。
-  // 写真は privilege と同一。同じ特典なので別カットにすると別物に見える。
   fvSummary: {
+    // 来館特典は試食1点のみ（2026-10-21 顧客指定で Amazonギフト券と「最大6万円」の訴求を削除）。
+    // 1点だと横並びでは間延びするので写真版で組み、写真の上に「来館特典」の罫を出す。
+    photo: { placeholder: "国産牛のコース料理", src: `${ASSET}/tasting.jpg` },
+    photoLabel: true,
     label: "来館特典",
-    // 「来館特典」の罫と写真の間に置く（顧客指定）。
-    headline: "最大6万円の来館ギフトがついてくる",
-    headlineEmphasis: "最大6万円",
-    headlinePosition: "afterLabel",
-    items: [
-      {
-        amount: "5万円相当",
-        name: "国産牛コース\n豪華無料試食",
-        image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
-      },
-      {
-        amount: "1万円分",
-        name: "Amazon\nギフト券",
-        // lold と同じギフトの写真（顧客指定）。
-        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
-      },
-    ],
+    items: [{ amount: "5万円相当", name: "国産牛コース豪華無料試食" }],
   },
 
   // 成約特典。指示書の並び（選べるギフト ➕ 最大15大特典）をそのまま上から積む。
@@ -187,11 +174,6 @@ const config: PatternCConfig = {
         amount: "5万円相当",
         // 支給の横位置カットを正方形に切り出したもの（3皿とも収まる中央）。
         image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
-      },
-      {
-        title: "Amazon\nギフト券",
-        amount: "1万円分",
-        image: { placeholder: "ギフトボックス", src: `${ASSET}/gift-card.jpg` },
       },
     ],
     frame: `${ASSET}/privilege-frame.png`,
