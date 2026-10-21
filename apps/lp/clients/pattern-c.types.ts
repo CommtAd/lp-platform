@@ -554,6 +554,13 @@ export interface PatternCConfig {
       /** 金額・`extras` の下に置く締めの一言（例 "プレゼント！"）。本文色の明朝太字。 */
       footer?: string;
       /**
+       * 金額の下に並べる成約特典の中身（写真つき）。来館特典の `items` と同じ見た目
+       * （`AmountRow`）で、`amount` は金色の太字、`title` は下の小さい説明になる。
+       * `columns` で1行の数を指定する（既定は items の数＝横1列。4点なら 2 で2×2）。
+       */
+      items?: { title: string; amount: string; image?: Slot }[];
+      columns?: number;
+      /**
        * カードを左右に広げる量(px)。セクションの左右アキ（20px）からこの分だけ外へ出す。
        * `extras` で文言が長くなり、内寸が足りないときに使う（8 でFVのプレートと同じ12pxのアキ）。
        */
