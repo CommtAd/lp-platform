@@ -1521,15 +1521,39 @@ export default function Page() {
                     )}
                   </p>
                 )}
-                <AmountRow
-                  items={c.privilege.items.map((p) => ({
-                    amount: p.amount,
-                    label: p.title,
-                    image: p.image,
-                  }))}
-                  ink={c.ink}
-                  columns={c.privilege.columns}
-                />
+                {c.privilege.single ? (
+                  // 1点だけのときは、FV下の写真版と同じく写真を4:3で受けて金額を大きく組む。
+                  <div className="text-center">
+                    {c.privilege.items[0].image && (
+                      <ImageSlot
+                        src={c.privilege.items[0].image.src}
+                        placeholder={c.privilege.items[0].image.placeholder}
+                        objectPosition={c.privilege.items[0].image.position ?? "center"}
+                        radius={2}
+                        style={{ width: "100%", aspectRatio: "4 / 3" }}
+                      />
+                    )}
+                    <p className="mt-4 text-[12.5px] leading-[1.6]" style={{ color: `${c.ink}B3` }}>
+                      {nl(c.privilege.items[0].title)}
+                    </p>
+                    <p
+                      className="mt-1 text-[26px] font-bold leading-[1.3] tracking-[0.04em]"
+                      style={{ fontFamily: mincho, color: goldOnWhite }}
+                    >
+                      {c.privilege.items[0].amount}
+                    </p>
+                  </div>
+                ) : (
+                  <AmountRow
+                    items={c.privilege.items.map((p) => ({
+                      amount: p.amount,
+                      label: p.title,
+                      image: p.image,
+                    }))}
+                    ink={c.ink}
+                    columns={c.privilege.columns}
+                  />
+                )}
                 {c.privilege.total && (
                   <>
                     {/* 菱形を挟んだ罫が「＝」の役割を兼ねる。 */}

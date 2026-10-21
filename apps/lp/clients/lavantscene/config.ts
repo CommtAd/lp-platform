@@ -168,12 +168,13 @@ const config: PatternCConfig = {
   privilege: {
     heading: "ご来館特典・ご成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
+    // 来館特典は試食1点のみ（2026-10-21 顧客指定で Amazonギフト券を削除）。1点用の組み方で出す。
+    single: true,
     items: [
       {
-        title: "国産牛コース\n豪華無料試食",
+        title: "国産牛コース豪華無料試食",
         amount: "5万円相当",
-        // 支給の横位置カットを正方形に切り出したもの（3皿とも収まる中央）。
-        image: { placeholder: "国産牛のコース料理", src: `${ASSET}/gift-tasting.jpg` },
+        image: { placeholder: "国産牛のコース料理", src: `${ASSET}/tasting.jpg` },
       },
     ],
     frame: `${ASSET}/privilege-frame.png`,
