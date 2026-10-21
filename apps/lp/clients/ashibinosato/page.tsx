@@ -884,14 +884,20 @@ export default function Page() {
             <div className="bg-[var(--paper)] px-5 pt-10">
               {/*
                 写真版の見出し。細い罫＋12pxの文字では写真に負けて読み飛ばされるので、
-                成約特典の「さらに、ご成約で」と同じ濃色ラベルにして金の罫で挟む。
+                17pxの太字にして金の罫で挟む。濃色の地だと生成りのページから浮くので、
+                写真下の金額プレートと同じ「白地＋金の細枠」に揃え、文字は深い金で置く。
               */}
               {c.fvSummary.photoLabel && (
                 <div className="mb-5 flex items-center gap-3">
                   <span className="h-px flex-1" style={{ background: c.accent }} />
                   <span
-                    className="rounded-[2px] px-6 py-2 text-[17px] font-bold leading-none tracking-[0.3em]"
-                    style={{ fontFamily: mincho, background: c.ink, color: "#F0DDB2" }}
+                    className="bg-white px-6 py-2 text-[17px] font-bold leading-none tracking-[0.3em]"
+                    style={{
+                      fontFamily: mincho,
+                      color: goldOnWhite,
+                      border: `1px solid ${c.accent}`,
+                      boxShadow: `inset 0 0 0 3px #fff, inset 0 0 0 4px ${c.accent}55`,
+                    }}
                   >
                     {c.fvSummary.label}
                   </span>
