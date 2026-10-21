@@ -774,6 +774,28 @@ export default function Page() {
           {/* ── FV直下の特典サマリー（写真版。fvSummary.photo があるときだけ） ── */}
           {c.fvSummary?.photo && (
             <div className="bg-[var(--paper)] px-5 pt-10">
+              {/*
+                写真版の見出し。細い罫＋12pxの文字では写真に負けて読み飛ばされるので、
+                17pxの太字にして金の罫で挟む。濃色の地だと生成りのページから浮くので、
+                写真下の金額プレートと同じ「白地＋金の細枠」に揃え、文字は深い金で置く。
+              */}
+              {c.fvSummary.photoLabel && (
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="h-px flex-1" style={{ background: c.accent }} />
+                  <span
+                    className="bg-white px-6 py-2 text-[17px] font-bold leading-none tracking-[0.3em]"
+                    style={{
+                      fontFamily: mincho,
+                      color: goldOnWhite,
+                      border: `1px solid ${c.accent}`,
+                      boxShadow: `inset 0 0 0 3px #fff, inset 0 0 0 4px ${c.accent}55`,
+                    }}
+                  >
+                    {c.fvSummary.label}
+                  </span>
+                  <span className="h-px flex-1" style={{ background: c.accent }} />
+                </div>
+              )}
               {c.fvSummary.headline && (
                 <p
                   className="mb-5 text-center text-[16px] leading-[1.6]"
@@ -1397,15 +1419,39 @@ export default function Page() {
                     )}
                   </p>
                 )}
-                <AmountRow
-                  items={c.privilege.items.map((p) => ({
-                    amount: p.amount,
-                    label: p.title,
-                    image: p.image,
-                  }))}
-                  ink={c.ink}
-                  columns={c.privilege.columns}
-                />
+                {c.privilege.single ? (
+                  // 1点だけのときは、FV下の写真版と同じく写真を4:3で受けて金額を大きく組む。
+                  <div className="text-center">
+                    {c.privilege.items[0].image && (
+                      <ImageSlot
+                        src={c.privilege.items[0].image.src}
+                        placeholder={c.privilege.items[0].image.placeholder}
+                        objectPosition={c.privilege.items[0].image.position ?? "center"}
+                        radius={2}
+                        style={{ width: "100%", aspectRatio: "4 / 3" }}
+                      />
+                    )}
+                    <p className="mt-4 text-[12.5px] leading-[1.6]" style={{ color: `${c.ink}B3` }}>
+                      {nl(c.privilege.items[0].title)}
+                    </p>
+                    <p
+                      className="mt-1 text-[26px] font-bold leading-[1.3] tracking-[0.04em]"
+                      style={{ fontFamily: mincho, color: goldOnWhite }}
+                    >
+                      {c.privilege.items[0].amount}
+                    </p>
+                  </div>
+                ) : (
+                  <AmountRow
+                    items={c.privilege.items.map((p) => ({
+                      amount: p.amount,
+                      label: p.title,
+                      image: p.image,
+                    }))}
+                    ink={c.ink}
+                    columns={c.privilege.columns}
+                  />
+                )}
                 {c.privilege.total && (
                   <>
                     {/* 菱形を挟んだ罫が「＝」の役割を兼ねる。 */}
