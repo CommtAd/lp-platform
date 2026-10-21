@@ -300,8 +300,9 @@ export interface PatternCConfig {
      */
     photo?: Slot;
     /**
-     * 写真版でも `label`（「─ 来館特典 ─」の罫）を写真の上に出す。既定 false。
+     * 写真版でも `label` を写真の上に見出しとして出す。既定 false。
      * `headline` を置かない案件で、写真が何の特典かを先に示すために使う。
+     * 金の罫に挟んだ濃色のラベル（成約特典の「さらに、ご成約で」と同じ配色）で出る。
      */
     photoLabel?: boolean;
     /** FV写真の直下・`label` の上に置く訴求文。1行に収まる長さにする。 */

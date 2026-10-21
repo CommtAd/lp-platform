@@ -286,7 +286,8 @@ const config: PatternCConfig = {
       },
       { type: "date", name: "visit_date_1", label: "ご来館希望日（第一希望）", required: true },
       { type: "date", name: "visit_date_2", label: "ご来館希望日（第二希望）", required: true },
-      { type: "date", name: "visit_date_3", label: "ご来館希望日（第三希望）", required: true },
+      // 第三希望のみ任意（2026-10-21 顧客指定）。
+      { type: "date", name: "visit_date_3", label: "ご来館希望日（第三希望）", optionalTag: "任意" },
       {
         // 挙式の招待人数ではなく、フェア当日に来館する人数。
         type: "select",
@@ -327,7 +328,7 @@ const config: PatternCConfig = {
     disclaimer:
       "ご入力いただいた内容はご予約対応のみに利用します。\nしつこいご案内はいたしません。",
     errorMessage:
-      "お名前・電話番号・メールアドレス・ご来館希望日（第一/第二/第三）・ご人数・ご試食の有無は必須項目です。",
+      "お名前・電話番号・メールアドレス・ご来館希望日（第一/第二）・ご人数・ご試食の有無は必須項目です。",
   },
 
   sticky: {

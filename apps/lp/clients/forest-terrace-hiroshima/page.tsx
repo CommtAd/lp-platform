@@ -774,16 +774,20 @@ export default function Page() {
           {/* ── FV直下の特典サマリー（写真版。fvSummary.photo があるときだけ） ── */}
           {c.fvSummary?.photo && (
             <div className="bg-[var(--paper)] px-5 pt-10">
+              {/*
+                写真版の見出し。細い罫＋12pxの文字では写真に負けて読み飛ばされるので、
+                成約特典の「さらに、ご成約で」と同じ濃色ラベルにして金の罫で挟む。
+              */}
               {c.fvSummary.photoLabel && (
-                <div className="mb-6 flex items-center gap-4">
-                  <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="h-px flex-1" style={{ background: c.accent }} />
                   <span
-                    className="text-[12px] tracking-[0.3em]"
-                    style={{ fontFamily: mincho }}
+                    className="rounded-[2px] px-6 py-2 text-[17px] font-bold leading-none tracking-[0.3em]"
+                    style={{ fontFamily: mincho, background: c.ink, color: "#F0DDB2" }}
                   >
                     {c.fvSummary.label}
                   </span>
-                  <span className="h-px flex-1" style={{ background: `${c.accent}66` }} />
+                  <span className="h-px flex-1" style={{ background: c.accent }} />
                 </div>
               )}
               {c.fvSummary.headline && (
