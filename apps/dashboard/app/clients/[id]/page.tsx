@@ -195,7 +195,13 @@ export default async function ClientDetailPage({
           <p className="text-xs text-neutral-500">
             クリック位置とスクロール到達を自社計測で集計します（外部サービスは使いません）。
             保存するのは座標・押されたボタンの文字・到達深さだけで、入力欄の中身や録画は
-            保存しません。OFFにするとLPから収集スクリプトが出なくなります。
+            保存しません。
+          </p>
+          <p className="text-xs text-neutral-500">
+            <strong className="font-medium text-neutral-700">既定はOFFです。</strong>
+            分析したい案件だけONにしてください。全案件で回すと、使わないデータで
+            DBの無料枠を削ることになります（フォーム送信の記録と同じDBです）。
+            分析が終わったらOFFに戻して構いません。
           </p>
           <Toggle
             label="ヒートマップを計測する"

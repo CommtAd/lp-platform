@@ -40,7 +40,7 @@ function buildDefault(
     meta_domain_verification: null,
     cv_events: {},
     meta_cv_event: null,
-    heatmap_enabled: true,
+    heatmap_enabled: false,
     created_at: now,
     updated_at: now,
   };
@@ -84,9 +84,11 @@ export default async function LPShell({
 
       <TagInjector client={record} />
       <UtmCapture />
-      {/* ヒートマップ収集。`heatmap_enabled` は公開RPCが返す値で、
-          マイグレーション(0038)が未適用なら undefined になり計測は止まったまま
-          になる（存在しないRPCを叩き続けない）。 */}
+      {/* ヒートマップ収集。既定OFFのオプトインで、分析したい案件だけ
+          ダッシュボードでONにする（`docs/heatmap.md`）。
+          `heatmap_enabled` は公開RPCが返す値で、マイグレーション(0038)が
+          未適用なら undefined になり計測は止まったままになる
+          （存在しないRPCを叩き続けない）。 */}
       <HeatmapTracker clientSlug={record.slug} enabled={record.heatmap_enabled === true} />
 
       {!isPublished && (
