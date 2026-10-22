@@ -151,7 +151,8 @@ export default async function HeatmapPage({
 
       {!client.heatmap_enabled && (
         <p className="mb-6 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700">
-          この案件は計測がOFFです。新しいデータは溜まりません（設定画面でONにできます）。
+          この案件は計測がOFFです（既定OFF）。新しいデータは溜まりません。分析したい期間だけ
+          設定画面でONにしてください。
         </p>
       )}
       {sessionError && (
@@ -221,7 +222,8 @@ export default async function HeatmapPage({
             この期間のデータはまだありません
           </p>
           <p className="mt-2 text-xs text-neutral-500">
-            公開後にLPが開かれると溜まります。計測はページを開いた2秒後と離脱時に送信されます。
+            計測をONにしたうえで公開後にLPが開かれると溜まります。計測はページを開いた
+            2秒後と離脱時に送信されます。
           </p>
         </section>
       ) : (

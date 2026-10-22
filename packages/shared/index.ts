@@ -105,8 +105,9 @@ export interface ClientRecord {
   meta_domain_verification: string | null;
   cv_events: CvEvents;
   /**
-   * ヒートマップ計測のON/OFF。既定ON。LPShell がこの値を見て収集スクリプトを
-   * 出すかどうかを決める（`supabase/migrations/0038_heatmap.sql`）。
+   * ヒートマップ計測のON/OFF。**既定OFFのオプトイン**で、分析したい案件だけ
+   * ダッシュボードでONにする（`supabase/migrations/0039_heatmap_opt_in.sql`）。
+   * LPShell がこの値を見て収集スクリプトを出すかどうかを決める。
    */
   heatmap_enabled: boolean;
   /**

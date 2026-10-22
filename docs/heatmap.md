@@ -5,6 +5,12 @@
 既存のタグ注入と同じ経路（`clients` の列 → 公開RPC → LPShell）に乗っているので、
 **各LPの `page.tsx` には何も足さなくてよい。**
 
+**既定はOFF（オプトイン）。分析したい案件だけダッシュボードでONにする。**
+全案件で回し続けると、使わないデータで無料枠の500MBを削ることになる。
+同じDBに `submissions`（CV）が入っているので、容量が詰まると一番落としては
+いけないフォーム送信の記録まで止まる。分析が終わったらOFFに戻してよい
+（それまでのデータは残る）。
+
 ## 何を保存しているか
 
 | 保存するもの | 保存しないもの |
@@ -62,6 +68,7 @@ y を比率に直してから重ねている。
 | 場所 | 役割 |
 | --- | --- |
 | `supabase/migrations/0038_heatmap.sql` | テーブル2つ・記録RPC・掃除関数・`clients.heatmap_enabled` |
+| `supabase/migrations/0039_heatmap_opt_in.sql` | `heatmap_enabled` を既定OFFに（オプトイン化） |
 | `apps/lp/components/HeatmapTracker.tsx` | 収集。LPShell が全LPに差し込む |
 | `apps/lp/components/LPShell.tsx` | `heatmap_enabled` を見てトラッカーを出す |
 | `packages/shared/index.ts` | 型と集計ヘルパー（`heatmapPoints` / `scrollReach` / `clickRanking`） |
@@ -72,11 +79,22 @@ y を比率に直してから重ねている。
 
 ## 運用
 
-- **ON/OFF**: ダッシュボードの案件詳細 →「ヒートマップ分析」。既定はON。
+- **ON/OFF**: ダッシュボードの案件詳細 →「ヒートマップ分析」。**既定はOFF。**
+  分析したい案件だけONにする。ONの案件は次のSQLで一覧できる。
+  ```sql
+  select slug, name from public.clients where heatmap_enabled order by slug;
+  ```
 - **送信タイミング**: 表示2秒後・15秒ごと・離脱時（`fetch` の `keepalive`）。
-- **保持期間**: 自動削除はしていない。溜まってきたら SQL エディタで
-  `select public.prune_heatmap(90);`（90日より古いセッションと、
-  そこにぶら下がるクリックを消す）。
+- **保持期間**: 自動削除はしていない。オプトインなので当面は溜まらないが、
+  増えてきたら SQL エディタで `select public.prune_heatmap(90);`
+  （90日より古いセッションと、そこにぶら下がるクリックを消す）。
+  増え方は次のSQLで見る。
+  ```sql
+  select pg_size_pretty(pg_total_relation_size('public.heatmap_clicks')) as clicks,
+         pg_size_pretty(pg_total_relation_size('public.heatmap_sessions')) as sessions;
+  ```
+  なお、LPを修正するとページの高さも構成も変わるため、修正前のクリックは
+  修正後のLPには重ならない。古いデータは分析には使えないものとして扱う。
 - **読み込み上限**: 1画面あたり20,000行。超える案件は期間を短くする。
 
 ## 読み方の注意
