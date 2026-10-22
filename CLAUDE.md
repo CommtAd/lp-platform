@@ -8,7 +8,9 @@
 1. LPは `apps/lp/clients/{slug}/` 配下に作成する。
    ベーステンプレート（`clients/_base-a/`）をコピーして開始する。
 2. **LPShell で全体をラップすること（削除・迂回禁止）。**
-   タグ注入・noindex・UTM保持はすべて LPShell が担う。外すと機能が失われる。
+   タグ注入・noindex・UTM保持・ヒートマップ計測はすべて LPShell が担う。
+   外すと機能が失われる。ヒートマップのためにLP側へ足すものは何もない
+   （`docs/heatmap.md`）。
 3. **フォームは LPForm を使用する。送信先URLの変更禁止。**
    送信先は基盤側で固定（`lib/form-endpoint.ts`）。HTML納品時も動作させるため。
    フィールド構成・見た目は `config.ts` の `form` で自由にカスタマイズしてよい。

@@ -99,6 +99,7 @@ export async function updateClientRecord(clientId: string, formData: FormData) {
       meta_domain_verification: emptyToNull(formData.get("meta_domain_verification")),
       commitad_client_id: emptyToNull(formData.get("commitad_client_id")),
       meta_cv_event: readMetaCvEvent(formData),
+      heatmap_enabled: formData.get("heatmap_enabled") === "on",
       notify_emails: notifyEmails,
       cv_events: {
         form_submit: formData.get("cv_form_submit") === "on",
