@@ -164,6 +164,13 @@
    確認は独自ドメインを直接開く（curlで検証する場合は必ず `-L` を付ける）。
    リダイレクト追従なしで vercel.app を叩くと本文が空になり「未反映」と誤検知するので注意。
 
-- **権限**: メンバーはGitHubの collaborator（write）とダッシュボードのSupabase Authユーザーを付与すれば足りる。いずれも無料枠。
+- **権限**: メンバーはGitHubの collaborator（write）と、ダッシュボードの
+  **「メンバー管理」画面でのメールアドレス登録**で足りる。いずれも無料枠。
+  ログインはGoogleのみ（パスワードログインは廃止済み）。
+  Supabase の管理コンソールを開いてAuthユーザーを手で作る運用は不要。
+  登録したメールアドレスのGoogleアカウント以外は Supabase Auth 側で弾かれる
+  （Authentication → Allow new users to sign up を OFF にしてあることが前提。
+  これを ON に戻すと誰でもGoogleログインで入れてしまうので触らない）。
+  追加・削除ができるのは `members.role = 'admin'` の人だけ。
 - **保護設定**: `check` 通過必須・PR必須・force-push/削除禁止。管理者のみ緊急時にバイパス可。
   ルールを緩めたい場合もコードや設定側で調整し、保護自体は外さない。

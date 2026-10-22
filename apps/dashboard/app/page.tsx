@@ -73,6 +73,12 @@ export default async function HomePage({
         </div>
         <div className="flex items-center gap-3">
           <Link
+            href="/members"
+            className="text-sm text-neutral-500 hover:text-neutral-800"
+          >
+            メンバー管理
+          </Link>
+          <Link
             href="/new"
             className="rounded-md bg-navy px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
           >
