@@ -1,14 +1,7 @@
 import Link from "next/link";
 import { ROLE_LABEL, checkMemberAccess, listMembers, type MemberRow } from "@/lib/members";
-import {
-  addMember,
-  changeOwnPassword,
-  removeMember,
-  resetMemberPassword,
-  setMemberRole,
-} from "./actions";
+import { addMember, removeMember, setMemberRole } from "./actions";
 import ConfirmButton from "./ConfirmButton";
-import PasswordField from "./PasswordField";
 
 /**
  * メンバー管理画面。
@@ -16,13 +9,17 @@ import PasswordField from "./PasswordField";
  * ログインできる人（Supabase Auth ユーザー）の一覧・追加・削除をここで完結させる。
  * これまでは Supabase の管理コンソールを開いて手で作っていた。
  *
+ * ログインはGoogleのみなので、登録するのはメールアドレスだけ。
+ * **この一覧が実質の許可リスト**で、ここに無いメールアドレスのGoogleアカウントは
+ * Supabase Auth 側で弾かれる（Allow new users to sign up が OFF）。
+ *
  * 操作できるのは `members.role = 'admin'` の人だけ。clients / submissions の
  * 権限は 0010 のまま全員同じで、**絞っているのはメンバー管理の操作だけ**。
  */
 
 const INPUT = "w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-navy";
 const PRIMARY = "rounded-md bg-navy px-4 py-2 text-sm font-medium text-white transition hover:opacity-90";
-const GHOST = "rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs text-neutral-700 transition hover:bg-neutral-50";
+const GHOST = "rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs text-neutral-700 transition hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40";
 
 function formatDate(iso: string | null): string {
   if (!iso) return "—";
@@ -48,27 +45,8 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 function Notice({ tone, children }: { tone: "error" | "info"; children: React.ReactNode }) {
-  const style =
-    tone === "error" ? "bg-red-50 text-red-700" : "bg-blue-50 text-blue-800";
+  const style = tone === "error" ? "bg-red-50 text-red-700" : "bg-blue-50 text-blue-800";
   return <div className={`mb-4 rounded-md px-3 py-2 text-sm ${style}`}>{children}</div>;
-}
-
-/** 自分のパスワード変更。管理者でなくても使えるよう、権限ゲートの外に置く。 */
-function OwnPasswordSection() {
-  return (
-    <section className="mt-10 rounded-lg border border-neutral-200 bg-white p-5">
-      <h2 className="mb-1 text-sm font-semibold">自分のパスワードを変更</h2>
-      <p className="mb-4 text-xs text-neutral-500">
-        管理者から受け取った初期パスワードは、ここで自分のものに差し替えてください。
-      </p>
-      <form action={changeOwnPassword} className="space-y-4">
-        <PasswordField name="password" label="新しいパスワード" />
-        <button type="submit" className={PRIMARY}>
-          パスワードを変更する
-        </button>
-      </form>
-    </section>
-  );
 }
 
 function MemberList({ members }: { members: MemberRow[] }) {
@@ -85,14 +63,18 @@ function MemberList({ members }: { members: MemberRow[] }) {
                 ) : null}
               </p>
               <p className="mt-0.5 text-xs text-neutral-500">
-                最終ログイン {formatDate(m.lastSignInAt)} · 作成 {formatDate(m.createdAt)}
+                {m.lastSignInAt ? (
+                  <>最終ログイン {formatDate(m.lastSignInAt)}</>
+                ) : (
+                  // 追加したが本人がまだGoogleで入っていない状態。
+                  <span className="text-amber-700">まだログインしていません</span>
+                )}
+                {` · 追加 ${formatDate(m.createdAt)}`}
               </p>
             </div>
             <span
               className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                m.role === "admin"
-                  ? "bg-navy/10 text-navy"
-                  : "bg-neutral-100 text-neutral-600"
+                m.role === "admin" ? "bg-navy/10 text-navy" : "bg-neutral-100 text-neutral-600"
               }`}
             >
               {ROLE_LABEL[m.role]}
@@ -113,19 +95,6 @@ function MemberList({ members }: { members: MemberRow[] }) {
                 {m.role === "admin" ? "メンバーに戻す" : "管理者にする"}
               </button>
             </form>
-
-            <details className="w-full">
-              <summary className="inline-block cursor-pointer rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs text-neutral-700 transition hover:bg-neutral-50">
-                パスワード再発行
-              </summary>
-              <form action={resetMemberPassword} className="mt-3 space-y-3 border-l-2 border-neutral-200 pl-4">
-                <input type="hidden" name="user_id" value={m.userId} />
-                <PasswordField name="password" label="新しいパスワード" />
-                <button type="submit" className={PRIMARY}>
-                  再発行する
-                </button>
-              </form>
-            </details>
 
             {m.isSelf ? null : (
               <form action={removeMember}>
@@ -185,8 +154,6 @@ export default async function MembersPage({
             </p>
           </Notice>
         )}
-        {/* 権限が無くても自分のパスワードは変えられる必要がある。 */}
-        {access.reason === "not-admin" ? <OwnPasswordSection /> : null}
       </Shell>
     );
   }
@@ -198,9 +165,9 @@ export default async function MembersPage({
       {error ? <Notice tone="error">{error}</Notice> : null}
       {notice ? <Notice tone="info">{notice}</Notice> : null}
 
-      <p className="mb-6 text-sm text-neutral-500">
-        ここに載っている人がダッシュボードにログインできます。LPの作成・編集・公開は
-        全員が行えます（権限差はメンバー管理の操作だけ）。
+      <p className="mb-6 text-sm leading-relaxed text-neutral-500">
+        ここに載っているメールアドレスのGoogleアカウントだけがログインできます。
+        LPの作成・編集・公開は全員が行えます（権限差はメンバー管理の操作だけ）。
       </p>
 
       {members === null ? (
@@ -211,14 +178,14 @@ export default async function MembersPage({
 
       <section className="mt-10 rounded-lg border border-neutral-200 bg-white p-5">
         <h2 className="mb-1 text-sm font-semibold">メンバーを追加</h2>
-        <p className="mb-4 text-xs text-neutral-500">
-          追加した時点でログインできます（確認メールは不要）。初期パスワードは
-          この画面で生成し、本人に手渡してください。
+        <p className="mb-4 text-xs leading-relaxed text-neutral-500">
+          本人が普段使っているGoogleアカウントのメールアドレスを登録してください。
+          追加した時点でログインできます（招待メールは送られません。URLを伝えるだけで完了です）。
         </p>
         <form action={addMember} className="space-y-4">
           <div>
             <label htmlFor="email" className="mb-1 block text-sm font-medium">
-              メールアドレス
+              Googleアカウントのメールアドレス
             </label>
             <input
               id="email"
@@ -229,8 +196,11 @@ export default async function MembersPage({
               placeholder="sales@example.com"
               className={INPUT}
             />
+            <p className="mt-1 text-xs text-neutral-500">
+              本人がログインに使うアドレスと完全に一致している必要があります。
+              別のアドレスだとログインできません。
+            </p>
           </div>
-          <PasswordField name="password" label="初期パスワード" />
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
@@ -245,8 +215,6 @@ export default async function MembersPage({
           </button>
         </form>
       </section>
-
-      <OwnPasswordSection />
     </Shell>
   );
 }

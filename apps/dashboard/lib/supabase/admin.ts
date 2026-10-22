@@ -16,7 +16,7 @@ export function isAdminApiConfigured(): boolean {
 /**
  * service_role キーを使う Supabase クライアント。**RLSを全てバイパスする。**
  *
- * 使うのはメンバー管理（Auth ユーザーの一覧・作成・削除・パスワード更新）だけ。
+ * 使うのはメンバー管理（Auth ユーザーの一覧・作成・削除）だけ。
  * clients / submissions の読み書きは従来どおり `lib/supabase/server.ts` の
  * anon キー + RLS 経由で行う（0010 の「認証済みなら全件操作可」を変えないため）。
  *

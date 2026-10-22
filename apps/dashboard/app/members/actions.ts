@@ -3,13 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
 import { checkMemberAccess, type MemberRole } from "@/lib/members";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/** 初期パスワードの最低長。Supabase の既定(6)より厳しくしている。 */
-const MIN_PASSWORD_LENGTH = 12;
 
 function back(params: { error?: string; notice?: string }): never {
   const q = new URLSearchParams();
@@ -41,32 +37,31 @@ function readRole(formData: FormData): MemberRole {
 }
 
 /**
- * メンバーを追加する。
+ * メンバーを追加する。登録するのは**メールアドレスだけ**。
  *
- * `inviteUserByEmail`（招待メール）ではなく `admin.createUser` +
- * 初期パスワード手渡しを採る。理由は PR 本文に記載。要点は、Supabase の
- * 既定メール送信が本番非推奨でレート制限も厳しく、カスタムSMTPを立てていない
- * 現状では「招待メールが届かない」という一番気づきにくい失敗をするため。
+ * パスワードは作らない。ログインはGoogleのみで、本人がGoogleで入ってきた
+ * ときに Supabase Auth が「同じメールアドレスの既存ユーザー」へ
+ * Google の認証情報を自動で紐づける（automatic identity linking）。
+ *
+ * 逆に、ここに登録されていないメールアドレスでGoogleログインしてきた人は
+ * Supabase の「Allow new users to sign up」が OFF であるため新規作成が拒否される。
+ * つまり**この一覧が実質の許可リスト**になる。
  */
 export async function addMember(formData: FormData) {
   await requireAdmin();
 
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const password = String(formData.get("password") ?? "");
   const role = readRole(formData);
 
   if (!EMAIL_RE.test(email)) back({ error: "メールアドレスの形式が正しくありません" });
-  if (password.length < MIN_PASSWORD_LENGTH) {
-    back({ error: `初期パスワードは${MIN_PASSWORD_LENGTH}文字以上にしてください` });
-  }
 
   const admin = createAdminClient();
 
-  // email_confirm: true = 確認メールを待たずにそのままログインできる状態で作る。
-  // メール送信に依存しないのがこの方式を選んだ理由なので、ここは必須。
+  // password を渡さない = パスワードログインできないユーザーになる。
+  // email_confirm: true は確認メールを出さないために必須（メール送信経路に
+  // 一切依存しないのがこの方式の利点なので、ここで送ってしまうと台無しになる）。
   const { data, error } = await admin.auth.admin.createUser({
     email,
-    password,
     email_confirm: true,
   });
 
@@ -74,7 +69,7 @@ export async function addMember(formData: FormData) {
     const duplicate = /already|registered|exists/i.test(error?.message ?? "");
     back({
       error: duplicate
-        ? "そのメールアドレスのユーザーは既に存在します"
+        ? "そのメールアドレスは既に登録されています"
         : "メンバーの追加に失敗しました",
     });
   }
@@ -93,7 +88,9 @@ export async function addMember(formData: FormData) {
   }
 
   revalidatePath("/members");
-  back({ notice: `${email} を追加しました。初期パスワードを本人に伝えてください。` });
+  back({
+    notice: `${email} を追加しました。本人がこのメールアドレスのGoogleアカウントでログインできます。`,
+  });
 }
 
 /** メンバーを削除する。自分自身は削除できない。 */
@@ -113,6 +110,8 @@ export async function removeMember(formData: FormData) {
   if (error) back({ error: "削除に失敗しました" });
 
   // members 行は auth.users への FK（on delete cascade）で一緒に消える。
+  // 消した時点でそのメールアドレスは許可リストから外れるので、
+  // 以降はGoogleログインしても Supabase が拒否する。
   revalidatePath("/members");
   back({ notice: `${target?.user?.email ?? "メンバー"} を削除しました` });
 }
@@ -137,55 +136,4 @@ export async function setMemberRole(formData: FormData) {
 
   revalidatePath("/members");
   back({ notice: role === "admin" ? "管理者にしました" : "メンバー権限にしました" });
-}
-
-/**
- * メンバーのパスワードを再発行する。
- *
- * カスタムSMTPを立てていないので「パスワードを忘れた」のメール復旧が使えない。
- * 管理者が新しいパスワードを発行して本人に渡す運用で代替する。
- */
-export async function resetMemberPassword(formData: FormData) {
-  await requireAdmin();
-  const targetId = String(formData.get("user_id") ?? "");
-  const password = String(formData.get("password") ?? "");
-
-  if (!targetId) back({ error: "対象が指定されていません" });
-  if (password.length < MIN_PASSWORD_LENGTH) {
-    back({ error: `パスワードは${MIN_PASSWORD_LENGTH}文字以上にしてください` });
-  }
-
-  const admin = createAdminClient();
-  const { data: target } = await admin.auth.admin.getUserById(targetId);
-  const { error } = await admin.auth.admin.updateUserById(targetId, { password });
-
-  if (error) back({ error: "パスワードの再発行に失敗しました" });
-
-  back({
-    notice: `${target?.user?.email ?? "メンバー"} のパスワードを再発行しました。本人に伝えてください。`,
-  });
-}
-
-/**
- * 自分のパスワードを変更する。管理者でなくても使える。
- *
- * 初期パスワードは管理者が決めるため、受け取った本人が差し替えられる口を
- * 必ず用意しておく必要がある。service_role は使わず自分のセッションで更新する。
- */
-export async function changeOwnPassword(formData: FormData) {
-  const password = String(formData.get("password") ?? "");
-  if (password.length < MIN_PASSWORD_LENGTH) {
-    back({ error: `パスワードは${MIN_PASSWORD_LENGTH}文字以上にしてください` });
-  }
-
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const { error } = await supabase.auth.updateUser({ password });
-  if (error) back({ error: "パスワードの変更に失敗しました" });
-
-  back({ notice: "自分のパスワードを変更しました" });
 }
