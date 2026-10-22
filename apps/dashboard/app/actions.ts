@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { canAccessIndustry, currentMemberRole } from "@/lib/members";
 import { VERCEL_DEPLOY_HOOK_URL } from "@/lib/env";
 import { addDomainToProject, removeDomainFromProject } from "@/lib/vercel-domains";
 import {
@@ -49,11 +50,19 @@ export async function createClientRecord(formData: FormData) {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  // 担当外の業種で作ろうとした場合。RLS の with check でも弾かれるが、
+  // そちらは「作成に失敗しました」としか言えないので、ここで理由を出す。
+  const industry = readIndustry(formData);
+  const { industries: allowed } = await currentMemberRole();
+  if (!canAccessIndustry(allowed, industry)) {
+    redirect(`/new?error=${encodeURIComponent("担当外の業種では作成できません")}`);
+  }
+
   const { error } = await supabase.from("clients").insert({
     slug,
     name,
     status: "draft",
-    industry: readIndustry(formData),
+    industry,
     owner_user_id: user.id,
   });
 

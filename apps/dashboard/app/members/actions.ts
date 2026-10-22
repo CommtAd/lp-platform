@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { INDUSTRIES, INDUSTRY_LABEL, type Industry } from "@shared/index";
 import { checkMemberAccess, type MemberRole } from "@/lib/members";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,6 +38,25 @@ function readRole(formData: FormData): MemberRole {
 }
 
 /**
+ * フォームから「見られる業種」を読む。
+ *
+ * `all` にチェックが入っていれば制限なし（null）。
+ * そうでなければチェックされた業種の配列を返す。
+ * 1つも選ばれていない＝何も見えない状態は無意味なので null は返さず、
+ * 呼び出し側でエラーにする（undefined を返す）。
+ */
+function readIndustries(formData: FormData): Industry[] | null | undefined {
+  if (formData.get("industries_all") === "on") return null;
+
+  const picked = formData
+    .getAll("industries")
+    .map(String)
+    .filter((v): v is Industry => (INDUSTRIES as string[]).includes(v));
+
+  return picked.length ? picked : undefined;
+}
+
+/**
  * メンバーを追加する。登録するのは**メールアドレスだけ**。
  *
  * パスワードは作らない。ログインはGoogleのみで、本人がGoogleで入ってきた
@@ -52,8 +72,12 @@ export async function addMember(formData: FormData) {
 
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const role = readRole(formData);
+  const industries = readIndustries(formData);
 
   if (!EMAIL_RE.test(email)) back({ error: "メールアドレスの形式が正しくありません" });
+  if (industries === undefined) {
+    back({ error: "業種を1つ以上選ぶか、「全業種」を選んでください" });
+  }
 
   const admin = createAdminClient();
 
@@ -77,9 +101,19 @@ export async function addMember(formData: FormData) {
   // 0040 のトリガーが members 行を role='member' で作る。
   // 管理者として追加する場合だけ上書きする（トリガーが未適用の環境でも
   // 行が無い状態にならないよう upsert にしておく）。
-  const { error: roleError } = await admin
-    .from("members")
-    .upsert({ user_id: data.user.id, role }, { onConflict: "user_id" });
+  // 0041 未適用の環境でも追加だけは通るよう、industries 付きで失敗したら
+  // role だけで入れ直す。
+  let roleError = (
+    await admin
+      .from("members")
+      .upsert({ user_id: data.user.id, role, industries }, { onConflict: "user_id" })
+  ).error;
+
+  if (roleError && (roleError.code === "42703" || roleError.code === "PGRST204")) {
+    roleError = (
+      await admin.from("members").upsert({ user_id: data.user.id, role }, { onConflict: "user_id" })
+    ).error;
+  }
 
   if (roleError) {
     back({
@@ -136,4 +170,45 @@ export async function setMemberRole(formData: FormData) {
 
   revalidatePath("/members");
   back({ notice: role === "admin" ? "管理者にしました" : "メンバー権限にしました" });
+}
+
+/**
+ * 見られる業種を設定する。
+ *
+ * 実際に行を絞るのは RLS（0041 の `member_can_access_industry`）。
+ * ここで書き換えるのはその判定材料で、画面側のタブ表示も同じ値を見る。
+ */
+export async function setMemberIndustries(formData: FormData) {
+  await requireAdmin();
+  const targetId = String(formData.get("user_id") ?? "");
+  const industries = readIndustries(formData);
+
+  if (!targetId) back({ error: "対象が指定されていません" });
+  if (industries === undefined) {
+    back({ error: "業種を1つ以上選ぶか、「全業種」を選んでください" });
+  }
+
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("members")
+    .upsert({ user_id: targetId, industries }, { onConflict: "user_id" });
+
+  if (error) {
+    // 0041 未適用だと industries 列が無い。
+    const missingColumn = error.code === "42703" || error.code === "PGRST204";
+    back({
+      error: missingColumn
+        ? "マイグレーション0041が未適用のため設定できません"
+        : "業種の設定に失敗しました",
+    });
+  }
+
+  revalidatePath("/members");
+  revalidatePath("/");
+  back({
+    notice:
+      industries === null
+        ? "全業種を見られるようにしました"
+        : `${industries.map((i) => INDUSTRY_LABEL[i]).join("・")}のみに設定しました`,
+  });
 }

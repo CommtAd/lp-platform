@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { INDUSTRIES, INDUSTRY_LABEL } from "@shared/index";
+import { canAccessIndustry, currentMemberRole } from "@/lib/members";
 import { createClientRecord } from "../actions";
 
 export default async function NewClientPage({
@@ -8,6 +9,11 @@ export default async function NewClientPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
+
+  // 自分が見られない業種で作ると、作った瞬間に自分の一覧から消える
+  // （RLS が弾くので保存自体も失敗する）。選択肢の時点で絞っておく。
+  const { industries: allowed } = await currentMemberRole();
+  const selectable = INDUSTRIES.filter((key) => canAccessIndustry(allowed, key));
 
   return (
     <main className="mx-auto max-w-md px-6 py-10">
@@ -55,10 +61,10 @@ export default async function NewClientPage({
           <select
             id="industry"
             name="industry"
-            defaultValue="fitness"
+            defaultValue={selectable[0] ?? "fitness"}
             className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-navy"
           >
-            {INDUSTRIES.map((key) => (
+            {selectable.map((key) => (
               <option key={key} value={key}>
                 {INDUSTRY_LABEL[key]}
               </option>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signout } from "./login/actions";
+import { canAccessIndustry, currentMemberRole } from "@/lib/members";
 import {
   INDUSTRIES,
   INDUSTRY_LABEL,
@@ -33,6 +34,10 @@ export default async function HomePage({
 }) {
   const tab = readTab((await searchParams).industry);
 
+  // 見られる業種。null = 制限なし。行のフィルタ自体はRLSが行うので、
+  // ここでやるのは「見えない業種のタブを出さない」という表示の整理だけ。
+  const { industries: allowed } = await currentMemberRole();
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("clients")
@@ -53,11 +58,16 @@ export default async function HomePage({
 
   // 0015 以前に作られた行は industry が入っていない可能性があるため fitness に寄せる。
   const industryOf = (c: (typeof all)[number]): Industry => c.industry ?? "fitness";
-  const clients = tab === "all" ? all : all.filter((c) => industryOf(c) === tab);
+
+  const visibleIndustries = INDUSTRIES.filter((key) => canAccessIndustry(allowed, key));
+  // 見られない業種が ?industry= で指定されても「すべて」に倒す。
+  const activeTab = tab !== "all" && !canAccessIndustry(allowed, tab) ? "all" : tab;
+
+  const clients = activeTab === "all" ? all : all.filter((c) => industryOf(c) === activeTab);
 
   const tabs: { key: Industry | "all"; label: string; count: number }[] = [
     { key: "all", label: "すべて", count: all.length },
-    ...INDUSTRIES.map((key) => ({
+    ...visibleIndustries.map((key) => ({
       key,
       label: INDUSTRY_LABEL[key],
       count: all.filter((c) => industryOf(c) === key).length,
@@ -69,7 +79,11 @@ export default async function HomePage({
       <header className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold text-navy">顧客LP一覧</h1>
-          <p className="text-sm text-neutral-500">自分が担当する顧客のみ表示されます</p>
+          <p className="text-sm text-neutral-500">
+            {allowed === null
+              ? "チーム全体の顧客LPを表示しています"
+              : `担当業種（${allowed.map((i) => INDUSTRY_LABEL[i]).join("・")}）のみ表示されます`}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <Link
@@ -90,9 +104,10 @@ export default async function HomePage({
         </div>
       </header>
 
-      <nav className="mb-6 flex flex-wrap gap-2">
+      {/* 業種が1つしか見えない人にはタブを出さない（「すべて」と同義になるため）。 */}
+      <nav className={`mb-6 flex-wrap gap-2 ${visibleIndustries.length > 1 ? "flex" : "hidden"}`}>
         {tabs.map((t) => {
-          const active = t.key === tab;
+          const active = t.key === activeTab;
           return (
             <Link
               key={t.key}
@@ -118,9 +133,9 @@ export default async function HomePage({
         </p>
       ) : clients.length === 0 ? (
         <p className="rounded-md border border-dashed border-neutral-300 px-4 py-10 text-center text-sm text-neutral-500">
-          {tab === "all"
+          {activeTab === "all"
             ? "担当顧客がまだありません。「新規作成」から追加してください。"
-            : `${INDUSTRY_LABEL[tab]}のLPはまだありません。`}
+            : `${INDUSTRY_LABEL[activeTab]}のLPはまだありません。`}
         </p>
       ) : (
         <ul className="divide-y divide-neutral-200 overflow-hidden rounded-lg border border-neutral-200 bg-white">

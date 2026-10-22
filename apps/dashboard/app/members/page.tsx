@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { ROLE_LABEL, checkMemberAccess, listMembers, type MemberRow } from "@/lib/members";
-import { addMember, removeMember, setMemberRole } from "./actions";
+import { INDUSTRY_LABEL } from "@shared/index";
+import { addMember, removeMember, setMemberIndustries, setMemberRole } from "./actions";
 import ConfirmButton from "./ConfirmButton";
+import IndustryPicker from "./IndustryPicker";
 
 /**
  * メンバー管理画面。
@@ -72,13 +74,20 @@ function MemberList({ members }: { members: MemberRow[] }) {
                 {` · 追加 ${formatDate(m.createdAt)}`}
               </p>
             </div>
-            <span
-              className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                m.role === "admin" ? "bg-navy/10 text-navy" : "bg-neutral-100 text-neutral-600"
-              }`}
-            >
-              {ROLE_LABEL[m.role]}
-            </span>
+            <div className="flex shrink-0 flex-wrap justify-end gap-1.5">
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                  m.role === "admin" ? "bg-navy/10 text-navy" : "bg-neutral-100 text-neutral-600"
+                }`}
+              >
+                {ROLE_LABEL[m.role]}
+              </span>
+              <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-600">
+                {m.industries === null
+                  ? "全業種"
+                  : m.industries.map((i) => INDUSTRY_LABEL[i]).join("・")}
+              </span>
+            </div>
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -95,6 +104,22 @@ function MemberList({ members }: { members: MemberRow[] }) {
                 {m.role === "admin" ? "メンバーに戻す" : "管理者にする"}
               </button>
             </form>
+
+            <details className="w-full">
+              <summary className="inline-block cursor-pointer rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs text-neutral-700 transition hover:bg-neutral-50">
+                業種を設定
+              </summary>
+              <form
+                action={setMemberIndustries}
+                className="mt-3 space-y-3 border-l-2 border-neutral-200 pl-4"
+              >
+                <input type="hidden" name="user_id" value={m.userId} />
+                <IndustryPicker current={m.industries} idPrefix={m.userId} />
+                <button type="submit" className={PRIMARY}>
+                  保存する
+                </button>
+              </form>
+            </details>
 
             {m.isSelf ? null : (
               <form action={removeMember}>
@@ -167,7 +192,8 @@ export default async function MembersPage({
 
       <p className="mb-6 text-sm leading-relaxed text-neutral-500">
         ここに載っているメールアドレスのGoogleアカウントだけがログインできます。
-        LPの作成・編集・公開は全員が行えます（権限差はメンバー管理の操作だけ）。
+        「業種を設定」で担当業種を絞ると、その業種のLPとCVデータだけが見えるようになります
+        （絞り込みはデータベース側で行っているので、画面を細工しても他業種は見えません）。
       </p>
 
       {members === null ? (
@@ -201,6 +227,7 @@ export default async function MembersPage({
               別のアドレスだとログインできません。
             </p>
           </div>
+          <IndustryPicker current={null} idPrefix="new-member" />
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"

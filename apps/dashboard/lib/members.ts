@@ -1,5 +1,6 @@
 import "server-only";
 
+import { INDUSTRIES, type Industry } from "@shared/index";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient, isAdminApiConfigured } from "@/lib/supabase/admin";
 
@@ -15,6 +16,8 @@ export type MemberRow = {
   userId: string;
   email: string;
   role: MemberRole;
+  /** 見られる業種。null = 制限なし（全業種）。 */
+  industries: Industry[] | null;
   createdAt: string;
   lastSignInAt: string | null;
   isSelf: boolean;
@@ -32,10 +35,36 @@ export type MemberAccess =
   | { ok: true; userId: string; email: string }
   | { ok: false; reason: MemberAccessDenial; role: MemberRole | null };
 
+/**
+ * `members.industries` を型に落とす。
+ * null / 未知の値 / 空配列はすべて「制限なし」に寄せる
+ * （0041 未適用の環境でも全業種見える状態を保つため）。
+ */
+export function parseIndustries(raw: unknown): Industry[] | null {
+  if (!Array.isArray(raw)) return null;
+  const valid = raw.filter((v): v is Industry => (INDUSTRIES as string[]).includes(String(v)));
+  return valid.length ? valid : null;
+}
+
+/** その業種を見られるか。RLS と同じ判定を画面側でも使う。 */
+export function canAccessIndustry(
+  allowed: Industry[] | null,
+  industry: Industry | null | undefined,
+): boolean {
+  if (allowed === null) return true;
+  return allowed.includes(industry ?? "fitness");
+}
+
 /** PostgREST が「テーブルが無い」を返したか（0040 未適用の判定）。 */
 function isMissingTable(code: string | undefined): boolean {
   // 42P01 = undefined_table、PGRST205 = スキーマキャッシュに見つからない
   return code === "42P01" || code === "PGRST205";
+}
+
+/** PostgREST が「列が無い」を返したか（0041 未適用の判定）。 */
+function isMissingColumn(code: string | undefined): boolean {
+  // 42703 = undefined_column、PGRST204 = スキーマキャッシュに列が無い
+  return code === "42703" || code === "PGRST204";
 }
 
 /**
@@ -49,6 +78,8 @@ export async function currentMemberRole(): Promise<{
   userId: string | null;
   email: string | null;
   role: MemberRole | null;
+  /** 見られる業種。null = 制限なし。 */
+  industries: Industry[] | null;
   migrationMissing: boolean;
 }> {
   const supabase = await createClient();
@@ -56,26 +87,53 @@ export async function currentMemberRole(): Promise<{
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { userId: null, email: null, role: null, migrationMissing: false };
+  if (!user) {
+    return { userId: null, email: null, role: null, industries: null, migrationMissing: false };
+  }
 
-  const { data, error } = await supabase
+  // industries は 0041 で足した列。未適用の環境では落ちるので、
+  // 列が無いエラーのときは role だけで読み直す。
+  let data: { role?: string; industries?: unknown } | null = null;
+  let error = null as { code?: string } | null;
+
+  const withIndustries = await supabase
     .from("members")
-    .select("role")
+    .select("role, industries")
     .eq("user_id", user.id)
     .maybeSingle();
+
+  if (withIndustries.error && isMissingColumn(withIndustries.error.code)) {
+    const fallback = await supabase
+      .from("members")
+      .select("role")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    data = fallback.data;
+    error = fallback.error;
+  } else {
+    data = withIndustries.data;
+    error = withIndustries.error;
+  }
 
   if (error) {
     return {
       userId: user.id,
       email: user.email ?? null,
       role: null,
+      industries: null,
       migrationMissing: isMissingTable(error.code),
     };
   }
 
   // 行が無い場合は member 扱い（トリガーが入る前に作られたユーザーの保険）。
   const role = (data?.role as MemberRole | undefined) ?? "member";
-  return { userId: user.id, email: user.email ?? null, role, migrationMissing: false };
+  return {
+    userId: user.id,
+    email: user.email ?? null,
+    role,
+    industries: parseIndustries(data?.industries),
+    migrationMissing: false,
+  };
 }
 
 /**
@@ -111,9 +169,21 @@ export async function listMembers(selfId: string): Promise<MemberRow[] | null> {
   const { data, error } = await admin.auth.admin.listUsers({ page: 1, perPage: LIST_PER_PAGE });
   if (error || !data) return null;
 
-  const { data: roleRows } = await admin.from("members").select("user_id, role");
+  // 0041 未適用の環境では industries 列が無いので、落ちたら role だけで読み直す。
+  let roleRows: { user_id: string; role: string; industries?: unknown }[] = [];
+  const withIndustries = await admin.from("members").select("user_id, role, industries");
+  if (withIndustries.error) {
+    const fallback = await admin.from("members").select("user_id, role");
+    roleRows = (fallback.data ?? []) as typeof roleRows;
+  } else {
+    roleRows = (withIndustries.data ?? []) as typeof roleRows;
+  }
+
   const roleOf = new Map<string, MemberRole>(
-    (roleRows ?? []).map((r) => [r.user_id as string, r.role as MemberRole]),
+    roleRows.map((r) => [r.user_id, r.role as MemberRole]),
+  );
+  const industriesOf = new Map<string, Industry[] | null>(
+    roleRows.map((r) => [r.user_id, parseIndustries(r.industries)]),
   );
 
   return data.users
@@ -122,6 +192,7 @@ export async function listMembers(selfId: string): Promise<MemberRow[] | null> {
       email: u.email ?? "(メールアドレス未設定)",
       // members 行が無いユーザーは member 扱い（0040 のトリガー導入前の取りこぼし）。
       role: roleOf.get(u.id) ?? "member",
+      industries: industriesOf.get(u.id) ?? null,
       createdAt: u.created_at,
       lastSignInAt: u.last_sign_in_at ?? null,
       isSelf: u.id === selfId,
