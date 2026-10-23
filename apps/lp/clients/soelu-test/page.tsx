@@ -2014,13 +2014,13 @@ export default function Page() {
         offers={[
           <span
             key="label"
-            style={{ fontFamily: GOTHIC, fontSize: 12.5, fontWeight: 700, color: MAIN }}
+            style={{ fontFamily: GOTHIC, fontSize: 17, fontWeight: 800, color: MAIN }}
           >
             {c.sticky.label}
           </span>,
           <span
             key="value"
-            style={{ fontFamily: GOTHIC, fontSize: 14, fontWeight: 800, color: GOLD_DEEP }}
+            style={{ fontFamily: GOTHIC, fontSize: 24, fontWeight: 900, color: GOLD_DEEP }}
           >
             {c.sticky.value}
           </span>,
