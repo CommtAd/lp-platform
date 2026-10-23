@@ -31,8 +31,8 @@ export interface SoeluTestConfig {
   /** 2. オファーバー（AUN #3） */
   offerBar: { main: string; sub: string };
 
-  /** 4. FV（AUN #1 バッジ削除 / #2 キャッチ変更） */
-  fv: { catchLines: [string, string]; hero: Slot };
+  /** 4. FV（顧客支給の完成画像。キャッチは画像内に入っている） */
+  fv: { alt: string; hero: Slot };
 
   /** 5. FV下のメインカラー帯（AUN2 #10 — 添付を参考に特徴カード4枚へ） */
   fvBand: {
@@ -171,11 +171,11 @@ const config: SoeluTestConfig = {
   },
 
   fv: {
-    // AUN #2: 縦書き2枚の札のコピーを差し替え。行末に1文字だけ残さない配分にしている。
-    catchLines: ["ココロもカラダも", "整う毎日へ。"],
+    // 2026-10-19: キャッチ・特徴アイコン入りの完成画像に差し替え。画像内の文字を alt に入れる。
+    alt: "SOELU ココロもカラダも整う毎日へ。マシンピラティス、よもぎ蒸し、オンラインレッスン。",
     hero: {
-      placeholder: "スタジオ内観 / マシンピラティスの写真（全面）",
-      src: `${ASSET}/hero-2.webp`,
+      placeholder: "FV完成画像（941×1672）",
+      src: `${ASSET}/fv.webp`,
     },
   },
 
