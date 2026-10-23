@@ -56,6 +56,12 @@ export default async function ClientDetailPage({
           <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600">
             {STATUS_LABEL[client.status]}
           </span>
+          <Link
+            href={`/clients/${client.id}/heatmap`}
+            className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-50"
+          >
+            ヒートマップ
+          </Link>
           {/* 下書き・非公開でも開けるようにしておく（LPShell が noindex を出すだけで表示はされる）。 */}
           <a
             href={lpUrl}
@@ -182,6 +188,33 @@ export default async function ClientDetailPage({
             name="meta_domain_verification"
             defaultValue={client.meta_domain_verification}
           />
+        </section>
+
+        <section className="space-y-3 rounded-lg border border-neutral-200 bg-white p-5">
+          <h2 className="text-sm font-semibold">ヒートマップ分析</h2>
+          <p className="text-xs text-neutral-500">
+            クリック位置とスクロール到達を自社計測で集計します（外部サービスは使いません）。
+            保存するのは座標・押されたボタンの文字・到達深さだけで、入力欄の中身や録画は
+            保存しません。
+          </p>
+          <p className="text-xs text-neutral-500">
+            <strong className="font-medium text-neutral-700">既定はOFFです。</strong>
+            分析したい案件だけONにしてください。全案件で回すと、使わないデータで
+            DBの無料枠を削ることになります（フォーム送信の記録と同じDBです）。
+            分析が終わったらOFFに戻して構いません。
+          </p>
+          <Toggle
+            label="ヒートマップを計測する"
+            name="heatmap_enabled"
+            defaultChecked={client.heatmap_enabled}
+          />
+          <p className="text-xs text-neutral-500">
+            集計結果は{" "}
+            <Link href={`/clients/${client.id}/heatmap`} className="text-navy underline">
+              ヒートマップ画面
+            </Link>{" "}
+            で見られます。
+          </p>
         </section>
 
         <section className="space-y-3 rounded-lg border border-neutral-200 bg-white p-5">

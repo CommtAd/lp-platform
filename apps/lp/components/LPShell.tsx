@@ -4,6 +4,7 @@ import type { ClientRecord, ClientStatus } from "@shared/index";
 import { resolveMetaCvEvent } from "@shared/index";
 import { fetchClientRecord } from "@/lib/client-record";
 import { CvEventProvider } from "./CvEventProvider";
+import HeatmapTracker from "./HeatmapTracker";
 import TagInjector from "./TagInjector";
 import UtmCapture from "./UtmCapture";
 
@@ -39,15 +40,17 @@ function buildDefault(
     meta_domain_verification: null,
     cv_events: {},
     meta_cv_event: null,
+    heatmap_enabled: false,
     created_at: now,
     updated_at: now,
   };
 }
 
 /**
- * Mandatory wrapper for every LP. Handles tag injection, publication gating and
- * UTM capture without the LP author having to think about it. The design inside
- * `children` is untouched. See docs/implementation-brief-01.md §3.1.
+ * Mandatory wrapper for every LP. Handles tag injection, publication gating,
+ * UTM capture and heatmap collection without the LP author having to think
+ * about it. The design inside `children` is untouched.
+ * See docs/implementation-brief-01.md §3.1.
  */
 export default async function LPShell({
   clientSlug,
@@ -81,6 +84,12 @@ export default async function LPShell({
 
       <TagInjector client={record} />
       <UtmCapture />
+      {/* ヒートマップ収集。既定OFFのオプトインで、分析したい案件だけ
+          ダッシュボードでONにする（`docs/heatmap.md`）。
+          `heatmap_enabled` は公開RPCが返す値で、マイグレーション(0038)が
+          未適用なら undefined になり計測は止まったままになる
+          （存在しないRPCを叩き続けない）。 */}
+      <HeatmapTracker clientSlug={record.slug} enabled={record.heatmap_enabled === true} />
 
       {!isPublished && (
         <div

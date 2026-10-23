@@ -38,15 +38,16 @@ export interface BeatToyotaMetaConfig {
   meta: { title: string; description: string; ogpImage?: string };
 
   header: { logo: string; logoAlt: string; station: string; walkPre: string; walkNum: string; walkPost: string; parking: string };
-  offerBar: { trialLabel: string; trial: string; admissionLabel: string; admission: string };
+  /** 上部の帯。label＋特大の数字＋単位の並び。 */
+  offerBar: { label: string; num: string; unit: string }[];
 
   /** 価格はここに1か所だけ。FV・キャンペーン・最終CTA・追従CTAで共有する。 */
   prices: {
     trialLabel: string;
     trialNote: string;
     trial: string;
-    admissionLabel: string;
-    admission: string;
+    /** 体験の下に並べる特典。`num` を特大、`unit` を小さく置く。 */
+    perks: { label: string; num: string; unit: string }[];
   };
 
   cta: { main: string; reserve: string; try: string; sub: string };
@@ -128,9 +129,9 @@ const config: BeatToyotaMetaConfig = {
   slug: "beat-pilates-toyota2",
   status: "draft",
   meta: {
-    title: "【初回体験1,000円】運動は続かなかった。でも、身体は変えたい。｜BEAT PILATES 豊田店",
+    title: "【初回体験0円】運動は続かなかった。でも、身体は変えたい。｜BEAT PILATES 豊田店",
     description:
-      "音楽に合わせて楽しむ、女性専用の暗闇マシンピラティス。周りを気にしにくい暗闇と、動きをサポートするマシンで、運動が苦手でも始めやすい。初回体験1,000円・入会金0円。名鉄豊田市駅 徒歩3分・駐車場あり。",
+      "音楽に合わせて楽しむ、女性専用の暗闇マシンピラティス。周りを気にしにくい暗闇と、動きをサポートするマシンで、運動が苦手でも始めやすい。初回体験0円・月3回プラン2ヶ月無料・入会金0円。名鉄豊田市駅 徒歩3分・駐車場あり。",
     // 相対パスだと metadataBase 未設定のためブライダルのドメインで解決される。必ず絶対URL。
     ogpImage: `https://fitness-lp.commitad.com${IMG}/ogp.jpg`,
   },
@@ -145,19 +146,25 @@ const config: BeatToyotaMetaConfig = {
     parking: "駐車場完備",
   },
 
-  offerBar: { trialLabel: "初回体験", trial: "1,000", admissionLabel: "入会金", admission: "0" },
+  offerBar: [
+    { label: "初回体験", num: "0", unit: "円" },
+    { label: "月3回プラン", num: "2", unit: "ヶ月無料" },
+    { label: "入会金", num: "0", unit: "円" },
+  ],
 
   prices: {
     trialLabel: "初回体験",
     trialNote: "45分レッスン",
-    trial: "1,000",
-    admissionLabel: "入会金",
-    admission: "0",
+    trial: "0",
+    perks: [
+      { label: "月3回プラン", num: "2", unit: "ヶ月無料" },
+      { label: "入会金", num: "0", unit: "円" },
+    ],
   },
 
   cta: {
-    main: "1,000円で体験してみる",
-    reserve: "1,000円で体験レッスンを予約する",
+    main: "0円で体験してみる",
+    reserve: "0円で体験レッスンを予約する",
     try: "BEAT PILATESを体験してみる",
     sub: "豊田市駅 徒歩3分｜女性専用",
   },
@@ -418,7 +425,7 @@ const config: BeatToyotaMetaConfig = {
 
   reserve: { url: "https://beatpilates-toyota.hacomono.jp/reserve/schedule/1/1/?trial=true" },
 
-  sticky: { buttonText: "初回1,000円｜体験予約する", showAfter: 700 },
+  sticky: { buttonText: "初回0円｜体験予約する", showAfter: 700 },
   footer: { copyright: "© BEAT PILATES 豊田店" },
 };
 

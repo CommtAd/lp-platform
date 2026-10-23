@@ -299,6 +299,12 @@ export interface PatternCConfig {
      * このとき `label` / `headlineOrnament` / `headlinePosition` / `items[].image` は使わない。
      */
     photo?: Slot;
+    /**
+     * 写真版でも `label` を写真の上に見出しとして出す。既定 false。
+     * `headline` を置かない案件で、写真が何の特典かを先に示すために使う。
+     * 金の罫に挟んだ白地＋金の細枠のラベル（文字は深い金）で出る。下の白プレートと同じトーン。
+     */
+    photoLabel?: boolean;
     /** FV写真の直下・`label` の上に置く訴求文。1行に収まる長さにする。 */
     headline?: string;
     /** `headline` の中で金額として強調する部分文字列（21pxの深い金になる）。 */
@@ -506,6 +512,12 @@ export interface PatternCConfig {
      * 4点を写真つきで並べると1列75px前後まで潰れるので、2 を渡して2×2で組む。
      */
     columns?: number;
+    /**
+     * 特典が1点のときの組み方。写真を4:3で横幅いっぱいに置き、その下に特典名と金額（26px）を
+     * 大きめに組む。既定の横並びのままだと、1点では正方形の写真が大きすぎて金額が埋もれる。
+     * `items[0]` だけを使う。
+     */
+    single?: boolean;
     /** パネルに重ねる四隅のフレーム装飾（中央が透明のPNG）。`grandOffer.frame` と同じ扱い。 */
     frame?: string;
     /** セクションの地に散らす飾り（季節の葉など）。`SectionDecor` 参照。 */
@@ -541,6 +553,13 @@ export interface PatternCConfig {
       inkAfterAmount?: boolean;
       /** 金額・`extras` の下に置く締めの一言（例 "プレゼント！"）。本文色の明朝太字。 */
       footer?: string;
+      /**
+       * 金額の下に並べる成約特典の中身（写真つき）。来館特典の `items` と同じ見た目
+       * （`AmountRow`）で、`amount` は金色の太字、`title` は下の小さい説明になる。
+       * `columns` で1行の数を指定する（既定は items の数＝横1列。4点なら 2 で2×2）。
+       */
+      items?: { title: string; amount: string; image?: Slot }[];
+      columns?: number;
       /**
        * カードを左右に広げる量(px)。セクションの左右アキ（20px）からこの分だけ外へ出す。
        * `extras` で文言が長くなり、内寸が足りないときに使う（8 でFVのプレートと同じ12pxのアキ）。

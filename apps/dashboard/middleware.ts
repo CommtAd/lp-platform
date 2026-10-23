@@ -26,9 +26,15 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isLogin = request.nextUrl.pathname.startsWith("/login");
+  const path = request.nextUrl.pathname;
+  const isLogin = path.startsWith("/login");
 
-  if (!user && !isLogin) {
+  // Google ログインの戻り先。ここは未ログインのまま通さないといけない
+  // （認可コードをセッションに交換するのがこのルート自身なので、
+  //  先に /login へ飛ばすと永久にログインできなくなる）。
+  const isAuthCallback = path.startsWith("/auth/");
+
+  if (!user && !isLogin && !isAuthCallback) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

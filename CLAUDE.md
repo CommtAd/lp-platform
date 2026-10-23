@@ -8,7 +8,9 @@
 1. LPは `apps/lp/clients/{slug}/` 配下に作成する。
    ベーステンプレート（`clients/_base-a/`）をコピーして開始する。
 2. **LPShell で全体をラップすること（削除・迂回禁止）。**
-   タグ注入・noindex・UTM保持はすべて LPShell が担う。外すと機能が失われる。
+   タグ注入・noindex・UTM保持・ヒートマップ計測はすべて LPShell が担う。
+   外すと機能が失われる。ヒートマップのためにLP側へ足すものは何もない
+   （`docs/heatmap.md`）。
 3. **フォームは LPForm を使用する。送信先URLの変更禁止。**
    送信先は基盤側で固定（`lib/form-endpoint.ts`）。HTML納品時も動作させるため。
    フィールド構成・見た目は `config.ts` の `form` で自由にカスタマイズしてよい。
@@ -162,6 +164,28 @@
    確認は独自ドメインを直接開く（curlで検証する場合は必ず `-L` を付ける）。
    リダイレクト追従なしで vercel.app を叩くと本文が空になり「未反映」と誤検知するので注意。
 
-- **権限**: メンバーはGitHubの collaborator（write）とダッシュボードのSupabase Authユーザーを付与すれば足りる。いずれも無料枠。
+- **権限**: メンバーはGitHubの collaborator（write）と、ダッシュボードの
+  **「メンバー管理」画面でのメールアドレス登録**で足りる。いずれも無料枠。
+  ログインはGoogleのみ（パスワードログインは廃止済み）。
+  Supabase の管理コンソールを開いてAuthユーザーを手で作る運用は不要。
+  登録したメールアドレスのGoogleアカウント以外は Supabase Auth 側で弾かれる
+  （Authentication → Allow new users to sign up を OFF にしてあることが前提。
+  これを ON に戻すと誰でもGoogleログインで入れてしまうので触らない）。
+  追加・削除ができるのは `members.role = 'admin'` の人だけ。
+- **業種単位の権限分け**: `members.industries`（`text[]`）で「見られる業種」を絞れる。
+  **`NULL` = 制限なし（全業種）**。`{bridal}` のように入れるとブライダル専任になる。
+  設定はダッシュボードの「メンバー管理 → 業種を設定」から行う
+  （実体は `supabase/migrations/0041_member_industry_scope.sql`）。
+  - **絞り込みはRLSで行う。画面側でタブを隠すのは見た目の整理にすぎない。**
+    ブラウザにはデータが届いているので、UIだけ変えても守れない。
+  - **新しい軸で絞りたくなったときは、必ず5テーブルを揃えること。**
+    `clients` / `submissions` / `pending_webhooks` / `heatmap_sessions` / `heatmap_clicks`。
+    判定は `member_can_access_industry()` 1つにまとめてあり、5つのポリシーから呼んでいる。
+    **`clients` だけ絞るのは誤り。** `submissions` に顧客の氏名・電話・メールが入っているため、
+    揃え忘れると「一覧には出ないのにCVデータは読める」という気づきにくい穴になる。
+  - `admin` ロールは業種制限をバイパスしない。`admin` は「メンバー管理ができる」という
+    意味だけで、データの見える範囲とは別の軸。管理者は通常 `industries = NULL` のままにする。
+  - `clients.industry` が入っていない古い行は `fitness` 扱い（一覧画面の既定値と揃えてある）。
+  - 公開中のLPには影響しない。LP配信は `get_public_client`（SECURITY DEFINER）経由のため。
 - **保護設定**: `check` 通過必須・PR必須・force-push/削除禁止。管理者のみ緊急時にバイパス可。
   ルールを緩めたい場合もコードや設定側で調整し、保護自体は外さない。

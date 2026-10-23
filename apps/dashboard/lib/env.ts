@@ -1,6 +1,15 @@
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 export const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
+/**
+ * Supabase service_role key. Auth ユーザーの作成・削除に必要。
+ *
+ * **サーバー側専用。`NEXT_PUBLIC_` を付けてはいけない**（付けるとクライアント
+ * バンドルに焼き込まれ、RLSを全部バイパスできる鍵が公開される）。
+ * 未設定のときはメンバー管理機能を無効化し、画面にその旨を出す。
+ */
+export const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
+
 /** Vercel Deploy Hook fired on publish/unpublish. Unset -> skip + log. */
 export const VERCEL_DEPLOY_HOOK_URL = process.env.VERCEL_DEPLOY_HOOK_URL ?? "";
 

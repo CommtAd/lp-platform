@@ -342,6 +342,7 @@ export default function Page() {
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
               objectPosition={c.fv.hero.position}
+              poster={c.fv.hero.poster}
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", alignItems: "flex-start", paddingTop: c.fv.hero.src ? 0 : 70 }}
             />
             <div
@@ -801,11 +802,11 @@ export default function Page() {
                 <OfferGrid />
               </div>
               <OfferNote />
-              <div style={{ marginTop: 24, borderTop: `1px dashed ${line}`, paddingTop: 20 }}>
-                <p style={{ margin: 0, textAlign: "center", fontFamily: fontMincho, fontWeight: 700, fontSize: 16, color: brown, letterSpacing: "0.08em" }}>
-                  月会費プラン
-                </p>
-                {c.price.plans.length > 0 ? (
+              {c.price.plans.length > 0 && (
+                <div style={{ marginTop: 24, borderTop: `1px dashed ${line}`, paddingTop: 20 }}>
+                  <p style={{ margin: 0, textAlign: "center", fontFamily: fontMincho, fontWeight: 700, fontSize: 16, color: brown, letterSpacing: "0.08em" }}>
+                    月会費プラン
+                  </p>
                   <dl style={{ margin: "14px 0 0" }}>
                     {c.price.plans.map((p) => (
                       <div
@@ -830,24 +831,8 @@ export default function Page() {
                       </div>
                     ))}
                   </dl>
-                ) : (
-                  <p
-                    style={{
-                      margin: "12px 0 0",
-                      background: greige,
-                      borderRadius: 10,
-                      padding: "18px 14px",
-                      fontSize: 12,
-                      lineHeight: 1.7,
-                      color: inkSoft,
-                      textAlign: "center",
-                    }}
-                  >
-                    <Confirm />
-                    {c.price.emptyNote}
-                  </p>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </section>
 
