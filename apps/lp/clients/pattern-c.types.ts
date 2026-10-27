@@ -296,7 +296,10 @@ export interface PatternCConfig {
      * 写真版。渡すと罫＋金額の横並びの代わりに、
      * 「`headline` → 特典の写真（横幅いっぱい）→ 写真の下端に重ねた白プレートに `items`」
      * の組み方になる。特典が1〜2点で、中身の写真がある案件向け。
-     * このとき `label` / `headlineOrnament` / `headlinePosition` / `items[].image` は使わない。
+     * このとき `label` / `headlineOrnament` / `headlinePosition` は使わない。
+     * `items[].image` を渡した項目は、最初の写真のプレートには入れず、その下に
+     * 「写真＋重ねたプレート」の組をもう1つ作って置く（特典ごとに写真を見せたいとき）。
+     * `disclaimer` は `\n` で改行できる。
      */
     photo?: Slot;
     /**
