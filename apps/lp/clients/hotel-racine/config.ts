@@ -105,7 +105,16 @@ const config: PatternCConfig = {
     headlineEmphasis: "豪華来館特典",
     // 写真版では label は表示されない（型の必須項目なので値だけ置く）。
     label: "来館特典",
-    items: [{ amount: "ハーフコース無料試食", name: "国産牛フィレ肉を含む" }],
+    // ランチビュッフェは 2026-10-27 追加（AUN指示）。写真つきの項目は試食の下に別の組で出る。
+    items: [
+      { amount: "ハーフコース無料試食", name: "国産牛フィレ肉を含む" },
+      {
+        amount: "人気のランチビュッフェ",
+        name: "",
+        image: { placeholder: "ランチビュッフェ", src: `${ASSET}/lunch-buffet.jpg` },
+      },
+    ],
+    disclaimer: "※ビュッフェは来館特典として後日ご招待いたします",
   },
 
   grandOffer: {
@@ -172,7 +181,7 @@ const config: PatternCConfig = {
   privilege: {
     heading: "来館特典・フェア成約特典",
     lead: "フェアにご参加いただいた方にご用意しています。",
-    // パネルは来館特典の試食1点だけ（2026-10-21 AUN指示）。成約特典は下の contract に並べる。
+    // パネルは来館特典（試食・ランチビュッフェ）だけ。成約特典は下の contract に並べる。
     headline: "ご来館特典",
     headlineEmphasis: "ご来館特典",
     items: [
@@ -181,9 +190,17 @@ const config: PatternCConfig = {
         amount: "豪華ハーフコース試食",
         image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
       },
+      {
+        // 2026-10-27 追加（AUN指示）。
+        title: "",
+        amount: "人気のランチビュッフェ",
+        image: { placeholder: "ランチビュッフェ", src: `${ASSET}/lunch-buffet.jpg` },
+      },
     ],
+    // 2点とも横長の写真で見せたいので1列で縦に積む（既定の横並びだと正方形の小さい写真になる）。
+    columns: 1,
     frame: `${ASSET}/privilege-frame.png`,
-    disclaimer: "※特典のお渡しには適用条件がございます",
+    disclaimer: "※特典のお渡しには適用条件がございます\n※ビュッフェは来館特典として後日ご招待いたします",
     contract: {
       label: "さらに、ご成約で",
       // 指示書どおりここだけ「分」（FV・追従バーは「相当」のまま。2026-10-21 ユーザー判断）。

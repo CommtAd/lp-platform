@@ -316,9 +316,52 @@ function AmountRow({
             {item.amount}
           </p>
           {/* 特典名は `\n` で改行できる（長い名称を意図した位置で折るため）。 */}
-          <p className="mt-2.5 text-[10.5px] leading-snug opacity-65">{nl(item.label)}</p>
+          {/* 説明が空の項目は行ごと出さない（空の行だけ余白が空いて見えるため）。 */}
+          {item.label && (
+            <p className="mt-2.5 text-[10.5px] leading-snug opacity-65">{nl(item.label)}</p>
+          )}
         </div>
       ))}
+    </div>
+  );
+}
+
+/**
+ * FV直下の特典サマリー（写真版）で、写真の下端に重ねる白プレート。二重罫で招待状のように見せる。
+ * 写真つきの項目ごとに「写真＋プレート」の組を作るので、組み立てを1か所にまとめている。
+ */
+function PhotoPlate({
+  items,
+  accent,
+  ink,
+}: {
+  items: { amount: string; name: string }[];
+  accent: string;
+  ink: string;
+}) {
+  if (items.length === 0) return null;
+  return (
+    <div
+      className="relative mx-3 -mt-8 bg-white p-1"
+      style={{ border: `1px solid ${accent}`, boxShadow: "0 12px 28px rgba(59,55,48,0.14)" }}
+    >
+      <div className="px-3 py-4 text-center" style={{ border: `1px solid ${accent}55` }}>
+        {items.map((item, i) => (
+          <div key={`${item.amount}-${i}`} className={i > 0 ? "mt-4" : undefined}>
+            {item.name && (
+              <p className="mb-1 text-[12px] leading-[1.6]" style={{ color: `${ink}B3` }}>
+                {nl(item.name)}
+              </p>
+            )}
+            <p
+              className="text-[23px] font-bold leading-[1.3] tracking-[0.04em]"
+              style={{ fontFamily: mincho, color: goldOnWhite }}
+            >
+              {item.amount}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -812,39 +855,33 @@ export default function Page() {
                 radius={4}
                 style={{ width: "100%", aspectRatio: "4 / 3" }}
               />
-              {/* 写真の下端に重ねる白プレート。二重罫で招待状のように見せる。 */}
-              <div
-                className="relative mx-3 -mt-8 bg-white p-1"
-                style={{
-                  border: `1px solid ${c.accent}`,
-                  boxShadow: "0 12px 28px rgba(59,55,48,0.14)",
-                }}
-              >
-                <div
-                  className="px-3 py-4 text-center"
-                  style={{ border: `1px solid ${c.accent}55` }}
-                >
-                  {c.fvSummary.items.map((item, i) => (
-                    <div key={`${item.name}-${i}`} className={i > 0 ? "mt-4" : undefined}>
-                      <p className="text-[12px] leading-[1.6]" style={{ color: `${c.ink}B3` }}>
-                        {nl(item.name)}
-                      </p>
-                      <p
-                        className="mt-1 text-[23px] font-bold leading-[1.3] tracking-[0.04em]"
-                        style={{ fontFamily: mincho, color: goldOnWhite }}
-                      >
-                        {item.amount}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {/* 写真の下端に重ねる白プレート。写真を持つ項目は下で別の組にするので除く。 */}
+              <PhotoPlate
+                items={c.fvSummary.items.filter((i) => !i.image)}
+                accent={c.accent}
+                ink={c.ink}
+              />
+              {/* 写真つきの項目は「写真＋プレート」の組をもう1つ作って下に積む。 */}
+              {c.fvSummary.items
+                .filter((i) => i.image)
+                .map((item, i) => (
+                  <div key={`${item.amount}-${i}`} className="mt-9">
+                    <ImageSlot
+                      src={item.image!.src}
+                      placeholder={item.image!.placeholder}
+                      objectPosition={item.image!.position ?? "center"}
+                      radius={4}
+                      style={{ width: "100%", aspectRatio: "4 / 3" }}
+                    />
+                    <PhotoPlate items={[item]} accent={c.accent} ink={c.ink} />
+                  </div>
+                ))}
               {c.fvSummary.disclaimer && (
                 <p
                   className="mt-3 text-right text-[10px] leading-[1.6]"
                   style={{ color: `${c.ink}80` }}
                 >
-                  {c.fvSummary.disclaimer}
+                  {nl(c.fvSummary.disclaimer)}
                 </p>
               )}
               {c.fvSummary.note && (
@@ -1483,7 +1520,7 @@ export default function Page() {
             {/* 注記はパネルの外。中に入れると特典の一部に読めてしまう。 */}
             {c.privilege.disclaimer && (
               <p className="mt-2.5 text-right text-[10px] leading-[1.6] opacity-65">
-                {c.privilege.disclaimer}
+                {nl(c.privilege.disclaimer)}
               </p>
             )}
             {c.privilege.contract && (
