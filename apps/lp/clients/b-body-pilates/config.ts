@@ -359,9 +359,9 @@ const config: BaseBodyConfig = {
       },
       {
         num: "02",
-        title: "7つの動きから身体を知る\nFMS評価",
+        title: "7つの動きから身体を知る\n理学療法",
         body: "しゃがむ・またぐ・踏み込むなど、7つの基本的な動作から、左右差やバランス、身体の使い方のクセを確認。自分では気づきにくいクセが見えてきます。",
-        img: { placeholder: "FMS評価", src: `${ASSET}/reason-02.jpg`, position: "50% 45%" },
+        img: { placeholder: "理学療法", src: `${ASSET}/reason-02.jpg`, position: "50% 45%" },
       },
       {
         num: "03",
