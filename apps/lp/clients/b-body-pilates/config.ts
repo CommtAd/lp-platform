@@ -25,7 +25,7 @@ import type { LPFormField } from "@/components/LPForm";
  * 配色はブランドの既存色（ブラウン・グリーン）に縛られず、30〜50代女性向けに
  * 「上品・清潔・落ち着き・安心」で提案した3色構成（ヒアリング Q25）。
  *   - メイン #2F5560 … 深いスレートティール。白地 8:1。見出し・CTA・濃色の地。
- *   - 価格   #B0563E … テラコッタ。**1,000円／0円の数字だけ**に使う（白地 4.9:1）。
+ *   - 価格   #B0563E … テラコッタ。**4,980円／0円の数字だけ**に使う（白地 4.9:1）。
  *   - 地     #FBFAF7（ほぼ白）／#F4F0E8（グレージュ）／#EAF1F0（淡いミスト）。
  */
 
@@ -241,9 +241,9 @@ const config: BaseBodyConfig = {
   slug: "b-body-pilates",
   status: "draft",
   meta: {
-    title: "【初回体験1,000円】鍛える前に、まず身体を知る。｜base BODY 赤坂見附のパーソナルマシンピラティス",
+    title: "【初回体験4,980円】鍛える前に、まず身体を知る。｜base BODY 赤坂見附のパーソナルマシンピラティス",
     description:
-      "7つの動きから身体のクセをチェック。理学療法の考え方を取り入れた身体分析で、あなたに合ったマンツーマンのマシンピラティスを。10月31日までの期間限定で、通常11,000円の体験が初回1,000円。体験当日のご入会で入会金0円。赤坂見附駅徒歩30秒。",
+      "7つの動きから身体のクセをチェック。理学療法の考え方を取り入れた身体分析で、あなたに合ったマンツーマンのマシンピラティスを。11月30日までの期間限定で、通常11,000円の体験が初回4,980円。体験当日のご入会で入会金0円。赤坂見附駅徒歩30秒。",
     /* 相対パスは metadataBase が別ドメインに解決されるため、本番の絶対URLで持つ。 */
     ogpImage: "https://fitness-lp.commitad.com/clients/b-body-pilates/ogp.jpg",
   },
@@ -257,7 +257,7 @@ const config: BaseBodyConfig = {
     walkPost: "秒",
   },
 
-  offerBar: { badge: "10/31まで", pre: "初回体験", num: "1,000", post: "円" },
+  offerBar: { badge: "11/30まで", pre: "初回体験", num: "4,980", post: "円" },
 
   fv: {
     hero: {
@@ -267,14 +267,14 @@ const config: BaseBodyConfig = {
     },
     catchLines: ["鍛える前に、", "まず身体を知る。"],
     sub: "[[7つ]]の動きから身体のクセをチェック。\n理学療法の考え方を取り入れた身体分析で、\nあなたに合ったピラティスを。",
-    features: ["FMS評価", "身体分析", "パーソナル\nマシンピラティス"],
+    features: ["理学療法", "身体分析", "パーソナル\nマシンピラティス"],
   },
 
-  /* 体験1,000円は 2026-10-31（土）までの期間限定（顧客指示 2026-10-03）。 */
-  deadline: { short: "10/31まで", date: "10月31日", dow: "土" },
+  /* 体験4,980円は 2026-11-30（月）までの期間限定（顧客指示 2026-10-31。旧: 1,000円・10/31まで）。 */
+  deadline: { short: "11/30まで", date: "11月30日", dow: "月" },
 
   prices: {
-    trial: { label: "初回体験", regular: "11,000", now: "1,000" },
+    trial: { label: "初回体験", regular: "11,000", now: "4,980" },
     admission: { label: "入会金", condition: "体験当日のご入会で", regular: "22,000", now: "0" },
   },
 
@@ -453,7 +453,7 @@ const config: BaseBodyConfig = {
 
   trial: {
     kicker: "初回体験レッスン",
-    heading: "1,000円の体験で、\nここまで身体を見ていきます。",
+    heading: "4,980円の体験で、\nここまで身体を見ていきます。",
     photo: { placeholder: "カウンセリングの様子", src: `${ASSET}/trial.jpg`, position: "50% 40%" },
     duration: { label: "所要時間", value: "90分" },
     items: [
@@ -486,7 +486,7 @@ const config: BaseBodyConfig = {
 
   campaign: {
     heading: "初回限定",
-    values: ["FMS評価", "身体分析", "マンツーマン", "マシンピラティス", "90分"],
+    values: ["理学療法", "身体分析", "マンツーマン", "マシンピラティス", "90分"],
   },
 
   plans: {
@@ -576,10 +576,10 @@ const config: BaseBodyConfig = {
   },
 
   cta: {
-    main: "1,000円で体験してみる",
+    main: "4,980円で体験してみる",
     sub: "まずは自分の身体を知ってみる",
-    campaign: "1,000円で体験する",
-    final: "1,000円で体験レッスンを予約する",
+    campaign: "4,980円で体験する",
+    final: "4,980円で体験レッスンを予約する",
     note: "初回体験 90分｜無理な勧誘はいたしません",
   },
 
@@ -589,11 +589,11 @@ const config: BaseBodyConfig = {
     lead: "ご希望の日時を2つお選びください。\n確認のうえ、スタッフからご連絡いたします。",
     fields: formFields,
     submitLabel: "この内容で体験を予約する",
-    microcopy: "初回体験 1,000円（税込）｜無理な勧誘なし",
+    microcopy: "初回体験 4,980円（税込）｜無理な勧誘なし",
     disclaimer: "ご入力いただいた情報は、体験レッスンのご案内のためにのみ使用いたします。",
   },
 
-  sticky: { buttonText: "1,000円で体験してみる", showAfter: 700 },
+  sticky: { buttonText: "4,980円で体験してみる", showAfter: 700 },
   footer: { copyright: "© base BODY" },
 };
 
