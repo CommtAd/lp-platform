@@ -7,6 +7,8 @@ import ImageSlot from "@/components/ImageSlot";
 import FaqList from "./FaqList";
 import config from "./config";
 
+type Offer = (typeof config.offers)[number];
+
 /**
  * Pilates KASANE バロー豊橋店 — Meta広告用LP。指示書（brief.md）の13セクション構成。
  *
@@ -182,50 +184,116 @@ function ReserveCta({ variant = "light", marginTop = 30 }: { variant?: "light" |
 }
 
 /**
- * 4特典のグリッド。`size="lg"` はキャンペーン・料金セクション用（2×2で数字を特大）、
- * `size="sm"` はFV・最終CTA用（4列で1行に収める）。
+ * 特典のグリッド。`size="lg"` はキャンペーン・料金セクション用（2列で数字を特大）、
+ * `size="sm"` はFV・最終CTA・フォーム上用（1行に収める）。
  * 通常料金（`regular`）が確定した項目だけ、打ち消し線で上に併記する。
+ *
+ * 期間限定の特典（`limited`）は通年の特典と混ぜない。「今だけ」が通年の特典にまで
+ * かかって見えないよう、lg では別ブロックに分けて終了日をバッジで出し、
+ * sm でも数字の下に期限を添える（広告審査 2026-11）。
  */
 function OfferGrid({ size = "lg" }: { size?: "lg" | "sm" }) {
   const lg = size === "lg";
+  const regular = c.offers.filter((o) => !o.limited);
+  const limited = c.offers.filter((o) => o.limited);
+  const value = (o: Offer, fs: number, unitFs: number) => (
+    <p style={{ margin: lg ? "6px 0 0" : "3px 0 0", color: cta, lineHeight: 1, whiteSpace: "nowrap" }}>
+      <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: fs }}>{o.value}</span>
+      <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: unitFs, marginLeft: 1 }}>{o.unit}</span>
+    </p>
+  );
+
+  if (!lg) {
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${c.offers.length}, 1fr)`, gap: 6 }}>
+        {c.offers.map((o) => (
+          <div
+            key={o.label}
+            style={{
+              background: "#FFFFFF",
+              border: o.limited ? `1.5px solid ${cta}` : `1px solid ${line}`,
+              borderRadius: 10,
+              padding: "9px 2px 8px",
+              textAlign: "center",
+            }}
+          >
+            <p style={{ margin: 0, fontFamily: fontGothic, fontWeight: 700, fontSize: 10.5, color: brown, whiteSpace: "nowrap" }}>
+              {o.shortLabel ?? o.label}
+            </p>
+            {value(o, 26, 10.5)}
+            {(o.limited || o.cond) && (
+              <p style={{ margin: "4px 0 0", fontSize: 9.5, lineHeight: 1.3, fontWeight: 700, color: o.limited ? cta : inkSoft, whiteSpace: "nowrap" }}>
+                {o.limited ? `期間限定 ${o.limited.short}` : (o.condShort ?? o.cond)}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div style={{ display: "grid", gridTemplateColumns: lg ? "1fr 1fr" : "repeat(4, 1fr)", gap: lg ? 10 : 6 }}>
-      {c.offers.map((o) => (
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {regular.map((o, i) => (
+          <div
+            key={o.label}
+            style={{
+              // 奇数個のときは先頭を2列ぶち抜きにして、最後の1枚が余らないようにする
+              gridColumn: regular.length % 2 === 1 && i === 0 ? "1 / -1" : undefined,
+              background: "#FFFFFF",
+              border: `1px solid ${line}`,
+              borderRadius: 14,
+              padding: "16px 8px 14px",
+              textAlign: "center",
+              boxShadow: "0 4px 12px rgba(94,70,54,0.08)",
+            }}
+          >
+            <p style={{ margin: 0, fontFamily: fontGothic, fontWeight: 700, fontSize: 13.5, color: brown, letterSpacing: "0.06em", whiteSpace: "nowrap" }}>
+              {o.label}
+            </p>
+            {o.regular && (
+              <p style={{ margin: "6px 0 0", fontSize: 12, color: inkMute, textDecoration: "line-through" }}>通常{o.regular}円</p>
+            )}
+            {value(o, 54, 17)}
+            {o.cond && (
+              <p style={{ margin: "8px 0 0", fontSize: 11.5, fontWeight: 700, color: inkSoft, whiteSpace: "nowrap" }}>※{o.cond}</p>
+            )}
+          </div>
+        ))}
+      </div>
+      {limited.map((o) => (
         <div
           key={o.label}
           style={{
+            marginTop: 12,
             background: "#FFFFFF",
-            border: `1px solid ${line}`,
-            borderRadius: lg ? 14 : 10,
-            padding: lg ? "16px 8px 14px" : "10px 2px 9px",
+            border: `1.5px solid ${cta}`,
+            borderRadius: 14,
+            padding: "0 12px 14px",
             textAlign: "center",
-            boxShadow: lg ? "0 4px 12px rgba(94,70,54,0.08)" : "none",
+            boxShadow: "0 4px 12px rgba(94,70,54,0.08)",
+            overflow: "hidden",
           }}
         >
           <p
             style={{
-              margin: 0,
+              margin: "0 -12px",
+              padding: "6px 8px",
+              background: cta,
+              color: "#FFFFFF",
               fontFamily: fontGothic,
               fontWeight: 700,
-              fontSize: lg ? 13.5 : 10.5,
-              color: brown,
-              letterSpacing: lg ? "0.06em" : 0,
-              whiteSpace: "nowrap",
+              fontSize: 12.5,
+              letterSpacing: "0.04em",
             }}
           >
+            期間限定｜{o.limited!.until}
+          </p>
+          <p style={{ margin: "12px 0 0", fontFamily: fontGothic, fontWeight: 700, fontSize: 14, color: brown, letterSpacing: "0.04em" }}>
             {o.label}
           </p>
-          {lg && o.regular && (
-            <p style={{ margin: "6px 0 0", fontSize: 12, color: inkMute, textDecoration: "line-through" }}>
-              通常{o.regular}円
-            </p>
-          )}
-          <p style={{ margin: lg ? "6px 0 0" : "3px 0 0", color: cta, lineHeight: 1, whiteSpace: "nowrap" }}>
-            <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: lg ? 54 : 28 }}>{o.value}</span>
-            <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: lg ? 17 : 10.5, marginLeft: 1 }}>
-              {o.unit}
-            </span>
-          </p>
+          {value(o, 48, 16)}
         </div>
       ))}
     </div>
@@ -329,9 +397,10 @@ export default function Page() {
             }}
           >
             {c.offerBar.map((t, i) => (
-              <span key={t} style={{ display: "flex", alignItems: "center", gap: 10, whiteSpace: "nowrap" }}>
+              <span key={t.label} style={{ display: "flex", alignItems: "center", gap: 10, whiteSpace: "nowrap" }}>
                 {i > 0 && <span style={{ opacity: 0.5 }}>｜</span>}
-                {t}
+                {t.label} {t.value}
+                {t.note && <span style={{ fontSize: 11, opacity: 0.85, marginLeft: -6 }}>（{t.note}）</span>}
               </span>
             ))}
           </div>
@@ -507,7 +576,9 @@ export default function Page() {
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: 11, color: inkMute, margin: "12px 0 0", textAlign: "right" }}>{c.benefit.note}</p>
+            {c.benefit.note && (
+              <p style={{ fontSize: 11, color: inkMute, margin: "12px 0 0", textAlign: "right" }}>{c.benefit.note}</p>
+            )}
           </section>
 
           {/* ── ⑤ 選ばれる5つの理由 ＋ CTA ── */}
@@ -579,18 +650,26 @@ export default function Page() {
             >
               {nl(c.program.lead)}
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 26 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 26 }}>
               {c.program.items.map((p) => (
-                <div key={p.en} style={{ background: "#FFFFFF", borderRadius: 14, overflow: "hidden", border: `1px solid ${line}` }}>
-                  <ImageSlot src={p.img.src} placeholder={p.img.placeholder} objectPosition={p.img.position} style={{ width: "100%", height: 110 }} />
-                  <div style={{ padding: "12px 12px 14px" }}>
+                <div
+                  key={p.en}
+                  style={{ display: "flex", background: "#FFFFFF", borderRadius: 14, overflow: "hidden", border: `1px solid ${line}` }}
+                >
+                  <ImageSlot
+                    src={p.img.src}
+                    placeholder={p.img.placeholder}
+                    objectPosition={p.img.position}
+                    style={{ flex: "none", width: 120, minHeight: 120 }}
+                  />
+                  <div style={{ padding: "12px 14px 14px" }}>
                     <p style={{ margin: 0, lineHeight: 1.2 }}>
                       <span style={{ fontFamily: fontEn, fontStyle: "italic", fontWeight: 700, fontSize: 19, color: brown }}>{p.en}</span>
                     </p>
                     <p style={{ margin: "4px 0 0", fontFamily: fontMincho, fontWeight: 700, fontSize: 13, color: brownMid, letterSpacing: "0.1em" }}>
                       〜{p.name}〜
                     </p>
-                    <p style={{ fontSize: 12, lineHeight: 1.75, color: inkSoft, margin: "8px 0 0" }}>
+                    <p style={{ fontSize: 13, lineHeight: 1.75, color: inkSoft, margin: "8px 0 0" }}>
                       {p.confirm && <Confirm />}
                       {p.body}
                     </p>
@@ -602,6 +681,23 @@ export default function Page() {
 
           {/* ── ⑦ 2回体験 ＋ CTA ── */}
           <section style={{ background: brownGrad, padding: "58px 24px 60px" }}>
+            <p style={{ textAlign: "center", margin: "0 0 18px" }}>
+              <span
+                style={{
+                  display: "inline-block",
+                  background: cta,
+                  color: "#FFFFFF",
+                  fontFamily: fontGothic,
+                  fontWeight: 700,
+                  fontSize: 13,
+                  letterSpacing: "0.04em",
+                  borderRadius: 999,
+                  padding: "6px 14px",
+                }}
+              >
+                {c.twice.limited.badge}
+              </span>
+            </p>
             <SectionHeading text={c.twice.heading} kicker={c.twice.kicker} variant="white" />
             <p style={{ textAlign: "center", fontSize: 14, lineHeight: 1.85, color: "rgba(255,255,255,0.88)", margin: "18px 0 0" }}>
               {nl(c.twice.lead)}
@@ -658,6 +754,9 @@ export default function Page() {
               }}
             >
               {nl(c.twice.closing)}
+            </p>
+            <p style={{ textAlign: "center", fontSize: 11.5, lineHeight: 1.7, color: "rgba(255,255,255,0.85)", margin: "12px 0 0" }}>
+              {nl(c.twice.limited.note)}
             </p>
             {c.twice.confirm && (
               <p style={{ textAlign: "center", fontSize: 11, lineHeight: 1.7, color: "rgba(255,255,255,0.8)", margin: "12px 0 0" }}>
@@ -956,7 +1055,15 @@ export default function Page() {
                 submitLabel={c.form.submitLabel}
                 submitStyle={{ background: ctaGrad, boxShadow: "0 10px 22px rgba(154,76,49,0.32)", borderRadius: 999 }}
                 microcopy={c.form.microcopy}
-                disclaimer={c.form.disclaimer}
+                disclaimer={
+                  <>
+                    {c.form.disclaimer}
+                    <br />
+                    <a href={c.footer.links[0].url} target="_blank" rel="noopener noreferrer" style={{ color: brown, textDecoration: "underline" }}>
+                      {c.footer.links[0].label}
+                    </a>
+                  </>
+                }
               />
             </div>
           </section>
@@ -967,11 +1074,26 @@ export default function Page() {
               color: "rgba(255,255,255,0.8)",
               fontSize: 11,
               textAlign: "center",
-              padding: "14px 0",
-              letterSpacing: "0.06em",
+              padding: "22px 20px 18px",
+              letterSpacing: "0.04em",
+              lineHeight: 1.8,
             }}
           >
-            {c.footer.copyright}
+            <p style={{ margin: 0, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "4px 14px" }}>
+              {c.footer.links.map((l) => (
+                <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" style={{ color: "#FFFFFF", textDecoration: "underline" }}>
+                  {l.label}
+                </a>
+              ))}
+            </p>
+            <p style={{ margin: "12px 0 0" }}>
+              運営会社：{c.footer.company}
+              <br />
+              {c.footer.address}
+              <br />
+              TEL：{c.footer.tel}
+            </p>
+            <p style={{ margin: "10px 0 0", opacity: 0.8 }}>{c.footer.copyright}</p>
           </footer>
         </LPCanvas>
       </div>
@@ -985,18 +1107,16 @@ export default function Page() {
         buttonGradient={ctaGrad}
         shadowColor="rgba(154,76,49,0.35)"
         borderColor={`${brown}59`}
-        offers={c.offerBar.map((t) => {
-          const [label, value] = t.split(" ");
-          return (
-            <span key={t} style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-              <span style={{ fontSize: 11, color: inkSoft }}>{label}</span>
-              <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 18, lineHeight: 1, color: cta }}>
-                {value.replace("円", "")}
-                <span style={{ fontSize: 11 }}>円</span>
-              </span>
+        offers={c.offerBar.map((t) => (
+          <span key={t.label} style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+            <span style={{ fontSize: 11, color: inkSoft }}>{t.label}</span>
+            <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 18, lineHeight: 1, color: cta }}>
+              {t.value.replace("円", "")}
+              <span style={{ fontSize: 11 }}>円</span>
             </span>
-          );
-        })}
+            {t.note && <span style={{ fontSize: 10, color: inkSoft }}>{t.note}</span>}
+          </span>
+        ))}
       />
     </LPShell>
   );

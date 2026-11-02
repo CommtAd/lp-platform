@@ -44,6 +44,18 @@ interface Offer {
   value: string;
   unit: string;
   regular?: string | null;
+  /** FV下など小さいグリッド用の短いラベル。`label` が1行に収まらないときだけ入れる。 */
+  shortLabel?: string;
+  /** 適用条件。数字のすぐ下に出す。条件付きの特典は必ず入れる（広告審査 2026-11: 条件の明示）。 */
+  cond?: string;
+  /** 小さいグリッド用の短い条件表記。`cond` が1行に収まらないときだけ入れる。 */
+  condShort?: string;
+  /**
+   * 期間限定の特典だけに入れる終了日の表記。入っている特典は通年の特典と分けて
+   * 「期間限定」バッジ付きで置く。終了日を過ぎたら特典ごと外すこと
+   * （終了後も同じ内容が続いていると「今だけ」表記がNGになる）。
+   */
+  limited?: { until: string; short: string };
 }
 
 export interface KasaneConfig {
@@ -57,7 +69,8 @@ export interface KasaneConfig {
    * ロゴに似せない素のテキストで出す。
    */
   header: { logo?: string | null; brand: string; store: string; badge: string };
-  offerBar: string[];
+  /** ヘッダー直下の帯と追従フッターに出す特典。`note` は期限・条件の短い表記。 */
+  offerBar: { label: string; value: string; note?: string }[];
 
   fv: {
     hero: Slot;
@@ -66,7 +79,7 @@ export interface KasaneConfig {
     features: string[];
   };
 
-  /** FV・キャンペーン・料金・最終CTAで使い回す4特典。 */
+  /** FV・キャンペーン・料金・最終CTAで使い回す特典。 */
   offers: Offer[];
   /** 特典の注記。条件が確定したら差し替える。 */
   offerNote: { text: string; confirm?: boolean };
@@ -85,7 +98,7 @@ export interface KasaneConfig {
     kicker: string;
     heading: string;
     items: { num: string; title: string; body: string; img: Slot }[];
-    note: string;
+    note?: string;
   };
 
   reasons: {
@@ -108,6 +121,8 @@ export interface KasaneConfig {
     items: { num: string; title: string; body: string; img: Slot }[];
     closing: string;
     confirm?: string;
+    /** 期間限定の表記（終了日）。2回目の無料体験は期間限定なので必ず入れる。 */
+    limited: { badge: string; note: string };
   };
 
   studio: {
@@ -159,7 +174,14 @@ export interface KasaneConfig {
   };
 
   sticky: { buttonText: string; showAfter: number };
-  footer: { copyright: string };
+  /** 事業者情報（広告審査 2026-11: 事業者情報の記載）。公式サイトの会社概要・特商法表記から転記。 */
+  footer: {
+    company: string;
+    address: string;
+    tel: string;
+    links: { label: string; url: string }[];
+    copyright: string;
+  };
 }
 
 /**
@@ -187,21 +209,6 @@ const formFields: LPFormField[] = [
   },
   { name: "time2", label: "希望の時間帯（第2希望）", type: "select", required: true, options: timeBands, placeholder: "選択してください" },
   {
-    name: "concerns",
-    label: "気になっていること",
-    type: "checkboxGroup",
-    optionalTag: "任意・複数可",
-    columns: 2,
-    options: [
-      { value: "下腹部", label: "下腹部" },
-      { value: "くびれ・下半身", label: "くびれ・下半身" },
-      { value: "猫背・巻き肩", label: "猫背・巻き肩" },
-      { value: "反り腰・骨盤周り", label: "反り腰・骨盤周り" },
-      { value: "身体の硬さ", label: "身体の硬さ" },
-      { value: "運動不足", label: "運動不足" },
-    ],
-  },
-  {
     name: "message",
     label: "ご質問・お伝えしておきたいこと",
     type: "textarea",
@@ -209,19 +216,31 @@ const formFields: LPFormField[] = [
     rows: 4,
     placeholder: "例）ピラティスは初めてです。",
   },
+  {
+    name: "privacyConsent",
+    label: "個人情報の取り扱いへの同意",
+    type: "checkboxGroup",
+    required: true,
+    columns: 1,
+    hint: "フォーム下部のプライバシーポリシーをご確認のうえ、チェックしてください。",
+    options: [{ value: "同意する", label: "プライバシーポリシーに同意する" }],
+  },
 ];
 
 const config: KasaneConfig = {
   slug: "kasane-toyohashi",
   status: "draft",
   meta: {
-    title: "【体験0円・入会金0円】少人数制マシンピラティス｜Pilates KASANE バロー豊橋店",
+    title: "【体験レッスン0円】少人数制マシンピラティス｜Pilates KASANE バロー豊橋店",
     description:
-      "気になる下腹も、姿勢も。少人数制で初心者にも丁寧なマシンピラティス。和を基調とした落ち着いたスタジオで、50分の体験レッスンが無料。バロー豊橋2F・無料駐車場あり。",
+      "少人数制で初心者にも丁寧なマシンピラティス。和を基調とした落ち着いたスタジオで、50分の体験レッスンが0円。バロー豊橋2F・無料駐車場あり。",
   },
 
   header: { logo: null, brand: "Pilates KASANE", store: "バロー豊橋店", badge: "無料駐車場あり" },
-  offerBar: ["体験 0円", "入会金 0円", "初月会費 0円"],
+  offerBar: [
+    { label: "体験", value: "0円" },
+    { label: "2回目の体験も", value: "0円", note: "11/30まで" },
+  ],
 
   fv: {
     hero: {
@@ -230,63 +249,75 @@ const config: KasaneConfig = {
       poster: "/clients/kasane-toyohashi/fv-hero-poster.jpg",
       position: "center",
     },
-    catchLines: ["気になる下腹も、姿勢も。", "私らしく、", "しなやかな身体へ。"],
-    sub: "少人数制で、初心者にも丁寧な\nマシンピラティス。",
+    catchLines: ["和の空間で、", "はじめての", "マシンピラティス。"],
+    sub: "少人数制で、初心者にも丁寧に。\nバロー豊橋2F・無料駐車場あり。",
     features: ["少人数制の\n丁寧な指導", "無料駐車場\n完備", "50分の\n体験レッスン"],
   },
 
+  /*
+   * 広告審査（2026-11）の指摘で整理:
+   *   - 入会金0円は公式（/price/ FAQ）の条件「体験レッスン後その場でご入会」を明記。
+   *   - 初月会費0円も入会金と同じ「体験当日のご入会」が条件（2026-11 営業確認）。
+   *   - 2回目の体験0円だけが期間限定。`limited` で通年の特典と分けて終了日を出す。
+   */
   offers: [
     { label: "体験レッスン", value: "0", unit: "円", regular: null },
-    { label: "じっくり", value: "2", unit: "回体験", regular: null },
-    { label: "入会金", value: "0", unit: "円", regular: null },
-    { label: "初月会費", value: "0", unit: "円", regular: null },
+    { label: "入会金", value: "0", unit: "円", regular: null, cond: "体験当日のご入会で", condShort: "体験当日入会で" },
+    { label: "初月会費", value: "0", unit: "円", regular: null, cond: "体験当日のご入会で", condShort: "体験当日入会で" },
+    {
+      label: "2回目の体験レッスンも",
+      shortLabel: "2回目の体験も",
+      value: "0",
+      unit: "円",
+      regular: null,
+      limited: { until: "2026年11月30日(月)まで", short: "11/30まで" },
+    },
   ],
   /* 文言はKASANE表記ガイドライン「固定表記・クレジット／キャンペーン」の指定どおり。改行位置だけこちらで決めている。 */
   offerNote: {
     text: "※店舗により適用条件が異なります。\n※割引の適用タイミングは店舗により\n異なる場合がございます。\n詳細は各店へお問い合わせください。",
   },
 
-  campaign: { kicker: "CAMPAIGN", heading: "今なら、お得に\nピラティスをスタート！" },
+  campaign: { kicker: "FOR BEGINNERS", heading: "はじめての方の\n体験・入会特典" },
 
   worry: {
-    kicker: "WORRIES",
-    heading: "こんなお悩み、\nありませんか？",
+    kicker: "RECOMMEND",
+    heading: "こんな方に\nおすすめです",
     img: { placeholder: "お悩みのイメージ", src: "/clients/kasane-toyohashi/lesson-seated.jpg", position: "50% 25%" },
     items: [
-      { text: "下腹部のゆるみが気になる", strong: true },
-      { text: "くびれや下半身を引き締めたい", strong: true },
-      { text: "猫背や巻き肩が気になる", strong: true },
-      { text: "反り腰や骨盤周りが気になる" },
-      { text: "昔よりも身体が硬くなった" },
-      { text: "運動を始めたいけど、\n続けられるか不安" },
+      { text: "運動を始めたいけど、\n続けられるか不安", strong: true },
+      { text: "少人数で丁寧に見てほしい", strong: true },
+      { text: "マシンを使ったレッスンを\n試してみたい", strong: true },
+      { text: "ピラティスは初めて" },
+      { text: "車で通えるスタジオを探している" },
+      { text: "落ち着いた空間で運動したい" },
     ],
-    bridge: "そんな身体のお悩みに、\nマシンピラティスという選択を。",
+    bridge: "そんな方に、\nマシンピラティスという選択を。",
   },
 
   benefit: {
-    kicker: "BENEFIT",
-    heading: "ただ鍛えるだけじゃない。\n姿勢から、身体の印象を整える。",
+    kicker: "LESSON",
+    heading: "マシンピラティスの\nレッスン内容",
     items: [
       {
         num: "01",
-        title: "すっきりとした\nボディラインへ",
-        body: "体幹やインナーマッスルを意識したエクササイズで、引き締まった身体づくりをサポートします。",
+        title: "体幹・インナーマッスルを\n使うエクササイズ",
+        body: "体幹やインナーマッスルを意識して動かす、マシンを使ったエクササイズです。",
         img: { placeholder: "ボディライン", src: "/clients/kasane-toyohashi/core.jpg", position: "40% 35%" },
       },
       {
         num: "02",
-        title: "美しく自然な姿勢へ",
-        body: "呼吸・骨盤・背骨の動きを意識しながら、正しい身体の使い方を学んでいきます。",
+        title: "呼吸・骨盤・背骨の\n動きを意識する",
+        body: "呼吸や骨盤・背骨の動きを意識しながら、身体の動かし方を一つずつ確認していきます。",
         img: { placeholder: "姿勢", src: "/clients/kasane-toyohashi/posture-check.jpg", position: "60% 30%" },
       },
       {
         num: "03",
-        title: "動きやすく、\nしなやかな身体へ",
-        body: "身体の柔軟性や可動域にアプローチし、日常生活でも動きやすい身体を目指します。",
+        title: "身体をのびのび動かす",
+        body: "ストレッチの要素を含む動きで、身体を大きく動かします。",
         img: { placeholder: "しなやかな身体", src: "/clients/kasane-toyohashi/stretch.jpg", position: "45% 55%" },
       },
     ],
-    note: "※感じ方には個人差があります。",
   },
 
   reasons: {
@@ -331,31 +362,25 @@ const config: KasaneConfig = {
   program: {
     kicker: "PROGRAM",
     heading: "身体の基礎から、\n少しずつ。",
-    lead: "自分に合ったレッスンで、\n理想の身体づくりを。",
+    lead: "ご自身のペースで、\n基礎から学べるレッスン。",
     items: [
       {
         en: "Relax",
         name: "呼吸",
-        body: "呼吸と身体の動きを意識し、インナーマッスルにアプローチするプログラム。",
+        body: "呼吸と身体の動きを意識して、インナーマッスルを使うプログラム。",
         img: { placeholder: "Relax のレッスン", src: "/clients/kasane-toyohashi/lesson-seated.jpg", position: "45% 35%" },
       },
       {
         en: "Core",
         name: "骨盤",
-        body: "骨盤の動きや体幹を意識するプログラム。反り腰や下腹部、骨盤周りが気になる方に。",
+        body: "骨盤の動きや体幹を意識して使うプログラム。",
         img: { placeholder: "Core のレッスン", src: "/clients/kasane-toyohashi/core.jpg", position: "45% 40%" },
       },
       {
         en: "Stretch",
         name: "背骨",
-        body: "背骨の動きや柔軟性にフォーカスし、身体のコンディションを整えるプログラム。",
+        body: "背骨を大きく動かし、身体をのばすストレッチ中心のプログラム。",
         img: { placeholder: "Stretch のレッスン", src: "/clients/kasane-toyohashi/stretch.jpg", position: "45% 50%" },
-      },
-      {
-        en: "Posture",
-        name: "美姿勢",
-        body: "美しい姿勢づくりにフォーカスしたプログラム。",
-        img: { placeholder: "美姿勢プログラムのレッスン", src: "/clients/kasane-toyohashi/posture-check.jpg", position: "65% 35%" },
       },
     ],
   },
@@ -379,6 +404,10 @@ const config: KasaneConfig = {
       },
     ],
     closing: "自分に合うかどうか、\nじっくり確かめてから始められる。",
+    limited: {
+      badge: "2026年11月30日(月)までの期間限定",
+      note: "※2回目の体験レッスン0円は2026年11月30日(月)で終了します。\n12月1日以降の体験レッスンは1回となります。",
+    },
   },
 
   studio: {
@@ -432,7 +461,7 @@ const config: KasaneConfig = {
 
   price: {
     kicker: "PRICE",
-    heading: "今なら、\nお得に始められる！",
+    heading: "はじめての方の\n体験・入会特典",
     plans: [],
   },
 
@@ -482,9 +511,9 @@ const config: KasaneConfig = {
   },
 
   closing: {
-    heading: "身体を整える、\n新しい習慣を。",
+    heading: "マシンピラティスを、\n新しい習慣に。",
     lead: "まずは体験レッスンから\n始めませんか？",
-    points: ["少人数制で丁寧な指導", "初心者も始めやすい", "無料駐車場完備", "体験無料・入会特典あり"],
+    points: ["少人数制で丁寧な指導", "初心者も始めやすい", "無料駐車場完備", "体験レッスン0円"],
   },
 
   reserve: {
@@ -500,11 +529,22 @@ const config: KasaneConfig = {
     fields: formFields,
     submitLabel: "この内容で無料体験を予約する",
     microcopy: "50分の体験レッスン｜手ぶらでOK｜無料駐車場あり",
-    disclaimer: "ご入力いただいた情報は、体験レッスンのご案内のためにのみ使用いたします。",
+    disclaimer:
+      "ご入力いただいた個人情報は、体験レッスンのご予約・ご案内、ご入会のご案内、各種ご連絡等のために利用し、運営会社（株式会社ワールドフィット）のプライバシーポリシーに従って取り扱います。",
   },
 
   sticky: { buttonText: "無料体験を予約する", showAfter: 640 },
-  footer: { copyright: "© Pilates KASANE" },
+  footer: {
+    company: "株式会社ワールドフィット",
+    address: "〒151-0063 東京都渋谷区富ヶ谷1-37-5 白寿本社ビル4F",
+    tel: "03-5778-4126",
+    links: [
+      { label: "プライバシーポリシー", url: "https://pilates-kasane.jp/privacy-policy/" },
+      { label: "特定商取引法に基づく表記", url: "https://pilates-kasane.jp/tradelaw/" },
+      { label: "会社概要", url: "https://pilates-kasane.jp/company/" },
+    ],
+    copyright: "© Pilates KASANE",
+  },
 };
 
 export default config;
