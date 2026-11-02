@@ -223,7 +223,7 @@ function OfferGrid({ size = "lg" }: { size?: "lg" | "sm" }) {
             {value(o, 26, 10.5)}
             {(o.limited || o.cond) && (
               <p style={{ margin: "4px 0 0", fontSize: 9.5, lineHeight: 1.3, fontWeight: 700, color: o.limited ? cta : inkSoft, whiteSpace: "nowrap" }}>
-                {o.limited ? `期間限定 ${o.limited.short}` : o.cond}
+                {o.limited ? `期間限定 ${o.limited.short}` : (o.condShort ?? o.cond)}
               </p>
             )}
           </div>
@@ -235,10 +235,12 @@ function OfferGrid({ size = "lg" }: { size?: "lg" | "sm" }) {
   return (
     <div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        {regular.map((o) => (
+        {regular.map((o, i) => (
           <div
             key={o.label}
             style={{
+              // 奇数個のときは先頭を2列ぶち抜きにして、最後の1枚が余らないようにする
+              gridColumn: regular.length % 2 === 1 && i === 0 ? "1 / -1" : undefined,
               background: "#FFFFFF",
               border: `1px solid ${line}`,
               borderRadius: 14,

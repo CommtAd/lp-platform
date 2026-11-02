@@ -48,6 +48,8 @@ interface Offer {
   shortLabel?: string;
   /** 適用条件。数字のすぐ下に出す。条件付きの特典は必ず入れる（広告審査 2026-11: 条件の明示）。 */
   cond?: string;
+  /** 小さいグリッド用の短い条件表記。`cond` が1行に収まらないときだけ入れる。 */
+  condShort?: string;
   /**
    * 期間限定の特典だけに入れる終了日の表記。入っている特典は通年の特典と分けて
    * 「期間限定」バッジ付きで置く。終了日を過ぎたら特典ごと外すこと
@@ -255,12 +257,13 @@ const config: KasaneConfig = {
   /*
    * 広告審査（2026-11）の指摘で整理:
    *   - 入会金0円は公式（/price/ FAQ）の条件「体験レッスン後その場でご入会」を明記。
-   *   - 初月会費0円は公式サイトに条件の記載が無いため外した。条件が確認できたら `cond` 付きで戻す。
+   *   - 初月会費0円も入会金と同じ「体験当日のご入会」が条件（2026-11 営業確認）。
    *   - 2回目の体験0円だけが期間限定。`limited` で通年の特典と分けて終了日を出す。
    */
   offers: [
     { label: "体験レッスン", value: "0", unit: "円", regular: null },
-    { label: "入会金", value: "0", unit: "円", regular: null, cond: "体験当日のご入会で" },
+    { label: "入会金", value: "0", unit: "円", regular: null, cond: "体験当日のご入会で", condShort: "体験当日入会で" },
+    { label: "初月会費", value: "0", unit: "円", regular: null, cond: "体験当日のご入会で", condShort: "体験当日入会で" },
     {
       label: "2回目の体験レッスンも",
       shortLabel: "2回目の体験も",
