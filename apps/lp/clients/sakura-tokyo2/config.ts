@@ -16,6 +16,7 @@ import type { ClientStatus } from "@shared/index";
  *     「体験レッスン5,500円が【無料】で受けられるキャンペーンも実施中」で継続中のため、
  *     通常版と同じ「月末締め」の運用で 11/30 を置いた。**月をまたぐたびに更新すること。**
  *   - 店舗数: 公式 /studios/ の東京都の店舗は24（うち3店舗がオープン予定）→ 営業中21店舗。
+ *     LP上は 11/15 オープンの白金高輪店を含めた「22店舗」で表記する（顧客判断）。
  */
 
 /** 画像・動画スロット。`src` が空ならプレースホルダが出る。 */
@@ -156,9 +157,9 @@ const config: SakuraSwipeConfig = {
   slug: "sakura-tokyo2",
   status: "draft",
   meta: {
-    title: "女性専用パーソナルマシンピラティス SAKURA｜東京都内21店舗・体験レッスン受付中",
+    title: "女性専用パーソナルマシンピラティス SAKURA｜東京都内22店舗・体験レッスン受付中",
     description:
-      "姿勢が変わると、鏡を見るのが楽しみになる。東京都内21店舗、女性専用・完全マンツーマンのマシンピラティスSAKURA。会員様の80%がピラティス未経験、継続率94%。11月30日までのご予約で体験レッスン＆入会金が0円。",
+      "姿勢が変わると、鏡を見るのが楽しみになる。東京都内22店舗、女性専用・完全マンツーマンのマシンピラティスSAKURA。会員様の80%がピラティス未経験、継続率94%。11月30日までのご予約で体験レッスン＆入会金が0円。",
     // 相対パスだと metadataBase が別ドメインに解決されるため絶対URLで固定する。
     ogpImage: "https://fitness-lp.commitad.com/clients/sakura-tokyo2/ogp.jpg",
   },
@@ -187,7 +188,7 @@ const config: SakuraSwipeConfig = {
     kicker: "PERSONAL MACHINE PILATES",
     catchLines: ["姿勢が変わると、", "鏡を見るのが", "楽しみになる。"],
     lead: "あなたの身体だけを見る、\n女性専用・完全マンツーマンの60分。",
-    chips: ["東京都内21店舗", "女性専用", "完全マンツーマン"],
+    chips: ["東京都内22店舗", "女性専用", "完全マンツーマン"],
     hero: { placeholder: "マンツーマンレッスン風景", src: `${IMG}/hero.jpg`, position: "44% center" },
     swipeHint: "スワイプして読む",
   },
