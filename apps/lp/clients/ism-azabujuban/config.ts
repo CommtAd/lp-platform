@@ -3,6 +3,10 @@ import type { LPFormField } from "@/components/LPForm";
 
 const ASSET = "/clients/ism-azabujuban";
 
+/** レンタルウェアに触れる箇所すべてに添える注釈（サンクスページでも使う）。 */
+export const RENTAL_NOTE =
+  "※レンタルウェアは数・サイズに限りがあるため、ご希望のサイズをご用意できない場合がございます。あらかじめご了承ください。";
+
 /**
  * 予約システム（hacomono）の麻布十番店スケジュール。全CTAの共通遷移先。
  * ページ内フォームは使わないため `scripts/check-rules.ts` の FORM_EXEMPT に登録している
@@ -124,6 +128,7 @@ export interface IsmConfig {
     body: string;
     scenes: string[];
     img: Slot;
+    note: string;
   };
 
   reasons: {
@@ -336,6 +341,7 @@ const config: IsmConfig = {
       "※オンラインレッスン特典は月4回・月8回プランのみ対象です。",
       "※1回あたり1,875円は、月4回プラン（30,000円）のスタジオレッスン4回と、特典のオンラインレッスン最大12回を合わせた月16回で算出した、オンラインレッスンを含む価格です。",
       "※プラン料金は税込です。",
+      RENTAL_NOTE,
     ],
     ctaText: "無料体験を予約する",
   },
@@ -392,6 +398,7 @@ const config: IsmConfig = {
     body: "ウェア・タオルのレンタルをご用意。荷物を持ち歩かなくていいから、毎日の予定にすっと組み込めます。",
     scenes: ["お仕事帰りに", "お出かけついでに", "自分時間に"],
     img: { placeholder: "スタジオ内観の写真", src: `${ASSET}/studio-tools.jpg`, position: "center 75%" },
+    note: RENTAL_NOTE,
   },
 
   reasons: {
@@ -427,6 +434,7 @@ const config: IsmConfig = {
         img: { placeholder: "レッスンシーンの写真", src: `${ASSET}/lesson-ring.jpg`, height: 320, position: "center 30%" },
         title: "手ぶら＆オンライン特典で\n続けやすい",
         body: "ウェア・タオルのレンタルで手ぶら通いOK。月4回・月8回プランはオンラインレッスンが最大月12回つき、公式LINEでのフォローもあるから、無理なく習慣にできます。",
+        note: RENTAL_NOTE,
       },
     ],
     ctaText: "無料体験を予約する",
@@ -485,7 +493,7 @@ const config: IsmConfig = {
         body: "グリッド線つきの比較写真で変化と課題を共有し、目標に合った通い方をご提案します。",
       },
     ],
-    note: "※ウェア・タオルはレンタルがございますので、手ぶらでお越しいただけます。",
+    note: `※ウェア・タオルはレンタルがございますので、手ぶらでお越しいただけます。${RENTAL_NOTE}`,
   },
 
   faq: {
@@ -505,7 +513,7 @@ const config: IsmConfig = {
       },
       {
         q: "持ち物は必要ですか？",
-        a: "ウェア・タオルのレンタルがございますので、手ぶらでお越しいただけます。",
+        a: "ウェア・タオルのレンタルがございますので、手ぶらでお越しいただけます。ただし、レンタルウェアは数・サイズに限りがあるため、ご希望のサイズをご用意できない場合がございます。あらかじめご了承ください。",
       },
       {
         q: "妊娠中・産後でも受けられますか？",

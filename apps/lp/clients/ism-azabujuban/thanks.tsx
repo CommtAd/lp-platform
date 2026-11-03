@@ -1,6 +1,6 @@
 import LPShell from "@/components/LPShell";
 import LPCanvas from "@/components/LPCanvas";
-import config from "./config";
+import config, { RENTAL_NOTE } from "./config";
 
 /* Pilates isM 麻布十番店 サンクスページ — 予約受付の完了と体験当日のご案内。 */
 const MAIN = "#4A3F43";
@@ -57,6 +57,7 @@ export default function ThanksPage() {
                 <br />
                 <span style={{ color: ROSE, fontWeight: 700 }}>◎</span> 体験当日のご入会で入会金50%OFF＋初月料金割引
               </p>
+              <p style={{ margin: "10px 0 0", fontSize: 11, lineHeight: 1.7, color: DIM }}>{RENTAL_NOTE}</p>
             </div>
 
             <a
