@@ -576,6 +576,7 @@ export default function Page() {
               ))}
             </div>
             <ImageSlot src={c.tebura.img.src} placeholder={c.tebura.img.placeholder} objectPosition={c.tebura.img.position ?? "center"} radius={16} style={{ width: "100%", height: 180, background: BLUSH, marginTop: 18 }} />
+            <Notes items={[c.tebura.note]} />
           </section>
 
           {/* ── 選ばれる5つの理由 ── */}
