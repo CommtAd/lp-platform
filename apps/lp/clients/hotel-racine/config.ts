@@ -16,7 +16,7 @@ const config: PatternCConfig = {
   meta: {
     title: "ホテル ラシーネ新前橋｜プレミアム ブライダルフェア",
     description:
-      "「ホテル ラシーネ新前橋」の大聖堂チャペル×ホテルウェディング プレミアム ブライダルフェア。最大40万円相当の特典をプレゼント。大聖堂チャペル見学・国産牛フィレ肉を含むハーフコース無料試食・お見積り相談を最短30秒でご予約いただけます。",
+      "「ホテル ラシーネ新前橋」の大聖堂チャペル×ホテルウェディング プレミアム ブライダルフェア。最大40万円相当の特典をプレゼント。大聖堂チャペル見学・上州牛フィレ肉を含むハーフコース無料試食・お見積り相談を最短30秒でご予約いただけます。",
     // OGP専用の1枚（1200x630）。チャペル正面のカットから切り出した。
     // 差し替えるときは必ずファイル名も変えること（SNS側のキャッシュ対策）。
     ogpImage: `${ASSET}/ogp-2026-10-02.jpg`,
@@ -55,7 +55,7 @@ const config: PatternCConfig = {
       text: "#FFFFFF",
     },
     // 会場名はヘッダーのロゴで出すので、カードには置かない（ashibinosato と同じ構成）。
-    kicker: "＼豪華来館特典付き／",
+    kicker: "＼先輩花嫁おすすめ／",
     // 1行で出す（顧客指定）。既定26pxだとカードの内寸（344px）ぎりぎりなので一段下げる（24pxで約318px）。
     catch: ["プレミアム ブライダルフェア"],
     catchSize: 24,
@@ -70,10 +70,11 @@ const config: PatternCConfig = {
       gap: -20,
       gapBottom: -20,
     },
-    // 金額を大きく見せるため「プレゼント」は次の行（highlightSub）へ送る。
-    highlight: "最大40万円相当",
+    // 2026-11-04 AUN指示で金額から試食の訴求に変更。1行（17字）だとプレートに入らないので、
+    // 「試食付き！」を次の行（highlightSub）へ送って、従来と同じ2段で組む。
+    highlight: "上州牛フィレ肉＆デザート",
     highlightSize: 22,
-    highlightSub: "プレゼント！",
+    highlightSub: "試食付き！",
     highlightSubSize: 16,
     ctaText: "最短30秒で予約する",
     // lold と同じくプレートを上に置く（顧客指定）。
@@ -100,14 +101,14 @@ const config: PatternCConfig = {
   // 写真版（顧客指定でベースから組み方を変えた）。写真は体験03と同じ料理のカット
   //（同じ試食なので、別カットにすると別物に見える）。
   fvSummary: {
-    photo: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
+    photo: { placeholder: "上州牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
     headline: "豪華来館特典付き",
     headlineEmphasis: "豪華来館特典",
     // 写真版では label は表示されない（型の必須項目なので値だけ置く）。
     label: "来館特典",
     // ランチビュッフェは 2026-10-27 追加（AUN指示）。写真つきの項目は試食の下に別の組で出る。
     items: [
-      { amount: "ハーフコース無料試食", name: "国産牛フィレ肉を含む" },
+      { amount: "ハーフコース無料試食", name: "上州牛フィレ肉を含む" },
       {
         amount: "人気のランチビュッフェ",
         name: "",
@@ -121,17 +122,35 @@ const config: PatternCConfig = {
     eyebrow: "プレミアムブライダルフェア",
     heading: "大聖堂 × 美食を体験",
     headingSize: 29,
-    // バッジを戻す（2026-10-21 AUN指示）。ここは指示書どおり「分」。
-    badge: "最大40万円分プレゼント",
-    title: "フェア成約特典",
-    // 既定17pxから一段上げる（顧客指定）。
-    titleSize: 21,
-    // lold の「衣装2着・装花…／結婚式に必要な…」と同じ2段の組み方（2026-10-21 AUN指示）。
-    amount: "衣装20%OFF、新郎新婦当日ご宿泊など\nお得な特典がたくさん！",
-    amountProse: true,
-    amountProseEmphasis: "衣装20%OFF",
-    // 1行目が20字あり、既定（強調17px）だと「ど」だけ次の行に落ちる。15pxで1行に収める。
-    amountProseSize: 11,
+    // 2026-11-04 AUN指示: バッジを「ご成約で」にし、カードの中身を「さらに、ご成約で」（privilege.contract）
+    // と同じ「最大40万円分プレゼント＋写真つき4点」に差し替え。見出し（title）は空にして出さない。
+    badge: "ご成約で",
+    title: "",
+    amount: "最大40万円分プレゼント",
+    amountInkAfter: true,
+    columns: 2,
+    items: [
+      {
+        title: "衣装",
+        amount: "20%OFF",
+        image: { placeholder: "ドレスサロン", src: `${ASSET}/priv-dress.jpg` },
+      },
+      {
+        title: "スパークリングワイン＆\nウェルカムドリンク",
+        amount: "人数分",
+        image: { placeholder: "スパークリングワイン", src: `${ASSET}/priv-drink.jpg` },
+      },
+      {
+        title: "新郎新婦様",
+        amount: "当日宿泊",
+        image: { placeholder: "デラックスツイン", src: `${ASSET}/priv-suite.jpg` },
+      },
+      {
+        title: "ご列席者様",
+        amount: "宿泊ご優待",
+        image: { placeholder: "ツインルーム", src: `${ASSET}/priv-twin.jpg` },
+      },
+    ],
     frame: `${ASSET}/grand-offer-frame.png`,
   },
 
@@ -153,9 +172,9 @@ const config: PatternCConfig = {
       },
       {
         tag: "03",
-        title: "国産牛フィレ肉の無料試食",
+        title: "上州牛フィレ肉の無料試食",
         body: "婚礼料理の味を、実際に試食しておもてなしを確認。",
-        image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
+        image: { placeholder: "上州牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
       },
       {
         tag: "04",
@@ -186,9 +205,9 @@ const config: PatternCConfig = {
     headlineEmphasis: "ご来館特典",
     items: [
       {
-        title: "国産牛フィレ肉を含む",
+        title: "上州牛フィレ肉を含む",
         amount: "豪華ハーフコース試食",
-        image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
+        image: { placeholder: "上州牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
       },
       {
         // 2026-10-27 追加（AUN指示）。
@@ -291,7 +310,7 @@ const config: PatternCConfig = {
         num: "2",
         title: "見学・試食",
         icon: `${ASSET}/flow-02.png`,
-        body: "大聖堂チャペルや披露宴会場を実際にご見学いただきます。また、国産牛フィレ肉を含むハーフコースをご試食いただけます。",
+        body: "大聖堂チャペルや披露宴会場を実際にご見学いただきます。また、上州牛フィレ肉を含むハーフコースをご試食いただけます。",
       },
       {
         num: "3",
