@@ -14,6 +14,8 @@ import config from "./config";
  *      （CLAUDE.md §16-17）。キャンバス外の地色を敷く `100vh` だけが例外。
  *   2. 予約CTAは4箇所のみ（体験キャンペーン・選ばれる理由・体験の流れ・
  *      クロージングの各末尾）。ボタンの上に小見出しは置かない。
+ *      各CTAは店舗別ボタン3つ（白金高輪・錦糸町・南行徳）で、予約ページへ直通。
+ *      店舗情報の各カードにも同じボタンを1つずつ置いている。
  *   3. 配色は3色＋中間トーン1色。ブランドに無い色（ゴールド等）を足さない。
  *   4. 料金プランのセクションは「一旦非表示」の指示により丸ごと出していない
  *      （config にもデータを持たせていない。復活させるときは両方に足すこと）。
@@ -129,36 +131,77 @@ const CheckIcon = ({ color = accentMid }: { color?: string }) => (
 );
 
 /**
+ * 店舗別の予約ボタン。左の白い札に店舗名、中央に共通のCTA文言。
+ * 店舗ごとに予約システムが違う（白金高輪だけ hacomono）ため、
+ * どのボタンも予約ページへ直接遷移させ、遷移先で店舗を選ばせない。
+ */
+function StoreReserveButton({
+  name,
+  url,
+  showName = true,
+}: {
+  name: string;
+  url: string;
+  /** 店舗カードの中では店名が見出しにあるので札を省き、文言を1行に収める。 */
+  showName?: boolean;
+}) {
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        height: 56,
+        padding: showName ? "0 18px 0 8px" : "0 18px",
+        background: ctaGrad,
+        color: "#FFFFFF",
+        textDecoration: "none",
+        fontFamily: fontGothic,
+        borderRadius: 999,
+        boxShadow: "0 8px 18px rgba(30,45,36,0.26)",
+      }}
+    >
+      {showName && (
+        <span
+          style={{
+            flex: "none",
+            width: 88,
+            textAlign: "center",
+            fontSize: 12.5,
+            fontWeight: 700,
+            letterSpacing: "0.02em",
+            color: accent,
+            background: "#FFFFFF",
+            borderRadius: 999,
+            padding: "8px 0",
+          }}
+        >
+          {name}
+        </span>
+      )}
+      <span style={{ flex: 1, textAlign: "center", fontSize: 15, fontWeight: 700, letterSpacing: "0.04em" }}>
+        {c.reserve.label}
+      </span>
+      <span style={{ fontSize: 13 }}>›</span>
+    </a>
+  );
+}
+
+/**
  * 予約CTA。指示書どおり4箇所だけで使う。上に小見出しは置かず、
- * ボタンの下に注記1行だけを添える。
+ * 店舗別のボタンを縦に並べ、その下に注記1行だけを添える。
  */
 function ReserveCta({ variant = "light" }: { variant?: "light" | "dark" }) {
   return (
     <div style={{ marginTop: 30 }}>
-      <a
-        href={c.reserve.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-          height: 58,
-          background: ctaGrad,
-          color: "#FFFFFF",
-          textDecoration: "none",
-          fontFamily: fontGothic,
-          fontSize: 15.5,
-          fontWeight: 700,
-          letterSpacing: "0.04em",
-          borderRadius: 999,
-          boxShadow: "0 10px 22px rgba(30,45,36,0.30)",
-        }}
-      >
-        {c.reserve.label}
-        <span style={{ fontSize: 13 }}>›</span>
-      </a>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {c.stores.items.map((store) => (
+          <StoreReserveButton key={store.name} name={store.name} url={store.reserveUrl} />
+        ))}
+      </div>
       <p
         style={{
           textAlign: "center",
@@ -225,8 +268,9 @@ function CampaignBlock({ compact = false }: { compact?: boolean } = {}) {
       </div>
 
       {/*
-        二重価格。「完全無料」は4文字でも58pxあるため横並びにすると収まらない。
-        通常価格を上段にまとめ、↓ をはさんで下段に特大で置く縦積みにしている。
+        二重価格。通常価格を上段にまとめ、↓ をはさんで下段に特大で置く縦積み。
+        （無料だった頃の「完全無料」が横並びに収まらなかった名残。文言が
+        また長くなっても崩れないよう、縦積みのまま維持している。）
       */}
       <div style={{ marginTop: compact ? 18 : 26, textAlign: "center" }}>
         <div
@@ -293,7 +337,16 @@ function CampaignBlock({ compact = false }: { compact?: boolean } = {}) {
             color: accent,
           }}
         >
-          {c.campaign.trialNow}
+          {/* 「980円」の数字だけ特大にし、単位は小さく添える。 */}
+          {c.campaign.trialNow.split(/([\d,]+)/).map((part, i) =>
+            /\d/.test(part) ? (
+              <span key={i}>{part}</span>
+            ) : (
+              <span key={i} style={{ fontSize: 26, marginLeft: 2 }}>
+                {part}
+              </span>
+            ),
+          )}
         </div>
       </div>
     </>
@@ -446,13 +499,14 @@ export default function Page() {
             </div>
           )}
 
-          {/* ── ④ FV：写真全面＋縦書きキャッチ（白い札2枚）＋円形バッジ ── */}
+          {/* ── ④ FV：写真全面＋上部に横組みのメインコピー＋下部に特徴の円形バッジ3つ ── */}
           {/*
-            写真の領域には縦書きキャッチとバッジしか置かない。サブコピーや
-            チップを同じ領域に重ねると、文量が増えたときに縦書きの真下へ
-            回り込んで文字が被る（rinne で実際に起きた）。
+            「40代からの」を最も目立たせるため、縦書きの札をやめて横組みにした
+            （スマホで一番読みやすい組み方）。写真の領域にはメインコピーと
+            バッジしか置かない。サブコピーやチップを同じ領域に重ねると、
+            文量が増えたときに被る（rinne で実際に起きた）。
           */}
-          <section style={{ position: "relative", height: 480, overflow: "hidden", background: accent }}>
+          <section style={{ position: "relative", height: 520, overflow: "hidden", background: accent }}>
             <ImageSlot
               src={c.fv.hero.src}
               placeholder={c.fv.hero.placeholder}
@@ -466,87 +520,99 @@ export default function Page() {
                 filter: "brightness(1.08) contrast(0.98)",
               }}
             />
+            {/*
+              上はメインコピーを載せる生成りのグラデーション（顔に掛からない
+              36%で消す）、下はバッジを締める薄い影。
+            */}
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background:
-                  "linear-gradient(to bottom, rgba(20,30,24,0.04) 0%, rgba(20,30,24,0) 34%, rgba(20,30,24,0.24) 100%)",
+                background: `linear-gradient(to bottom, ${base}F5 0%, ${base}E0 22%, ${base}00 36%, rgba(20,30,24,0) 64%, rgba(20,30,24,0.34) 100%)`,
                 pointerEvents: "none",
               }}
             />
-            {/* 縦書きメインコピー。配列の先頭が右に来る。 */}
             <div
               style={{
                 position: "absolute",
-                top: 34,
-                left: 14,
+                top: 24,
+                left: 0,
+                right: 0,
                 zIndex: 2,
-                display: "flex",
-                flexDirection: "row-reverse",
-                alignItems: "flex-start",
-                gap: 5,
+                textAlign: "center",
                 pointerEvents: "none",
               }}
             >
-              {c.fv.catchLines.map((line, i) => (
-                <div
-                  key={i}
+              <p style={{ margin: 0, fontFamily: fontMincho, fontWeight: 700, lineHeight: 1.15, color: ink }}>
+                <span
                   style={{
-                    writingMode: "vertical-rl",
-                    fontFamily: fontMincho,
-                    fontWeight: 600,
-                    fontSize: 18,
-                    letterSpacing: "0.10em",
-                    lineHeight: 1.65,
-                    color: ink,
-                    background: "#FFFFFF",
-                    padding: "10px 5px",
-                    borderRadius: 4,
-                    boxShadow: "0 4px 14px rgba(0,0,0,0.18)",
+                    fontSize: 56,
+                    letterSpacing: "0.02em",
+                    color: accent,
+                    /* 年代の数字の下にだけ淡いマーカーを引いて、さらに一段立てる。 */
+                    background: `linear-gradient(transparent 70%, ${cream} 70%)`,
+                    padding: "0 2px",
                   }}
                 >
-                  {line}
-                </div>
-              ))}
+                  {c.fv.catchAge}
+                </span>
+                <span style={{ fontSize: 28, letterSpacing: "0.06em" }}>{c.fv.catchAgeSuffix}</span>
+              </p>
+              <h1
+                style={{
+                  margin: "4px 0 0",
+                  fontFamily: fontMincho,
+                  fontWeight: 600,
+                  fontSize: 32,
+                  lineHeight: 1.3,
+                  letterSpacing: "0.08em",
+                  color: ink,
+                }}
+              >
+                {c.fv.catchMain}
+              </h1>
             </div>
-            {/* 右上の円形バッジ */}
+            {/*
+              下部の特徴バッジ3つ。写真の下端は暗いので、濃色の円だと沈んで
+              読みにくい（顧客指摘）。白地＋メインカラーの二重リングで反転させる。
+            */}
             <div
               style={{
                 position: "absolute",
-                top: 36,
-                right: 20,
+                bottom: 16,
+                left: 0,
+                right: 0,
                 zIndex: 2,
                 display: "flex",
-                flexDirection: "column",
+                justifyContent: "center",
                 gap: 8,
                 pointerEvents: "none",
               }}
             >
-              {c.fv.chips.map((chip) => (
+              {c.fv.features.map((f) => (
                 <div
-                  key={chip.big}
+                  key={f}
                   style={{
-                    width: 84,
-                    height: 84,
+                    width: 110,
+                    height: 110,
                     borderRadius: "50%",
-                    background: accent,
-                    border: "1.5px solid rgba(255,255,255,0.55)",
+                    background: "#FFFFFF",
+                    border: `2px solid ${accent}`,
+                    outline: "3px solid rgba(255,255,255,0.85)",
                     display: "flex",
-                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    lineHeight: 1.25,
-                    color: "#FFFFFF",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.22)",
+                    textAlign: "center",
+                    fontFamily: fontGothic,
+                    fontWeight: 700,
+                    fontSize: 15,
+                    lineHeight: 1.35,
+                    letterSpacing: "0.01em",
+                    color: accent,
+                    boxShadow: "0 6px 16px rgba(0,0,0,0.28)",
                   }}
                 >
-                  <span style={{ fontSize: 10.5, letterSpacing: "0.04em", color: cream }}>
-                    {chip.small}
-                  </span>
-                  <span style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 21 }}>
-                    {chip.big}
-                  </span>
+                  <span>{nl(f)}</span>
                 </div>
               ))}
             </div>
@@ -646,9 +712,9 @@ export default function Page() {
                   textAlign: "center",
                   fontFamily: fontMincho,
                   fontWeight: 600,
-                  fontSize: 22,
+                  fontSize: 20,
                   lineHeight: 1.8,
-                  letterSpacing: "0.05em",
+                  letterSpacing: "0.04em",
                   margin: 0,
                   color: "#FFFFFF",
                 }}
@@ -1039,6 +1105,10 @@ export default function Page() {
                         }}
                       />
                     )}
+                    {/* 店舗を見て決めた人がそのまま予約できるよう、各店に直通ボタン。 */}
+                    <div style={{ marginTop: 18 }}>
+                      <StoreReserveButton name={store.name} url={store.reserveUrl} showName={false} />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -1105,8 +1175,9 @@ export default function Page() {
       </div>
 
       {/* ── ⑱ 追従フッターCTA ── */}
+      {/* 予約先が店舗ごとに分かれるため、追従ボタンは店舗別ボタンの並ぶ⑰へ送る。 */}
       <StickyFooterCTA
-        href={c.reserve.url}
+        anchor="#reserve"
         buttonText={c.sticky.buttonText}
         showAfter={c.sticky.showAfter}
         buttonGradient={ctaGrad}
