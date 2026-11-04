@@ -55,7 +55,7 @@ const config: PatternCConfig = {
       text: "#FFFFFF",
     },
     // 会場名はヘッダーのロゴで出すので、カードには置かない（ashibinosato と同じ構成）。
-    kicker: "＼豪華来館特典付き／",
+    kicker: "＼先輩花嫁おすすめ／",
     // 1行で出す（顧客指定）。既定26pxだとカードの内寸（344px）ぎりぎりなので一段下げる（24pxで約318px）。
     catch: ["プレミアム ブライダルフェア"],
     catchSize: 24,
@@ -70,10 +70,11 @@ const config: PatternCConfig = {
       gap: -20,
       gapBottom: -20,
     },
-    // 金額を大きく見せるため「プレゼント」は次の行（highlightSub）へ送る。
-    highlight: "最大40万円相当",
+    // 2026-11-04 AUN指示で金額から試食の訴求に変更。1行（17字）だとプレートに入らないので、
+    // 「試食付き！」を次の行（highlightSub）へ送って、従来と同じ2段で組む。
+    highlight: "上州牛フィレ肉＆デザート",
     highlightSize: 22,
-    highlightSub: "プレゼント！",
+    highlightSub: "試食付き！",
     highlightSubSize: 16,
     ctaText: "最短30秒で予約する",
     // lold と同じくプレートを上に置く（顧客指定）。
@@ -121,17 +122,35 @@ const config: PatternCConfig = {
     eyebrow: "プレミアムブライダルフェア",
     heading: "大聖堂 × 美食を体験",
     headingSize: 29,
-    // バッジを戻す（2026-10-21 AUN指示）。ここは指示書どおり「分」。
-    badge: "最大40万円分プレゼント",
-    title: "フェア成約特典",
-    // 既定17pxから一段上げる（顧客指定）。
-    titleSize: 21,
-    // lold の「衣装2着・装花…／結婚式に必要な…」と同じ2段の組み方（2026-10-21 AUN指示）。
-    amount: "衣装20%OFF、新郎新婦当日ご宿泊など\nお得な特典がたくさん！",
-    amountProse: true,
-    amountProseEmphasis: "衣装20%OFF",
-    // 1行目が20字あり、既定（強調17px）だと「ど」だけ次の行に落ちる。15pxで1行に収める。
-    amountProseSize: 11,
+    // 2026-11-04 AUN指示: バッジを「ご成約で」にし、カードの中身を「さらに、ご成約で」（privilege.contract）
+    // と同じ「最大40万円分プレゼント＋写真つき4点」に差し替え。見出し（title）は空にして出さない。
+    badge: "ご成約で",
+    title: "",
+    amount: "最大40万円分プレゼント",
+    amountInkAfter: true,
+    columns: 2,
+    items: [
+      {
+        title: "衣装",
+        amount: "20%OFF",
+        image: { placeholder: "ドレスサロン", src: `${ASSET}/priv-dress.jpg` },
+      },
+      {
+        title: "スパークリングワイン＆\nウェルカムドリンク",
+        amount: "人数分",
+        image: { placeholder: "スパークリングワイン", src: `${ASSET}/priv-drink.jpg` },
+      },
+      {
+        title: "新郎新婦様",
+        amount: "当日宿泊",
+        image: { placeholder: "デラックスツイン", src: `${ASSET}/priv-suite.jpg` },
+      },
+      {
+        title: "ご列席者様",
+        amount: "宿泊ご優待",
+        image: { placeholder: "ツインルーム", src: `${ASSET}/priv-twin.jpg` },
+      },
+    ],
     frame: `${ASSET}/grand-offer-frame.png`,
   },
 
