@@ -354,7 +354,10 @@ export interface PatternCConfig {
     lead?: string;
     /** 対象条件のバッジ、例 "2027年5月までの挙式披露宴が対象"。 */
     badge?: string;
-    /** 特典の名前、例 "豪華10大特典"。`\n` で改行位置を指定できる。 */
+    /**
+     * 特典の名前、例 "豪華10大特典"。`\n` で改行位置を指定できる。
+     * 空文字にすると見出しと菱形の罫ごと出ず、`amount` から始まる。
+     */
     title: string;
     /**
      * `title` の中で金額として強調する部分文字列（例 "3万円分"）。深い金の太字・大きめになる。
@@ -378,6 +381,13 @@ export interface PatternCConfig {
     amountProseEmphasis?: string;
     /** `amountProse` の基準文字サイズ(px)。既定 13（強調行はこれ +4）。 */
     amountProseSize?: number;
+    /**
+     * 金額の下に並べる成約特典の中身（写真つき）。来館特典の `items` と同じ見た目
+     * （`AmountRow`）で、`amount` は金色の太字、`title` は下の小さい説明になる。
+     * `columns` で1行の数を指定する（既定は items の数＝横1列。4点なら 2 で2×2）。
+     */
+    items?: { title: string; amount: string; image?: Slot }[];
+    columns?: number;
     /**
      * `amount` の金額部分（"最大40万円相当" まで）だけを金の特大にし、続く文言を
      * 本文色で組む。`\n` で改行でき、2行目以降も本文色になる

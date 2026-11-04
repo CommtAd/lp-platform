@@ -1168,7 +1168,7 @@ export default function Page() {
                     高さが中身で変わる箱には CornerFrame を使うこと。
                   */}
                   {c.grandOffer.frame &&
-                    (c.grandOffer.images?.length ? (
+                    (c.grandOffer.images?.length || c.grandOffer.items?.length ? (
                       // 写真を並べると箱の高さが伸びるので、角を自然比で貼る版に切り替える。
                       <CornerFrame src={c.grandOffer.frame} />
                     ) : (
@@ -1177,14 +1177,17 @@ export default function Page() {
                         <img src={c.grandOffer.frame} alt="" className="h-full w-full" />
                       </span>
                     ))}
-                  <p
-                    className="leading-snug tracking-[0.18em]"
-                    style={{ fontFamily: mincho, fontSize: c.grandOffer.titleSize ?? 17 }}
-                  >
-                    {c.grandOffer.titleEmphasis
-                      ? emphasize(c.grandOffer.title, c.grandOffer.titleEmphasis, goldOnWhite, 26)
-                      : nl(c.grandOffer.title)}
-                  </p>
+                  {/* title が空なら見出しと菱形の罫ごと出さず、金額から始める。 */}
+                  {c.grandOffer.title && (
+                    <p
+                      className="leading-snug tracking-[0.18em]"
+                      style={{ fontFamily: mincho, fontSize: c.grandOffer.titleSize ?? 17 }}
+                    >
+                      {c.grandOffer.titleEmphasis
+                        ? emphasize(c.grandOffer.title, c.grandOffer.titleEmphasis, goldOnWhite, 26)
+                        : nl(c.grandOffer.title)}
+                    </p>
+                  )}
                   {/* 特典の中身の写真。四隅の飾りより前面に出すため relative を付ける。 */}
                   {c.grandOffer.images?.length ? (
                     <div
@@ -1213,12 +1216,14 @@ export default function Page() {
                   ) : null}
                   {c.grandOffer.amount && (
                     <>
-                      {/* 菱形を挟んだ罫。直線1本より装飾として効く。 */}
-                      <span className="mt-5 flex items-center justify-center gap-2.5">
-                        <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
-                        <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
-                        <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
-                      </span>
+                      {/* 菱形を挟んだ罫。直線1本より装飾として効く。見出しが無いときは引かない。 */}
+                      {c.grandOffer.title && (
+                        <span className="mt-5 flex items-center justify-center gap-2.5">
+                          <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                          <span className="h-[5px] w-[5px] rotate-45" style={{ background: c.accent }} />
+                          <span className="h-px w-9" style={{ background: `${c.accent}80` }} />
+                        </span>
+                      )}
                       {/* 金額として組むか、説明文として組むか。説明文のときは数字を
                           特大にしない（"衣装2着…" の 2 だけが巨大になるのを避ける）。 */}
                       {c.grandOffer.amountProse ? (
@@ -1236,7 +1241,7 @@ export default function Page() {
                         /* text-[30px] は数字を含まない文字列（テンプレのダミー等）の
                            フォールバック。数字があれば amountEmphasis 側の span が上書きする。 */
                         <p
-                          className={`mt-5 text-[30px] font-bold tracking-[0.02em] ${
+                          className={`${c.grandOffer.title ? "mt-5 " : ""}text-[30px] font-bold tracking-[0.02em] ${
                             c.grandOffer.amountInkAfter ? "leading-[1.35]" : "leading-none"
                           }`}
                           style={{ fontFamily: mincho, color: goldOnWhite }}
@@ -1247,6 +1252,21 @@ export default function Page() {
                         </p>
                       )}
                     </>
+                  )}
+                  {/* 成約特典の中身（写真つき）。来館特典と同じ AmountRow で揃える。
+                      四隅の飾りより前面に出すため relative を付ける。 */}
+                  {c.grandOffer.items && c.grandOffer.items.length > 0 && (
+                    <div className="relative mt-7">
+                      <AmountRow
+                        items={c.grandOffer.items.map((p) => ({
+                          amount: p.amount,
+                          label: p.title,
+                          image: p.image,
+                        }))}
+                        ink={c.ink}
+                        columns={c.grandOffer.columns}
+                      />
+                    </div>
                   )}
                 </div>
                 {/* カード下端の帯。特典の中身の補足を、カードの外の小さな注記ではなく読ませる位置に置く。 */}
