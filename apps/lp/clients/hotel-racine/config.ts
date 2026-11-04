@@ -16,7 +16,7 @@ const config: PatternCConfig = {
   meta: {
     title: "ホテル ラシーネ新前橋｜プレミアム ブライダルフェア",
     description:
-      "「ホテル ラシーネ新前橋」の大聖堂チャペル×ホテルウェディング プレミアム ブライダルフェア。最大40万円相当の特典をプレゼント。大聖堂チャペル見学・国産牛フィレ肉を含むハーフコース無料試食・お見積り相談を最短30秒でご予約いただけます。",
+      "「ホテル ラシーネ新前橋」の大聖堂チャペル×ホテルウェディング プレミアム ブライダルフェア。最大40万円相当の特典をプレゼント。大聖堂チャペル見学・上州牛フィレ肉を含むハーフコース無料試食・お見積り相談を最短30秒でご予約いただけます。",
     // OGP専用の1枚（1200x630）。チャペル正面のカットから切り出した。
     // 差し替えるときは必ずファイル名も変えること（SNS側のキャッシュ対策）。
     ogpImage: `${ASSET}/ogp-2026-10-02.jpg`,
@@ -101,14 +101,14 @@ const config: PatternCConfig = {
   // 写真版（顧客指定でベースから組み方を変えた）。写真は体験03と同じ料理のカット
   //（同じ試食なので、別カットにすると別物に見える）。
   fvSummary: {
-    photo: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
+    photo: { placeholder: "上州牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
     headline: "豪華来館特典付き",
     headlineEmphasis: "豪華来館特典",
     // 写真版では label は表示されない（型の必須項目なので値だけ置く）。
     label: "来館特典",
     // ランチビュッフェは 2026-10-27 追加（AUN指示）。写真つきの項目は試食の下に別の組で出る。
     items: [
-      { amount: "ハーフコース無料試食", name: "国産牛フィレ肉を含む" },
+      { amount: "ハーフコース無料試食", name: "上州牛フィレ肉を含む" },
       {
         amount: "人気のランチビュッフェ",
         name: "",
@@ -172,9 +172,9 @@ const config: PatternCConfig = {
       },
       {
         tag: "03",
-        title: "国産牛フィレ肉の無料試食",
+        title: "上州牛フィレ肉の無料試食",
         body: "婚礼料理の味を、実際に試食しておもてなしを確認。",
-        image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
+        image: { placeholder: "上州牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
       },
       {
         tag: "04",
@@ -205,9 +205,9 @@ const config: PatternCConfig = {
     headlineEmphasis: "ご来館特典",
     items: [
       {
-        title: "国産牛フィレ肉を含む",
+        title: "上州牛フィレ肉を含む",
         amount: "豪華ハーフコース試食",
-        image: { placeholder: "国産牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
+        image: { placeholder: "上州牛フィレ肉の婚礼料理", src: `${ASSET}/exp-tasting.jpg` },
       },
       {
         // 2026-10-27 追加（AUN指示）。
@@ -310,7 +310,7 @@ const config: PatternCConfig = {
         num: "2",
         title: "見学・試食",
         icon: `${ASSET}/flow-02.png`,
-        body: "大聖堂チャペルや披露宴会場を実際にご見学いただきます。また、国産牛フィレ肉を含むハーフコースをご試食いただけます。",
+        body: "大聖堂チャペルや披露宴会場を実際にご見学いただきます。また、上州牛フィレ肉を含むハーフコースをご試食いただけます。",
       },
       {
         num: "3",
