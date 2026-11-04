@@ -196,6 +196,7 @@ const timeBands = ["10:00〜12:00", "12:00〜15:00", "15:00〜18:00", "18:00〜2
 const formFields: LPFormField[] = [
   { name: "name", label: "お名前", type: "text", required: true, placeholder: "例）山田 花子" },
   { name: "kana", label: "フリガナ", type: "text", required: true, placeholder: "例）ヤマダ ハナコ" },
+  { name: "age", label: "年齢", type: "text", required: true, placeholder: "例）35" },
   { name: "tel", label: "電話番号", type: "tel", required: true, placeholder: "例）09012345678" },
   { name: "email", label: "メールアドレス", type: "email", required: true, placeholder: "例）example@mail.com" },
   { name: "date1", label: "体験希望日（第1希望）", type: "date", required: true },
