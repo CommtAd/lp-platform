@@ -1,14 +1,19 @@
 import type { ClientStatus } from "@shared/index";
 
 /**
- * Seren Pilates Studio（セレンピラティス）— 錦糸町店・南行徳店。
+ * Seren Pilates Studio（セレンピラティス）— 白金高輪店・錦糸町店・南行徳店。
  *
  * 構成は指示書の18セクション固定。料金プランのセクションは「一旦非表示」の
  * 指示により丸ごと落としている（`page.tsx` にもコメントを残してある）。
  *
- * 予約導線は公式サイトと同じ hacomono（https://sanare-pilates.hacomono.jp/）へ
- * 外部遷移する。ページ内フォームを持たないため、`scripts/check-rules.ts` の
- * FORM_EXEMPT に `seren-pilates` を登録している。LPShell は必須なので維持。
+ * 予約導線は店舗ごとの予約ページへ直接外部遷移する（`stores.items[].reserveUrl`）。
+ * 錦糸町・南行徳は rusk-reservation、白金高輪は未登録のため公式サイトと同じ
+ * hacomono の店舗スケジュール。ページ内フォームを持たないため、
+ * `scripts/check-rules.ts` の FORM_EXEMPT に `seren-pilates` を登録している。
+ * LPShell は必須なので維持。
+ *
+ * 年代訴求は `TARGET_AGE` 1か所で持つ。広告テストで「35歳から」などに
+ * 切り替えるときはここだけ書き換えれば、FV・お悩み・理由・予約の見出しが揃って変わる。
  *
  * 配色は公式サイト（seren-pilates.jp）とロゴの実測から起こした3色構成。
  *   - メインカラー #4E5F56 … ロゴのセージ #697970 を暗くした深いセージ。
@@ -42,10 +47,12 @@ export interface SerenConfig {
 
   fv: {
     hero: Slot;
-    /** 縦書きの白い札。**配列の先頭が右**（row-reverse で組むため）。 */
-    catchLines: string[];
-    /** 右上の円形バッジ。 */
-    chips: { small: string; big: string }[];
+    /** 写真上部のメインコピー。`catchAge` だけ特大・メインカラーで立てる。 */
+    catchAge: string;
+    catchAgeSuffix: string;
+    catchMain: string;
+    /** 写真下部に並べる円形バッジ（3つ）。"\n" で改行。 */
+    features: string[];
     /** ⑤FV下のメインカラー帯のサブコピー2行。 */
     subLines: string[];
     /** 同・悩みワードの丸チップ。 */
@@ -97,6 +104,8 @@ export interface SerenConfig {
       access: string[];
       img: Slot;
       mapEmbedSrc?: string;
+      /** 店舗の予約ページ。予約CTAはすべて店舗別のボタンとして並ぶ。 */
+      reserveUrl: string;
     }[];
   };
   /** ⑯FAQ。 */
@@ -104,8 +113,8 @@ export interface SerenConfig {
   /** ⑰クロージング。 */
   closing: { heading: string; lead: string; chips: string[] };
 
-  /** 予約CTA。⑥⑨⑬⑰の4箇所だけで使う。 */
-  reserve: { label: string; url: string; note: string };
+  /** 予約CTA。⑥⑨⑬⑰の4箇所で、店舗ごとのボタンとして並べる。 */
+  reserve: { label: string; note: string };
   /** ⑱追従フッターCTA。 */
   sticky: {
     buttonText: string;
@@ -115,16 +124,20 @@ export interface SerenConfig {
 }
 
 const ASSET = "/clients/seren-pilates";
-/** 予約システム（rusk-reservation）のグループページ。店舗と日時は遷移先で選ぶ。 */
-const RESERVE_URL = "https://rusk-reservation.vercel.app/group/seren-pilates";
+
+/**
+ * 年代訴求。LP内の「40代から」はすべてここから組み立てている。
+ * 「35歳」のように書き換えると「35歳からのマシンピラティス」になる。
+ */
+export const TARGET_AGE = "40代";
 
 const config: SerenConfig = {
   slug: "seren-pilates",
   status: "draft",
   meta: {
-    title: "Seren Pilates Studio｜錦糸町・南行徳のパーソナルマシンピラティス",
+    title: `Seren Pilates Studio｜${TARGET_AGE}からのマシンピラティス｜白金高輪・錦糸町・南行徳`,
     description:
-      "AI姿勢分析付きのマンツーマン体験レッスンが、10月15日までのご予約で完全無料（通常11,550円）。国家資格「理学療法士」が所属・監修するプログラム。錦糸町店・南行徳店。",
+      `${TARGET_AGE}からの姿勢や体型の変化に。AI姿勢分析付きの完全マンツーマン体験レッスンが980円（通常11,550円）。国家資格「理学療法士」が研修に携わるプログラム。白金高輪店・錦糸町店・南行徳店。`,
     /*
        相対パスで書くと metadataBase が別ドメインに解決されてしまうため、
        OGPは必ず本番の絶対URLで持つ。
@@ -137,43 +150,45 @@ const config: SerenConfig = {
   header: {
     brand: "Seren Pilates",
     brandSub: "セレンピラティス",
-    stores: ["錦糸町店 / 南行徳店"],
+    stores: ["白金高輪・錦糸町・南行徳"],
     note: "パーソナル マシンピラティス",
   },
 
   offerBar: {
-    badgeText: "10/15まで",
-    text: "無料体験レッスン受付中",
+    badgeText: "初回限定",
+    text: "体験レッスン 980円",
   },
 
   fv: {
-    hero: { placeholder: "FVメイン写真", src: `${ASSET}/hero.jpg`, position: "left" },
-    /* 公式サイトのメインコピー。先頭が右の札。 */
-    catchLines: ["キレイになるだけじゃない、", "身体がラクになるピラティス"],
-    chips: [{ small: "AI姿勢分析", big: "付き" }],
-    subLines: ["AI姿勢分析で、今の身体を知る。", "60分マンツーマンで、整えていく。"],
-    notes: ["猫背", "肩こり", "ぽっこりお腹", "反り腰"],
+    /* 顧客撮影（2026/10/30・錦糸町店）。カウンセリング中の1枚。 */
+    hero: { placeholder: "FVメイン写真", src: `${ASSET}/fv-counseling.jpg` },
+    catchAge: TARGET_AGE,
+    catchAgeSuffix: "からの",
+    catchMain: "マシンピラティス",
+    features: ["完全\nマンツーマン", "AI\n姿勢分析", "一人ひとりに\n合わせた\nレッスン"],
+    subLines: ["年齢とともに変わる姿勢や体型に。", "今のあなたに合った身体づくりを。"],
+    notes: ["猫背・巻き肩", "反り腰", "下腹", "肩こり"],
   },
 
   campaign: {
-    badge: "10月15日まで",
+    badge: "初めての方限定",
     title: "60分のお試し体験",
     lead:
-      "10月15日までに体験レッスンを\nご予約いただいた方限定。\nAI姿勢分析付きのマンツーマン60分を、\n無料でお受けいただけます。",
+      "AI姿勢分析付きの\nマンツーマン60分を、\n980円でお受けいただけます。",
     trialRegular: "11,550",
-    trialNow: "完全無料",
+    trialNow: "980円",
   },
 
   worry: {
-    heading: "こんなお悩み、\nありませんか？",
+    heading: `${TARGET_AGE}から、\nこんなお悩みありませんか？`,
     items: [
-      "デスクワークで、猫背と肩こりが\n慢性化している",
-      "運動は苦手。何から始めれば\nいいのか分からない",
-      "体重よりも、姿勢とくびれを\nどうにかしたい",
-      "産後や年齢の変化で、体型が\n戻らなくなってきた",
-      "ジムもエステも、結局続かなかった",
+      "最近、下腹や背中のお肉が\n気になってきた",
+      "昔より姿勢が悪くなった気がする",
+      "肩こりや身体の重さを\n感じやすくなった",
+      "運動したいけど、何から\n始めればいいか分からない",
+      "無理なく続けられる運動を探している",
     ],
-    closing: "その原因は、\n姿勢のクセに\nあるかもしれません。",
+    closing: "これからの自分のために、\n今こそ身体と向き合う時間を。",
   },
 
   future: {
@@ -208,25 +223,25 @@ const config: SerenConfig = {
   },
 
   reasons: {
-    heading: "Serenが選ばれる理由",
+    heading: `${TARGET_AGE}からの女性に\nSerenが選ばれる理由`,
     items: [
       {
         num: "01",
-        title: "その日の身体に合わせた\n完全マンツーマン",
-        body: "姿勢・柔軟性・運動経験、そしてその日の体調まで伺ったうえで、負荷とメニューを一つひとつ組み立てます。決まったプログラムをこなすだけのレッスンではありません。",
-        img: { placeholder: "マンツーマン指導", src: `${ASSET}/reason-01.jpg` },
+        title: "人目を気にせず、自分のペースで\n完全マンツーマン",
+        body: "レッスンの最初から最後まで、インストラクターがあなた一人を担当します。スタジオを同時にご利用いただくのは最大2名まで。周りの目を気にせず、体型のことも身体の不安も気兼ねなくご相談いただけます。その日の体調まで伺ったうえで、負荷とメニューを組み立てます。",
+        img: { placeholder: "マンツーマン指導", src: `${ASSET}/reason-01-manto.jpg` },
       },
       {
         num: "02",
-        title: "「なんとなく」で終わらせない\nAI姿勢分析",
-        body: "専用タブレットで数枚撮影し、姿勢の傾向を数値と画面で見える化します。結果を一緒に見ながらその日の優先ポイントを決め、来店ごとの記録を見比べることもできます。",
-        img: { placeholder: "AI姿勢分析", src: `${ASSET}/reason-02.jpg` },
+        title: "自分では気づけない癖を\nAI姿勢分析で見える化",
+        body: "専用タブレットで数枚撮影し、自分では気づきにくい姿勢の癖や左右差を、数値と画面で確認します。結果をインストラクターと一緒に見ながら、一人ひとりに合わせたレッスン内容を決めていきます。来店ごとの記録を見比べることもできます。",
+        img: { placeholder: "AI姿勢分析", src: `${ASSET}/reason-02-ai.jpg` },
       },
       {
         num: "03",
-        title: "人目を気にせず向き合える\nプライベート空間",
-        body: "同時にご利用いただくのは最大2名まで。周囲の視線を気にせず、体型のことも産後のお悩みも、気兼ねなくご相談いただける環境です。",
-        img: { placeholder: "スタジオ内観", src: `${ASSET}/reason-03.jpg` },
+        title: "運動が久しぶりでも\n無理なく始められるマシンピラティス",
+        body: "マシンのスプリングが動きを支えてくれるので、筋力や柔軟性に自信がなくても正しいフォームで動けます。運動経験や身体の状態に合わせて負荷を細かく調整し、無理のない範囲から少しずつ進めます。",
+        img: { placeholder: "マシンピラティス", src: `${ASSET}/reason-03-machine.jpg` },
       },
       {
         num: "04",
@@ -240,7 +255,7 @@ const config: SerenConfig = {
   posture: {
     heading: "AI姿勢分析で、\n今の姿勢を知ることから。",
     body: "専用タブレットで正面・側面などを数枚撮影し、姿勢のバランスや身体の傾きの傾向を「見える化」します。身体を動かす検査ではないので、運動が久しぶりの方にも負担はありません。結果はインストラクターと画面を一緒に見ながら確認し、その日のレッスンにそのまま活かします。",
-    photo: { placeholder: "AI姿勢分析の様子", src: `${ASSET}/posture.jpg` },
+    photo: { placeholder: "AI姿勢分析の様子", src: `${ASSET}/posture-tablet.jpg` },
     items: [
       "頭の位置（前に出ていないか）",
       "肩の高さの左右差",
@@ -256,7 +271,7 @@ const config: SerenConfig = {
       {
         num: "1",
         title: "ご予約",
-        body: "予約ページから、ご希望の店舗と日時をお選びください。",
+        body: "ご希望の店舗の予約ボタンから、日時をお選びください。",
       },
       {
         num: "2",
@@ -303,6 +318,21 @@ const config: SerenConfig = {
     heading: "店舗のご案内",
     items: [
       {
+        name: "白金高輪店",
+        appeal: "白金高輪駅から徒歩3分。\n完全予約制のプライベートスタジオ。",
+        address: "〒108-0074\n東京都港区高輪1-17-15\nオーク高輪ビル 3F",
+        hours: "営業開始 9:00",
+        closed: "不定休",
+        access: ["東京メトロ南北線・都営三田線「白金高輪駅」1番出口から徒歩3分"],
+        img: { placeholder: "白金高輪店 スタジオ", src: `${ASSET}/studio-shirokane.jpg` },
+        mapEmbedSrc:
+          "https://maps.google.com/maps?q=" +
+          encodeURIComponent("東京都港区高輪1-17-15 オーク高輪ビル") +
+          "&z=17&output=embed",
+        /* rusk-reservation に未登録のため、公式サイトと同じ hacomono の店舗スケジュール。 */
+        reserveUrl: "https://sanare-pilates.hacomono.jp/reserve/schedule/2/9",
+      },
+      {
         name: "錦糸町店",
         appeal: "錦糸町駅から徒歩3分。\n光が差し込む開放的なスタジオ。",
         address: "〒130-0022\n東京都墨田区江東橋4-25-10\nオカバ錦糸町ビル 1F Ⅱ",
@@ -317,6 +347,8 @@ const config: SerenConfig = {
           "https://maps.google.com/maps?q=" +
           encodeURIComponent("東京都墨田区江東橋4-25-10 オカバ錦糸町ビル") +
           "&z=17&output=embed",
+        /* メニュー選択から始まる店舗トップ。体験メニューを差し替えてもリンクが切れない。 */
+        reserveUrl: "https://rusk-reservation.vercel.app/seren-pilates-kinshicho",
       },
       {
         name: "南行徳店",
@@ -333,6 +365,7 @@ const config: SerenConfig = {
           "https://maps.google.com/maps?q=" +
           encodeURIComponent("千葉県市川市相之川4-6 エクセレントマンション") +
           "&z=17&output=embed",
+        reserveUrl: "https://rusk-reservation.vercel.app/seren-pilates-minami-gyotoku",
       },
     ],
   },
@@ -360,21 +393,20 @@ const config: SerenConfig = {
   },
 
   closing: {
-    heading: "今の身体を知ることから、\n始めてみませんか。",
-    lead: "10月15日までのご予約で、\n通常11,550円の体験レッスンが無料に。",
+    heading: `${TARGET_AGE}から始める、\n私のためのマシンピラティス`,
+    lead: "まずは体験レッスンで、\n今の自分の身体を知ることから。",
     chips: ["初めての方限定", "AI姿勢分析付き", "マンツーマン60分", "入会金0円"],
   },
 
   reserve: {
-    label: "無料体験レッスンを予約する",
-    url: RESERVE_URL,
-    note: "初回体験 完全無料｜入会金0円｜しつこい勧誘はいたしません。",
+    label: "体験レッスンを予約する",
+    note: "初回体験 980円｜当日ご入会で入会金0円｜しつこい勧誘はいたしません。",
   },
 
   sticky: {
-    buttonText: "無料体験レッスンを予約する",
+    buttonText: "体験レッスンを予約する",
     showAfter: 620,
-    offers: [{ label: "体験レッスン", value: "無料" }],
+    offers: [{ label: "体験レッスン", value: "980円" }],
   },
 };
 
