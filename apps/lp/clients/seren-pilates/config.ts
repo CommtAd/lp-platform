@@ -7,8 +7,9 @@ import type { ClientStatus } from "@shared/index";
  * 指示により丸ごと落としている（`page.tsx` にもコメントを残してある）。
  *
  * 予約導線は店舗ごとの予約ページへ直接外部遷移する（`stores.items[].reserveUrl`）。
- * 錦糸町・南行徳は rusk-reservation、白金高輪は未登録のため公式サイトと同じ
- * hacomono の店舗スケジュール。ページ内フォームを持たないため、
+ * 3店舗とも公式サイトと同じ hacomono の店舗別スケジュール（URL末尾の
+ * `/reserve/schedule/{店舗}/{スケジュール}` は公式サイトの各店舗ページから取得）。
+ * ページ内フォームを持たないため、
  * `scripts/check-rules.ts` の FORM_EXEMPT に `seren-pilates` を登録している。
  * LPShell は必須なので維持。
  *
@@ -329,7 +330,6 @@ const config: SerenConfig = {
           "https://maps.google.com/maps?q=" +
           encodeURIComponent("東京都港区高輪1-17-15 オーク高輪ビル") +
           "&z=17&output=embed",
-        /* rusk-reservation に未登録のため、公式サイトと同じ hacomono の店舗スケジュール。 */
         reserveUrl: "https://sanare-pilates.hacomono.jp/reserve/schedule/2/9",
       },
       {
@@ -347,8 +347,7 @@ const config: SerenConfig = {
           "https://maps.google.com/maps?q=" +
           encodeURIComponent("東京都墨田区江東橋4-25-10 オカバ錦糸町ビル") +
           "&z=17&output=embed",
-        /* メニュー選択から始まる店舗トップ。体験メニューを差し替えてもリンクが切れない。 */
-        reserveUrl: "https://rusk-reservation.vercel.app/seren-pilates-kinshicho",
+        reserveUrl: "https://sanare-pilates.hacomono.jp/reserve/schedule/3/10",
       },
       {
         name: "南行徳店",
@@ -365,7 +364,7 @@ const config: SerenConfig = {
           "https://maps.google.com/maps?q=" +
           encodeURIComponent("千葉県市川市相之川4-6 エクセレントマンション") +
           "&z=17&output=embed",
-        reserveUrl: "https://rusk-reservation.vercel.app/seren-pilates-minami-gyotoku",
+        reserveUrl: "https://sanare-pilates.hacomono.jp/reserve/schedule/4/14",
       },
     ],
   },
