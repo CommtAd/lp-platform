@@ -83,6 +83,11 @@ export interface KasaneConfig {
   offers: Offer[];
   /** 特典の注記。条件が確定したら差し替える。 */
   offerNote: { text: string; confirm?: boolean };
+  /**
+   * 「0円」ごとの対象・条件の注釈（顧客法務 2026-11: 0円表記には注釈必須）。
+   * 0円を出す特典グリッドの直下に必ず併記する。文言は顧客原稿のまま。
+   */
+  offerTerms: { target: string; lines: string[] }[];
 
   campaign: { kicker: string; heading: string };
 
@@ -274,6 +279,13 @@ const config: KasaneConfig = {
     },
   ],
   /* 文言はKASANE表記ガイドライン「固定表記・クレジット／キャンペーン」の指定どおり。改行位置だけこちらで決めている。 */
+  offerTerms: [
+    { target: "体験0円", lines: ["※体験0円は、初めて体験レッスンをご利用の方が対象です。"] },
+    {
+      target: "入会金0円、初月会費0円",
+      lines: ["※過去にご入会いただいたことがある方は対象外です。", "※入会プランにより3ヶ月～6ヶ月の在籍が必須です"],
+    },
+  ],
   offerNote: {
     text: "※店舗により適用条件が異なります。\n※割引の適用タイミングは店舗により\n異なる場合がございます。\n詳細は各店へお問い合わせください。",
   },
