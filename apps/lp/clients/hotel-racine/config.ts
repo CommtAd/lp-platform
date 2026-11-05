@@ -299,6 +299,8 @@ const config: PatternCConfig = {
 
   flow: {
     heading: "当日の流れ",
+    // 見出し下の囲み（2026-11-05 AUN指示。lold と同じ組み方）。
+    lead: "所要時間：2〜3時間",
     steps: [
       {
         num: "1",
