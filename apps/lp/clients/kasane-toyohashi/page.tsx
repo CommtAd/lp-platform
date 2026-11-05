@@ -300,25 +300,58 @@ function OfferGrid({ size = "lg" }: { size?: "lg" | "sm" }) {
   );
 }
 
-function OfferNote({ dark = false }: { dark?: boolean }) {
+/** 0円の対象・条件の注釈（`offerTerms`）。0円を出すグリッドの直下に必ず置く。 */
+function OfferTerms() {
   return (
-    <p
+    <div
       style={{
+        margin: "12px 0 0",
+        padding: "10px 12px",
+        background: "#FFFFFF",
+        border: `1px solid ${line}`,
+        borderRadius: 10,
         fontSize: 11,
         lineHeight: 1.7,
-        color: dark ? "rgba(255,255,255,0.75)" : inkMute,
-        margin: "10px 0 0",
-        textAlign: "center",
+        color: inkSoft,
+        textAlign: "left",
       }}
     >
-      {c.offerNote.confirm && (
-        <>
-          <Confirm />
-          <br />
-        </>
-      )}
-      {nl(c.offerNote.text)}
-    </p>
+      {c.offerTerms.map((t, i) => (
+        <div key={t.target} style={{ marginTop: i === 0 ? 0 : 6 }}>
+          <p style={{ margin: 0, fontWeight: 700, color: brown }}>【{t.target}】</p>
+          {t.lines.map((l) => (
+            <p key={l} style={{ margin: 0 }}>
+              {l}
+            </p>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function OfferNote({ dark = false }: { dark?: boolean }) {
+  return (
+    <>
+      <OfferTerms />
+      <p
+        style={{
+          fontSize: 11,
+          lineHeight: 1.7,
+          color: dark ? "rgba(255,255,255,0.75)" : inkMute,
+          margin: "10px 0 0",
+          textAlign: "center",
+        }}
+      >
+        {c.offerNote.confirm && (
+          <>
+            <Confirm />
+            <br />
+          </>
+        )}
+        {nl(c.offerNote.text)}
+      </p>
+    </>
   );
 }
 
@@ -485,6 +518,7 @@ export default function Page() {
             <div style={{ marginTop: 16 }}>
               <OfferGrid size="sm" />
             </div>
+            <OfferTerms />
             <ReserveCta marginTop={18} />
           </section>
 
@@ -1039,6 +1073,7 @@ export default function Page() {
             <div style={{ marginTop: 20 }}>
               <OfferGrid size="sm" />
             </div>
+            <OfferTerms />
             <div
               style={{
                 background: "#FFFFFF",
