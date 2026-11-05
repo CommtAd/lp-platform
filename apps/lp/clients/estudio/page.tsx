@@ -170,7 +170,7 @@ const GoldCta = ({ text, sub }: { text: string; sub?: string }) => (
           margin: "12px 0 0",
         }}
       >
-        {sub}
+        {nl(sub)}
       </p>
     )}
   </div>
@@ -556,7 +556,7 @@ export default function Page() {
                 }}
               >
                 <div style={{ fontFamily: fontGothic, fontWeight: 700, fontSize: 16, letterSpacing: "0.06em", color: "#FFFFFF", textShadow: "0 1px 4px rgba(120,80,60,0.4)" }}>
-                  {c.campaign.limitText}
+                  {nl(c.campaign.limitText)}
                 </div>
                 <div style={{ fontSize: 11, letterSpacing: "0.04em", color: "rgba(255,255,255,0.9)", marginTop: 4 }}>
                   本気で改善したい方限定｜体験枠には限りがございます
@@ -599,10 +599,36 @@ export default function Page() {
                   </span>
                 )}
               </div>
-              <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 68, lineHeight: 0.9, letterSpacing: "0.01em", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                980<span style={{ fontSize: 34 }}>円</span>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                {c.offer.secondTrial && (
+                  <span style={{ fontFamily: fontGothic, fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", color: "#5A5044", border: "1px solid #C49A85", borderRadius: 999, padding: "2px 12px" }}>
+                    1回目
+                  </span>
+                )}
+                <div style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 68, lineHeight: 0.9, letterSpacing: "0.01em", whiteSpace: "nowrap", background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
+                  980<span style={{ fontSize: 34 }}>円</span>
+                </div>
               </div>
             </div>
+
+            {/* 2回目の体験（1回目980円＋2回目0円） */}
+            {c.offer.secondTrial && (
+              <div style={{ marginTop: 22, padding: "14px 16px 12px", background: "#FFFFFF", border: "1.5px solid #C49A85", borderRadius: 12, boxShadow: "0 4px 12px rgba(150,110,85,0.12)" }}>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 8 }}>
+                  <span style={{ fontSize: 13, color: "#C49A85" }}>＋</span>
+                  <span style={{ fontFamily: fontMincho, fontWeight: 600, fontSize: 18, letterSpacing: "0.04em", color: "#3B342C" }}>
+                    {c.offer.secondTrial.label}
+                  </span>
+                  <span style={{ fontFamily: fontMincho, fontWeight: 700, fontSize: 40, lineHeight: 1, background: goldGrad, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
+                    {c.offer.secondTrial.amount}
+                    <span style={{ fontSize: 22 }}>円</span>
+                  </span>
+                </div>
+                <div style={{ fontSize: 11.5, letterSpacing: "0.04em", color: "#6E6455", marginTop: 6 }}>
+                  {c.offer.secondTrial.note}
+                </div>
+              </div>
+            )}
 
             {/* six items */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px 8px", marginTop: 34 }}>

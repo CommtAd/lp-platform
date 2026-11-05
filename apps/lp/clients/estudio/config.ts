@@ -10,7 +10,7 @@ const ASSET = "/clients/estudio";
  * → check-rules.ts の FORM_EXEMPT に "estudio" を登録済み。LPShell は維持。
  * NOTE: この方式では基盤側にフォームCVは届かない（予約はすべて STORES 側に入る）。
  */
-type Config = Omit<PatternAConfig, "form"> & {
+type Config = Omit<PatternAConfig, "form" | "offerBar" | "offer"> & {
   reserve: {
     heading: string;
     lead: string;
@@ -22,6 +22,12 @@ type Config = Omit<PatternAConfig, "form"> & {
   };
   /** 帯（旧・実績バー）に出すブランドタグライン。Google口コミはFV右上バッジ側に集約。 */
   tagline: string;
+  /** 円バッジに「11月30日／までの限定／キャンペーン」の3行を入れるため、2行固定の型を広げる。 */
+  offerBar: Omit<PatternAConfig["offerBar"], "badgeLines"> & { badgeLines: string[] };
+  /** 体験2回キャンペーン（1回目980円＋2回目0円）。offer の 980円表示の直下に出す。 */
+  offer: PatternAConfig["offer"] & {
+    secondTrial?: { label: string; amount: string; note: string };
+  };
 };
 
 /**
@@ -42,7 +48,7 @@ const config: Config = {
   meta: {
     title: "Pilates E-studio｜参宮橋駅徒歩1分の女性専用パーソナルピラティス",
     description:
-      "小田急線「参宮橋駅」西口より徒歩1分。女性ならではのお悩みに寄りそうパーソナルピラティススタジオ。姿勢評価をもとにしたオーダーメイドレッスンで、猫背・反り腰・産前産後の不調まで一人ひとりに合わせて整えます。10月限定、60分体験レッスン初回980円・当日入会で入会金0円。",
+      "小田急線「参宮橋駅」西口より徒歩1分。女性ならではのお悩みに寄りそうパーソナルピラティススタジオ。姿勢評価をもとにしたオーダーメイドレッスンで、猫背・反り腰・産前産後の不調まで一人ひとりに合わせて整えます。11月30日までの限定キャンペーンで、60分体験レッスンが2回受けられます（1回目980円・2回目0円）。当日入会で入会金0円。",
     ogpImage: `${ASSET}/ogp.jpg`,
   },
   accent: "#6B5645",
@@ -50,12 +56,12 @@ const config: Config = {
 
   // 緊急性・限定性（月ごとに更新する。定員が変わったら人数・月表記を差し替え）。
   // 2026-10 MTG: 気軽な予約を防ぐため「本気で改善したい方限定」「枠に限り」の訴求へ寄せる。
-  campaign: { limitText: "10月限定 先着10名様" },
+  campaign: { limitText: "11月30日までの限定キャンペーン\n先着10名様" },
 
   // 予約導線（外部 STORES 予約）。全CTAがこの url（新規タブ）へ接続する。
   reserve: {
     heading: "60分体験のご予約",
-    lead: "本気で体を改善したい方のための体験枠です。\n下記ボタンのSTORES予約から日時をお選びください。\n（外部の予約ページが新しいタブで開きます）",
+    lead: "本気で体を改善したい方のための体験枠です。\n下記ボタンのSTORES予約から日時をお選びください。\n2回目の体験も同じSTORES予約からご予約いただけます。\n（外部の予約ページが新しいタブで開きます）",
     url: "https://sanguubashi.stores.jp/reserve/pilates-e-studio88/1479210#pageContent",
     ctaText: "60分体験を予約する",
     caution: "※ご予約枠には限りがあるため、\n確実にご来店いただける日程をお選びください。",
@@ -69,11 +75,12 @@ const config: Config = {
     access: [{ station: "参宮橋駅", walk: "西口 徒歩1分" }],
   },
   offerBar: {
-    // 左上の円バッジ：10月限定のキャンペーンであることを明示（旧「新規オープン キャンペーン」）。
-    badgeLines: ["10月限定", "キャンペーン"],
+    // 左上の円バッジ：11月30日までの限定キャンペーンであることを明示（旧「新規オープン キャンペーン」）。
+    // 円（直径68px）に収めるため3行に割る。
+    badgeLines: ["11月30日", "までの限定", "キャンペーン"],
     badgeFontSize: 9.5,
     // スマホで「入会金」が途中改行しないよう、意図的に2行に割る。
-    text: "初回60分体験 ¥980\n入会金0円",
+    text: "60分体験2回 ¥980\n入会金0円",
   },
   // 帯：Google口コミはFV右上バッジに集約し、ここはブランドタグラインに。
   tagline: "女性専用パーソナルピラティススタジオ",
@@ -90,10 +97,12 @@ const config: Config = {
 
   offer: {
     eyebrow: "本気で変わりたい方へ",
-    heading: "60分の体験レッスン",
+    heading: "60分体験レッスン×2回",
     trialBadge: "当日入会で入会金0円",
     trialRegular: "13,200",
-    discountBadge: "92%OFF", // 通常13,200円 → 980円（92.6%OFF）を丸めた表記。
+    discountBadge: "92%OFF", // 1回目：通常13,200円 → 980円（92.6%OFF）を丸めた表記。
+    // 2026-11〜 体験が2回受けられるように（1回目980円・2回目0円）。
+    secondTrial: { label: "2回目の体験も", amount: "0", note: "合計2回、60分体験を受けられます" },
 
     items: [
       "カウンセリング\n10分",
@@ -168,7 +177,7 @@ const config: Config = {
       },
     ],
     ctaText: "60分体験を予約する",
-    ctaSub: "10月限定｜初回60分体験 ¥980｜入会金0円",
+    ctaSub: "11月30日までの限定キャンペーン\n60分体験2回 ¥980｜入会金0円",
   },
 
   trainers: {
@@ -239,7 +248,7 @@ const config: Config = {
         num: "3",
         title: "フィードバック・ご案内",
         time: "約10分",
-        body: "体験の振り返りと、今後の通い方・ご入会についてご案内します。当日ご入会で入会金0円です。",
+        body: "体験の振り返りと、今後の通い方についてご案内します。2回目の体験はSTORES予約からお好きな日時をお選びいただけます。当日ご入会で入会金0円です。",
       },
     ],
   },
@@ -281,7 +290,7 @@ const config: Config = {
 
   sticky: {
     offers: [
-      { label: "60分体験", value: "¥980" },
+      { label: "体験2回", value: "¥980" },
       { label: "入会金", value: "0円" },
     ],
     buttonText: "60分体験を予約する",
