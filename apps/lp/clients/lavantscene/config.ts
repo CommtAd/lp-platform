@@ -234,7 +234,8 @@ const config: PatternCConfig = {
 
   flow: {
     heading: "当日の流れ",
-    // 所要時間は指示書に無いので囲みごと出さない（lead 未設定）。
+    // lold と同じ囲みで所要時間を出す（2026-11-05 顧客指定）。
+    lead: "所要時間：2〜3時間",
     steps: [
       {
         num: "1",
