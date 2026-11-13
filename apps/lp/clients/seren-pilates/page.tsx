@@ -132,7 +132,7 @@ const CheckIcon = ({ color = accentMid }: { color?: string }) => (
 
 /**
  * 店舗別の予約ボタン。左の白い札に店舗名、中央に共通のCTA文言。
- * どのボタンも hacomono の店舗別スケジュールへ直接遷移させ、
+ * どのボタンも hacomono の店舗別予約ウィジェットへ直接遷移させ、
  * 遷移先で店舗を選ばせない。
  */
 function StoreReserveButton({
