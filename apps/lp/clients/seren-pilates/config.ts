@@ -7,8 +7,8 @@ import type { ClientStatus } from "@shared/index";
  * 指示により丸ごと落としている（`page.tsx` にもコメントを残してある）。
  *
  * 予約導線は店舗ごとの予約ページへ直接外部遷移する（`stores.items[].reserveUrl`）。
- * 3店舗とも公式サイトと同じ hacomono の店舗別スケジュール（URL末尾の
- * `/reserve/schedule/{店舗}/{スケジュール}` は公式サイトの各店舗ページから取得）。
+ * 3店舗とも hacomono の店舗別予約ウィジェット
+ * （`/widgets/{ウィジェットID}?isShowProgramName=false&studioId={店舗ID}`、顧客指定のURL）。
  * ページ内フォームを持たないため、
  * `scripts/check-rules.ts` の FORM_EXEMPT に `seren-pilates` を登録している。
  * LPShell は必須なので維持。
@@ -173,9 +173,9 @@ const config: SerenConfig = {
 
   campaign: {
     badge: "初めての方限定",
-    title: "60分のお試し体験",
+    title: "約75分のお試し体験",
     lead:
-      "AI姿勢分析付きの\nマンツーマン60分を、\n980円でお受けいただけます。",
+      "AI姿勢分析付きの\nマンツーマン約75分を、\n980円でお受けいただけます。",
     trialRegular: "11,550",
     trialNow: "980円",
   },
@@ -330,7 +330,7 @@ const config: SerenConfig = {
           "https://maps.google.com/maps?q=" +
           encodeURIComponent("東京都港区高輪1-17-15 オーク高輪ビル") +
           "&z=17&output=embed",
-        reserveUrl: "https://sanare-pilates.hacomono.jp/reserve/schedule/2/9",
+        reserveUrl: "https://sanare-pilates.hacomono.jp/widgets/9?isShowProgramName=false&studioId=2",
       },
       {
         name: "錦糸町店",
@@ -347,7 +347,7 @@ const config: SerenConfig = {
           "https://maps.google.com/maps?q=" +
           encodeURIComponent("東京都墨田区江東橋4-25-10 オカバ錦糸町ビル") +
           "&z=17&output=embed",
-        reserveUrl: "https://sanare-pilates.hacomono.jp/reserve/schedule/3/10",
+        reserveUrl: "https://sanare-pilates.hacomono.jp/widgets/11?isShowProgramName=false&studioId=3",
       },
       {
         name: "南行徳店",
@@ -364,7 +364,7 @@ const config: SerenConfig = {
           "https://maps.google.com/maps?q=" +
           encodeURIComponent("千葉県市川市相之川4-6 エクセレントマンション") +
           "&z=17&output=embed",
-        reserveUrl: "https://sanare-pilates.hacomono.jp/reserve/schedule/4/14",
+        reserveUrl: "https://sanare-pilates.hacomono.jp/widgets/12?isShowProgramName=false&studioId=4",
       },
     ],
   },
@@ -394,7 +394,7 @@ const config: SerenConfig = {
   closing: {
     heading: `${TARGET_AGE}から始める、\n私のためのマシンピラティス`,
     lead: "まずは体験レッスンで、\n今の自分の身体を知ることから。",
-    chips: ["初めての方限定", "AI姿勢分析付き", "マンツーマン60分", "入会金0円"],
+    chips: ["初めての方限定", "AI姿勢分析付き", "マンツーマン約75分", "入会金0円"],
   },
 
   reserve: {
