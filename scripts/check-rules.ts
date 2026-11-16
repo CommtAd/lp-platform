@@ -72,6 +72,9 @@ const FORM_EXEMPT = new Set<string>([
   // （2026-10-15、顧客判断）。config の `form` はデータごと残してあるので、
   // フォームに戻すときはこの行を消すこと。
   "ism-azabujuban",
+  // sakura-tokyo のスワイプ版（ABテスト用、2026-11-02）。CTAは通常版と同じ
+  // SAKURA公式の予約サイト（reserve.sakura-pilates.jp）へ遷移し、ページ内フォームを持たない。
+  "sakura-tokyo2",
 ]);
 
 function clientSlugs(): string[] {
