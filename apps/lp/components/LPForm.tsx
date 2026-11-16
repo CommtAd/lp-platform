@@ -653,7 +653,12 @@ export default function LPForm({
                 }}
               >
                 <option value="" disabled>
-                  {disabled ? "先にご希望日を選択してください" : f.placeholder ?? "選択してください"}
+                  {disabled
+                    ? "先にご希望日を選択してください"
+                    : // 日付連動で選択肢が0件 = その日は空き枠なし（満席・受付外）。
+                      linkedOptions && linkedOptions.length === 0
+                      ? "満席です。別の日をお選びください"
+                      : f.placeholder ?? "選択してください"}
                 </option>
                 {linkedOptions
                   ? linkedOptions.map((opt) => (
