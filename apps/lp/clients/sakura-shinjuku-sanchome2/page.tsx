@@ -3,7 +3,7 @@ import LPShell from "@/components/LPShell";
 import LPCanvas from "@/components/LPCanvas";
 import StickyFooterCTA from "@/components/StickyFooterCTA";
 import ImageSlot from "@/components/ImageSlot";
-import LPForm from "@/components/LPForm";
+import SlotForm from "./SlotForm";
 import config from "./config";
 import type { Perk, WorryIconKind } from "./config";
 
@@ -11,7 +11,7 @@ import type { Perk, WorryIconKind } from "./config";
  * Pilates SAKURA 新宿三丁目店 — 11/1 NEW OPEN 記念のMeta広告用・短尺LP。
  *
  * 指示書 §4 の3ブロックだけで構成する（スマホで2〜3スクロール）:
- *   ① FV（NEW OPEN・先着20名・3大特典・CTA）→ ② お悩み（こんな方におすすめ）→ ③ 最終CTA
+ *   ① FV（NEW OPEN・先着10名・3大特典・CTA）→ ② お悩み（こんな方におすすめ）→ ③ 最終CTA
  *   → ④ 予約フォーム（LPForm）＋ 追従フッターCTA（§5）
  *
  * 広告バナーとの一貫性が最優先（§3「印象が大きく変わらないように」）:
@@ -22,7 +22,8 @@ import type { Perk, WorryIconKind } from "./config";
  *   - 特典は横並び3枚のカード。0円の「0」を最大の要素にする
  *   - アニメーション・装飾は入れない（§3）
  *
- * CTAはすべてページ下部の予約フォーム（#form）へスクロールする。CVは LPForm の送信。
+ * CTAはすべてページ下部の予約フォーム（#form）へスクロールする。CVは LPForm の送信（SlotForm.tsx 経由。
+ * 時間はhacomonoの空き枠の写しから、LPで予約済みの枠を除いて出す）。
  *
  * 幅は390px固定のキャンバス（LPCanvas）。vw/vh はキャンバス外の minHeight のみ（CLAUDE.md §16-17）。
  */
@@ -482,7 +483,7 @@ export default function Page() {
                 {fv.ribbon}
               </div>
 
-              {/* ＼ 先着20名様限定 ／ */}
+              {/* ＼ 先着10名様限定 ／ */}
               <div
                 style={{
                   display: "flex",
@@ -730,7 +731,7 @@ export default function Page() {
               </h2>
               <p style={{ margin: "10px 0 0", fontSize: 14, lineHeight: 1.8, color: BODY }}>{nl(c.form.lead)}</p>
               <div style={{ marginTop: 18, textAlign: "left" }}>
-                <LPForm
+                <SlotForm
                   clientSlug={c.slug}
                   accent={PINK_INK}
                   fields={c.form.fields}
