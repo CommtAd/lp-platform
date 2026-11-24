@@ -72,6 +72,9 @@ const FORM_EXEMPT = new Set<string>([
   // （2026-10-15、顧客判断）。config の `form` はデータごと残してあるので、
   // フォームに戻すときはこの行を消すこと。
   "ism-azabujuban",
+  // Swan蒲郡店（新規オープン）のMeta広告用LP。CTAはすべて hacomono の予約ページへ遷移。
+  // 予約URLは config の `reserve.url` 1か所で管理（自由枠ウィジェットのURL確定待ち、2026-11-24）。
+  "swan-pilates-gamagori",
 ]);
 
 function clientSlugs(): string[] {
