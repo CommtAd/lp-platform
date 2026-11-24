@@ -49,6 +49,7 @@ export const clientRegistry: Record<
   "sinnjyukubiyougeka-test": () => import("./sinnjyukubiyougeka-test/page"),
   "sakura-aobadai": () => import("./sakura-aobadai/page"),
   "sakura-shinjuku-sanchome2": () => import("./sakura-shinjuku-sanchome2/page"),
+  "swan-pilates-gamagori": () => import("./swan-pilates-gamagori/page"),
 };
 
 export const clientSlugs = Object.keys(clientRegistry);
@@ -127,4 +128,5 @@ export const clientMetaRegistry: Record<
   "sinnjyukubiyougeka-test": () => import("./sinnjyukubiyougeka-test/config"),
   "sakura-aobadai": () => import("./sakura-aobadai/config"),
   "sakura-shinjuku-sanchome2": () => import("./sakura-shinjuku-sanchome2/config"),
+  "swan-pilates-gamagori": () => import("./swan-pilates-gamagori/config"),
 };
